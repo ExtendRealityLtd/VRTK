@@ -17,7 +17,6 @@ This file describes all of the public methods, variables and events utilised by 
      * [Artificial Controllables](#artificial-controllables-vrtksourcescriptsinteractionscontrollablesartificial)
  * [Presence](#presence-vrtksourcescriptspresence)
  * [UI](#ui-vrtksourcescriptsui)
- * [3D Controls](#3d-controls-vrtksourcescriptscontrols3d)
  * [Utilities](#utilities-vrtksourcescriptsutilities)
  * [Base SDK](#base-sdk-vrtksourcesdkbase)
    * [Fallback SDK](#fallback-sdk-vrtksourcesdkfallback)
@@ -5096,6 +5095,17 @@ The ProcessUpdate method is run in every Update method on the Interactable Objec
 
 The ProcessFixedUpdate method is run in every FixedUpdate method on the Interactable Object.
 
+#### ResetState/0
+
+  > `public virtual void ResetState()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetState method re-initializes the grab attach.
+
 ---
 
 ## Base Joint Grab Attach (VRTK_BaseJointGrabAttach)
@@ -5684,6 +5694,18 @@ The GetCurrentDirection method returns a Vector3 of the current positive/negativ
 
 The GetDirectionFromOrigin method returns a Vector3 of the direction across the axis from the original position.
 
+#### SetCurrentPosition/2
+
+  > `public virtual void SetCurrentPosition(Vector3 newPosition, float speed)`
+
+ * Parameters
+   * `Vector3 newPosition` - The position to move the Interactable Object to.
+   * `float speed` - The speed in which to move the Interactable Object.
+ * Returns
+   * _none_
+
+The SetCurrentPosition method sets the position of the Interactable Object to the given new position at the appropriate speed.
+
 #### ResetPosition/0
 
   > `public virtual void ResetPosition()`
@@ -5693,7 +5715,7 @@ The GetDirectionFromOrigin method returns a Vector3 of the direction across the 
  * Returns
    * _none_
 
-The ResetPosition method will move the transform back to the origin position.
+The ResetPosition method will move the Interactable Object back to the origin position.
 
 #### GetWorldLimits/0
 
@@ -6700,6 +6722,7 @@ A collection of scripts that provide artificial simulated controls that mimiic r
 
  * [Artificial Pusher](#artificial-pusher-vrtk_artificialpusher)
  * [Artificial Rotator](#artificial-rotator-vrtk_artificialrotator)
+ * [Artificial Slider](#artificial-slider-vrtk_artificialslider)
 
 ---
 
@@ -6924,6 +6947,144 @@ The SetAngleTarget method sets a target angle to rotate the rotator to.
    * `bool` - Returns `true` if the rotator is at the resting angle or within the resting angle threshold.
 
 The IsResting method returns whether the rotator is at the resting angle or within the resting angle threshold.
+
+#### GetControlInteractableObject/0
+
+  > `public virtual VRTK_InteractableObject GetControlInteractableObject()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_InteractableObject` - The Interactable Object associated with the control.
+
+The GetControlInteractableObject method returns the Interactable Object associated with the control.
+
+---
+
+## Artificial Slider (VRTK_ArtificialSlider)
+ > extends [VRTK_BaseControllable](#base-controllable-vrtk_basecontrollable)
+
+### Overview
+
+A artificially simulated slider.
+
+**Required Components:**
+ * `Collider` - A Unity Collider to determine when an interaction has occured. Can be a compound collider set in child GameObjects. Will be automatically added at runtime.
+
+**Script Usage:**
+ * Create a slider container GameObject and set the GameObject that is to become the slider as a child of the container.
+ * Place the `VRTK_ArtificialSlider` script onto the GameObject that is to become the slider.
+
+  > The slider GameObject must not be at the root level and needs to have it's Transform position set to `0,0,0`. This is the reason for the container GameObject requirement. Any positioning of the slider must be set on the parent GameObject.
+
+### Inspector Parameters
+
+ * **Maximum Length:** The maximum length that the slider can be moved from the origin position across the `Operate Axis`. A negative value will allow it to move the opposite way.
+ * **Min Max Threshold:** The normalized position the slider can be within the minimum or maximum slider positions before the minimum or maximum positions are considered reached.
+ * **Resting Position:** The position the slider when it is at the default resting point given in a normalized value of `0f` (start point) to `1f` (end point).
+ * **Force Resting Position Threshold:** The normalized threshold value the slider has to be within the `Resting Position` before the slider is forced back to the `Resting Position` if it is not grabbed.
+ * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the slider to register along the `Operate Axis`.
+ * **Step Size:** The increments the slider value will change in between the `Step Value Range`.
+ * **Use Step As Value:** If this is checked then the value for the slider will be the step value and not the absolute position of the slider Transform.
+ * **Snap To Step:** If this is checked then the slider will snap to the position of the nearest step along the value range.
+ * **Snap Force:** The speed in which the slider will snap to the relevant point along the `Operate Axis`
+ * **Tracking Speed:** The speed in which to track the grabbed slider to the interacting object.
+ * **Precision Grab:** If this is checked then when the Interact Grab grabs the Interactable Object, it will grab it with precision and pick it up at the particular point on the Interactable Object that the Interact Touch is touching.
+ * **Detach Distance:** The maximum distance the grabbing object is away from the slider before it is automatically released.
+ * **Release Friction:** The amount of friction to the slider Rigidbody when it is released.
+ * **Only Interact With:** A collection of GameObjects that will be used as the valid collisions to determine if the door can be interacted with.
+
+### Class Methods
+
+#### GetValue/0
+
+  > `public override float GetValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The actual position of the button.
+
+The GetValue method returns the current position value of the slider.
+
+#### GetNormalizedValue/0
+
+  > `public override float GetNormalizedValue()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The normalized position of the button.
+
+The GetNormalizedValue method returns the current position value of the slider normalized between `0f` and `1f`.
+
+#### GetStepValue/1
+
+  > `public virtual float GetStepValue(float currentValue)`
+
+ * Parameters
+   * `float currentValue` - The current position value of the slider to get the Step Value for.
+ * Returns
+   * `float` - The current Step Value based on the slider position.
+
+The GetStepValue method returns the current position of the slider based on the step value range.
+
+#### SetPositionTarget/2
+
+  > `public virtual void SetPositionTarget(float newPositionTarget, float speed)`
+
+ * Parameters
+   * `float newPositionTarget` - The new position target value.
+   * `float speed` - The speed to move to the new position target.
+ * Returns
+   * _none_
+
+The SetPositionTarget method allows the setting of the `Position Target` parameter at runtime.
+
+#### SetPositionTargetWithStepValue/2
+
+  > `public virtual void SetPositionTargetWithStepValue(float givenStepValue, float speed)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Position Target` parameter to.
+   * `float speed` - The speed to move to the new position target.
+ * Returns
+   * _none_
+
+The SetPositionTargetWithStepValue sets the `Position Target` parameter but uses a value within the `Step Value Range`.
+
+#### SetRestingPositionWithStepValue/1
+
+  > `public virtual void SetRestingPositionWithStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value within the `Step Value Range` to set the `Resting Position` parameter to.
+ * Returns
+   * _none_
+
+The SetRestingPositionWithStepValue sets the `Resting Position` parameter but uses a value within the `Step Value Range`.
+
+#### GetPositionFromStepValue/1
+
+  > `public virtual float GetPositionFromStepValue(float givenStepValue)`
+
+ * Parameters
+   * `float givenStepValue` - The step value to check the position for.
+ * Returns
+   * `float` - The position the slider would be at based on the given step value.
+
+The GetPositionFromStepValue returns the position the slider would be at based on the given step value.
+
+#### IsResting/0
+
+  > `public override bool IsResting()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns `true` if the slider is at the resting position or within the resting position threshold.
+
+The IsResting method returns whether the slider is at the resting position or within the resting position threshold.
 
 #### GetControlInteractableObject/0
 
@@ -7844,121 +8005,6 @@ Specifies a Unity UI Element as being a valid drop zone location for a UI Dragga
 ### Example
 
 `VRTK/Examples/034_Controls_InteractingWithUnityUI` demonstrates a collection of UI Drop Zones.
-
----
-
-# 3D Controls (VRTK/Source/Scripts/Controls/3D)
-
-In order to interact with the world beyond grabbing and throwing, controls can be used to mimic real-life objects.
-
-A number of controls are available which partially support auto-configuration. So can a slider for example detect its min and max points or a button the distance until a push event should be triggered. In the editor gizmos will be drawn that show the current settings. A yellow gizmo signals a valid configuration. A red one shows that the position of the object should change or switch to manual configuration mode.
-
-All 3D controls extend the `VRTK_Control` abstract class which provides common methods and events.
-
- * [Control](#control-vrtk_control)
- * [Content Handler](#content-handler-vrtk_contenthandler)
-
----
-
-## Control (VRTK_Control)
-
-### Overview
-
-All 3D controls extend the `VRTK_Control` abstract class which provides a default set of methods and events that all of the subsequent controls expose.
-
-### Inspector Parameters
-
- * **Interact Without Grab:** If active the control will react to the controller without the need to push the grab button.
-
-### Class Variables
-
- * `public enum Direction` - 3D Control Directions
-   * `autodetect` - Attempt to auto detect the axis.
-   * `x` - The world x direction.
-   * `y` - The world y direction.
-   * `z` - The world z direction.
-
-### Class Events
-
- * `ValueChanged` - Emitted when the 3D Control value has changed.
-
-### Unity Events
-
-Adding the `VRTK_Control_UnityEvents` component to `VRTK_Control` object allows access to `UnityEvents` that will react identically to the Class Events.
-
- * All C# delegate events are mapped to a Unity Event with the `On` prefix. e.g. `MyEvent` -> `OnMyEvent`.
-
-### Event Payload
-
- * `float value` - The current value being reported by the control.
- * `float normalizedValue` - The normalized value being reported by the control.
-
-### Class Methods
-
-#### GetValue/0
-
-  > `public virtual float GetValue()`
-
- * Parameters
-   * _none_
- * Returns
-   * `float` - The current value of the control.
-
-The GetValue method returns the current value/position/setting of the control depending on the control that is extending this abstract class.
-
-#### GetNormalizedValue/0
-
-  > `public virtual float GetNormalizedValue()`
-
- * Parameters
-   * _none_
- * Returns
-   * `float` - The current normalized value of the control.
-
-The GetNormalizedValue method returns the current value mapped onto a range between 0 and 100.
-
-#### SetContent/2
-
-  > `public virtual void SetContent(GameObject content, bool hideContent)`
-
- * Parameters
-   * `GameObject content` - The content to be considered within the control.
-   * `bool hideContent` - When true the content will be hidden in addition to being non-interactable in case the control is fully closed.
- * Returns
-   * _none_
-
-The SetContent method sets the given game object as the content of the control. This will then disable and optionally hide the content when a control is obscuring its view to prevent interacting with content within a control.
-
-#### GetContent/0
-
-  > `public virtual GameObject GetContent()`
-
- * Parameters
-   * _none_
- * Returns
-   * `GameObject` - The currently stored content for the control.
-
-The GetContent method returns the current game object of the control's content.
-
----
-
-## Content Handler (VRTK_ContentHandler)
-
-### Overview
-
-Manages objects defined as content. When taking out an object from a drawer and closing the drawer this object would otherwise disappear even if outside the drawer.
-
-The script will use the boundaries of the control to determine if it is in or out and re-parent the object as necessary. It can be put onto individual objects or the parent of multiple objects. Using the latter way all interactable objects under that parent will become managed by the script.
-
-### Inspector Parameters
-
- * **Control:** The 3D control responsible for the content.
- * **Inside:** The transform containing the meshes or colliders that define the inside of the control.
- * **Outside:** Any transform that will act as the parent while the object is not inside the control.
-
-### Example
-
-`VRTK/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
 
 ---
 

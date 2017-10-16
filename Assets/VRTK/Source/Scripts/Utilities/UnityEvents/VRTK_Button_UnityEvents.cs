@@ -5,7 +5,7 @@
     using System;
 
     [AddComponentMenu("VRTK/Scripts/Utilities/Unity Events/VRTK_Button_UnityEvents")]
-    [Obsolete("`VRTK_Button_UnityEvents` has been replaced with `VRTK_BaseControllable_UnityEvents`. This script will be removed in a future version of VRTK.")]
+    [Obsolete("`VRTK_Button_UnityEvents` has been deprecated and can be recreated with `VRTK_BaseControllable_UnityEvents`. This script will be removed in a future version of VRTK.")]
     public sealed class VRTK_Button_UnityEvents : VRTK_UnityEvents<VRTK_Button>
     {
         [Serializable]

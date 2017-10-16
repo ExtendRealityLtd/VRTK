@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
     /// </example>
+    [System.Obsolete("`VRTK_ContentHandler` has been deprecated. This script will be removed in a future version of VRTK.")]
     public class VRTK_ContentHandler : MonoBehaviour
     {
         [Tooltip("The 3D control responsible for the content.")]

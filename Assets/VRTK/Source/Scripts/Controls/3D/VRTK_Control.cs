@@ -25,6 +25,7 @@ namespace VRTK
     /// All 3D controls extend the `VRTK_Control` abstract class which provides a default set of methods and events that all of the subsequent controls expose.
     /// </summary>
     [ExecuteInEditMode]
+    [System.Obsolete("`VRTK_Control` has been deprecated. This script will be removed in a future version of VRTK.")]
     public abstract class VRTK_Control : MonoBehaviour
     {
         /// <summary>

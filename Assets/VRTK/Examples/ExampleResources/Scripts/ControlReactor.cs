@@ -8,16 +8,20 @@
     {
         public TextMesh go;
 
+#pragma warning disable 0618
         protected VRTK_Control_UnityEvents controlEvents;
+#pragma warning restore 0618
         protected VRTK_BaseControllable controllableEvents;
 
         protected virtual void OnEnable()
         {
+#pragma warning disable 0618
             if (GetComponent<VRTK_Control>() != null && GetComponent<VRTK_Control_UnityEvents>() == null)
             {
                 controlEvents = gameObject.AddComponent<VRTK_Control_UnityEvents>();
             }
             controlEvents = GetComponent<VRTK_Control_UnityEvents>();
+#pragma warning restore 0618
             controllableEvents = GetComponent<VRTK_BaseControllable>();
 
             ManageListeners(true);
