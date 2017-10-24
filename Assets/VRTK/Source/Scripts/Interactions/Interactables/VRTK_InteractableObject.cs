@@ -1207,7 +1207,7 @@ namespace VRTK
         {
             if (isGrabbable && grabAttachMechanicScript == null)
             {
-                VRTK_BaseGrabAttach setGrabMechanic = GetComponentInChildren<VRTK_BaseGrabAttach>();
+                VRTK_BaseGrabAttach setGrabMechanic = GetComponent<VRTK_BaseGrabAttach>();
                 if (setGrabMechanic == null)
                 {
                     setGrabMechanic = gameObject.AddComponent<VRTK_FixedJointGrabAttach>();
@@ -1220,7 +1220,7 @@ namespace VRTK
         {
             if (isGrabbable && secondaryGrabActionScript == null)
             {
-                secondaryGrabActionScript = GetComponentInChildren<VRTK_BaseGrabAction>();
+                secondaryGrabActionScript = GetComponent<VRTK_BaseGrabAction>();
             }
         }
 
