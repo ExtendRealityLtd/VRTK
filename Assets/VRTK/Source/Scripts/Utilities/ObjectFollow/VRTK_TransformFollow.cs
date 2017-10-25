@@ -15,6 +15,10 @@ namespace VRTK
         public enum FollowMoment
         {
             /// <summary>
+            /// Follow in the FixedUpdate method.
+            /// </summary>
+            OnFixedUpdate,
+            /// <summary>
             /// Follow in the Update method.
             /// </summary>
             OnUpdate,
@@ -103,6 +107,14 @@ namespace VRTK
             transformToChange = null;
             Camera.onPreRender -= OnCamPreRender;
             Camera.onPreCull -= OnCamPreCull;
+        }
+
+        protected void FixedUpdate()
+        {
+            if (moment == FollowMoment.OnFixedUpdate)
+            {
+                Follow();
+            }
         }
 
         protected void Update()
