@@ -9354,6 +9354,7 @@ Changes one game object's transform to follow another game object's transform.
 ### Class Variables
 
  * `public enum FollowMoment` - The moment at which to follow.
+   * `OnFixedUpdate` - Follow in the FixedUpdate method.
    * `OnUpdate` - Follow in the Update method.
    * `OnLateUpdate` - Follow in the LateUpdate method.
    * `OnPreRender` - Follow in the OnPreRender method. (This script doesn't have to be attached to a camera).
