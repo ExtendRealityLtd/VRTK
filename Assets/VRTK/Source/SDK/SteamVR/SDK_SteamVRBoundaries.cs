@@ -47,7 +47,7 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                var steamVRPlayArea = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_PlayArea>();
+                SteamVR_PlayArea steamVRPlayArea = VRTK_SharedMethods.FindEvenInactiveComponent<SteamVR_PlayArea>();
                 if (steamVRPlayArea != null)
                 {
                     cachedSteamVRPlayArea = steamVRPlayArea;
