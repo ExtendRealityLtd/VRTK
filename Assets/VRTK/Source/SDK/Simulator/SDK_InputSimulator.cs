@@ -111,6 +111,11 @@
         [Tooltip("Key used to switch between hair touch mode.")]
         public KeyCode hairTouchModifier = KeyCode.H;
 
+        [Header("Custom Settings")]
+
+        [Tooltip("An optional Body Physics script to check for potential collisions in the moving direction. If any potential collision is found then the move will not take place.")]
+        public VRTK_BodyPhysics bodyPhysics;
+
         #endregion
         #region Private fields
 
@@ -327,7 +332,7 @@
             }
         }
 
-        private void UpdateHands()
+        protected virtual void UpdateHands()
         {
             Vector3 mouseDiff = GetMouseDelta();
 
@@ -369,7 +374,7 @@
             }
         }
 
-        private void UpdateRotation()
+        protected virtual void UpdateRotation()
         {
             Vector3 mouseDiff = GetMouseDelta();
 
@@ -395,25 +400,31 @@
             }
         }
 
-        private void UpdatePosition()
+        protected virtual void UpdatePosition()
         {
             float moveMod = Time.deltaTime * playerMoveMultiplier * sprintMultiplier;
+            Vector3 proposedDirection = Vector3.zero;
             if (Input.GetKey(moveForward))
             {
-                transform.Translate(transform.forward * moveMod, Space.World);
+                proposedDirection = transform.forward * moveMod;
             }
             else if (Input.GetKey(moveBackward))
             {
-                transform.Translate(-transform.forward * moveMod, Space.World);
+                proposedDirection = -transform.forward * moveMod;
             }
             if (Input.GetKey(moveLeft))
             {
-                transform.Translate(-transform.right * moveMod, Space.World);
+                proposedDirection = -transform.right * moveMod;
             }
             else if (Input.GetKey(moveRight))
             {
-                transform.Translate(transform.right * moveMod, Space.World);
+                proposedDirection = transform.right * moveMod;
             }
+
+            if (bodyPhysics != null && !bodyPhysics.CanMove(transform.position + proposedDirection))
+                return;
+
+            transform.Translate(proposedDirection, Space.World);
         }
 
         private void SetHand()
