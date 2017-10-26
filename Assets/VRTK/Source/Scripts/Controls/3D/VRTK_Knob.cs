@@ -13,6 +13,7 @@ namespace VRTK
     /// `VRTK/Examples/025_Controls_Overview` has a couple of rotator knobs that can be rotated by grabbing with the controller and then rotating the controller in the desired direction.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Knob")]
+    [System.Obsolete("`VRTK.VRTK_Knob` has been deprecated and can be recreated with `VRTK.Controllables.PhysicsBased.VRTK_PhysicsRotator`. This script will be removed in a future version of VRTK.")]
     public class VRTK_Knob : VRTK_Control
     {
         /// <summary>

@@ -160,9 +160,17 @@ namespace VRTK.GrabAttachMechanics
         {
         }
 
-        protected virtual void Awake()
+        /// <summary>
+        /// The ResetState method re-initializes the grab attach.
+        /// </summary>
+        public virtual void ResetState()
         {
             Initialise();
+        }
+
+        protected virtual void Awake()
+        {
+            ResetState();
         }
 
         protected abstract void Initialise();

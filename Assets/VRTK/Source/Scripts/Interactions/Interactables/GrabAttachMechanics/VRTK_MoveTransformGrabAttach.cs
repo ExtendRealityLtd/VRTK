@@ -322,7 +322,7 @@ namespace VRTK.GrabAttachMechanics
                 else
                 {
                     Vector3 currentPosition = transform.localPosition;
-                    Vector3 moveTowards = currentPosition + (transform.InverseTransformPoint(controllerAttachPoint.transform.position) - transform.InverseTransformPoint(grabbedObjectScript.GetPrimaryAttachPoint().position));
+                    Vector3 moveTowards = currentPosition + Vector3.Scale((transform.InverseTransformPoint(controllerAttachPoint.transform.position) - transform.InverseTransformPoint(grabbedObjectScript.GetPrimaryAttachPoint().position)), transform.localScale);
                     Vector3 targetPosition = Vector3.Lerp(currentPosition, moveTowards, trackingSpeed * Time.deltaTime);
                     previousPosition = transform.localPosition;
                     UpdatePosition(targetPosition, false);
@@ -368,19 +368,29 @@ namespace VRTK.GrabAttachMechanics
         }
 
         /// <summary>
-        /// The ResetPosition method will move the transform back to the origin position.
+        /// The SetCurrentPosition method sets the position of the Interactable Object to the given new position at the appropriate speed.
         /// </summary>
-        public virtual void ResetPosition()
+        /// <param name="newPosition">The position to move the Interactable Object to.</param>
+        /// <param name="speed">The speed in which to move the Interactable Object.</param>
+        public virtual void SetCurrentPosition(Vector3 newPosition, float speed)
         {
-            if (resetToOrignOnReleaseSpeed > 0)
+            if(speed > 0f)
             {
                 CancelResetPosition();
-                resetPositionRoutine = StartCoroutine(MoveToOrigin());
+                resetPositionRoutine = StartCoroutine(MoveToPosition(newPosition, speed));
             }
             else
             {
-                UpdatePosition(localOrigin, false);
+                UpdatePosition(newPosition, false);
             }
+        }
+
+        /// <summary>
+        /// The ResetPosition method will move the Interactable Object back to the origin position.
+        /// </summary>
+        public virtual void ResetPosition()
+        {
+            SetCurrentPosition(localOrigin, resetToOrignOnReleaseSpeed);
         }
 
         /// <summary>
@@ -390,6 +400,11 @@ namespace VRTK.GrabAttachMechanics
         public virtual Vector2[] GetWorldLimits()
         {
             return new Vector2[] { xOriginLimits, yOriginLimits, zOriginLimits };
+        }
+
+        protected virtual void OnEnable()
+        {
+            ResetState();
         }
 
         protected virtual void OnDisable()
@@ -403,7 +418,6 @@ namespace VRTK.GrabAttachMechanics
             tracked = false;
             climbable = false;
             kinematic = true;
-
             SetupOrigin();
         }
 
@@ -464,14 +478,14 @@ namespace VRTK.GrabAttachMechanics
             EmitEvents();
         }
 
-        protected virtual IEnumerator MoveToOrigin()
+        protected virtual IEnumerator MoveToPosition(Vector3 targetPosition, float speed)
         {
-            while (transform.localPosition != localOrigin)
+            while (transform.localPosition != targetPosition)
             {
-                UpdatePosition(Vector3.Lerp(transform.localPosition, localOrigin, resetToOrignOnReleaseSpeed * Time.deltaTime), false, false);
+                UpdatePosition(Vector3.Lerp(transform.localPosition, targetPosition, speed * Time.deltaTime), false, false);
                 yield return null;
             }
-            UpdatePosition(localOrigin, false);
+            UpdatePosition(targetPosition, false);
         }
 
         protected virtual IEnumerator DeceleratePosition()
@@ -482,6 +496,7 @@ namespace VRTK.GrabAttachMechanics
                 UpdatePosition(movementVelocity, true);
                 yield return null;
             }
+            movementVelocity = Vector3.zero;
         }
 
         protected virtual void CheckAxisLimits()

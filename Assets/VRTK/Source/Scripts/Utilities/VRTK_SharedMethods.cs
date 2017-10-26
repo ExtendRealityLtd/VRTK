@@ -136,6 +136,41 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ColliderExclude method reduces the colliders in the setA array by those matched in the setB array.
+        /// </summary>
+        /// <param name="setA">The array that contains all of the relevant colliders.</param>
+        /// <param name="setB">The array that contains the colliders to remove from setA.</param>
+        /// <returns>A Collider array that is a subset of setA that doesn't contain the colliders from setB.</returns>
+        public static Collider[] ColliderExclude(Collider[] setA, Collider[] setB)
+        {
+            return setA.Except(setB).ToArray<Collider>();
+        }
+
+        /// <summary>
+        /// The GetCollidersInGameObjects method iterates through a GameObject array and returns all of the unique found colliders for all GameObejcts.
+        /// </summary>
+        /// <param name="gameObjects">An array of GameObjects to get the colliders for.</param>
+        /// <param name="searchChildren">If this is `true` then the given GameObjects will also have their child GameObjects searched for colliders.</param>
+        /// <param name="includeInactive">If this is `true` then the inactive GameObjects in the array will also be checked for Colliders. Only relevant if `searchChildren` is `true`.</param>
+        /// <returns>An array of Colliders that are found in the given GameObject array.</returns>
+        public static Collider[] GetCollidersInGameObjects(GameObject[] gameObjects, bool searchChildren, bool includeInactive)
+        {
+            List<Collider> foundColliders = new List<Collider>();
+            for (int i = 0; i < gameObjects.Length; i++)
+            {
+                Collider[] gameObjectColliders = (searchChildren ? gameObjects[i].GetComponentsInChildren<Collider>(includeInactive) : gameObjects[i].GetComponents<Collider>());
+                for (int j = 0; j < gameObjectColliders.Length; j++)
+                {
+                    if (!foundColliders.Contains(gameObjectColliders[j]))
+                    {
+                        foundColliders.Add(gameObjectColliders[j]);
+                    }
+                }
+            }
+            return foundColliders.ToArray<Collider>();
+        }
+
+        /// <summary>
         /// The CloneComponent method takes a source component and copies it to the given destination game object.
         /// </summary>
         /// <param name="source">The component to copy.</param>
@@ -331,12 +366,24 @@ namespace VRTK
         /// <param name="vectorA">The Vector2 to compare against.</param>
         /// <param name="vectorB">The Vector2 to compare with</param>
         /// <param name="compareFidelity">The number of decimal places to use when doing the comparison on the float elements within the Vector2.</param>
-        /// <returns>Returns true if the given Vector2 objects match based on the given fidelity.</returns>
+        /// <returns>Returns `true` if the given Vector2 objects match based on the given fidelity.</returns>
         public static bool Vector2ShallowCompare(Vector2 vectorA, Vector2 vectorB, int compareFidelity)
         {
             Vector2 distanceVector = vectorA - vectorB;
             return (Math.Round(Mathf.Abs(distanceVector.x), compareFidelity, MidpointRounding.AwayFromZero) < float.Epsilon &&
                     Math.Round(Mathf.Abs(distanceVector.y), compareFidelity, MidpointRounding.AwayFromZero) < float.Epsilon);
+        }
+
+        /// <summary>
+        /// The Vector3ShallowCompare method compares two given Vector3 objects based on the given threshold, which is the equavelent of checking the distance between two Vector3 objects are above the threshold distance.
+        /// </summary>
+        /// <param name="vectorA">The Vector3 to compare against.</param>
+        /// <param name="vectorB">The Vector3 to compare with</param>
+        /// <param name="threshold">The distance in which the two Vector3 objects can be within to be considered true</param>
+        /// <returns>Returns `true` if the given Vector3 objects are within the given threshold distance.</returns>
+        public static bool Vector3ShallowCompare(Vector3 vectorA, Vector3 vectorB, float threshold)
+        {
+            return (Vector3.Distance(vectorA, vectorB) < threshold);
         }
 
         /// <summary>
@@ -411,6 +458,18 @@ namespace VRTK
             result = (result < threshold ? 0f : result);
             result = (result > 1f - threshold ? 1f : result);
             return Mathf.Clamp(result, 0f, 1f);
+        }
+
+        /// <summary>
+        /// The AxisDirection method returns the relevant direction Vector3 based on the axis index in relation to x,y,z.
+        /// </summary>
+        /// <param name="axisIndex">The axis index of the axis. `0 = x` `1 = y` `2 = z`</param>
+        /// <param name="givenTransform">An optional Transform to get the Axis Direction for. If this is `null` then the World directions will be used.</param>
+        /// <returns>The direction Vector3 based on the given axis index.</returns>
+        public static Vector3 AxisDirection(int axisIndex, Transform givenTransform = null)
+        {
+            Vector3[] worldDirections = (givenTransform != null ? new Vector3[] { givenTransform.right, givenTransform.up, givenTransform.forward } : new Vector3[] { Vector3.right, Vector3.up, Vector3.forward });
+            return worldDirections[(int)Mathf.Clamp(axisIndex, 0f, worldDirections.Length)];
         }
 
         /// <summary>

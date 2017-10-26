@@ -1,31 +1,45 @@
 ﻿namespace VRTK.Examples
 {
     using UnityEngine;
-    using UnityEventHelper;
+    using VRTK.Controllables;
+    using VRTK.Controllables.PhysicsBased;
+    using VRTK.Controllables.ArtificialBased;
 
     public class ButtonReactor : MonoBehaviour
     {
-        public GameObject go;
-        public Transform dispenseLocation;
+        protected VRTK_PhysicsPusher buttonEvents;
+        protected VRTK_ArtificialPusher artbuttonEvents;
 
-        private VRTK_Button_UnityEvents buttonEvents;
-
-        private void Start()
+        protected virtual void OnEnable()
         {
-            buttonEvents = GetComponent<VRTK_Button_UnityEvents>();
-            if (buttonEvents == null)
+            buttonEvents = GetComponent<VRTK_PhysicsPusher>();
+            if (buttonEvents != null)
             {
-                buttonEvents = gameObject.AddComponent<VRTK_Button_UnityEvents>();
+                buttonEvents.MaxLimitReached += MaxLimitReached;
             }
-            buttonEvents.OnPushed.AddListener(handlePush);
+            artbuttonEvents = GetComponent<VRTK_ArtificialPusher>();
+            if (artbuttonEvents != null)
+            {
+                artbuttonEvents.MaxLimitReached += MaxLimitReached;
+            }
         }
 
-        private void handlePush(object sender, Control3DEventArgs e)
+        protected virtual void OnDisable()
         {
-            VRTK_Logger.Info("Pushed");
+            if (buttonEvents != null)
+            {
+                buttonEvents.MaxLimitReached -= MaxLimitReached;
+            }
+            if (artbuttonEvents != null)
+            {
+                artbuttonEvents.MaxLimitReached -= MaxLimitReached;
+            }
+        }
 
-            GameObject newGo = (GameObject)Instantiate(go, dispenseLocation.position, Quaternion.identity);
-            Destroy(newGo, 10f);
+        protected virtual void MaxLimitReached(object sender, ControllableEventArgs e)
+        {
+            VRTK_BaseControllable senderButton = sender as VRTK_BaseControllable;
+            VRTK_Logger.Info(senderButton.name + " was pushed");
         }
     }
 }

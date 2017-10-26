@@ -13,6 +13,7 @@ namespace VRTK
     /// `VRTK/Examples/025_Controls_Overview` has a selection of sliders at various angles with different step values to demonstrate their usage.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_Slider")]
+    [System.Obsolete("`VRTK.VRTK_Drawer` has been deprecated and can be recreated with `VRTK.Controllables.PhysicsBased.VRTK_PhysicsSlider`. This script will be removed in a future version of VRTK.")]
     public class VRTK_Slider : VRTK_Control
     {
         [Tooltip("An optional game object to which the wheel will be connected. If the game object moves the wheel will follow along.")]

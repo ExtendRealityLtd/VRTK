@@ -10,6 +10,7 @@ namespace VRTK
     /// The script will instantiate the required Rigidbody, Interactable and HingeJoint components automatically in case they do not exist yet. The joint is very tricky to setup automatically though and will only work in straight forward cases. If there are any issues, then create the HingeJoint component manually and configure it as needed.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Controls/3D/VRTK_SpringLever")]
+    [System.Obsolete("`VRTK.VRTK_SpringLever` has been deprecated and can be recreated with `VRTK.Controllables.PhysicsBased.VRTK_PhysicsRotator`. This script will be removed in a future version of VRTK.")]
     public class VRTK_SpringLever : VRTK_Lever
     {
         [Tooltip("The strength of the spring force that will be applied upon the lever.")]

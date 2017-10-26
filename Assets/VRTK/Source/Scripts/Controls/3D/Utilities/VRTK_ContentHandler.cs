@@ -12,6 +12,7 @@ namespace VRTK
     /// <example>
     /// `VRTK/Examples/025_Controls_Overview` has a drawer with a collection of items that adhere to this concept.
     /// </example>
+    [System.Obsolete("`VRTK_ContentHandler` has been deprecated. This script will be removed in a future version of VRTK.")]
     public class VRTK_ContentHandler : MonoBehaviour
     {
         [Tooltip("The 3D control responsible for the content.")]
@@ -44,16 +45,19 @@ namespace VRTK
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            Bounds insideBounds = VRTK_SharedMethods.GetBounds(inside, null, control.GetContent().transform);
-            Bounds objBounds = VRTK_SharedMethods.GetBounds(transform);
+            if (control != null)
+            {
+                Bounds insideBounds = VRTK_SharedMethods.GetBounds(inside, null, control.GetContent().transform);
+                Bounds objBounds = VRTK_SharedMethods.GetBounds(transform);
 
-            if (objBounds.Intersects(insideBounds))
-            {
-                transform.SetParent(control.GetContent().transform);
-            }
-            else
-            {
-                transform.SetParent(outside);
+                if (objBounds.Intersects(insideBounds))
+                {
+                    transform.SetParent(control.GetContent().transform);
+                }
+                else
+                {
+                    transform.SetParent(outside);
+                }
             }
         }
     }
