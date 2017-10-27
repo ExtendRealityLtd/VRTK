@@ -30,6 +30,9 @@ namespace VRTK.GrabAttachMechanics
     ///  * Place the `VRTK_ControlAnimationGrabAttach` script on either:
     ///    * The GameObject of the Interactable Object to detect interactions on.
     ///    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+    ///    * Create and apply an animation via:
+    ///      * `Animation Timeline` parameter takes a legacy `Animation` component to use as the timeline to scrub through. The animation must be marked as `legacy` via the inspector in debug mode.
+    ///      * `Animator Timeline` parameter takes an Animator component to use as the timeline to scrub through.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/Grab Attach Mechanics/VRTK_ControlAnimationGrabAttach")]
     public class VRTK_ControlAnimationGrabAttach : VRTK_BaseGrabAttach
@@ -39,8 +42,10 @@ namespace VRTK.GrabAttachMechanics
 
         [Header("Animation Settings", order = 2)]
 
-        [Tooltip("The Animator with the timeline to scrub through on grab.")]
-        public Animator timeline;
+        [Tooltip("An Animation with the timeline to scrub through on grab. If this is set then the `Animator Timeline` will be ignored if it is also set.")]
+        public Animation animationTimeline;
+        [Tooltip("An Animator with the timeline to scrub through on grab.")]
+        public Animator animatorTimeline;
         [Tooltip("The maximum amount of frames in the timeline.")]
         public float maxFrames = 1f;
         [Tooltip("An amount to multiply the distance by to determine the scrubbed frame to be on.")]
@@ -68,6 +73,7 @@ namespace VRTK.GrabAttachMechanics
         protected float currentFrame = 0f;
         protected Coroutine resetTimelineRoutine;
         protected bool atEnd = false;
+        protected string animationName = "";
 
         public virtual void OnAnimationFrameChanged(ControlAnimationGrabAttachEventArgs e)
         {
@@ -166,10 +172,10 @@ namespace VRTK.GrabAttachMechanics
         public virtual void SetFrame(float frame)
         {
             float setFrame = frame * distanceMultiplier;
-            timeline.speed = animationSpeed;
+            SetTimelineSpeed(animationSpeed);
             if (setFrame < maxFrames)
             {
-                timeline.Play(0, 0, setFrame);
+                SetTimelinePosition(setFrame);
                 if (setFrame == 0)
                 {
                     OnAnimationFrameAtStart(SetEventPayload(setFrame));
@@ -204,9 +210,52 @@ namespace VRTK.GrabAttachMechanics
             tracked = false;
             climbable = false;
             kinematic = true;
+            InitTimeline();
+        }
 
-            timeline = (timeline != null ? timeline : GetComponent<Animator>());
-            timeline.speed = animationSpeed;
+        protected virtual void InitTimeline()
+        {
+            animatorTimeline = (animatorTimeline != null ? animatorTimeline : GetComponent<Animator>());
+            animationTimeline = (animationTimeline != null ? animationTimeline : GetComponent<Animation>());
+            if (animationTimeline != null)
+            {
+                if (!animationTimeline.clip.legacy)
+                {
+                    VRTK_Logger.Error("The `VRTK_ControlAnimationGrabAttach` script is using an `Animation Timeline` that has not been set to `Legacy Animation`. Only legacy animations are supported.");
+                }
+
+                foreach (AnimationState currentClip in animationTimeline)
+                {
+                    animationName = currentClip.name;
+                    break;
+                }
+            }
+            SetTimelineSpeed(animationSpeed);
+        }
+
+        protected virtual void SetTimelineSpeed(float speed)
+        {
+            if (animationTimeline != null)
+            {
+                animationTimeline[animationName].speed = speed;
+            }
+            else if (animatorTimeline != null)
+            {
+                animatorTimeline.speed = speed;
+            }
+        }
+
+        protected virtual void SetTimelinePosition(float framePosition)
+        {
+            if (animationTimeline != null)
+            {
+                animationTimeline[animationName].time = framePosition;
+                animationTimeline.Play(animationName);
+            }
+            else if (animatorTimeline != null)
+            {
+                animatorTimeline.Play(0, 0, framePosition);
+            }
         }
 
         protected virtual void CancelResetTimeline()
@@ -232,7 +281,7 @@ namespace VRTK.GrabAttachMechanics
         protected virtual ControlAnimationGrabAttachEventArgs SetEventPayload(float frame)
         {
             ControlAnimationGrabAttachEventArgs e;
-            e.interactingObject = grabbedObjectScript.GetGrabbingObject();
+            e.interactingObject = (grabbedObjectScript != null ? grabbedObjectScript.GetGrabbingObject() : null);
             e.currentFrame = frame;
             return e;
         }
