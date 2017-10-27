@@ -5437,11 +5437,15 @@ Scrubs through the given animation based on the distance from the grabbing objec
  * Place the `VRTK_ControlAnimationGrabAttach` script on either:
    * The GameObject of the Interactable Object to detect interactions on.
    * Any other scene GameObject and then link that GameObject to the Interactable Objects `Grab Attach Mechanic Script` parameter to denote use of the grab mechanic.
+   * Create and apply an animation via:
+     * `Animation Timeline` parameter takes a legacy `Animation` component to use as the timeline to scrub through. The animation must be marked as `legacy` via the inspector in debug mode.
+     * `Animator Timeline` parameter takes an Animator component to use as the timeline to scrub through.
 
 ### Inspector Parameters
 
  * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically released.
- * **Timeline:** The Animator with the timeline to scrub through on grab.
+ * **Animation Timeline:** An Animation with the timeline to scrub through on grab. If this is set then the `Animator Timeline` will be ignored if it is also set.
+ * **Animator Timeline:** An Animator with the timeline to scrub through on grab.
  * **Max Frames:** The maximum amount of frames in the timeline.
  * **Distance Multiplier:** An amount to multiply the distance by to determine the scrubbed frame to be on.
  * **Rewind On Release:** If this is checked then the animation will rewind to the start on ungrab.
