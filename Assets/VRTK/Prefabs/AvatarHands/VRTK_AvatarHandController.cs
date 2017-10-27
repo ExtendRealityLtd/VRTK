@@ -166,6 +166,8 @@ namespace VRTK
 
         [Header("Custom Settings")]
 
+        [Tooltip("The Transform that contains the avatar hand model. If this is left blank then a child GameObject named `Model` will be searched for to use as the Transform.")]
+        public Transform handModel;
         [Tooltip("The controller to listen for the events on. If this is left blank as it will be auto populated by finding the Controller Events script on the parent GameObject.")]
         public VRTK_ControllerEvents controllerEvents;
         [Tooltip("An optional Interact NearTouch to listen for near touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact NearTouch script on the parent GameObject.")]
@@ -703,7 +705,7 @@ namespace VRTK
 
         protected virtual void MirrorHand()
         {
-            Transform modelTransform = transform.Find("Model");
+            Transform modelTransform = (handModel != null ? handModel : transform.Find("Model"));
             if (modelTransform != null)
             {
                 modelTransform.localScale = new Vector3(modelTransform.localScale.x * -1f, modelTransform.localScale.y, modelTransform.localScale.z);

@@ -1109,6 +1109,7 @@ Provides a custom controller hand model with psuedo finger functionality.
  * **Touch Overrides:** Finger axis overrides on an Interact Touch event.
  * **Grab Overrides:** Finger axis overrides on an Interact Grab event.
  * **Use Overrides:** Finger axis overrides on an Interact Use event.
+ * **Hand Model:** The Transform that contains the avatar hand model. If this is left blank then a child GameObject named `Model` will be searched for to use as the Transform.
  * **Controller Events:** The controller to listen for the events on. If this is left blank as it will be auto populated by finding the Controller Events script on the parent GameObject.
  * **Interact Near Touch:** An optional Interact NearTouch to listen for near touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact NearTouch script on the parent GameObject.
  * **Interact Touch:** An optional Interact Touch to listen for touch events on. If this is left blank as it will attempt to be auto populated by finding the Interact Touch script on the parent GameObject.
