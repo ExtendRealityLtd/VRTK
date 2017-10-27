@@ -356,7 +356,7 @@ namespace VRTK
             float gpuTimeLastFrame;
             return (XRStats.TryGetGPUTimeLastFrame(out gpuTimeLastFrame) ? gpuTimeLastFrame : 0f);
 #else
-            return VRStats.gpuTimeLastFrame;
+            return XRStats.gpuTimeLastFrame;
 #endif
         }
 
