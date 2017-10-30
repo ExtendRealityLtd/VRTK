@@ -12,6 +12,78 @@ namespace VRTK
     /// </remarks>
     public abstract class SDK_BaseHeadset : SDK_Base
     {
+
+        /// <summary>
+        /// SDK Headset types.
+        /// </summary>
+        public enum Headsets
+        {
+            /// <summary>
+            /// An unknown headset.
+            /// </summary>
+            Unknown,
+            /// <summary>
+            /// A summary of all Oculus Rift headset versions.
+            /// </summary>
+            OculusRift,
+            /// <summary>
+            /// A specific version of the Oculus Rift headset, the Consumer Version 1.
+            /// </summary>
+            OculusRiftCV1,
+            /// <summary>
+            /// A summary of all HTC Vive headset versions.
+            /// </summary>
+            Vive,
+            /// <summary>
+            /// A specific version of the HTC Vive headset, the first consumer version.
+            /// </summary>
+            ViveMV,
+            /// <summary>
+            /// A specific version of the HTC Vive headset, the first consumer version.
+            /// </summary>
+            ViveDVT,
+            /// <summary>
+            /// A specific version of the Oculus Rift headset, the rare ES07.
+            /// </summary>
+            OculusRiftES07,
+            /// <summary>
+            /// A summary of all GearVR headset versions.
+            /// </summary>
+            GearVR,
+            /// <summary>
+            /// A specific version of the GearVR headset running on a Samsung Galaxy Note 5.
+            /// </summary>
+            GearVRGalaxyNote5,
+            /// <summary>
+            /// A specific version of the GearVR headset running on a Samsung Galaxy S6.
+            /// </summary>
+            GearVRGalaxyS6,
+            /// <summary>
+            /// A specific version of the GearVR headset running on a Samsung Galaxy S6 Edge.
+            /// </summary>
+            GearVRGalaxyS6Edge,
+            /// <summary>
+            /// A specific version of the GearVR headset running on a Samsung Galaxy S7.
+            /// </summary>
+            GearVRGalaxyS7,
+            /// <summary>
+            /// A specific version of the GearVR headset running on a Samsung Galaxy S7 Edge.
+            /// </summary>
+            GearVRGalaxyS7Edge,
+            /// <summary>
+            /// A specific version of the GearVR headset running on a Samsung Galaxy S8.
+            /// </summary>
+            GearVRGalaxyS8,
+            /// <summary>
+            /// A summary of all Google Cardboard headset versions.
+            /// </summary>
+            GoogleCardboard,
+            /// <summary>
+            /// A summary of all Google Daydream headset versions.
+            /// </summary>
+            Daydream
+        }
+
         protected Transform cachedHeadset;
         protected Transform cachedHeadsetCamera;
 

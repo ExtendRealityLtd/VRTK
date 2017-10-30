@@ -26,7 +26,7 @@ namespace VRTK
         [Tooltip("If the currently loaded SDK Setup matches the one provided here then the `Target` state will be set to the desired `Object State`.")]
         public VRTK_SDKSetup loadedSDKSetup = null;
         [Tooltip("If the attached headset type matches the selected headset then the `Target` state will be set to the desired `Object State`.")]
-        public VRTK_DeviceFinder.Headsets headsetType = VRTK_DeviceFinder.Headsets.Unknown;
+        public SDK_BaseHeadset.Headsets headsetType = SDK_BaseHeadset.Headsets.Unknown;
         [Tooltip("If the current controller type matches the selected controller type then the `Target` state will be set to the desired `Object State`.")]
         public SDK_BaseController.ControllerType controllerType = SDK_BaseController.ControllerType.Undefined;
 
@@ -91,7 +91,7 @@ namespace VRTK
 
         protected virtual void ToggleOnHeadset()
         {
-            if (headsetType != VRTK_DeviceFinder.Headsets.Unknown && headsetType == VRTK_DeviceFinder.GetHeadsetType(true))
+            if (headsetType != SDK_BaseHeadset.Headsets.Unknown && headsetType == VRTK_DeviceFinder.GetHeadsetType(true))
             {
                 ToggleObject();
             }
