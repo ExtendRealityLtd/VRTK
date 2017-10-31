@@ -8323,14 +8323,6 @@ The Device Finder offers a collection of static methods that can be called to fi
    * `Headset` - The headset.
    * `LeftController` - The left hand controller.
    * `RightController` - The right hand controller.
- * `public enum Headsets` - Possible headsets
-   * `Unknown` - An unknown headset.
-   * `OculusRift` - A summary of all Oculus Rift headset versions.
-   * `OculusRiftCV1` - A specific version of the Oculus Rift headset, the Consumer Version 1.
-   * `Vive` - A summary of all HTC Vive headset versions.
-   * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
-   * `ViveDVT` - A specific version of the HTC Vive headset, the first consumer version.
-   * `OculusRiftES07` - A specific version of the Oculus Rift headset, the rare ES07.
 
 ### Class Methods
 
@@ -8624,12 +8616,12 @@ The ResetHeadsetTypeCache resets the cache holding the current headset type valu
 
 #### GetHeadsetType/1
 
-  > `public static Headsets GetHeadsetType(bool summary = false)`
+  > `public static SDK_BaseHeadset.Headsets GetHeadsetType(bool summary = false)`
 
  * Parameters
    * `bool summary` - If this is `true`, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).
  * Returns
-   * `Headsets` - The Headset type that is connected.
+   * `SDK_BaseHeadset.Headsets` - The Headset type that is connected.
 
 The GetHeadsetType method returns the type of headset connected to the computer.
 
@@ -9753,6 +9745,26 @@ The ForceInterleavedReprojectionOn method determines whether Interleaved Reproje
 The Base Headset SDK script provides a bridge to SDK methods that deal with the VR Headset.
 
 This is an abstract class to implement the interface required by all implemented SDKs.
+
+### Class Variables
+
+ * `public enum Headsets` - SDK Headset types.
+   * `Unknown` - An unknown headset.
+   * `OculusRift` - A summary of all Oculus Rift headset versions.
+   * `OculusRiftCV1` - A specific version of the Oculus Rift headset, the Consumer Version 1.
+   * `Vive` - A summary of all HTC Vive headset versions.
+   * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
+   * `ViveDVT` - A specific version of the HTC Vive headset, the first consumer version.
+   * `OculusRiftES07` - A specific version of the Oculus Rift headset, the rare ES07.
+   * `GearVR` - A summary of all GearVR headset versions.
+   * `GearVRGalaxyNote5` - A specific version of the GearVR headset running on a Samsung Galaxy Note 5.
+   * `GearVRGalaxyS6` - A specific version of the GearVR headset running on a Samsung Galaxy S6.
+   * `GearVRGalaxyS6Edge` - A specific version of the GearVR headset running on a Samsung Galaxy S6 Edge.
+   * `GearVRGalaxyS7` - A specific version of the GearVR headset running on a Samsung Galaxy S7.
+   * `GearVRGalaxyS7Edge` - A specific version of the GearVR headset running on a Samsung Galaxy S7 Edge.
+   * `GearVRGalaxyS8` - A specific version of the GearVR headset running on a Samsung Galaxy S8.
+   * `GoogleCardboard` - A summary of all Google Cardboard headset versions.
+   * `Daydream` - A summary of all Google Daydream headset versions.
 
 ### Class Methods
 

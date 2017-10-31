@@ -83,9 +83,9 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     return GetSteamVRControllerType(controllerReference);
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return ControllerType.SteamVR_OculusTouch;
             }
             return ControllerType.Custom;
@@ -101,10 +101,10 @@ namespace VRTK
             string returnCollider = "ControllerColliders/Fallback";
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
                     break;
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     switch (GetCurrentControllerType())
                     {
                         case ControllerType.SteamVR_ValveKnuckles:
@@ -225,7 +225,7 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     if (IsControllerLeftHand(parent) || IsControllerRightHand(parent))
                     {
                         GameObject generatedOrigin = new GameObject(parent.name + " _CustomPointerOrigin");
@@ -719,7 +719,7 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     switch (GetCurrentControllerType())
                     {
                         case ControllerType.SteamVR_ViveWand:
@@ -728,7 +728,7 @@ namespace VRTK
                             return "button_b" + suffix;
                     }
                     return null;
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return "grip" + suffix;
             }
             return null;
@@ -738,9 +738,9 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     return "trackpad" + suffix;
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return "thumbstick" + suffix;
             }
             return null;
@@ -750,9 +750,9 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     return null;
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return (hand == ControllerHand.Left ? "x_button" : "a_button") + suffix;
             }
             return null;
@@ -762,9 +762,9 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     return "button" + suffix;
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return (hand == ControllerHand.Left ? "y_button" : "b_button") + suffix;
             }
             return null;
@@ -774,9 +774,9 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     return "sys_button" + suffix;
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
             }
             return null;
@@ -786,9 +786,9 @@ namespace VRTK
         {
             switch (VRTK_DeviceFinder.GetHeadsetType(true))
             {
-                case VRTK_DeviceFinder.Headsets.Vive:
+                case SDK_BaseHeadset.Headsets.Vive:
                     return null;
-                case VRTK_DeviceFinder.Headsets.OculusRift:
+                case SDK_BaseHeadset.Headsets.OculusRift:
                     return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
             }
             return null;

@@ -747,10 +747,10 @@ namespace VRTK
             {
                 switch (VRTK_DeviceFinder.GetHeadsetType(true))
                 {
-                    case VRTK_DeviceFinder.Headsets.Vive:
+                    case SDK_BaseHeadset.Headsets.Vive:
                         cachedControllerType = ControllerType.SteamVR_ViveWand;
                         break;
-                    case VRTK_DeviceFinder.Headsets.OculusRift:
+                    case SDK_BaseHeadset.Headsets.OculusRift:
                         cachedControllerType = ControllerType.SteamVR_OculusTouch;
                         break;
                 }
