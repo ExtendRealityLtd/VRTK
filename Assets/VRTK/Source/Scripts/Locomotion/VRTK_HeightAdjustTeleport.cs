@@ -29,6 +29,8 @@ namespace VRTK
 
         [Tooltip("If this is checked, then the teleported Y position will snap to the nearest available below floor. If it is unchecked, then the teleported Y position will be where ever the destination Y position is.")]
         public bool snapToNearestFloor = true;
+        [Tooltip("If this is checked then the teleported Y position will also be offset by the play area parent Transform Y position (if the play area has a parent).")]
+        public bool applyPlayareaParentOffset = false;
         [Tooltip("A custom raycaster to use when raycasting to find floors.")]
         public VRTK_CustomRaycast customRaycast;
 
@@ -36,6 +38,7 @@ namespace VRTK
         {
             base.OnEnable();
             adjustYForTerrain = true;
+            AdjustForParentOffset();
         }
 
         protected override void OnDisable()
@@ -53,11 +56,30 @@ namespace VRTK
             return basePosition;
         }
 
+        protected virtual void AdjustForParentOffset()
+        {
+            if (snapToNearestFloor && applyPlayareaParentOffset && playArea != null && playArea.parent != null)
+            {
+                Ray ray = new Ray(playArea.parent.position, -playArea.up);
+                RaycastHit rayCollidedWith;
+                if (VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, Physics.IgnoreRaycastLayer, Mathf.Infinity, QueryTriggerInteraction.Ignore))
+                {
+                    playArea.position = new Vector3(playArea.position.x, playArea.position.y + rayCollidedWith.point.y, playArea.position.z);
+                }
+            }
+        }
+
+        protected virtual float GetParentOffset()
+        {
+            return (applyPlayareaParentOffset && playArea.parent != null ? playArea.parent.transform.localPosition.y : 0f);
+        }
+
         protected virtual float GetTeleportY(Transform target, Vector3 tipPosition)
         {
+            float parentOffset = GetParentOffset();
             if (!snapToNearestFloor || !ValidRigObjects())
             {
-                return tipPosition.y;
+                return tipPosition.y + parentOffset;
             }
 
             float newY = playArea.position.y;
@@ -70,7 +92,7 @@ namespace VRTK
             {
                 newY = (tipPosition.y - rayCollidedWith.distance) + heightOffset;
             }
-            return newY;
+            return newY + parentOffset;
         }
     }
 }
