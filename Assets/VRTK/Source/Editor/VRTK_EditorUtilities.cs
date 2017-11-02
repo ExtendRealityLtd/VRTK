@@ -7,11 +7,16 @@
 
     public static class VRTK_EditorUtilities
     {
+        public static TooltipAttribute GetTooltipAttribute(FieldInfo fieldInfo)
+        {
+            return (TooltipAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(TooltipAttribute));
+        }
+
         public static GUIContent BuildGUIContent<T>(string fieldName, string displayOverride = null)
         {
             string displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
             FieldInfo fieldInfo = typeof(T).GetField(fieldName);
-            TooltipAttribute tooltipAttribute = (TooltipAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(TooltipAttribute));
+            TooltipAttribute tooltipAttribute = GetTooltipAttribute(fieldInfo);
             return (tooltipAttribute == null ? new GUIContent(displayName) : new GUIContent(displayName, tooltipAttribute.tooltip));
         }
 

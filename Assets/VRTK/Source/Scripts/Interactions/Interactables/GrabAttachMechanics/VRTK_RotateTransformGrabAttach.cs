@@ -105,8 +105,8 @@ namespace VRTK.GrabAttachMechanics
 
         [Header("Rotation Limits")]
 
-        [Tooltip("The negative `(x)` and positive `(y)` limits the axis can be rotated to.")]
-        public Vector2 angleLimits = new Vector2(-180, 180);
+        [Tooltip("The negative and positive limits the axis can be rotated to.")]
+        public Limits2D angleLimits = new Limits2D(-180f, 180f);
         [Tooltip("The threshold the rotation value needs to be within to register a min or max rotation value.")]
         public float minMaxThreshold = 1f;
         [Tooltip("The threshold the normalized rotation value needs to be within to register a min or max normalized rotation value.")]
@@ -256,7 +256,7 @@ namespace VRTK.GrabAttachMechanics
         /// <param name="transitionTime">The time in which the entire rotation operation will take place.</param>
         public virtual void SetRotation(float newAngle, float transitionTime = 0f)
         {
-            newAngle = Mathf.Clamp(newAngle, angleLimits.x, angleLimits.y);
+            newAngle = Mathf.Clamp(newAngle, angleLimits.minimum, angleLimits.maximum);
             Vector3 newCurrentRotation = currentRotation;
             switch (rotateAround)
             {
@@ -327,7 +327,7 @@ namespace VRTK.GrabAttachMechanics
         /// <returns>The normalized rotated angle. Will return `0f` if either limit is set to `infinity`.</returns>
         public virtual float GetNormalizedAngle()
         {
-            return (angleLimits.x > float.MinValue && angleLimits.y < float.MaxValue ? VRTK_SharedMethods.NormalizeValue(GetAngle(), angleLimits.x, angleLimits.y, minMaxNormalizedThreshold) : 0f);
+            return (angleLimits.minimum > float.MinValue && angleLimits.maximum < float.MaxValue ? VRTK_SharedMethods.NormalizeValue(GetAngle(), angleLimits.minimum, angleLimits.maximum, minMaxNormalizedThreshold) : 0f);
         }
 
         /// <summary>
@@ -422,11 +422,11 @@ namespace VRTK.GrabAttachMechanics
             switch (rotateAround)
             {
                 case RotationAxis.xAxis:
-                    return (rotationCheck.x >= angleLimits.x && rotationCheck.x <= angleLimits.y);
+                    return angleLimits.WithinLimits(rotationCheck.x);
                 case RotationAxis.yAxis:
-                    return (rotationCheck.y >= angleLimits.x && rotationCheck.y <= angleLimits.y);
+                    return angleLimits.WithinLimits(rotationCheck.y);
                 case RotationAxis.zAxis:
-                    return (rotationCheck.z >= angleLimits.x && rotationCheck.z <= angleLimits.y);
+                    return angleLimits.WithinLimits(rotationCheck.z);
             }
             return false;
         }
@@ -490,16 +490,16 @@ namespace VRTK.GrabAttachMechanics
 
         protected virtual void CheckAngleLimits()
         {
-            angleLimits.x = (angleLimits.x > 0f ? angleLimits.x * -1f : angleLimits.x);
-            angleLimits.y = (angleLimits.y < 0f ? angleLimits.y * -1f : angleLimits.y);
+            angleLimits.minimum = (angleLimits.minimum > 0f ? angleLimits.minimum * -1f : angleLimits.minimum);
+            angleLimits.maximum = (angleLimits.maximum < 0f ? angleLimits.maximum * -1f : angleLimits.maximum);
         }
 
         protected virtual void EmitEvents()
         {
             OnAngleChanged(SetEventPayload());
             float angle = GetAngle();
-            float minAngle = angleLimits.x + minMaxThreshold;
-            float maxAngle = angleLimits.y - minMaxThreshold;
+            float minAngle = angleLimits.minimum + minMaxThreshold;
+            float maxAngle = angleLimits.maximum - minMaxThreshold;
             if (angle <= minAngle && !limitsReached[0])
             {
                 limitsReached[0] = true;

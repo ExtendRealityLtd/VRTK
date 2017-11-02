@@ -20,11 +20,16 @@ namespace VRTK.SecondaryControllerGrabActions
     {
         [Tooltip("The distance the secondary grabbing object must move away from the original grab position before the secondary grabbing object auto ungrabs the Interactable Object.")]
         public float ungrabDistance = 1f;
-        [Tooltip("If checked the current X Axis of the Interactable Object won't be scaled")]
+        [Tooltip("Locks the specified checked axes so they won't be scaled")]
+        public Vector3State lockAxis = Vector3State.False;
+        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockXAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
         public bool lockXAxis = false;
-        [Tooltip("If checked the current Y Axis of the Interactable Object won't be scaled")]
+        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockYAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
         public bool lockYAxis = false;
-        [Tooltip("If checked the current Z Axis of the Interactable Object won't be scaled")]
+        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockZAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
         public bool lockZAxis = false;
         [Tooltip("If checked all the axes will be scaled together (unless locked)")]
         public bool uniformScaling = false;
@@ -47,6 +52,13 @@ namespace VRTK.SecondaryControllerGrabActions
             initialScale = currentGrabbdObject.transform.localScale;
             initalLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
             initialScaleFactor = currentGrabbdObject.transform.localScale.x / initalLength;
+
+#pragma warning disable 618
+            if ((lockXAxis || lockYAxis || lockZAxis) && lockAxis == Vector3State.False)
+            {
+                lockAxis = new Vector3State(lockXAxis, lockYAxis, lockZAxis);
+            }
+#pragma warning restore 618
         }
 
         /// <summary>
@@ -81,9 +93,9 @@ namespace VRTK.SecondaryControllerGrabActions
         {
             Vector3 existingScale = grabbedObject.transform.localScale;
 
-            float finalScaleX = (lockXAxis ? existingScale.x : newScale.x);
-            float finalScaleY = (lockYAxis ? existingScale.y : newScale.y);
-            float finalScaleZ = (lockZAxis ? existingScale.z : newScale.z);
+            float finalScaleX = (lockAxis.xState ? existingScale.x : newScale.x);
+            float finalScaleY = (lockAxis.yState ? existingScale.y : newScale.y);
+            float finalScaleZ = (lockAxis.zState ? existingScale.z : newScale.z);
 
             if (finalScaleX > 0 && finalScaleY > 0 && finalScaleZ > 0)
             {

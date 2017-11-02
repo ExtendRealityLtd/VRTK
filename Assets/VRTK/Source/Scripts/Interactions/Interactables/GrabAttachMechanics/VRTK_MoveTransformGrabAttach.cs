@@ -58,12 +58,12 @@ namespace VRTK.GrabAttachMechanics
 
         [Header("Position Limit Settings")]
 
-        [Tooltip("The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the x axis.")]
-        public Vector2 xAxisLimits = Vector2.zero;
-        [Tooltip("The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the y axis.")]
-        public Vector2 yAxisLimits = Vector2.zero;
-        [Tooltip("The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the z axis.")]
-        public Vector2 zAxisLimits = Vector2.zero;
+        [Tooltip("The minimum and maximum limits the Interactable Object can be moved along the x axis.")]
+        public Limits2D xAxisLimits = Limits2D.zero;
+        [Tooltip("The minimum and maximum limits the Interactable Object can be moved along the y axis.")]
+        public Limits2D yAxisLimits = Limits2D.zero;
+        [Tooltip("The minimum and maximum limits the Interactable Object can be moved along the z axis.")]
+        public Limits2D zAxisLimits = Limits2D.zero;
         [Tooltip("The threshold the position value needs to be within to register a min or max position value.")]
         public float minMaxThreshold = 0.01f;
         [Tooltip("The threshold the normalized position value needs to be within to register a min or max normalized position value.")]
@@ -131,9 +131,9 @@ namespace VRTK.GrabAttachMechanics
 
         protected bool previousKinematicState;
         protected bool[] limitsReached = new bool[6];
-        protected Vector2 xOriginLimits;
-        protected Vector2 yOriginLimits;
-        protected Vector2 zOriginLimits;
+        protected Limits2D xOriginLimits;
+        protected Limits2D yOriginLimits;
+        protected Limits2D zOriginLimits;
         protected Vector3 previousPosition;
         protected Vector3 movementVelocity;
         protected Coroutine resetPositionRoutine;
@@ -397,9 +397,9 @@ namespace VRTK.GrabAttachMechanics
         /// The GetWorldLimits method returns an array of minimum and maximum axis limits for the Interactable Object in world space.
         /// </summary>
         /// <returns>An array of axis limits in world space.</returns>
-        public virtual Vector2[] GetWorldLimits()
+        public virtual Limits2D[] GetWorldLimits()
         {
-            return new Vector2[] { xOriginLimits, yOriginLimits, zOriginLimits };
+            return new Limits2D[] { xOriginLimits, yOriginLimits, zOriginLimits };
         }
 
         protected virtual void OnEnable()
@@ -425,17 +425,17 @@ namespace VRTK.GrabAttachMechanics
         {
             CheckAxisLimits();
             localOrigin = transform.localPosition;
-            xOriginLimits = new Vector2(localOrigin.x + xAxisLimits.x, localOrigin.x + xAxisLimits.y);
-            yOriginLimits = new Vector2(localOrigin.y + yAxisLimits.x, localOrigin.y + yAxisLimits.y);
-            zOriginLimits = new Vector2(localOrigin.z + zAxisLimits.x, localOrigin.z + zAxisLimits.y);
+            xOriginLimits = new Limits2D(localOrigin.x + xAxisLimits.minimum, localOrigin.x + xAxisLimits.maximum);
+            yOriginLimits = new Limits2D(localOrigin.y + yAxisLimits.minimum, localOrigin.y + yAxisLimits.maximum);
+            zOriginLimits = new Limits2D(localOrigin.z + zAxisLimits.minimum, localOrigin.z + zAxisLimits.maximum);
             previousPosition = localOrigin;
         }
 
-        protected virtual float ClampAxis(Vector2 limits, float axisValue)
+        protected virtual float ClampAxis(Limits2D limits, float axisValue)
         {
-            axisValue = (axisValue < limits.x + minMaxThreshold ? limits.x : axisValue);
-            axisValue = (axisValue > limits.y - minMaxThreshold ? limits.y : axisValue);
-            return Mathf.Clamp(axisValue, limits.x, limits.y);
+            axisValue = (axisValue < limits.minimum + minMaxThreshold ? limits.minimum : axisValue);
+            axisValue = (axisValue > limits.maximum - minMaxThreshold ? limits.maximum : axisValue);
+            return Mathf.Clamp(axisValue, limits.minimum, limits.maximum);
         }
 
         protected virtual void ClampPosition()
@@ -446,9 +446,9 @@ namespace VRTK.GrabAttachMechanics
         protected virtual Vector3 NormalizePosition(Vector3 givenHeading)
         {
             return new Vector3(
-                VRTK_SharedMethods.NormalizeValue(givenHeading.x, xAxisLimits.x, xAxisLimits.y, minMaxNormalizedThreshold),
-                VRTK_SharedMethods.NormalizeValue(givenHeading.y, yAxisLimits.x, yAxisLimits.y, minMaxNormalizedThreshold),
-                VRTK_SharedMethods.NormalizeValue(givenHeading.z, zAxisLimits.x, zAxisLimits.y, minMaxNormalizedThreshold)
+                VRTK_SharedMethods.NormalizeValue(givenHeading.x, xAxisLimits.minimum, xAxisLimits.maximum, minMaxNormalizedThreshold),
+                VRTK_SharedMethods.NormalizeValue(givenHeading.y, yAxisLimits.minimum, yAxisLimits.maximum, minMaxNormalizedThreshold),
+                VRTK_SharedMethods.NormalizeValue(givenHeading.z, zAxisLimits.minimum, zAxisLimits.maximum, minMaxNormalizedThreshold)
             );
         }
 
@@ -506,10 +506,10 @@ namespace VRTK.GrabAttachMechanics
             zAxisLimits = FixAxisLimits(zAxisLimits);
         }
 
-        protected virtual Vector2 FixAxisLimits(Vector2 givenLimits)
+        protected virtual Limits2D FixAxisLimits(Limits2D givenLimits)
         {
-            givenLimits.x = (givenLimits.x > 0f ? givenLimits.x * -1f : givenLimits.x);
-            givenLimits.y = (givenLimits.y < 0f ? givenLimits.y * -1f : givenLimits.y);
+            givenLimits.minimum = (givenLimits.minimum > 0f ? givenLimits.minimum * -1f : givenLimits.minimum);
+            givenLimits.maximum = (givenLimits.maximum < 0f ? givenLimits.maximum * -1f : givenLimits.maximum);
             return givenLimits;
         }
 

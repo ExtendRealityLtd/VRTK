@@ -43,8 +43,8 @@ namespace VRTK.Controllables.PhysicsBased
 
         [Header("Value Step Settings")]
 
-        [Tooltip("The minimum `(x)` and the maximum `(y)` step values for the slider to register along the `Operate Axis`.")]
-        public Vector2 stepValueRange = new Vector3(0f, 1f);
+        [Tooltip("The minimum and the maximum step values for the slider to register along the `Operate Axis`.")]
+        public Limits2D stepValueRange = new Limits2D(0f, 1f);
         [Tooltip("The increments the slider value will change in between the `Step Value Range`.")]
         public float stepSize = 0.1f;
         [Tooltip("If this is checked then the value for the slider will be the step value and not the absolute position of the slider Transform.")]
@@ -103,7 +103,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <returns>The current Step Value based on the slider position.</returns>
         public virtual float GetStepValue(float currentValue)
         {
-            return Mathf.Round((stepValueRange.x + Mathf.Clamp01(currentValue / maximumLength) * (stepValueRange.y - stepValueRange.x)) / stepSize) * stepSize;
+            return Mathf.Round((stepValueRange.minimum + Mathf.Clamp01(currentValue / maximumLength) * (stepValueRange.maximum - stepValueRange.minimum)) / stepSize) * stepSize;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <param name="givenStepValue">The step value within the `Step Value Range` to set the `Position Target` parameter to.</param>
         public virtual void SetPositionTargetWithStepValue(float givenStepValue)
         {
-            positionTarget = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.x, stepValueRange.y);
+            positionTarget = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.minimum, stepValueRange.maximum);
             SetPositionWithNormalizedValue(positionTarget);
         }
 
@@ -122,7 +122,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <param name="givenStepValue">The step value within the `Step Value Range` to set the `Resting Position` parameter to.</param>
         public virtual void SetRestingPositionWithStepValue(float givenStepValue)
         {
-            restingPosition = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.x, stepValueRange.y);
+            restingPosition = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.minimum, stepValueRange.maximum);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <returns>The position the slider would be at based on the given step value.</returns>
         public virtual float GetPositionFromStepValue(float givenStepValue)
         {
-            float normalizedStepValue = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.x, stepValueRange.y);
+            float normalizedStepValue = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.minimum, stepValueRange.maximum);
             return Mathf.Lerp(controlJoint.linearLimit.limit, -controlJoint.linearLimit.limit, Mathf.Clamp01(normalizedStepValue));
         }
 
