@@ -1881,6 +1881,7 @@ A collection of scripts that provide varying methods of moving the user around t
  * [Slingshot Jump](#slingshot-jump-vrtk_slingshotjump)
  * [Step Multiplier](#step-multiplier-vrtk_stepmultiplier)
  * [Tunnel Overlay](#tunnel-overlay-vrtk_tunneloverlay)
+ * [Drag World](#drag-world-vrtk_dragworld)
 
 ---
 
@@ -2551,6 +2552,58 @@ Applys a tunnel overlay effect to the active VR camera when the play area is mov
  * **Maximum Effect Size:** Screen coverage at the maximum tracked values.
  * **Feather Size:** Feather effect size around the cut-off as fraction of screen.
  * **Smoothing Time:** Smooth out radius over time.
+
+---
+
+## Drag World (VRTK_DragWorld)
+
+### Overview
+
+Provides the ability to move, rotate and scale the PlayArea by dragging the world with the controllers.
+
+**Script Usage:**
+ * Place the `VRTK_DragWorld` script on any active scene GameObject.
+
+  > If only one controller is being used to track the rotation mechanism, then the rotation will be based on the perpendicual (yaw) axis angular velocity of the tracking controller.
+  > If both controllers are being used to track the rotation mechanism, then the rotation will be based on pushing one controller forward, whilst pulling the other controller backwards.
+
+### Inspector Parameters
+
+ * **Movement Activation Button:** The controller button to press to activate the movement mechanism.
+ * **Movement Activation Requirement:** The controller(s) on which the activation button is to be pressed to consider the movement mechanism active.
+ * **Movement Tracking Controller:** The controller(s) on which to track position of to determine if a valid move has taken place.
+ * **Movement Multiplier:** The amount to multply the movement by.
+ * **Movement Position Lock:** The axes to lock to prevent movement across.
+ * **Rotation Activation Button:** The controller button to press to activate the rotation mechanism.
+ * **Rotation Activation Requirement:** The controller(s) on which the activation button is to be pressed to consider the rotation mechanism active.
+ * **Rotation Tracking Controller:** The controller(s) on which to determine how rotation should occur. `BothControllers` requires both controllers to be pushed/pulled to rotate, whereas any other setting will base rotation on the rotation of the activating controller.
+ * **Rotation Multiplier:** The amount to multply the rotation angle by.
+ * **Rotation Activation Threshold:** The threshold the rotation angle has to be above to consider a valid rotation amount.
+ * **Scale Activation Button:** The controller button to press to activate the scale mechanism.
+ * **Scale Activation Requirement:** The controller(s) on which the activation button is to be pressed to consider the scale mechanism active.
+ * **Scale Tracking Controller:** The controller(s) on which to determine how scaling should occur.
+ * **Scale Multiplier:** The amount to multply the scale factor by.
+ * **Scale Activation Threshold:** The threshold the distance between the scale objects has to be above to consider a valid scale operation.
+ * **Minimum Scale:** the minimum scale amount that can be applied.
+ * **Maximum Scale:** the maximum scale amount that can be applied.
+ * **Controlling Transform:** The transform to apply the control mechanisms to. If this is left blank then the PlayArea will be controlled.
+ * **Use Offset Transform:** Uses the specified `Offset Transform` when dealing with rotational offsets.
+ * **Offset Transform:** The transform to use when dealing with rotational offsets. If this is left blank then the Headset will be used as the offset.
+
+### Class Variables
+
+ * `public enum ActivationRequirement` - The controller on which to determine as the activation requirement for the control mechanism.
+   * `LeftControllerOnly` - Only pressing the activation button on the left controller will activate the mechanism, if the right button is held down then the mechanism will not be activated.
+   * `RightControllerOnly` - Only pressing the activation button on the right controller will activate the mechanism, if the left button is held down then the mechanism will not be activated.
+   * `LeftController` - Pressing the activation button on the left controller is all that is required to activate the mechanism.
+   * `RightController` - Pressing the activation button on the right controller is all that is required to activate the mechanism.
+   * `EitherController` - Pressing the activation button on the either controller is all that is required to activate the mechanism.
+   * `BothControllers` - Pressing the activation button on both controllers is required to activate the mechanism.
+ * `public enum TrackingController` - The controllers which to track when performing the mechanism.
+   * `LeftController` - Only track the left controller.
+   * `RightController` - Only track the right controller.
+   * `EitherController` - Track either the left or the right controller.
+   * `BothControllers` - Only track both controllers at the same time.
 
 ---
 
