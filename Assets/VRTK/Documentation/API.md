@@ -2051,6 +2051,7 @@ Updates the `x/y/z` position of the SDK Camera Rig with an optional screen fade.
 ### Inspector Parameters
 
  * **Snap To Nearest Floor:** If this is checked, then the teleported Y position will snap to the nearest available below floor. If it is unchecked, then the teleported Y position will be where ever the destination Y position is.
+ * **Apply Playarea Parent Offset:** If this is checked then the teleported Y position will also be offset by the play area parent Transform Y position (if the play area has a parent).
  * **Custom Raycast:** A custom raycaster to use when raycasting to find floors.
 
 ### Example
