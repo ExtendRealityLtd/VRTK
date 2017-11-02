@@ -57,6 +57,7 @@ A collection of titles that have been made with VRTK.
 | Holomeld | [Steam Store Page](http://store.steampowered.com/app/647790) |
 | Cloudborn | [Steam Store Page](http://store.steampowered.com/app/677040) |
 | Captain 13 Beyond the Hero | [Steam Store Page](http://store.steampowered.com/app/704350) |
+| VoxVR | [Steam Store Page](http://store.steampowered.com/app/502480) |
 
 ## Oculus Home
 
