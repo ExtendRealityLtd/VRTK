@@ -58,6 +58,7 @@ A collection of titles that have been made with VRTK.
 | Cloudborn | [Steam Store Page](http://store.steampowered.com/app/677040) |
 | Captain 13 Beyond the Hero | [Steam Store Page](http://store.steampowered.com/app/704350) |
 | VoxVR | [Steam Store Page](http://store.steampowered.com/app/502480) |
+| VR Hybrid War 2117 | [Steam Store Page](http://store.steampowered.com/app/741360) |
 
 ## Oculus Home
 
