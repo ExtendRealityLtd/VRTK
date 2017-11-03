@@ -525,6 +525,7 @@ namespace VRTK
             objectInteractorCollider.transform.localPosition = Vector3.zero;
             objectInteractorCollider.layer = LayerMask.NameToLayer("Ignore Raycast");
             SphereCollider tmpCollider = objectInteractorCollider.AddComponent<SphereCollider>();
+            tmpCollider.radius = 0.025f;
             tmpCollider.isTrigger = true;
             VRTK_PlayerObject.SetPlayerObject(objectInteractorCollider, VRTK_PlayerObject.ObjectTypes.Pointer);
 
