@@ -46,12 +46,9 @@ namespace VRTK.Controllables.PhysicsBased
 
         [Tooltip("A Transform that denotes the position where the rotator hinge will be created.")]
         public Transform hingePoint;
-        [Tooltip("The minimum angle the rotator can rotate to.")]
-        [Range(-180f, 180f)]
-        public float minimumAngle = -180f;
-        [Tooltip("The maximum angle the rotator can rotate to.")]
-        [Range(-180f, 180f)]
-        public float maximumAngle = 180f;
+        [Tooltip("The minimum and maximum angle the rotator can rotate to.")]
+        [MinMaxRange(-180f, 180f)]
+        public Limits2D angleLimits = new Limits2D(-180f, 180);
         [Tooltip("The angle at which the rotator rotation can be within the minimum or maximum angle before the minimum or maximum angles are considered reached.")]
         public float minMaxThresholdAngle = 1f;
         [Tooltip("The angle at which will be considered as the resting position of the rotator.")]
@@ -65,8 +62,8 @@ namespace VRTK.Controllables.PhysicsBased
 
         [Header("Value Step Settings")]
 
-        [Tooltip("The minimum `(x)` and the maximum `(y)` step values for the rotator to register along the `Operate Axis`.")]
-        public Vector2 stepValueRange = new Vector3(0f, 1f);
+        [Tooltip("The minimum and the maximum step values for the rotator to register along the `Operate Axis`.")]
+        public Limits2D stepValueRange = new Limits2D(0f, 1f);
         [Tooltip("The increments the rotator value will change in between the `Step Value Range`.")]
         public float stepSize = 0.1f;
         [Tooltip("If this is checked then the value for the rotator will be the step value and not the absolute rotation of the rotator Transform.")]
@@ -126,7 +123,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <returns>The normalized rotation of the rotator.</returns>
         public override float GetNormalizedValue()
         {
-            return VRTK_SharedMethods.NormalizeValue(GetValue(), minimumAngle, maximumAngle);
+            return VRTK_SharedMethods.NormalizeValue(GetValue(), angleLimits.minimum, angleLimits.maximum);
         }
 
         /// <summary>
@@ -136,7 +133,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <returns>The current Step Value based on the rotator angle.</returns>
         public virtual float GetStepValue(float currentValue)
         {
-            float step = Mathf.Lerp(stepValueRange.x, stepValueRange.y, VRTK_SharedMethods.NormalizeValue(currentValue, minimumAngle, maximumAngle));
+            float step = Mathf.Lerp(stepValueRange.minimum, stepValueRange.maximum, VRTK_SharedMethods.NormalizeValue(currentValue, angleLimits.minimum, angleLimits.maximum));
             return Mathf.Round(step / stepSize) * stepSize;
         }
 
@@ -146,7 +143,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <param name="givenStepValue">The step value within the `Step Value Range` to set the `Angle Target` parameter to.</param>
         public virtual void SetAngleTargetWithStepValue(float givenStepValue)
         {
-            angleTarget = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.x, stepValueRange.y);
+            angleTarget = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.minimum, stepValueRange.maximum);
             SetAngleWithNormalizedValue(angleTarget);
             previousAngleTarget = angleTarget;
         }
@@ -157,7 +154,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <param name="givenStepValue">The step value within the `Step Value Range` to set the `Resting Angle` parameter to.</param>
         public virtual void SetRestingAngleWithStepValue(float givenStepValue)
         {
-            restingAngle = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.x, stepValueRange.y);
+            restingAngle = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.minimum, stepValueRange.maximum);
         }
 
         /// <summary>
@@ -167,7 +164,7 @@ namespace VRTK.Controllables.PhysicsBased
         /// <returns>The angle the rotator would be at based on the given step value.</returns>
         public virtual float GetAngleFromStepValue(float givenStepValue)
         {
-            float normalizedStepValue = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.x, stepValueRange.y);
+            float normalizedStepValue = VRTK_SharedMethods.NormalizeValue(givenStepValue, stepValueRange.minimum, stepValueRange.maximum);
             return (controlJoint != null ? Mathf.Lerp(controlJoint.limits.min, controlJoint.limits.max, Mathf.Clamp01(normalizedStepValue)) : 0f);
         }
 
@@ -207,8 +204,8 @@ namespace VRTK.Controllables.PhysicsBased
             {
                 ControllableEventArgs payload = EventPayload();
                 float currentAngle = GetValue();
-                float minThreshold = minimumAngle + minMaxThresholdAngle;
-                float maxThreshold = maximumAngle - minMaxThresholdAngle;
+                float minThreshold = angleLimits.minimum + minMaxThresholdAngle;
+                float maxThreshold = angleLimits.maximum - minMaxThresholdAngle;
                 stillResting = false;
 
                 OnValueChanged(payload);
@@ -218,7 +215,7 @@ namespace VRTK.Controllables.PhysicsBased
                     atMaxLimit = true;
                     OnMaxLimitReached(payload);
                 }
-                else if (currentAngle <= (minimumAngle + minMaxThresholdAngle) && !AtMinLimit())
+                else if (currentAngle <= (angleLimits.minimum + minMaxThresholdAngle) && !AtMinLimit())
                 {
                     atMinLimit = true;
                     OnMinLimitReached(payload);
@@ -334,8 +331,8 @@ namespace VRTK.Controllables.PhysicsBased
         {
             if (controlJoint != null)
             {
-                controlJointLimits.min = minimumAngle;
-                controlJointLimits.max = maximumAngle;
+                controlJointLimits.min = angleLimits.minimum;
+                controlJointLimits.max = angleLimits.maximum;
                 controlJoint.limits = controlJointLimits;
             }
         }

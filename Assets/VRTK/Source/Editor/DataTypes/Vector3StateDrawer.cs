@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using VRTK;
 
 [CustomPropertyDrawer(typeof(Vector3State))]
 public class Vector3StateDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
+        label.tooltip = VRTK_EditorUtilities.GetTooltipAttribute(fieldInfo).tooltip;
         SerializedProperty xState = property.FindPropertyRelative("xState");
         SerializedProperty yState = property.FindPropertyRelative("yState");
         SerializedProperty zState = property.FindPropertyRelative("zState");

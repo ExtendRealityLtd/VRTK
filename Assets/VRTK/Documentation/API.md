@@ -5618,9 +5618,9 @@ Moves the Transform of the Interactable Object towards the interacting object wi
  * **Force Kinematic On Grab:** If this is checked then it will force the rigidbody on the Interactable Object to be `Kinematic` when the grab occurs.
  * **Release Deceleration Damper:** The damper in which to slow the Interactable Object down when released to simulate continued momentum. The higher the number, the faster the Interactable Object will come to a complete stop on release.
  * **Reset To Orign On Release Speed:** The speed in which the Interactable Object returns to it's origin position when released. If the `Reset To Orign On Release Speed` is `0f` then the position will not be reset.
- * **X Axis Limits:** The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the x axis.
- * **Y Axis Limits:** The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the y axis.
- * **Z Axis Limits:** The minimum (`x`) and maximum (`y`) limits the Interactable Object can be moved along the z axis.
+ * **X Axis Limits:** The minimum and maximum limits the Interactable Object can be moved along the x axis.
+ * **Y Axis Limits:** The minimum and maximum limits the Interactable Object can be moved along the y axis.
+ * **Z Axis Limits:** The minimum and maximum limits the Interactable Object can be moved along the z axis.
  * **Min Max Threshold:** The threshold the position value needs to be within to register a min or max position value.
  * **Min Max Normalized Threshold:** The threshold the normalized position value needs to be within to register a min or max normalized position value.
 
@@ -5778,12 +5778,12 @@ The ResetPosition method will move the Interactable Object back to the origin po
 
 #### GetWorldLimits/0
 
-  > `public virtual Vector2[] GetWorldLimits()`
+  > `public virtual Limits2D[] GetWorldLimits()`
 
  * Parameters
    * _none_
  * Returns
-   * `Vector2[]` - An array of axis limits in world space.
+   * `Limits2D[]` - An array of axis limits in world space.
 
 The GetWorldLimits method returns an array of minimum and maximum axis limits for the Interactable Object in world space.
 
@@ -5812,7 +5812,7 @@ Rotates the Transform of the Interactable Object around a specified transform lo
  * **Rotation Friction:** The amount of friction to apply when rotating, simulates a tougher rotation.
  * **Release Deceleration Damper:** The damper in which to slow the Interactable Object's rotation down when released to simulate continued momentum. The higher the number, the faster the Interactable Object will come to a complete stop on release.
  * **Reset To Orign On Release Speed:** The speed in which the Interactable Object returns to it's origin rotation when released. If the `Reset To Orign On Release Speed` is `0f` then the rotation will not be reset.
- * **Angle Limits:** The negative `(x)` and positive `(y)` limits the axis can be rotated to.
+ * **Angle Limits:** The negative and positive limits the axis can be rotated to.
  * **Min Max Threshold:** The threshold the rotation value needs to be within to register a min or max rotation value.
  * **Min Max Normalized Threshold:** The threshold the normalized rotation value needs to be within to register a min or max normalized rotation value.
 
@@ -6083,9 +6083,7 @@ Scales the grabbed Interactable Object along the given axes based on the positio
 ### Inspector Parameters
 
  * **Ungrab Distance:** The distance the secondary grabbing object must move away from the original grab position before the secondary grabbing object auto ungrabs the Interactable Object.
- * **Lock X Axis:** If checked the current X Axis of the Interactable Object won't be scaled
- * **Lock Y Axis:** If checked the current Y Axis of the Interactable Object won't be scaled
- * **Lock Z Axis:** If checked the current Z Axis of the Interactable Object won't be scaled
+ * **Lock Axis:** Locks the specified checked axes so they won't be scaled
  * **Uniform Scaling:** If checked all the axes will be scaled together (unless locked)
 
 ### Class Methods
@@ -6506,14 +6504,13 @@ A physics based rotatable object.
 ### Inspector Parameters
 
  * **Hinge Point:** A Transform that denotes the position where the rotator hinge will be created.
- * **Minimum Angle:** The minimum angle the rotator can rotate to.
- * **Maximum Angle:** The maximum angle the rotator can rotate to.
+ * **Angle Limits:** The minimum and maximum angle the rotator can rotate to.
  * **Min Max Threshold Angle:** The angle at which the rotator rotation can be within the minimum or maximum angle before the minimum or maximum angles are considered reached.
  * **Resting Angle:** The angle at which will be considered as the resting position of the rotator.
  * **Force Resting Angle Threshold:** The threshold angle from the `Resting Angle` that the current angle of the rotator needs to be within to snap the rotator back to the `Resting Angle`.
  * **Angle Target:** The target angle to rotate the rotator to.
  * **Is Locked:** If this is checked then the rotator Rigidbody will have all rotations frozen.
- * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the rotator to register along the `Operate Axis`.
+ * **Step Value Range:** The minimum and the maximum step values for the rotator to register along the `Operate Axis`.
  * **Step Size:** The increments the rotator value will change in between the `Step Value Range`.
  * **Use Step As Value:** If this is checked then the value for the rotator will be the step value and not the absolute rotation of the rotator Transform.
  * **Snap To Step:** If this is checked then the rotator will snap to the angle of the nearest step along the value range.
@@ -6662,7 +6659,7 @@ A physics based slider.
  * **Position Target:** The target position to move the slider towards given in a normalized value of `0f` (start point) to `1f` (end point).
  * **Resting Position:** The position the slider when it is at the default resting point given in a normalized value of `0f` (start point) to `1f` (end point).
  * **Force Resting Position Threshold:** The normalized threshold value the slider has to be within the `Resting Position` before the slider is forced back to the `Resting Position` if it is not grabbed.
- * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the slider to register along the `Operate Axis`.
+ * **Step Value Range:** The minimum and the maximum step values for the slider to register along the `Operate Axis`.
  * **Step Size:** The increments the slider value will change in between the `Step Value Range`.
  * **Use Step As Value:** If this is checked then the value for the slider will be the step value and not the absolute position of the slider Transform.
  * **Snap To Step:** If this is checked then the slider will snap to the position of the nearest step along the value range.
@@ -6888,13 +6885,12 @@ A artificially simulated openable rotator.
 ### Inspector Parameters
 
  * **Hinge Point:** A Transform that denotes the position where the rotator will rotate around.
- * **Minimum Angle:** The minimum angle the rotator can rotate to.
- * **Maximum Angle:** The maximum angle the rotator can rotate to.
+ * **Angle Limits:** The minimum and maximum angle the rotator can rotate to.
  * **Min Max Threshold Angle:** The angle at which the rotator rotation can be within the minimum or maximum angle before the minimum or maximum angles are considered reached.
  * **Resting Angle:** The angle at which will be considered as the resting position of the rotator.
  * **Force Resting Angle Threshold:** The threshold angle from the `Resting Angle` that the current angle of the rotator needs to be within to snap the rotator back to the `Resting Angle`.
  * **Is Locked:** If this is checked then the rotator Rigidbody will have all rotations frozen.
- * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the rotator to register along the `Operate Axis`.
+ * **Step Value Range:** The minimum and the maximum step values for the rotator to register along the `Operate Axis`.
  * **Step Size:** The increments the rotator value will change in between the `Step Value Range`.
  * **Use Step As Value:** If this is checked then the value for the rotator will be the step value and not the absolute rotation of the rotator Transform.
  * **Snap To Step:** If this is checked then the rotator will snap to the angle of the nearest step along the value range.
@@ -7042,7 +7038,7 @@ A artificially simulated slider.
  * **Min Max Threshold:** The normalized position the slider can be within the minimum or maximum slider positions before the minimum or maximum positions are considered reached.
  * **Resting Position:** The position the slider when it is at the default resting point given in a normalized value of `0f` (start point) to `1f` (end point).
  * **Force Resting Position Threshold:** The normalized threshold value the slider has to be within the `Resting Position` before the slider is forced back to the `Resting Position` if it is not grabbed.
- * **Step Value Range:** The minimum `(x)` and the maximum `(y)` step values for the slider to register along the `Operate Axis`.
+ * **Step Value Range:** The minimum and the maximum step values for the slider to register along the `Operate Axis`.
  * **Step Size:** The increments the slider value will change in between the `Step Value Range`.
  * **Use Step As Value:** If this is checked then the value for the slider will be the step value and not the absolute position of the slider Transform.
  * **Snap To Step:** If this is checked then the slider will snap to the position of the nearest step along the value range.
@@ -9275,8 +9271,7 @@ In more detail:
       * `-msaa X`: Set MSAA level to X
  * **Msaa Level:** The MSAA level to use.
  * **Scale Render Viewport:** Toggles whether the render viewport scale is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.
- * **Minimum Render Scale:** The minimum allowed render scale.
- * **Maximum Render Scale:** The maximum allowed render scale.
+ * **Render Scale Limits:** The minimum and maximum allowed render scale.
  * **Maximum Render Target Dimension:** The maximum allowed render target dimension. This puts an upper limit on the size of the render target regardless of the maximum render scale.
  * **Render Scale Fill Rate Step Size In Percent:** The fill rate step size in percent by which the render scale levels will be calculated.
  * **Scale Render Target Resolution:** Toggles whether the render target resolution is dynamically adjusted to maintain VR framerate. If unchecked, the renderer will use the maximum target resolution specified by `maximumRenderScale`.

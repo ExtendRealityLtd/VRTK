@@ -1,4 +1,4 @@
-// Adaptive Quality|Utilities|90100
+﻿// Adaptive Quality|Utilities|90100
 
 // Adapted from The Lab Renderer's ValveCamera.cs, available at
 // https://github.com/ValveSoftware/the_lab_renderer/blob/ae64c48a8ccbe5406aba1e39b160d4f2f7156c2c/Assets/TheLabRenderer/Scripts/ValveCamera.cs
@@ -107,10 +107,15 @@ namespace VRTK
         [Tooltip("Toggles whether the render viewport scale is dynamically adjusted to maintain VR framerate.\n\n"
                  + "If unchecked, the renderer will render at the recommended resolution provided by the current `VRDevice`.")]
         public bool scaleRenderViewport = true;
-        [Tooltip("The minimum allowed render scale.")]
-        [Range(0.01f, 5)]
+        [Tooltip("The minimum and maximum allowed render scale.")]
+        [MinMaxRange(0.01f, 5f)]
+        public Limits2D renderScaleLimits = new Limits2D(0.8f, 1.4f);
+
+        [Obsolete("`VRTK_AdaptiveQuality.minimumRenderScale` has been replaced with the `VRTK_AdaptiveQuality.renderScaleLimits`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
         public float minimumRenderScale = 0.8f;
-        [Tooltip("The maximum allowed render scale.")]
+        [Obsolete("`VRTK_AdaptiveQuality.maximumRenderScale` has been replaced with the `VRTK_AdaptiveQuality.renderScaleLimits`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
         public float maximumRenderScale = 1.4f;
         [Tooltip("The maximum allowed render target dimension.\n\n"
                  + "This puts an upper limit on the size of the render target regardless of the maximum render scale.")]
@@ -230,7 +235,7 @@ namespace VRTK
         {
             if (XRSettings.eyeTextureWidth == 0 || XRSettings.eyeTextureHeight == 0)
             {
-                return maximumRenderScale;
+                return renderScaleLimits.maximum;
             }
 
             float maximumHorizontalRenderScale = maximumRenderTargetDimension * VRTK_SharedMethods.GetEyeTextureResolutionScale()
@@ -330,8 +335,8 @@ namespace VRTK
 
         private void OnValidate()
         {
-            minimumRenderScale = Mathf.Max(0.01f, minimumRenderScale);
-            maximumRenderScale = Mathf.Max(minimumRenderScale, maximumRenderScale);
+            renderScaleLimits.minimum = Mathf.Max(0.01f, renderScaleLimits.minimum);
+            renderScaleLimits.maximum = Mathf.Max(renderScaleLimits.minimum, renderScaleLimits.maximum);
             maximumRenderTargetDimension = Mathf.Max(2, maximumRenderTargetDimension);
             renderScaleFillRateStepSizeInPercent = Mathf.Max(1, renderScaleFillRateStepSizeInPercent);
             msaaLevel = msaaLevel == 1 ? 0 : Mathf.Clamp(Mathf.ClosestPowerOfTwo(msaaLevel), 0, 8);
@@ -389,10 +394,10 @@ namespace VRTK
                         scaleRenderViewport = false;
                         break;
                     case CommandLineArguments.MinimumRenderScale:
-                        minimumRenderScale = float.Parse(nextArgument);
+                        renderScaleLimits.minimum = float.Parse(nextArgument);
                         break;
                     case CommandLineArguments.MaximumRenderScale:
-                        maximumRenderScale = float.Parse(nextArgument);
+                        renderScaleLimits.maximum = float.Parse(nextArgument);
                         break;
                     case CommandLineArguments.MaximumRenderTargetDimension:
                         maximumRenderTargetDimension = int.Parse(nextArgument);
@@ -451,28 +456,28 @@ namespace VRTK
 
         private void UpdateRenderScaleLevels()
         {
-            if (Mathf.Abs(previousMinimumRenderScale - minimumRenderScale) <= float.Epsilon
-                && Mathf.Abs(previousMaximumRenderScale - maximumRenderScale) <= float.Epsilon
+            if (Mathf.Abs(previousMinimumRenderScale - renderScaleLimits.minimum) <= float.Epsilon
+                && Mathf.Abs(previousMaximumRenderScale - renderScaleLimits.maximum) <= float.Epsilon
                 && Mathf.Abs(previousRenderScaleFillRateStepSizeInPercent - renderScaleFillRateStepSizeInPercent) <= float.Epsilon)
             {
                 return;
             }
 
-            previousMinimumRenderScale = minimumRenderScale;
-            previousMaximumRenderScale = maximumRenderScale;
+            previousMinimumRenderScale = renderScaleLimits.minimum;
+            previousMaximumRenderScale = renderScaleLimits.maximum;
             previousRenderScaleFillRateStepSizeInPercent = renderScaleFillRateStepSizeInPercent;
 
             allRenderScales.Clear();
 
             // Respect maximumRenderTargetDimension
             float allowedMaximumRenderScale = BiggestAllowedMaximumRenderScale();
-            float renderScaleToAdd = Mathf.Min(minimumRenderScale, allowedMaximumRenderScale);
+            float renderScaleToAdd = Mathf.Min(renderScaleLimits.minimum, allowedMaximumRenderScale);
 
             // Add min scale as the reprojection scale
             allRenderScales.Add(renderScaleToAdd);
 
             // Add all entries
-            while (renderScaleToAdd <= maximumRenderScale)
+            while (renderScaleToAdd <= renderScaleLimits.maximum)
             {
                 allRenderScales.Add(renderScaleToAdd);
                 renderScaleToAdd =
