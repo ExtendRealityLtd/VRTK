@@ -9375,11 +9375,12 @@ Follow `gameObjectToFollow` using the current settings.
 
 ### Overview
 
-Changes one game object's rigidbody to follow another game object's rigidbody.
+Changes one GameObject's rigidbody to follow another GameObject's rigidbody.
 
 ### Inspector Parameters
 
  * **Movement Option:** Specifies how to position and rotate the rigidbody.
+ * **Track Max Distance:** The maximum distance the tracked `Game Object To Change` Rigidbody can be from the `Game Object To Follow` Rigidbody before the position is forcibly set to match the position.
 
 ### Class Variables
 
@@ -9387,6 +9388,20 @@ Changes one game object's rigidbody to follow another game object's rigidbody.
    * `Set` - Use Rigidbody.position and Rigidbody.rotation.
    * `Move` - Use Rigidbody.MovePosition and Rigidbody.MoveRotation.
    * `Add` - Use Rigidbody.AddForce(Vector3) and Rigidbody.AddTorque(Vector3).
+   * `Track` - Use velocity and angular velocity with MoveTowards.
+
+### Class Methods
+
+#### Follow/0
+
+  > `public override void Follow()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+Follow `gameObjectToFollow` using the current settings.
 
 ---
 
@@ -9395,7 +9410,7 @@ Changes one game object's rigidbody to follow another game object's rigidbody.
 
 ### Overview
 
-Changes one game object's transform to follow another game object's transform.
+Changes one GameObject's transform to follow another GameObject's transform.
 
 ### Class Variables
 
@@ -9405,6 +9420,19 @@ Changes one game object's transform to follow another game object's transform.
    * `OnLateUpdate` - Follow in the LateUpdate method.
    * `OnPreRender` - Follow in the OnPreRender method. (This script doesn't have to be attached to a camera).
    * `OnPreCull` - Follow in the OnPreCull method. (This script doesn't have to be attached to a camera).
+
+### Class Methods
+
+#### Follow/0
+
+  > `public override void Follow()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+Follow `gameObjectToFollow` using the current settings.
 
 ---
 

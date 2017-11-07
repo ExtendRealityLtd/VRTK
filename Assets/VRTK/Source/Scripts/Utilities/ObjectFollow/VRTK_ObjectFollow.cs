@@ -8,10 +8,14 @@ namespace VRTK
     /// </summary>
     public abstract class VRTK_ObjectFollow : MonoBehaviour
     {
+        [Header("Object Settings")]
+
         [Tooltip("The game object to follow. The followed property values will be taken from this one.")]
         public GameObject gameObjectToFollow;
         [Tooltip("The game object to change the property values of. If left empty the game object this script is attached to will be changed.")]
         public GameObject gameObjectToChange;
+
+        [Header("Position Settings")]
 
         [Tooltip("Whether to follow the position of the given game object.")]
         public bool followsPosition = true;
@@ -24,6 +28,8 @@ namespace VRTK
         /// </summary>
         public Vector3 targetPosition { get; private set; }
 
+        [Header("Rotation Settings")]
+
         [Tooltip("Whether to follow the rotation of the given game object.")]
         public bool followsRotation = true;
         [Tooltip("Whether to smooth the rotation when following `gameObjectToFollow`.")]
@@ -34,6 +40,8 @@ namespace VRTK
         /// The rotation that results by following `gameObjectToFollow`.
         /// </summary>
         public Quaternion targetRotation { get; private set; }
+
+        [Header("Scale Settings")]
 
         [Tooltip("Whether to follow the scale of the given game object.")]
         public bool followsScale = true;
