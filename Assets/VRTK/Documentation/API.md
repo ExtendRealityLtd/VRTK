@@ -1249,7 +1249,8 @@ Provides a basis of being able to emit a pointer from a specified GameObject.
  * **Select After Hover Duration:** The amount of time the pointer can be over the same collider before it automatically attempts to select it. 0f means no selection attempt will be made.
  * **Interact With Objects:** If this is checked then the pointer will be an extension of the controller and able to interact with Interactable Objects.
  * **Grab To Pointer Tip:** If `Interact With Objects` is checked and this is checked then when an object is grabbed with the pointer touching it, the object will attach to the pointer tip and not snap to the controller.
- * **Controller:** An optional controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Attached To:** An optional GameObject that determines what the pointer is to be attached to. If this is left blank then the GameObject the script is on will be used.
+ * **Controller Events:** An optional Controller Events that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Use:** An optional InteractUse script that will be used when using interactable objects with pointer. If this is left blank then it will attempt to get the InteractUse script from the same GameObject and if it cannot find one then it will attempt to get it from the attached controller.
  * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
 
@@ -7864,8 +7865,9 @@ Provides the ability to interact with UICanvas elements and the contained Unity 
  * **Click Method:** Determines when the UI Click event action should happen.
  * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`
  * **Click After Hover Duration:** The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.
- * **Controller:** The controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
- * **Pointer Origin Transform:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
+ * **Attached To:** An optional GameObject that determines what the pointer is to be attached to. If this is left blank then the GameObject the script is on will be used.
+ * **Controller Events:** The Controller Events that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.
 
 ### Class Variables
 
@@ -10075,17 +10077,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/1
-
-  > `public abstract Transform GenerateControllerPointerOrigin(GameObject parent);`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
-
 #### GetControllerLeftHand/1
 
   > `public abstract GameObject GetControllerLeftHand(bool actual = false);`
@@ -10707,17 +10698,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
-
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -11323,17 +11303,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
    * `Transform` - A Transform containing the origin of the controller.
 
 The GetControllerOrigin method returns the origin of the given controller.
-
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
 
 #### GetControllerLeftHand/1
 
@@ -11966,17 +11935,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
-
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -12599,17 +12557,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
    * `Transform` - A Transform containing the origin of the controller.
 
 The GetControllerOrigin method returns the origin of the given controller.
-
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
 
 #### GetControllerLeftHand/1
 
@@ -13234,17 +13181,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
-
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -13867,17 +13803,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
-
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -14489,17 +14414,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
 
 The GetControllerOrigin method returns the origin of the given controller.
 
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * _none_
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
-
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -15110,17 +15024,6 @@ The GetControllerByIndex method returns the GameObject of a controller with a sp
    * `Transform` - A Transform containing the origin of the controller.
 
 The GetControllerOrigin method returns the origin of the given controller.
-
-#### GenerateControllerPointerOrigin/1
-
-  > `public override Transform GenerateControllerPointerOrigin(GameObject parent)`
-
- * Parameters
-   * `GameObject parent` - The GameObject that the origin will become parent of. If it is a controller then it will also be used to determine the hand if required.
- * Returns
-   * `Transform` - A generated Transform that contains the custom pointer origin.
-
-The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
 
 #### GetControllerLeftHand/1
 

@@ -56,12 +56,18 @@ namespace VRTK
 
         [Header("Pointer Customisation Settings")]
 
-        [Tooltip("An optional controller that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
-        public VRTK_ControllerEvents controller;
+        [Tooltip("An optional GameObject that determines what the pointer is to be attached to. If this is left blank then the GameObject the script is on will be used.")]
+        public GameObject attachedTo;
+        [Tooltip("An optional Controller Events that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
+        public VRTK_ControllerEvents controllerEvents;
         [Tooltip("An optional InteractUse script that will be used when using interactable objects with pointer. If this is left blank then it will attempt to get the InteractUse script from the same GameObject and if it cannot find one then it will attempt to get it from the attached controller.")]
         public VRTK_InteractUse interactUse;
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform customOrigin;
+
+        [System.Obsolete("`VRTK_Pointer.controller` has been replaced with `VRTK_Pointer.controllerEvents`. This parameter will be removed in a future version of VRTK.")]
+        [HideInInspector]
+        public VRTK_ControllerEvents controller;
 
         /// <summary>
         /// Emitted when the pointer activation button is pressed.
@@ -104,7 +110,6 @@ namespace VRTK
         protected bool activationButtonPressed;
         protected bool selectionButtonPressed;
         protected bool attemptControllerSetup;
-        protected Transform originalCustomOrigin;
         protected VRTK_StraightPointerRenderer autogenPointerRenderer;
 
         public virtual void OnActivationButtonPressed(ControllerInteractionEventArgs e)
@@ -285,13 +290,16 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            originalCustomOrigin = customOrigin;
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected override void OnEnable()
         {
+#pragma warning disable 0618
+            controllerEvents = (controller != null && controllerEvents == null ? controller : controllerEvents);
+#pragma warning restore 0618
             base.OnEnable();
+            attachedTo = (attachedTo == null ? gameObject : attachedTo);
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
             SetDefaultValues();
 
@@ -331,7 +339,6 @@ namespace VRTK
 
         protected virtual void SetDefaultValues()
         {
-            customOrigin = (originalCustomOrigin == null ? VRTK_SDK_Bridge.GenerateControllerPointerOrigin(gameObject) : originalCustomOrigin);
             SetupRenderer();
             activateDelayTimer = 0f;
             selectDelayTimer = 0f;
@@ -416,12 +423,9 @@ namespace VRTK
 
         protected virtual bool FindController()
         {
-            if (controller == null)
-            {
-                controller = GetComponentInParent<VRTK_ControllerEvents>();
-            }
+            controllerEvents = (controllerEvents == null ? GetComponentInParent<VRTK_ControllerEvents>() : controllerEvents);
 
-            if (controller == null && ControllerRequired())
+            if (ControllerRequired() && controllerEvents == null)
             {
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_Pointer", "VRTK_ControllerEvents", "the Controller Alias", ". To omit this warning, set the `Activation Button` and `Selection Button` to `Undefined`"));
                 return false;
@@ -435,12 +439,12 @@ namespace VRTK
         protected virtual void GetInteractUse()
         {
             interactUse = (interactUse != null ? interactUse : GetComponentInChildren<VRTK_InteractUse>());
-            interactUse = (interactUse == null && controller != null ? controller.GetComponentInChildren<VRTK_InteractUse>() : interactUse);
+            interactUse = (interactUse == null && controllerEvents != null ? controllerEvents.GetComponentInChildren<VRTK_InteractUse>() : interactUse);
         }
 
         protected virtual void SetupController()
         {
-            if (controller != null)
+            if (controllerEvents != null)
             {
                 CheckButtonMappingConflict();
                 SubscribeSelectionButton();
@@ -526,27 +530,27 @@ namespace VRTK
                 UnsubscribeActivationButton();
             }
 
-            if (controller != null)
+            if (controllerEvents != null)
             {
-                controller.SubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
-                controller.SubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
+                controllerEvents.SubscribeToButtonAliasEvent(activationButton, true, DoActivationButtonPressed);
+                controllerEvents.SubscribeToButtonAliasEvent(activationButton, false, DoActivationButtonReleased);
                 subscribedActivationButton = activationButton;
             }
         }
 
         protected virtual void UnsubscribeActivationButton()
         {
-            if (controller != null && subscribedActivationButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            if (controllerEvents != null && subscribedActivationButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
-                controller.UnsubscribeToButtonAliasEvent(subscribedActivationButton, true, DoActivationButtonPressed);
-                controller.UnsubscribeToButtonAliasEvent(subscribedActivationButton, false, DoActivationButtonReleased);
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedActivationButton, true, DoActivationButtonPressed);
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedActivationButton, false, DoActivationButtonReleased);
                 subscribedActivationButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
         }
 
         protected virtual void DoActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
-            OnActivationButtonPressed(controller.SetControllerEvent(ref activationButtonPressed, true));
+            OnActivationButtonPressed(controllerEvents.SetControllerEvent(ref activationButtonPressed, true));
             if (EnabledPointerRenderer())
             {
                 controllerReference = e.controllerReference;
@@ -564,7 +568,7 @@ namespace VRTK
                     Toggle(false);
                 }
             }
-            OnActivationButtonReleased(controller.SetControllerEvent(ref activationButtonPressed, false));
+            OnActivationButtonReleased(controllerEvents.SetControllerEvent(ref activationButtonPressed, false));
         }
 
         protected virtual void SubscribeSelectionButton()
@@ -574,11 +578,11 @@ namespace VRTK
                 UnsubscribeSelectionButton();
             }
 
-            if (controller != null)
+            if (controllerEvents != null)
             {
-                controller.SubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
-                controller.SubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
-                controller.SubscribeToButtonAliasEvent(selectionButton, selectOnPress, SelectionButtonAction);
+                controllerEvents.SubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
+                controllerEvents.SubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
+                controllerEvents.SubscribeToButtonAliasEvent(selectionButton, selectOnPress, SelectionButtonAction);
                 subscribedSelectionButton = selectionButton;
                 currentSelectOnPress = selectOnPress;
             }
@@ -586,23 +590,23 @@ namespace VRTK
 
         protected virtual void UnsubscribeSelectionButton()
         {
-            if (controller != null && subscribedSelectionButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+            if (controllerEvents != null && subscribedSelectionButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
             {
-                controller.UnsubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
-                controller.UnsubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
-                controller.UnsubscribeToButtonAliasEvent(subscribedSelectionButton, currentSelectOnPress, SelectionButtonAction);
+                controllerEvents.UnsubscribeToButtonAliasEvent(selectionButton, true, DoSelectionButtonPressed);
+                controllerEvents.UnsubscribeToButtonAliasEvent(selectionButton, false, DoSelectionButtonReleased);
+                controllerEvents.UnsubscribeToButtonAliasEvent(subscribedSelectionButton, currentSelectOnPress, SelectionButtonAction);
                 subscribedSelectionButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
             }
         }
 
         protected virtual void DoSelectionButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
-            OnSelectionButtonPressed(controller.SetControllerEvent(ref selectionButtonPressed, true));
+            OnSelectionButtonPressed(controllerEvents.SetControllerEvent(ref selectionButtonPressed, true));
         }
 
         protected virtual void DoSelectionButtonReleased(object sender, ControllerInteractionEventArgs e)
         {
-            OnSelectionButtonReleased(controller.SetControllerEvent(ref selectionButtonPressed, false));
+            OnSelectionButtonReleased(controllerEvents.SetControllerEvent(ref selectionButtonPressed, false));
         }
 
         protected virtual void SelectionButtonAction(object sender, ControllerInteractionEventArgs e)
@@ -649,7 +653,7 @@ namespace VRTK
 
         protected virtual bool PointerActivatesUseAction(VRTK_InteractableObject givenInteractableObject)
         {
-            return (givenInteractableObject != null && givenInteractableObject.pointerActivatesUseAction && (!ControllerRequired() || givenInteractableObject.IsValidInteractableController(controller.gameObject, givenInteractableObject.allowedUseControllers)));
+            return (givenInteractableObject != null && givenInteractableObject.pointerActivatesUseAction && (!ControllerRequired() || givenInteractableObject.IsValidInteractableController(controllerEvents.gameObject, givenInteractableObject.allowedUseControllers)));
         }
 
         protected virtual void StartUseAction(Transform target)
