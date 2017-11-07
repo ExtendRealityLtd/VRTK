@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Ignores the collisions between the given Interact Touch colliders and the colliders on the GameObject this script is attached to.
@@ -98,6 +99,11 @@ namespace VRTK
         protected virtual void ManageTouchCollision(VRTK_InteractTouch touchToIgnore, bool ignore)
         {
             Collider[] interactTouchColliders = touchToIgnore.ControllerColliders();
+            if (VRTK_ObjectCache.registeredTrackedColliderToInteractTouches.ContainsKey(touchToIgnore) && VRTK_ObjectCache.registeredTrackedColliderToInteractTouches[touchToIgnore] != null)
+            {
+                Collider[] trackedColliders = VRTK_ObjectCache.registeredTrackedColliderToInteractTouches[touchToIgnore].TrackedColliders();
+                interactTouchColliders = interactTouchColliders.Concat(trackedColliders).ToArray();
+            }
 
             for (int touchCollidersIndex = 0; touchCollidersIndex < interactTouchColliders.Length; touchCollidersIndex++)
             {

@@ -164,11 +164,13 @@ Provides a simple trigger collider volume that when a controller enters will ena
  * Place the `VRTK/Prefabs/ControllerRigidbodyActivator/ControllerRigidbodyActivator` prefab in the scene at the location where the controller rigidbody should be automatically activated.
  * The prefab contains a default sphere collider to determine ths collision, this collider component can be customised in the inspector or can be replaced with another collider component (set to `Is Trigger`).
 
-  > If the prefab is placed as a child of the target interactable game object then the collider volume on the prefab will trigger collisions on the interactable object.
+  > If the prefab is placed as a child of the target Interactable Object then the collider volume on the prefab will trigger collisions on the Interactable Object.
 
 ### Inspector Parameters
 
- * **Is Enabled:** If this is checked then the collider will have it's rigidbody toggled on and off during a collision.
+ * **Is Enabled:** If this is checked then the Collider will have it's Rigidbody toggled on and off during a collision.
+ * **Activate Interact Touch:** If this is checked then the Rigidbody Activator will activate the rigidbody and colliders on the Interact Touch script.
+ * **Activate Tracked Collider:** If this is checked then the Rigidbody Activator will activate the rigidbody and colliders on the Controller Tracked Collider script.
 
 ### Class Events
 
@@ -3107,6 +3109,7 @@ A collection of scripts that provide the ability denote objects (such as control
  * [Interact Near Touch](#interact-near-touch-vrtk_interactneartouch)
  * [Interact Grab](#interact-grab-vrtk_interactgrab)
  * [Interact Use](#interact-use-vrtk_interactuse)
+ * [Controller Tracked Collider](#controller-tracked-collider-vrtk_controllertrackedcollider)
  * [Controller Highlighter](#controller-highlighter-vrtk_controllerhighlighter)
  * [Object Auto Grab](#object-auto-grab-vrtk_objectautograb)
 
@@ -3729,7 +3732,7 @@ Determines if the Interact Touch can initiate a grab with the touched Interactab
  * **Grab Button:** The button used to grab/release a touched Interactable Object.
  * **Grab Precognition:** An amount of time between when the grab button is pressed to when the controller is touching an Interactable Object to grab it.
  * **Throw Multiplier:** An amount to multiply the velocity of any Interactable Object being thrown.
- * **Create Rigid Body When Not Touching:** If this is checked and the Interact Touch is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the interacting object to allow it to push other rigid body objects around.
+ * **Create Rigid Body When Not Touching:** If this is checked and the Interact Touch is not touching an Interactable Object when the grab button is pressed then a Rigidbody is added to the interacting object to allow it to push other Rigidbody objects around.
  * **Controller Attach Point:** The rigidbody point on the controller model to snap the grabbed Interactable Object to. If blank it will be set to the SDK default.
  * **Controller Events:** The Controller Events to listen for the events on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
@@ -3907,6 +3910,56 @@ The AttemptUse method will attempt to use the currently touched Interactable Obj
 `VRTK/Examples/006_Controller_UsingADoor` simulates using a door object to open and close it. It also has a cube on the floor that can be grabbed to show how interactable objects can be usable or grabbable.
 
 `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that objects can be grabbed with one button and used with another (e.g. firing a gun).
+
+---
+
+## Controller Tracked Collider (VRTK_ControllerTrackedCollider)
+ > extends VRTK_SDKControllerReady
+
+### Overview
+
+Provides a controller collider collection that follows the controller rigidbody via the physics system.
+
+**Required Components:**
+ * `VRTK_InteractTouch` - An Interact Touch script to determine which controller rigidbody to follow.
+
+**Optional Components:**
+ * `VRTK_ControllerEvents` - The events component to listen for the button presses on. This must be applied in the same object hierarchy as the Interact Touch script if one is not provided via the `Controller Events` parameter.
+
+**Script Usage:**
+ * Place the `VRTK_ControllerTrackedCollider` script on any active scene GameObject except the Script Alias objects.
+ * Assign the controller to track by applying an Interact Touch to the relevant Script Alias and then providing that reference to the `Interact Touch` parameter on this script.
+
+### Inspector Parameters
+
+ * **Interact Touch:** The Interact Touch script to relate the tracked collider to.
+ * **Max Resnap Distance:** The maximum distance the collider object can be from the controller before it automatically snaps back to the same position.
+ * **Activation Button:** The button to press to activate the colliders on the tracked collider set. If `Undefined` then it will always be active.
+ * **Controller Events:** An optional Controller Events to use for listening to the button events. If this is left blank then it will attempt to be retrieved from the same controller as the `Interact Touch` parameter.
+
+### Class Methods
+
+#### ToggleColliders/1
+
+  > `public virtual void ToggleColliders(bool state)`
+
+ * Parameters
+   * `bool state` - If `true` then the tracked colliders will be able to affect other Rigidbodies.
+ * Returns
+   * _none_
+
+The ToggleColliders method toggles the collision state of the tracked colliders.
+
+#### TrackedColliders/0
+
+  > `public virtual Collider[] TrackedColliders()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Collider[]` - A Collider array of the tracked colliders.
+
+The TrackedColliders method returns an array of the tracked colliders.
 
 ---
 
