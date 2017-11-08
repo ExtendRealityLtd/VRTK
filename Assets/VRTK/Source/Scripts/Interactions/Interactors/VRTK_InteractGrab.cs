@@ -36,7 +36,7 @@ namespace VRTK
         public float grabPrecognition = 0f;
         [Tooltip("An amount to multiply the velocity of any Interactable Object being thrown.")]
         public float throwMultiplier = 1f;
-        [Tooltip("If this is checked and the Interact Touch is not touching an Interactable Object when the grab button is pressed then a rigid body is added to the interacting object to allow it to push other rigid body objects around.")]
+        [Tooltip("If this is checked and the Interact Touch is not touching an Interactable Object when the grab button is pressed then a Rigidbody is added to the interacting object to allow it to push other Rigidbody objects around.")]
         public bool createRigidBodyWhenNotTouching = false;
 
         [Header("Custom Settings")]

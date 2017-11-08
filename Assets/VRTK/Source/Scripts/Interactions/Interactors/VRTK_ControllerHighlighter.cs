@@ -1,4 +1,4 @@
-﻿// Controller Highlighter|Interactors|30060
+﻿// Controller Highlighter|Interactors|30070
 namespace VRTK
 {
     using UnityEngine;

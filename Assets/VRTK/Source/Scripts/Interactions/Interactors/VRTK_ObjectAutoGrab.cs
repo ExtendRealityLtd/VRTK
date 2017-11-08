@@ -1,4 +1,4 @@
-﻿// Object Auto Grab|Interactors|30070
+﻿// Object Auto Grab|Interactors|30080
 namespace VRTK
 {
     using UnityEngine;

@@ -4,7 +4,7 @@ namespace VRTK
     using UnityEngine;
 
     /// <summary>
-    /// Changes one game object's transform to follow another game object's transform.
+    /// Changes one GameObject's transform to follow another GameObject's transform.
     /// </summary>
     [AddComponentMenu("VRTK/Scripts/Utilities/Object Follow/VRTK_TransformFollow")]
     public class VRTK_TransformFollow : VRTK_ObjectFollow
@@ -35,6 +35,8 @@ namespace VRTK
             /// </summary>
             OnPreCull
         }
+
+        [Header("Follow Settings")]
 
         [Tooltip("The moment at which to follow.")]
         [SerializeField]
@@ -80,6 +82,9 @@ namespace VRTK
         protected Transform transformToFollow;
         protected Transform transformToChange;
 
+        /// <summary>
+        /// Follow `gameObjectToFollow` using the current settings.
+        /// </summary>
         public override void Follow()
         {
             CacheTransforms();
