@@ -1,0 +1,926 @@
+fileFormatVersion: 2
+guid: 9fbd4cfd43766cc4cbcb915ceafe52a9
+timeCreated: 1499671701
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Bone_Arm_root
+    100004: Bone_Index_Finger_1
+    100006: Bone_Index_Finger_2
+    100008: Bone_Index_Finger_3
+    100010: Bone_Index_Finger_3_end
+    100012: Bone_Index_Finger_Knuckle
+    100014: Bone_Index_Palm_Root
+    100016: Bone_Index_Palm_Root_2nd
+    100018: Bone_Index_Palm_root_3rd
+    100020: Bone_Middle_Finger_1
+    100022: Bone_Middle_Finger_2
+    100024: Bone_Middle_Finger_3
+    100026: Bone_Middle_Finger_3_end
+    100028: Bone_Middle_Finger_Knuckle
+    100030: Bone_Middle_Palm_2nd
+    100032: Bone_Middle_Palm_Root
+    100034: Bone_Midle_Palm_1st
+    100036: Bone_Palm_Pinkie_Root
+    100038: Bone_Palm_Root
+    100040: Bone_Pinkie_Finger_1
+    100042: Bone_Pinkie_Finger_2
+    100044: Bone_Pinkie_Finger_3
+    100046: Bone_Pinkie_Finger_3_end
+    100048: Bone_Pinkie_Finger_Knuckle
+    100050: Bone_Pinkie_Root_1st
+    100052: Bone_Ring_Finger_1
+    100054: Bone_Ring_Finger_2
+    100056: Bone_Ring_Finger_3
+    100058: Bone_Ring_Finger_3_end
+    100060: Bone_Ring_Knuckle
+    100062: Bone_Ring_Palm_1st
+    100064: Bone_Ring_Palm_2nd
+    100066: Bone_Ring_Palm_Root
+    100068: Bone_Thumb_Finger_1
+    100070: Bone_Thumb_Finger_2
+    100072: Bone_Thumb_Finger_3
+    100074: Bone_Thumb_Finger_3_end
+    100076: Bone_Thumb_Finger_Knuckle
+    100078: Bone_Thumb_Palm_Root
+    100080: Bone_Thumb_Root_1st
+    100082: Bone_Wrist
+    100084: VRTK_BasicHand
+    100086: //RootNode
+    100088: VRTK_Hand_Bone_Forearm
+    100090: VRTK_Hand_Bone_Index_1
+    100092: VRTK_Hand_Bone_Index_2
+    100094: VRTK_Hand_Bone_Index_3
+    100096: VRTK_Hand_Bone_Index_4
+    100098: VRTK_Hand_Bone_Index_5
+    100100: VRTK_Hand_Bone_Index_5_end
+    100102: VRTK_Hand_Bone_Middle_1
+    100104: VRTK_Hand_Bone_Middle_2
+    100106: VRTK_Hand_Bone_Middle_3
+    100108: VRTK_Hand_Bone_Middle_4
+    100110: VRTK_Hand_Bone_Middle_5
+    100112: VRTK_Hand_Bone_Middle_5_end
+    100114: VRTK_Hand_Bone_Palm
+    100116: VRTK_Hand_Bone_Pinkie_1
+    100118: VRTK_Hand_Bone_Pinkie_2
+    100120: VRTK_Hand_Bone_Pinkie_3
+    100122: VRTK_Hand_Bone_Pinkie_4
+    100124: VRTK_Hand_Bone_Pinkie_5
+    100126: VRTK_Hand_Bone_Pinkie_5_end
+    100128: VRTK_Hand_Bone_Ring_1
+    100130: VRTK_Hand_Bone_Ring_2
+    100132: VRTK_Hand_Bone_Ring_3
+    100134: VRTK_Hand_Bone_Ring_4
+    100136: VRTK_Hand_Bone_Ring_5
+    100138: VRTK_Hand_Bone_Ring_5_end
+    100140: VRTK_Hand_Bone_Thumb_1
+    100142: VRTK_Hand_Bone_Thumb_2
+    100144: VRTK_Hand_Bone_Thumb_3
+    100146: VRTK_Hand_Bone_Thumb_4
+    100148: VRTK_Hand_Bone_Thumb_4_end
+    100150: VRTK_Hand_Bone_Wrist
+    400000: Armature
+    400002: Bone_Arm_root
+    400004: Bone_Index_Finger_1
+    400006: Bone_Index_Finger_2
+    400008: Bone_Index_Finger_3
+    400010: Bone_Index_Finger_3_end
+    400012: Bone_Index_Finger_Knuckle
+    400014: Bone_Index_Palm_Root
+    400016: Bone_Index_Palm_Root_2nd
+    400018: Bone_Index_Palm_root_3rd
+    400020: Bone_Middle_Finger_1
+    400022: Bone_Middle_Finger_2
+    400024: Bone_Middle_Finger_3
+    400026: Bone_Middle_Finger_3_end
+    400028: Bone_Middle_Finger_Knuckle
+    400030: Bone_Middle_Palm_2nd
+    400032: Bone_Middle_Palm_Root
+    400034: Bone_Midle_Palm_1st
+    400036: Bone_Palm_Pinkie_Root
+    400038: Bone_Palm_Root
+    400040: Bone_Pinkie_Finger_1
+    400042: Bone_Pinkie_Finger_2
+    400044: Bone_Pinkie_Finger_3
+    400046: Bone_Pinkie_Finger_3_end
+    400048: Bone_Pinkie_Finger_Knuckle
+    400050: Bone_Pinkie_Root_1st
+    400052: Bone_Ring_Finger_1
+    400054: Bone_Ring_Finger_2
+    400056: Bone_Ring_Finger_3
+    400058: Bone_Ring_Finger_3_end
+    400060: Bone_Ring_Knuckle
+    400062: Bone_Ring_Palm_1st
+    400064: Bone_Ring_Palm_2nd
+    400066: Bone_Ring_Palm_Root
+    400068: Bone_Thumb_Finger_1
+    400070: Bone_Thumb_Finger_2
+    400072: Bone_Thumb_Finger_3
+    400074: Bone_Thumb_Finger_3_end
+    400076: Bone_Thumb_Finger_Knuckle
+    400078: Bone_Thumb_Palm_Root
+    400080: Bone_Thumb_Root_1st
+    400082: Bone_Wrist
+    400084: VRTK_BasicHand
+    400086: //RootNode
+    400088: VRTK_Hand_Bone_Forearm
+    400090: VRTK_Hand_Bone_Index_1
+    400092: VRTK_Hand_Bone_Index_2
+    400094: VRTK_Hand_Bone_Index_3
+    400096: VRTK_Hand_Bone_Index_4
+    400098: VRTK_Hand_Bone_Index_5
+    400100: VRTK_Hand_Bone_Index_5_end
+    400102: VRTK_Hand_Bone_Middle_1
+    400104: VRTK_Hand_Bone_Middle_2
+    400106: VRTK_Hand_Bone_Middle_3
+    400108: VRTK_Hand_Bone_Middle_4
+    400110: VRTK_Hand_Bone_Middle_5
+    400112: VRTK_Hand_Bone_Middle_5_end
+    400114: VRTK_Hand_Bone_Palm
+    400116: VRTK_Hand_Bone_Pinkie_1
+    400118: VRTK_Hand_Bone_Pinkie_2
+    400120: VRTK_Hand_Bone_Pinkie_3
+    400122: VRTK_Hand_Bone_Pinkie_4
+    400124: VRTK_Hand_Bone_Pinkie_5
+    400126: VRTK_Hand_Bone_Pinkie_5_end
+    400128: VRTK_Hand_Bone_Ring_1
+    400130: VRTK_Hand_Bone_Ring_2
+    400132: VRTK_Hand_Bone_Ring_3
+    400134: VRTK_Hand_Bone_Ring_4
+    400136: VRTK_Hand_Bone_Ring_5
+    400138: VRTK_Hand_Bone_Ring_5_end
+    400140: VRTK_Hand_Bone_Thumb_1
+    400142: VRTK_Hand_Bone_Thumb_2
+    400144: VRTK_Hand_Bone_Thumb_3
+    400146: VRTK_Hand_Bone_Thumb_4
+    400148: VRTK_Hand_Bone_Thumb_4_end
+    400150: VRTK_Hand_Bone_Wrist
+    4300000: VRTK_BasicHand
+    7400000: Main_Armature
+    7400002: Hand_Idle
+    7400004: Hand_Thumb
+    7400006: Hand_Index
+    7400008: Hand_Middle
+    7400010: Hand_Ring
+    7400012: Hand_Pinky
+    7400014: Armature|VRTK_BasicHandArmatureAction
+    9500000: //RootNode
+    13700000: VRTK_BasicHand
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armature|VRTK_BasicHandArmatureAction
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Idle
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Thumb
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 6
+      lastFrame: 7
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Index
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 17
+      lastFrame: 18
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Middle
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 26
+      lastFrame: 27
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Ring
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 36
+      lastFrame: 37
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Hand_Pinky
+      takeName: Armature|VRTK_BasicHandArmatureAction
+      firstFrame: 46
+      lastFrame: 47
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Index_1/VRTK_Hand_Bone_Index_2/VRTK_Hand_Bone_Index_3/VRTK_Hand_Bone_Index_4/VRTK_Hand_Bone_Index_5/VRTK_Hand_Bone_Index_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Middle_1/VRTK_Hand_Bone_Middle_2/VRTK_Hand_Bone_Middle_3/VRTK_Hand_Bone_Middle_4/VRTK_Hand_Bone_Middle_5/VRTK_Hand_Bone_Middle_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Pinkie_1/VRTK_Hand_Bone_Pinkie_2/VRTK_Hand_Bone_Pinkie_3/VRTK_Hand_Bone_Pinkie_4/VRTK_Hand_Bone_Pinkie_5/VRTK_Hand_Bone_Pinkie_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Ring_1/VRTK_Hand_Bone_Ring_2/VRTK_Hand_Bone_Ring_3/VRTK_Hand_Bone_Ring_4/VRTK_Hand_Bone_Ring_5/VRTK_Hand_Bone_Ring_5_end
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4
+        weight: 1
+      - path: Armature/VRTK_Hand_Bone_Forearm/VRTK_Hand_Bone_Wrist/VRTK_Hand_Bone_Palm/VRTK_Hand_Bone_Thumb_1/VRTK_Hand_Bone_Thumb_2/VRTK_Hand_Bone_Thumb_3/VRTK_Hand_Bone_Thumb_4/VRTK_Hand_Bone_Thumb_4_end
+        weight: 1
+      - path: VRTK_BasicHand
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

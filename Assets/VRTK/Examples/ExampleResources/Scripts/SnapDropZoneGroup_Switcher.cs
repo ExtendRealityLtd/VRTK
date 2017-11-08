@@ -4,43 +4,55 @@
 
     public class SnapDropZoneGroup_Switcher : MonoBehaviour
     {
-        private GameObject cubeZone;
-        private GameObject sphereZone;
+        private VRTK_SnapDropZone cubeZone;
+        private VRTK_SnapDropZone sphereZone;
 
         private void Start()
         {
-            cubeZone = transform.Find("Cube_SnapDropZone").gameObject;
-            sphereZone = transform.Find("Sphere_SnapDropZone").gameObject;
+            cubeZone = transform.Find("Cube_SnapDropZone").gameObject.GetComponent<VRTK_SnapDropZone>();
+            sphereZone = transform.Find("Sphere_SnapDropZone").GetComponent<VRTK_SnapDropZone>();
 
-            cubeZone.GetComponent<VRTK_SnapDropZone>().ObjectEnteredSnapDropZone += new SnapDropZoneEventHandler(DoCubeZoneSnapped);
-            cubeZone.GetComponent<VRTK_SnapDropZone>().ObjectSnappedToDropZone += new SnapDropZoneEventHandler(DoCubeZoneSnapped);
-            cubeZone.GetComponent<VRTK_SnapDropZone>().ObjectExitedSnapDropZone += new SnapDropZoneEventHandler(DoCubeZoneUnsnapped);
-            cubeZone.GetComponent<VRTK_SnapDropZone>().ObjectUnsnappedFromDropZone += new SnapDropZoneEventHandler(DoCubeZoneUnsnapped);
+            cubeZone.ObjectEnteredSnapDropZone += new SnapDropZoneEventHandler(DoCubeZoneSnapped);
+            cubeZone.ObjectSnappedToDropZone += new SnapDropZoneEventHandler(DoCubeZoneSnapped);
+            cubeZone.ObjectExitedSnapDropZone += new SnapDropZoneEventHandler(DoCubeZoneUnsnapped);
+            cubeZone.ObjectUnsnappedFromDropZone += new SnapDropZoneEventHandler(DoCubeZoneUnsnapped);
 
-            sphereZone.GetComponent<VRTK_SnapDropZone>().ObjectEnteredSnapDropZone += new SnapDropZoneEventHandler(DoSphereZoneSnapped);
-            sphereZone.GetComponent<VRTK_SnapDropZone>().ObjectSnappedToDropZone += new SnapDropZoneEventHandler(DoSphereZoneSnapped);
-            sphereZone.GetComponent<VRTK_SnapDropZone>().ObjectExitedSnapDropZone += new SnapDropZoneEventHandler(DoSphereZoneUnsnapped);
-            sphereZone.GetComponent<VRTK_SnapDropZone>().ObjectUnsnappedFromDropZone += new SnapDropZoneEventHandler(DoSphereZoneUnsnapped);
+            sphereZone.ObjectEnteredSnapDropZone += new SnapDropZoneEventHandler(DoSphereZoneSnapped);
+            sphereZone.ObjectSnappedToDropZone += new SnapDropZoneEventHandler(DoSphereZoneSnapped);
+            sphereZone.ObjectExitedSnapDropZone += new SnapDropZoneEventHandler(DoSphereZoneUnsnapped);
+            sphereZone.ObjectUnsnappedFromDropZone += new SnapDropZoneEventHandler(DoSphereZoneUnsnapped);
         }
 
         private void DoCubeZoneSnapped(object sender, SnapDropZoneEventArgs e)
         {
-            sphereZone.SetActive(false);
+            if (sphereZone.GetCurrentSnappedObject() == null)
+            {
+                sphereZone.gameObject.SetActive(false);
+            }
         }
 
         private void DoCubeZoneUnsnapped(object sender, SnapDropZoneEventArgs e)
         {
-            sphereZone.SetActive(true);
+            if (cubeZone.GetCurrentSnappedObject() == null)
+            {
+                sphereZone.gameObject.SetActive(true);
+            }
         }
 
         private void DoSphereZoneSnapped(object sender, SnapDropZoneEventArgs e)
         {
-            cubeZone.SetActive(false);
+            if (cubeZone.GetCurrentSnappedObject() == null)
+            {
+                cubeZone.gameObject.SetActive(false);
+            }
         }
 
         private void DoSphereZoneUnsnapped(object sender, SnapDropZoneEventArgs e)
         {
-            cubeZone.SetActive(true);
+            if (sphereZone.GetCurrentSnappedObject() == null)
+            {
+                cubeZone.gameObject.SetActive(true);
+            }
         }
     }
 }

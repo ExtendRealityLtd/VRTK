@@ -19,7 +19,7 @@
         private float defaultOpacity = 1f;
         private bool highlighted;
 
-        private void Start()
+        private void OnEnable()
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
             {
@@ -34,25 +34,36 @@
             highlighted = false;
 
             //Setup controller event listeners
-            events.TriggerPressed += new ControllerInteractionEventHandler(DoTriggerPressed);
-            events.TriggerReleased += new ControllerInteractionEventHandler(DoTriggerReleased);
-
-            events.ButtonOnePressed += new ControllerInteractionEventHandler(DoButtonOnePressed);
-            events.ButtonOneReleased += new ControllerInteractionEventHandler(DoButtonOneReleased);
-
-            events.ButtonTwoPressed += new ControllerInteractionEventHandler(DoButtonTwoPressed);
-            events.ButtonTwoReleased += new ControllerInteractionEventHandler(DoButtonTwoReleased);
-
-            events.StartMenuPressed += new ControllerInteractionEventHandler(DoStartMenuPressed);
-            events.StartMenuReleased += new ControllerInteractionEventHandler(DoStartMenuReleased);
-
-            events.GripPressed += new ControllerInteractionEventHandler(DoGripPressed);
-            events.GripReleased += new ControllerInteractionEventHandler(DoGripReleased);
-
-            events.TouchpadPressed += new ControllerInteractionEventHandler(DoTouchpadPressed);
-            events.TouchpadReleased += new ControllerInteractionEventHandler(DoTouchpadReleased);
+            events.TriggerPressed += DoTriggerPressed;
+            events.TriggerReleased += DoTriggerReleased;
+            events.ButtonOnePressed += DoButtonOnePressed;
+            events.ButtonOneReleased += DoButtonOneReleased;
+            events.ButtonTwoPressed += DoButtonTwoPressed;
+            events.ButtonTwoReleased += DoButtonTwoReleased;
+            events.StartMenuPressed += DoStartMenuPressed;
+            events.StartMenuReleased += DoStartMenuReleased;
+            events.GripPressed += DoGripPressed;
+            events.GripReleased += DoGripReleased;
+            events.TouchpadPressed += DoTouchpadPressed;
+            events.TouchpadReleased += DoTouchpadReleased;
 
             tooltips.ToggleTips(false);
+        }
+
+        private void OnDisable()
+        {
+            events.TriggerPressed -= DoTriggerPressed;
+            events.TriggerReleased -= DoTriggerReleased;
+            events.ButtonOnePressed -= DoButtonOnePressed;
+            events.ButtonOneReleased -= DoButtonOneReleased;
+            events.ButtonTwoPressed -= DoButtonTwoPressed;
+            events.ButtonTwoReleased -= DoButtonTwoReleased;
+            events.StartMenuPressed -= DoStartMenuPressed;
+            events.StartMenuReleased -= DoStartMenuReleased;
+            events.GripPressed -= DoGripPressed;
+            events.GripReleased -= DoGripReleased;
+            events.TouchpadPressed -= DoTouchpadPressed;
+            events.TouchpadReleased -= DoTouchpadReleased;
         }
 
         private void PulseTrigger()
