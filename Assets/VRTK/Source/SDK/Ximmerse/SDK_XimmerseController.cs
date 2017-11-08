@@ -197,6 +197,7 @@ namespace VRTK
         /// The GenerateControllerPointerOrigin method can create a custom pointer origin Transform to represent the pointer position and forward.
         /// </summary>
         /// <returns>A generated Transform that contains the custom pointer origin.</returns>
+        [System.Obsolete("GenerateControllerPointerOrigin has been deprecated and will be removed in a future version of VRTK.")]
         public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
             return null;

@@ -52,6 +52,7 @@
             return GetControllerSDK().GetControllerOrigin(controllerReference);
         }
 
+        [System.Obsolete("GenerateControllerPointerOrigin has been deprecated and will be removed in a future version of VRTK.")]
         public static Transform GenerateControllerPointerOrigin(GameObject parent)
         {
             return GetControllerSDK().GenerateControllerPointerOrigin(parent);
