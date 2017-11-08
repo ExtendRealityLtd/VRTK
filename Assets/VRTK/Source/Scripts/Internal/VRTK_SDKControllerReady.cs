@@ -29,26 +29,25 @@
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
-            RegisterLeftControllerReady();
-            RegisterRightControllerReady();
             CheckControllersReady();
             previousControllerSDK = VRTK_SDK_Bridge.GetControllerSDK();
         }
 
         protected virtual void CheckControllersReady()
         {
+            RegisterLeftControllerReady();
+            RegisterRightControllerReady();
+
             VRTK_ControllerReference leftRef = VRTK_DeviceFinder.GetControllerReferenceLeftHand();
             VRTK_ControllerReference rightRef = VRTK_DeviceFinder.GetControllerReferenceRightHand();
 
             if (VRTK_ControllerReference.IsValid(leftRef))
             {
-                RegisterLeftControllerReady();
                 ControllerReady(leftRef);
             }
 
             if (VRTK_ControllerReference.IsValid(rightRef))
             {
-                RegisterRightControllerReady();
                 ControllerReady(rightRef);
             }
         }
