@@ -6429,7 +6429,6 @@ Provides a base that all physics based Controllables can inherit from.
 
 ### Inspector Parameters
 
- * **Auto Interaction:** If this is checked then a VRTK_ControllerRigidbodyActivator will automatically be added to the Controllable so the interacting object's rigidbody is enabled on touch.
  * **Connected To:** The Rigidbody that the Controllable is connected to.
 
 ### Class Methods

@@ -420,7 +420,7 @@ namespace VRTK.Controllables.PhysicsBased
         protected virtual void InteractableObjectTouched(object sender, InteractableObjectEventArgs e)
         {
             CheckLock();
-            if (rigidbodyActivatorContainer != null)
+            if (GetControlActivatorContainer() != null)
             {
                 AttemptMove();
             }
@@ -429,7 +429,7 @@ namespace VRTK.Controllables.PhysicsBased
         protected virtual void InteractableObjectUntouched(object sender, InteractableObjectEventArgs e)
         {
             CheckLock();
-            if (rigidbodyActivatorContainer != null)
+            if (GetControlActivatorContainer() != null)
             {
                 AttemptRelease();
             }
@@ -501,7 +501,7 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected virtual void ForceRestingPosition()
         {
-            bool validReset = (controlJoint != null && !controlJoint.useSpring && !IsGrabbed() && (!autoInteraction || !controlInteractableObject.IsTouched()));
+            bool validReset = (controlJoint != null && !controlJoint.useSpring && !IsGrabbed() && (GetControlActivatorContainer() == null || !controlInteractableObject.IsTouched()));
             float currentValue = GetValue();
             float restingAngleMin = restingAngle - forceRestingAngleThreshold;
             float restingAngleMax = restingAngle + forceRestingAngleThreshold;

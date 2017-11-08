@@ -242,7 +242,6 @@ namespace VRTK.Controllables.ArtificialBased
             SetupParentContainer();
             SetupInteractableObject();
             SetAngleTarget(angleTarget);
-            EmitEvents();
         }
 
         protected override void OnDisable()
@@ -415,7 +414,10 @@ namespace VRTK.Controllables.ArtificialBased
                 ForceRestingPosition();
                 ForceSnapToStep();
             }
-            EmitEvents();
+            if (processAtEndOfFrame == null)
+            {
+                EmitEvents();
+            }
         }
 
         protected virtual void SetAngleWithNormalizedValue(float normalizedTargetAngle)
