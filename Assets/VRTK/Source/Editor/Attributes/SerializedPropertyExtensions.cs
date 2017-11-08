@@ -8,15 +8,14 @@
 // </author>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Supyrb
+namespace VRTK.Supyrb
 {
     using System;
     using UnityEngine;
     using UnityEditor;
     using System.Reflection;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Extension class for SerializedProperties

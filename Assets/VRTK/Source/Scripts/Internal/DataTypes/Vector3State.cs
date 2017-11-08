@@ -1,30 +1,33 @@
-﻿[System.Serializable]
-public class Vector3State
+﻿namespace VRTK
 {
-    public bool xState;
-    public bool yState;
-    public bool zState;
-
-    public static Vector3State False
+    [System.Serializable]
+    public class Vector3State
     {
-        get
+        public bool xState;
+        public bool yState;
+        public bool zState;
+
+        public static Vector3State False
         {
-            return new Vector3State(false, false, false);
+            get
+            {
+                return new Vector3State(false, false, false);
+            }
         }
-    }
 
-    public static Vector3State True
-    {
-        get
+        public static Vector3State True
         {
-            return new Vector3State(true, true, true);
+            get
+            {
+                return new Vector3State(true, true, true);
+            }
         }
-    }
 
-    public Vector3State(bool x, bool y, bool z)
-    {
-        xState = x;
-        yState = y;
-        zState = z;
+        public Vector3State(bool x, bool y, bool z)
+        {
+            xState = x;
+            yState = y;
+            zState = z;
+        }
     }
 }
