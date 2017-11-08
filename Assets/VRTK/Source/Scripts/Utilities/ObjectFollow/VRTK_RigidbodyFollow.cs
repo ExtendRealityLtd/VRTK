@@ -89,7 +89,7 @@ namespace VRTK
 
         protected override Vector3 GetScaleToFollow()
         {
-            return rigidbodyToFollow.transform.localScale;
+            return (rigidbodyToFollow != null ? rigidbodyToFollow.transform.localScale : Vector3.zero);
         }
 
         protected override void SetPositionOnGameObject(Vector3 newPosition)
@@ -134,12 +134,12 @@ namespace VRTK
 
         protected virtual void TrackPosition(Vector3 newPosition)
         {
-            if(rigidbodyToFollow == null)
+            if (rigidbodyToFollow == null)
             {
                 return;
             }
 
-            if(Vector3.Distance(rigidbodyToChange.position, rigidbodyToFollow.position) > trackMaxDistance)
+            if (Vector3.Distance(rigidbodyToChange.position, rigidbodyToFollow.position) > trackMaxDistance)
             {
                 rigidbodyToChange.position = rigidbodyToFollow.position;
                 rigidbodyToChange.rotation = rigidbodyToFollow.rotation;

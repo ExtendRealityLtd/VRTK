@@ -435,7 +435,7 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected virtual void InteractableObjectTouched(object sender, InteractableObjectEventArgs e)
         {
-            if (rigidbodyActivatorContainer != null)
+            if (GetControlActivatorContainer() != null)
             {
                 AttemptMove();
             }
@@ -443,7 +443,7 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected virtual void InteractableObjectUntouched(object sender, InteractableObjectEventArgs e)
         {
-            if (rigidbodyActivatorContainer != null)
+            if (GetControlActivatorContainer() != null)
             {
                 AttemptRelease();
             }

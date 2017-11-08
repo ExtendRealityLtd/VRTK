@@ -14,16 +14,12 @@ namespace VRTK.Controllables.PhysicsBased
     {
         [Header("Physics Settings")]
 
-        [Tooltip("If this is checked then a VRTK_ControllerRigidbodyActivator will automatically be added to the Controllable so the interacting object's rigidbody is enabled on touch.")]
-        public bool autoInteraction = true;
         [Tooltip("The Rigidbody that the Controllable is connected to.")]
         public Rigidbody connectedTo;
 
         protected Rigidbody controlRigidbody;
         protected bool createCustomRigidbody;
         protected GameObject rigidbodyActivatorContainer;
-        protected bool createCustomRigidbodyActivator;
-        protected Transform activatorParent;
 
         /// <summary>
         /// The GetControlRigidbody method returns the rigidbody associated with the control.
@@ -45,7 +41,6 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected override void OnEnable()
         {
-            activatorParent = (activatorParent == null ? transform : activatorParent);
             base.OnEnable();
             SetupRigidbody();
             SetupRigidbodyActivator();
@@ -53,39 +48,17 @@ namespace VRTK.Controllables.PhysicsBased
 
         protected override void OnDisable()
         {
-            if (createCustomRigidbodyActivator && rigidbodyActivatorContainer != null)
-            {
-                Destroy(rigidbodyActivatorContainer);
-            }
             if (createCustomRigidbody)
             {
                 Destroy(controlRigidbody);
             }
-            activatorParent = null;
             base.OnDisable();
         }
 
         protected virtual void SetupRigidbodyActivator()
         {
-            createCustomRigidbodyActivator = false;
-            if (GetComponentInChildren<VRTK_ControllerRigidbodyActivator>() == null && autoInteraction)
-            {
-                rigidbodyActivatorContainer = new GameObject(VRTK_SharedMethods.GenerateVRTKObjectName(true, name, "Controllable", "PhysicsBased", "ControllerRigidbodyActivator"));
-                rigidbodyActivatorContainer.transform.SetParent(activatorParent);
-                rigidbodyActivatorContainer.transform.localPosition = Vector3.zero;
-                rigidbodyActivatorContainer.transform.localRotation = Quaternion.identity;
-                rigidbodyActivatorContainer.transform.localScale = Vector3.one;
-                rigidbodyActivatorContainer.AddComponent<VRTK_ControllerRigidbodyActivator>();
-                BoxCollider rigidbodyActivatorCollider = rigidbodyActivatorContainer.AddComponent<BoxCollider>();
-                rigidbodyActivatorCollider.isTrigger = true;
-                rigidbodyActivatorCollider.size *= 1.2f;
-                createCustomRigidbodyActivator = true;
-                ConfigueRigidbodyActivator();
-            }
-        }
-
-        protected virtual void ConfigueRigidbodyActivator()
-        {
+            VRTK_ControllerRigidbodyActivator foundActivator = GetComponentInChildren<VRTK_ControllerRigidbodyActivator>();
+            rigidbodyActivatorContainer = (foundActivator != null ? foundActivator.gameObject : null);
         }
 
         protected virtual void SetupRigidbody()
