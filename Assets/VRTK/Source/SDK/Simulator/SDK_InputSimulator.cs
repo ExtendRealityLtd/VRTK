@@ -36,7 +36,9 @@
         public bool hideHandsAtSwitch = false;
         [Tooltip("Reset hand position and rotation when enabling them.")]
         public bool resetHandsAtSwitch = true;
-		
+        [Tooltip("Displays an axis helper to show which axis the hands will be moved through.")]
+        public bool showHandAxisHelpers = true;
+
         [Header("Mouse cursor lock")]
 
         [Tooltip("Lock the mouse cursor to the game window.")]
@@ -51,11 +53,13 @@
         [Tooltip("Adjust hand rotation speed.")]
         public float handRotationMultiplier = 0.5f;
         [Tooltip("Adjust player movement speed.")]
-        public float playerMoveMultiplier = 5;
+        public float playerMoveMultiplier = 5f;
         [Tooltip("Adjust player rotation speed.")]
         public float playerRotationMultiplier = 0.5f;
         [Tooltip("Adjust player sprint speed.")]
-        public float playerSprintMultiplier = 2;
+        public float playerSprintMultiplier = 2f;
+        [Tooltip("Adjust the speed of the cursor movement in locked mode.")]
+        public float lockedCursorMultiplier = 5f;
 
         [Header("Operation Key Bindings")]
 
@@ -114,20 +118,24 @@
         #endregion
         #region Private fields
 
-        private bool isHand = false;
-        private GameObject hintCanvas;
-        private Text hintText;
-        private Transform rightHand;
-        private Transform leftHand;
-        private Transform currentHand;
-        private Vector3 oldPos;
-        private Transform neck;
-        private SDK_ControllerSim rightController;
-        private SDK_ControllerSim leftController;
-        private static GameObject cachedCameraRig;
-        private static bool destroyed = false;
-        private float sprintMultiplier = 1;
-        private GameObject crossHairPanel;
+        protected bool isHand = false;
+        protected GameObject hintCanvas;
+        protected Text hintText;
+        protected Transform rightHand;
+        protected Transform leftHand;
+        protected Transform currentHand;
+        protected Vector3 oldPos;
+        protected Transform neck;
+        protected SDK_ControllerSim rightController;
+        protected SDK_ControllerSim leftController;
+        protected static GameObject cachedCameraRig;
+        protected static bool destroyed = false;
+        protected float sprintMultiplier = 1;
+        protected GameObject crossHairPanel;
+        protected Transform leftHandHorizontalAxisGuide;
+        protected Transform leftHandVerticalAxisGuide;
+        protected Transform rightHandHorizontalAxisGuide;
+        protected Transform rightHandVerticalAxisGuide;
 
         #endregion
 
@@ -148,12 +156,12 @@
             return cachedCameraRig;
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             hintCanvas = transform.Find("Canvas/Control Hints").gameObject;
             crossHairPanel = transform.Find("Canvas/CrosshairPanel").gameObject;
@@ -163,6 +171,10 @@
             rightHand.gameObject.SetActive(false);
             leftHand = transform.Find("LeftHand");
             leftHand.gameObject.SetActive(false);
+            leftHandHorizontalAxisGuide = leftHand.Find("Guides/HorizontalPlane");
+            leftHandVerticalAxisGuide = leftHand.Find("Guides/VerticalPlane");
+            rightHandHorizontalAxisGuide = rightHand.Find("Guides/HorizontalPlane");
+            rightHandVerticalAxisGuide = rightHand.Find("Guides/VerticalPlane");
             currentHand = rightHand;
             oldPos = Input.mousePosition;
             neck = transform.Find("Neck");
@@ -195,13 +207,13 @@
             crossHairPanel.SetActive(false);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
             destroyed = true;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (Input.GetKeyDown(toggleControlHints))
             {
@@ -235,6 +247,7 @@
                 if (isHand)
                 {
                     SetMove();
+                    ToggleGuidePlanes(false, false);
                 }
                 else
                 {
@@ -299,7 +312,7 @@
             }
         }
 
-        private void TryPickup(bool rightHand)
+        protected virtual void TryPickup(bool rightHand)
         {
             Ray screenRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
@@ -327,15 +340,16 @@
             }
         }
 
-        private void UpdateHands()
+        protected virtual void UpdateHands()
         {
             Vector3 mouseDiff = GetMouseDelta();
 
             if (IsAcceptingMouseInput())
             {
-                if (Input.GetKey(rotationPosition)) //Rotation
+                if (Input.GetKey(changeAxis))
                 {
-                    if (Input.GetKey(changeAxis))
+                    ToggleGuidePlanes(false, true);
+                    if (Input.GetKey(rotationPosition))
                     {
                         Vector3 rot = Vector3.zero;
                         rot.x += (mouseDiff * handRotationMultiplier).y;
@@ -344,19 +358,20 @@
                     }
                     else
                     {
+                        Vector3 pos = Vector3.zero;
+                        pos += mouseDiff * handMoveMultiplier;
+                        currentHand.transform.Translate(pos * Time.deltaTime);
+                    }
+                }
+                else
+                {
+                    ToggleGuidePlanes(true, false);
+                    if (Input.GetKey(rotationPosition))
+                    {
                         Vector3 rot = Vector3.zero;
                         rot.z += (mouseDiff * handRotationMultiplier).x;
                         rot.x += (mouseDiff * handRotationMultiplier).y;
                         currentHand.transform.Rotate(rot * Time.deltaTime);
-                    }
-                }
-                else //Position
-                {
-                    if (Input.GetKey(changeAxis))
-                    {
-                        Vector3 pos = Vector3.zero;
-                        pos += mouseDiff * handMoveMultiplier;
-                        currentHand.transform.Translate(pos * Time.deltaTime);
                     }
                     else
                     {
@@ -369,7 +384,7 @@
             }
         }
 
-        private void UpdateRotation()
+        protected virtual void UpdateRotation()
         {
             Vector3 mouseDiff = GetMouseDelta();
 
@@ -395,7 +410,7 @@
             }
         }
 
-        private void UpdatePosition()
+        protected virtual void UpdatePosition()
         {
             float moveMod = Time.deltaTime * playerMoveMultiplier * sprintMultiplier;
             if (Input.GetKey(moveForward))
@@ -416,7 +431,7 @@
             }
         }
 
-        private void SetHand()
+        protected virtual void SetHand()
         {
             Cursor.visible = false;
             isHand = true;
@@ -432,7 +447,7 @@
             }
         }
 
-        private void SetMove()
+        protected virtual void SetMove()
         {
             Cursor.visible = true;
             isHand = false;
@@ -443,7 +458,7 @@
             }
         }
 
-        private void UpdateHints()
+        protected virtual void UpdateHints()
         {
             string hints = "";
             Func<KeyCode, string> key = (k) => "<b>" + k.ToString() + "</b>";
@@ -457,6 +472,7 @@
             // WASD Movement
             string movementKeys = moveForward.ToString() + moveLeft.ToString() + moveBackward.ToString() + moveRight.ToString();
             hints += "Toggle Control Hints: " + key(toggleControlHints) + "\n\n";
+            hints += "Toggle Mouse Lock: " + key(toggleMouseLock) + "\n";
             hints += "Move Player/Playspace: <b>" + movementKeys + "</b>\n";
             hints += "Sprint Modifier: (" + key(sprint) + ")\n\n";
 
@@ -514,22 +530,51 @@
             hintText.text = hints.TrimEnd();
         }
 
-        private bool IsAcceptingMouseInput()
+        protected virtual bool IsAcceptingMouseInput()
         {
             return mouseMovementInput == MouseInputMode.Always || Input.GetKey(mouseMovementKey);
         }
 
-        private Vector3 GetMouseDelta()
+        protected virtual Vector3 GetMouseDelta()
         {
             if (Cursor.lockState == CursorLockMode.Locked)
             {
-                return new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                return new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * lockedCursorMultiplier;
             }
             else
             {
                 Vector3 mouseDiff = Input.mousePosition - oldPos;
                 oldPos = Input.mousePosition;
                 return mouseDiff;
+            }
+        }
+
+        protected virtual void ToggleGuidePlanes(bool horizontalState, bool verticalState)
+        {
+            if (!showHandAxisHelpers)
+            {
+                horizontalState = false;
+                verticalState = false;
+            }
+
+            if (leftHandHorizontalAxisGuide != null)
+            {
+                leftHandHorizontalAxisGuide.gameObject.SetActive(horizontalState);
+            }
+
+            if (leftHandVerticalAxisGuide != null)
+            {
+                leftHandVerticalAxisGuide.gameObject.SetActive(verticalState);
+            }
+
+            if (rightHandHorizontalAxisGuide != null)
+            {
+                rightHandHorizontalAxisGuide.gameObject.SetActive(horizontalState);
+            }
+
+            if (rightHandVerticalAxisGuide != null)
+            {
+                rightHandVerticalAxisGuide.gameObject.SetActive(verticalState);
             }
         }
     }
