@@ -137,6 +137,8 @@
                     }
 
                     GameObject target = ExecuteEvents.ExecuteHierarchy(result.gameObject, pointer.pointerEventData, ExecuteEvents.pointerEnterHandler);
+                    target = (target == null ? result.gameObject : target);
+
                     if (target != null)
                     {
                         Selectable selectable = target.GetComponent<Selectable>();
@@ -147,6 +149,11 @@
                             selectable.navigation = noNavigation;
                         }
 
+                        if (pointer.hoveringElement != null && pointer.hoveringElement != target)
+                        {
+                            pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(result, null, pointer.hoveringElement));
+                        }
+
                         pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, target, pointer.hoveringElement));
                         pointer.hoveringElement = target;
                         pointer.pointerEventData.pointerCurrentRaycast = result;
@@ -154,14 +161,12 @@
                         pointer.pointerEventData.hovered.Add(pointer.pointerEventData.pointerEnter);
                         break;
                     }
-                    else
+
+                    if (result.gameObject != pointer.hoveringElement)
                     {
-                        if (result.gameObject != pointer.hoveringElement)
-                        {
-                            pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, result.gameObject, pointer.hoveringElement));
-                        }
-                        pointer.hoveringElement = result.gameObject;
+                        pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, result.gameObject, pointer.hoveringElement));
                     }
+                    pointer.hoveringElement = result.gameObject;
                 }
 
                 if (pointer.hoveringElement && results.Count == 0)
