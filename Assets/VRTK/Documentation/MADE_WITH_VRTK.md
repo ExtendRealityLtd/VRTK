@@ -59,6 +59,7 @@ A collection of titles that have been made with VRTK.
 | Captain 13 Beyond the Hero | [Steam Store Page](http://store.steampowered.com/app/704350) |
 | VoxVR | [Steam Store Page](http://store.steampowered.com/app/502480) |
 | VR Hybrid War 2117 | [Steam Store Page](http://store.steampowered.com/app/741360) |
+| VR Shoot Around | [Steam Store Page](http://store.steampowered.com/app/671740) |
 
 ## Oculus Home
 
