@@ -147,6 +147,11 @@
                             selectable.navigation = noNavigation;
                         }
 
+                        if (pointer.hoveringElement != null && pointer.hoveringElement != target)
+                        {
+                            pointer.OnUIPointerElementExit(pointer.SetUIPointerEvent(result, null, pointer.hoveringElement));
+                        }
+
                         pointer.OnUIPointerElementEnter(pointer.SetUIPointerEvent(result, target, pointer.hoveringElement));
                         pointer.hoveringElement = target;
                         pointer.pointerEventData.pointerCurrentRaycast = result;
