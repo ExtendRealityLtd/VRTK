@@ -30,6 +30,8 @@
 
         #region Public fields
 
+        [Header("General Settings")]
+
         [Tooltip("Show control information in the upper left corner of the screen.")]
         public bool showControlHints = true;
         [Tooltip("Hide hands when disabling them.")]
@@ -39,14 +41,14 @@
         [Tooltip("Displays an axis helper to show which axis the hands will be moved through.")]
         public bool showHandAxisHelpers = true;
 
-        [Header("Mouse cursor lock")]
+        [Header("Mouse Cursor Lock Settings")]
 
         [Tooltip("Lock the mouse cursor to the game window.")]
         public bool lockMouseToView = true;
         [Tooltip("Whether the mouse movement always acts as input or requires a button press.")]
         public MouseInputMode mouseMovementInput = MouseInputMode.Always;
 
-        [Header("Adjustments")]
+        [Header("Manual Adjustment Settings")]
 
         [Tooltip("Adjust hand movement speed.")]
         public float handMoveMultiplier = 0.002f;
@@ -60,8 +62,12 @@
         public float playerSprintMultiplier = 2f;
         [Tooltip("Adjust the speed of the cursor movement in locked mode.")]
         public float lockedCursorMultiplier = 5f;
+        [Tooltip("The Colour of the GameObject representing the left hand.")]
+        public Color leftHandColor = Color.red;
+        [Tooltip("The Colour of the GameObject representing the right hand.")]
+        public Color rightHandColor = Color.green;
 
-        [Header("Operation Key Bindings")]
+        [Header("Operation Key Binding Settings")]
 
         [Tooltip("Key used to enable mouse input if a button press is required.")]
         public KeyCode mouseMovementKey = KeyCode.Mouse1;
@@ -84,7 +90,7 @@
         [Tooltip("Key used to enable distance pickup.")]
         public KeyCode distancePickupModifier = KeyCode.LeftControl;
 
-        [Header("Movement Key Bindings")]
+        [Header("Movement Key Binding Settings")]
 
         [Tooltip("Key used to move forward.")]
         public KeyCode moveForward = KeyCode.W;
@@ -97,7 +103,8 @@
         [Tooltip("Key used to sprint.")]
         public KeyCode sprint = KeyCode.LeftShift;
 
-        [Header("Controller Key Bindings")]
+        [Header("Controller Key Binding Settings")]
+
         [Tooltip("Key used to simulate trigger button.")]
         public KeyCode triggerAlias = KeyCode.Mouse1;
         [Tooltip("Key used to simulate grip button.")]
@@ -116,7 +123,7 @@
         public KeyCode hairTouchModifier = KeyCode.H;
 
         #endregion
-        #region Private fields
+        #region Protected fields
 
         protected bool isHand = false;
         protected GameObject hintCanvas;
@@ -178,8 +185,8 @@
             currentHand = rightHand;
             oldPos = Input.mousePosition;
             neck = transform.Find("Neck");
-            leftHand.Find("Hand").GetComponent<Renderer>().material.color = Color.red;
-            rightHand.Find("Hand").GetComponent<Renderer>().material.color = Color.green;
+            SetHandColor(leftHand, leftHandColor);
+            SetHandColor(rightHand, rightHandColor);
             rightController = rightHand.GetComponent<SDK_ControllerSim>();
             leftController = leftHand.GetComponent<SDK_ControllerSim>();
             rightController.selected = true;
@@ -309,6 +316,19 @@
             if (showControlHints)
             {
                 UpdateHints();
+            }
+        }
+
+        protected virtual void SetHandColor(Transform hand, Color givenColor)
+        {
+            Transform foundHand = hand.Find("Hand");
+            if (foundHand != null && givenColor != Color.clear)
+            {
+                Renderer[] renderers = foundHand.GetComponentsInChildren<Renderer>(true);
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].material.color = givenColor;
+                }
             }
         }
 
