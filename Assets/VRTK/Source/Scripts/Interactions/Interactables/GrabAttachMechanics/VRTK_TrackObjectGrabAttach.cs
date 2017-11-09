@@ -28,6 +28,8 @@ namespace VRTK.GrabAttachMechanics
         public float velocityLimit = float.PositiveInfinity;
         [Tooltip("The maximum amount of angular velocity magnitude that can be applied to the Interactable Object. Lowering this can prevent physics glitches if Interactable Objects are moving too fast.")]
         public float angularVelocityLimit = float.PositiveInfinity;
+        [Tooltip("The maximum difference in distance to the tracked position.")]
+        public float maxDistanceDelta = 10f;
 
         protected bool isReleasable = true;
 
@@ -94,7 +96,6 @@ namespace VRTK.GrabAttachMechanics
                 return;
             }
 
-            float maxDistanceDelta = 10f;
             Vector3 positionDelta = trackPoint.position - (grabbedSnapHandle != null ? grabbedSnapHandle.position : grabbedObject.transform.position);
             Quaternion rotationDelta = trackPoint.rotation * Quaternion.Inverse((grabbedSnapHandle != null ? grabbedSnapHandle.rotation : grabbedObject.transform.rotation));
 

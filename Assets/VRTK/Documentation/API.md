@@ -5410,6 +5410,7 @@ Applies velocity to the grabbed Interactable Object to ensure it tracks the posi
  * **Detach Distance:** The maximum distance the grabbing object is away from the Interactable Object before it is automatically dropped.
  * **Velocity Limit:** The maximum amount of velocity magnitude that can be applied to the Interactable Object. Lowering this can prevent physics glitches if Interactable Objects are moving too fast.
  * **Angular Velocity Limit:** The maximum amount of angular velocity magnitude that can be applied to the Interactable Object. Lowering this can prevent physics glitches if Interactable Objects are moving too fast.
+ * **Max Distance Delta:** The maximum difference in distance to the tracked position.
 
 ### Class Methods
 
