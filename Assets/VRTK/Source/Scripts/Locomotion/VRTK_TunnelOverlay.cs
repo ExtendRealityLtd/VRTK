@@ -30,6 +30,8 @@ namespace VRTK
 
         [Tooltip("The color to use for the tunnel effect.")]
         public Color effectColor = Color.black;
+        [Tooltip("An optional skybox texture to use for the tunnel effect.")]
+        public Texture effectSkybox;
         [Tooltip("The initial amount of screen coverage the tunnel to consume without any movement.")]
         [Range(0f, 1f)]
         public float initialEffectSize = 0f;
@@ -43,6 +45,7 @@ namespace VRTK
         public float smoothingTime = 0.15f;
 
         protected Transform headset;
+        protected Camera headsetCamera;
         protected Transform playarea;
         protected VRTK_TunnelEffect cameraEffect;
         protected float angularVelocity;
@@ -53,9 +56,11 @@ namespace VRTK
         protected int shaderPropertyColor;
         protected int shaderPropertyAV;
         protected int shaderPropertyFeather;
+        protected int shaderPropertySkyboxTexture;
         protected Color originalColor;
         protected float originalAngularVelocity;
         protected float originalFeatherSize;
+        protected Texture originalSkyboxTexture;
         protected float maximumEffectCoverage = 1.15f;
 
         protected virtual void Awake()
@@ -64,17 +69,25 @@ namespace VRTK
             shaderPropertyColor = Shader.PropertyToID("_Color");
             shaderPropertyAV = Shader.PropertyToID("_AngularVelocity");
             shaderPropertyFeather = Shader.PropertyToID("_FeatherSize");
+            shaderPropertySkyboxTexture = Shader.PropertyToID("_SecondarySkyBox");
             VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnEnable()
         {
             headset = VRTK_DeviceFinder.HeadsetCamera();
+            headsetCamera = headset.GetComponent<Camera>();
             playarea = VRTK_DeviceFinder.PlayAreaTransform();
             cameraEffect = headset.GetComponent<VRTK_TunnelEffect>();
             originalAngularVelocity = matCameraEffect.GetFloat(shaderPropertyAV);
             originalFeatherSize = matCameraEffect.GetFloat(shaderPropertyFeather);
             originalColor = matCameraEffect.GetColor(shaderPropertyColor);
+            CheckSkyboxTexture();
+            if (effectSkybox != null)
+            {
+                originalSkyboxTexture = matCameraEffect.GetTexture(shaderPropertySkyboxTexture);
+                matCameraEffect.SetTexture("_SecondarySkyBox", effectSkybox);
+            }
 
             if (cameraEffect == null)
             {
@@ -86,10 +99,14 @@ namespace VRTK
         protected virtual void OnDisable()
         {
             headset = null;
+            headsetCamera = null;
             playarea = null;
 
             if (cameraEffect != null)
             {
+                matCameraEffect.SetTexture("_SecondarySkyBox", originalSkyboxTexture);
+                originalSkyboxTexture = null;
+
                 SetShaderFeather(originalColor, originalAngularVelocity, originalFeatherSize);
                 matCameraEffect.SetColor(shaderPropertyColor, originalColor);
                 Destroy(cameraEffect);
@@ -130,6 +147,25 @@ namespace VRTK
 
             lastForward = fwd;
             lastPosition = pos;
+
+            if (effectSkybox != null)
+            {
+                matCameraEffect.SetMatrixArray("_EyeToWorld", new Matrix4x4[2]
+                {
+                headsetCamera.GetStereoViewMatrix(Camera.StereoscopicEye.Left).inverse,
+                headsetCamera.GetStereoViewMatrix(Camera.StereoscopicEye.Right).inverse
+                });
+
+                Matrix4x4[] eyeProjection = new Matrix4x4[2];
+                eyeProjection[0] = headsetCamera.GetStereoProjectionMatrix(Camera.StereoscopicEye.Left);
+                eyeProjection[1] = headsetCamera.GetStereoProjectionMatrix(Camera.StereoscopicEye.Right);
+                eyeProjection[0] = GL.GetGPUProjectionMatrix(eyeProjection[0], true).inverse;
+                eyeProjection[1] = GL.GetGPUProjectionMatrix(eyeProjection[1], true).inverse;
+                eyeProjection[0][1, 1] *= -1f;
+                eyeProjection[1][1, 1] *= -1f;
+
+                matCameraEffect.SetMatrixArray("_EyeProjection", eyeProjection);
+            }
         }
 
         protected virtual void SetShaderFeather(Color givenTunnelColor, float givenAngularVelocity, float givenFeatherSize)
@@ -137,6 +173,25 @@ namespace VRTK
             matCameraEffect.SetColor(shaderPropertyColor, givenTunnelColor);
             matCameraEffect.SetFloat(shaderPropertyAV, givenAngularVelocity);
             matCameraEffect.SetFloat(shaderPropertyFeather, givenFeatherSize);
+        }
+
+        protected virtual void CheckSkyboxTexture()
+        {
+            if (effectSkybox == null)
+            {
+                Cubemap tempTexture = new Cubemap(1, TextureFormat.ARGB32, false);
+                tempTexture.SetPixel(CubemapFace.NegativeX, 0, 0, Color.white);
+                tempTexture.SetPixel(CubemapFace.NegativeY, 0, 0, Color.white);
+                tempTexture.SetPixel(CubemapFace.NegativeZ, 0, 0, Color.white);
+                tempTexture.SetPixel(CubemapFace.PositiveX, 0, 0, Color.white);
+                tempTexture.SetPixel(CubemapFace.PositiveY, 0, 0, Color.white);
+                tempTexture.SetPixel(CubemapFace.PositiveZ, 0, 0, Color.white);
+                effectSkybox = tempTexture;
+            }
+            else if (effectColor.r < 0.15f && effectColor.g < 0.15 && effectColor.b < 0.15)
+            {
+                VRTK_Logger.Warn("`VRTK_TunnelOverlay` has an `Effect Skybox` texture but the `Effect Color` is too dark which will tint the texture so it is not visible.");
+            }
         }
     }
 }

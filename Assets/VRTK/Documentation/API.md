@@ -2552,6 +2552,7 @@ Applys a tunnel overlay effect to the active VR camera when the play area is mov
  * **Minimum Speed:** Minimum movement speed for the effect to activate.
  * **Maximum Speed:** Maximum movement speed where the effect will have its max settings applied.
  * **Effect Color:** The color to use for the tunnel effect.
+ * **Effect Skybox:** An optional skybox texture to use for the tunnel effect.
  * **Initial Effect Size:** The initial amount of screen coverage the tunnel to consume without any movement.
  * **Maximum Effect Size:** Screen coverage at the maximum tracked values.
  * **Feather Size:** Feather effect size around the cut-off as fraction of screen.
