@@ -8156,6 +8156,7 @@ A helper class that simply holds references to both the SDK_ScriptingDefineSymbo
  * **Auto Manage VR Settings:** Determines whether the VR settings of the Player Settings are automatically adjusted to allow for all the used SDKs in the SDK Setups list below.
  * **Auto Load Setup:** Determines whether the SDK Setups list below is used whenever the SDK Manager is enabled. The first loadable Setup is then loaded.
  * **Setups:** The list of SDK Setups to choose from.
+ * **Exclude Target Groups:** The list of Build Target Groups to exclude.
 
 ### Class Variables
 
