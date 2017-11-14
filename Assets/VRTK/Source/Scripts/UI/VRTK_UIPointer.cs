@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.EventSystems;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Event Payload
@@ -49,6 +50,8 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/UI/VRTK_UIPointer")]
     public class VRTK_UIPointer : MonoBehaviour
     {
+        public static Dictionary<int, float> pointerLengths = new Dictionary<int, float>();
+
         /// <summary>
         /// Methods of activation.
         /// </summary>
@@ -103,6 +106,8 @@ namespace VRTK
 
         [Header("Customisation Settings")]
 
+        [Tooltip("The maximum length the UI Raycast will reach.")]
+        public float maximumLength = float.PositiveInfinity;
         [Tooltip("An optional GameObject that determines what the pointer is to be attached to. If this is left blank then the GameObject the script is on will be used.")]
         public GameObject attachedTo;
         [Tooltip("The Controller Events that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
@@ -470,6 +475,7 @@ namespace VRTK
             if (controllerEvents != null)
             {
                 pointerEventData.pointerId = (int)VRTK_ControllerReference.GetRealIndex(GetControllerReference());
+                pointerLengths[pointerEventData.pointerId] = maximumLength;
             }
             if (controllerRenderModel == null && VRTK_ControllerReference.IsValid(GetControllerReference()))
             {
