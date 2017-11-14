@@ -424,6 +424,7 @@ namespace VRTK
         protected virtual bool FindController()
         {
             controllerEvents = (controllerEvents == null ? GetComponentInParent<VRTK_ControllerEvents>() : controllerEvents);
+            controllerReference = VRTK_ControllerReference.GetControllerReference((controllerEvents != null ? controllerEvents.gameObject : null));
 
             if (ControllerRequired() && controllerEvents == null)
             {
