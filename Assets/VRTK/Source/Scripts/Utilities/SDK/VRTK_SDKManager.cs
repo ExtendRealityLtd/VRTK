@@ -181,7 +181,12 @@ namespace VRTK
         [Tooltip("The list of SDK Setups to choose from.")]
         public VRTK_SDKSetup[] setups = new VRTK_SDKSetup[0];
         [Tooltip("The list of Build Target Groups to exclude.")]
-        public BuildTargetGroup[] excludeTargetGroups = new BuildTargetGroup[] { BuildTargetGroup.Switch, BuildTargetGroup.Facebook };
+        public BuildTargetGroup[] excludeTargetGroups = new BuildTargetGroup[] {
+#if UNITY_2017_1_OR_NEWER
+            BuildTargetGroup.Switch,
+            BuildTargetGroup.Facebook
+#endif
+        };
 
         /// <summary>
         /// The loaded SDK Setup. `null` if no setup is currently loaded.
