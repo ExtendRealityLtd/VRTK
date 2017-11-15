@@ -39,6 +39,8 @@ namespace VRTK
         public bool cloneGrabbedObject;
         [Tooltip("If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the Interactable Object to grab. If this is unchecked then the original cloned Interactable Object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.")]
         public bool alwaysCloneOnEnable;
+        [Tooltip("If this is checked then the `Object To Grab` will attempt to be secondary grabbed as well as primary grabbed.")]
+        public bool attemptSecondaryGrab;
 
         [Header("Custom Settings")]
 
@@ -46,6 +48,10 @@ namespace VRTK
         public VRTK_InteractTouch interactTouch;
         [Tooltip("The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.")]
         public VRTK_InteractGrab interactGrab;
+        [Tooltip("The secondary controller Interact Touch to listen for touches on. If this field is left blank then it will be looked up on the opposite controller script alias at runtime.")]
+        public VRTK_InteractTouch secondaryInteractTouch;
+        [Tooltip("The secondary controller Interact Grab to listen for grab actions on. If this field is left blank then it will be looked up on the opposite controller script alias at runtime.")]
+        public VRTK_InteractGrab secondaryInteractGrab;
 
         /// <summary>
         /// Emitted when the object auto grab has completed successfully.
@@ -152,11 +158,29 @@ namespace VRTK
                     interactTouch.ForceStopTouching();
                     interactTouch.ForceTouch(grabbableObject.gameObject);
                     interactGrab.AttemptGrab();
+                    AttemptSecondaryGrab(grabbableObject);
                     OnObjectAutoGrabCompleted();
                 }
             }
             objectToGrab.disableWhenIdle = grabbableObjectDisableState;
             grabbableObject.disableWhenIdle = grabbableObjectDisableState;
+        }
+
+        protected virtual void AttemptSecondaryGrab(VRTK_InteractableObject grabbableObject)
+        {
+            if (attemptSecondaryGrab)
+            {
+                SDK_BaseController.ControllerHand currentHand = VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject);
+                VRTK_ControllerReference oppositeControllerReference = VRTK_ControllerReference.GetControllerReference(VRTK_DeviceFinder.GetOppositeHand(currentHand));
+                if (VRTK_ControllerReference.IsValid(oppositeControllerReference))
+                {
+                    secondaryInteractTouch = (secondaryInteractTouch == null ? oppositeControllerReference.scriptAlias.GetComponentInChildren<VRTK_InteractTouch>() : secondaryInteractTouch);
+                    secondaryInteractGrab = (secondaryInteractGrab == null ? oppositeControllerReference.scriptAlias.GetComponentInChildren<VRTK_InteractGrab>() : secondaryInteractGrab);
+                    secondaryInteractTouch.ForceStopTouching();
+                    secondaryInteractTouch.ForceTouch(grabbableObject.gameObject);
+                    secondaryInteractGrab.AttemptGrab();
+                }
+            }
         }
     }
 }

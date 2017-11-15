@@ -222,6 +222,23 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetOppositeHand method returns the other hand type from the current hand given.
+        /// </summary>
+        /// <param name="currentHand">The current hand.</param>
+        /// <returns>The opposite hand.</returns>
+        public static SDK_BaseController.ControllerHand GetOppositeHand(SDK_BaseController.ControllerHand currentHand)
+        {
+            switch (currentHand)
+            {
+                case SDK_BaseController.ControllerHand.Left:
+                    return SDK_BaseController.ControllerHand.Right;
+                case SDK_BaseController.ControllerHand.Right:
+                    return SDK_BaseController.ControllerHand.Left;
+            }
+            return currentHand;
+        }
+
+        /// <summary>
         /// The GetActualController method will attempt to get the actual SDK controller object.
         /// </summary>
         /// <param name="givenController">The GameObject of the controller.</param>
