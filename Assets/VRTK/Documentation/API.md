@@ -4102,8 +4102,11 @@ Attempt to automatically grab a specified Interactable Object.
  * **Object Is Prefab:** If the `Object To Grab` is a prefab then this needs to be checked, if the `Object To Grab` already exists in the scene then this needs to be unchecked.
  * **Clone Grabbed Object:** If this is checked then the `Object To Grab` will be cloned into a new Interactable Object and grabbed by the Interact Grab leaving the existing Interactable Object in the scene. This is required if the same Interactable Object is to be grabbed to multiple instances of Interact Grab. It is also required to clone a grabbed Interactable Object if it is a prefab as it needs to exist within the scene to be grabbed.
  * **Always Clone On Enable:** If `Clone Grabbed Object` is checked and this is checked, then whenever this script is disabled and re-enabled, it will always create a new clone of the Interactable Object to grab. If this is unchecked then the original cloned Interactable Object will attempt to be grabbed again. If the original cloned object no longer exists then a new clone will be created.
+ * **Attempt Secondary Grab:** If this is checked then the `Object To Grab` will attempt to be secondary grabbed as well as primary grabbed.
  * **Interact Touch:** The Interact Touch to listen for touches on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Interact Grab:** The Interact Grab to listen for grab actions on. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
+ * **Secondary Interact Touch:** The secondary controller Interact Touch to listen for touches on. If this field is left blank then it will be looked up on the opposite controller script alias at runtime.
+ * **Secondary Interact Grab:** The secondary controller Interact Grab to listen for grab actions on. If this field is left blank then it will be looked up on the opposite controller script alias at runtime.
 
 ### Class Events
 
@@ -8598,6 +8601,17 @@ The IsControllerLeftHand method is used to check if a given controller game obje
    * `bool` - Is true if the given controller is the right controller.
 
 The IsControllerRightHand method is used to check if a given controller game object is the right handed controller.
+
+#### GetOppositeHand/1
+
+  > `public static SDK_BaseController.ControllerHand GetOppositeHand(SDK_BaseController.ControllerHand currentHand)`
+
+ * Parameters
+   * `SDK_BaseController.ControllerHand currentHand` - The current hand.
+ * Returns
+   * `SDK_BaseController.ControllerHand` - The opposite hand.
+
+The GetOppositeHand method returns the other hand type from the current hand given.
 
 #### GetActualController/1
 
