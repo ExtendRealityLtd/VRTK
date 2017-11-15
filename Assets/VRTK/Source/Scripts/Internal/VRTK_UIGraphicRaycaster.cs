@@ -93,7 +93,7 @@
         //[Pure]
         protected virtual void Raycast(Canvas canvas, Camera eventCamera, PointerEventData eventData, Ray ray, ref List<RaycastResult> results)
         {
-            float hitDistance = GetHitDistance(ray, VRTK_UIPointer.pointerLengths[eventData.pointerId]);
+            float hitDistance = GetHitDistance(ray, VRTK_UIPointer.GetPointerLength(eventData.pointerId));
             IList<Graphic> canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
             for (int i = 0; i < canvasGraphics.Count; ++i)
             {

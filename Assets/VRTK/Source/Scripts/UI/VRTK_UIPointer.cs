@@ -50,8 +50,6 @@ namespace VRTK
     [AddComponentMenu("VRTK/Scripts/UI/VRTK_UIPointer")]
     public class VRTK_UIPointer : MonoBehaviour
     {
-        public static Dictionary<int, float> pointerLengths = new Dictionary<int, float>();
-
         /// <summary>
         /// Methods of activation.
         /// </summary>
@@ -182,6 +180,7 @@ namespace VRTK
         /// </summary>
         public event UIPointerEventHandler UIPointerElementDragEnd;
 
+        protected static Dictionary<int, float> pointerLengths = new Dictionary<int, float>();
         protected bool pointerClicked = false;
         protected bool beamEnabledState = false;
         protected bool lastPointerPressState = false;
@@ -192,6 +191,21 @@ namespace VRTK
         protected Transform cachedPointerAttachPoint = null;
         protected EventSystem cachedEventSystem;
         protected VRTK_VRInputModule cachedVRInputModule;
+
+        /// <summary>
+        /// The GetPointerLength method retrieves the maximum UI Pointer length for the given pointer ID.
+        /// </summary>
+        /// <param name="pointerId">The pointer ID for the UI Pointer to recieve the length for.</param>
+        /// <returns>The maximum length the UI Pointer will cast to.</returns>
+        public static float GetPointerLength(int pointerId)
+        {
+            float maxLength;
+            if (!pointerLengths.TryGetValue(pointerId, out maxLength))
+            {
+                maxLength = float.MaxValue;
+            }
+            return maxLength;
+        }
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
         {
