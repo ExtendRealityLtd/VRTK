@@ -408,6 +408,17 @@
                 }
             }
 
+            using (new EditorGUILayout.VerticalScope("Box"))
+            {
+                VRTK_EditorUtilities.AddHeader("Target Platform Group Exclusions", false);
+                SerializedProperty excludeTargetGroups = serializedObject.FindProperty("excludeTargetGroups");
+                excludeTargetGroups.arraySize = EditorGUILayout.IntField("Size", excludeTargetGroups.arraySize);
+                for (int i = 0; i < excludeTargetGroups.arraySize; i++)
+                {
+                    EditorGUILayout.PropertyField(excludeTargetGroups.GetArrayElementAtIndex(i));
+                }
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 

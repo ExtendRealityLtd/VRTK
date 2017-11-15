@@ -402,7 +402,7 @@
             [InitializeOnLoadMethod]
             private static void ListenToPlayModeChanges()
             {
-                EditorApplication.playmodeStateChanged += () =>
+                EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
                 {
                     if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
                     {

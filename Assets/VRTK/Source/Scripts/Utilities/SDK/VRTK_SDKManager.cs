@@ -180,6 +180,9 @@ namespace VRTK
         public bool autoLoadSetup = true;
         [Tooltip("The list of SDK Setups to choose from.")]
         public VRTK_SDKSetup[] setups = new VRTK_SDKSetup[0];
+        [Tooltip("The list of Build Target Groups to exclude.")]
+        public BuildTargetGroup[] excludeTargetGroups = new BuildTargetGroup[] { BuildTargetGroup.Switch, BuildTargetGroup.Facebook };
+
         /// <summary>
         /// The loaded SDK Setup. `null` if no setup is currently loaded.
         /// </summary>
@@ -208,6 +211,7 @@ namespace VRTK
         private Coroutine checkLeftControllerReadyRoutine = null;
         private Coroutine checkRightControllerReadyRoutine = null;
         private float checkControllerReadyDelay = 1f;
+        private BuildTargetGroup[] targetGroupsToExclude;
 
         /// <summary>
         /// The event invoked whenever the loaded SDK Setup changes.
@@ -357,6 +361,10 @@ namespace VRTK
 
             foreach (BuildTargetGroup targetGroup in VRTK_SharedMethods.GetValidBuildTargetGroups())
             {
+                if (targetGroupsToExclude.Contains(targetGroup))
+                {
+                    continue;
+                }
                 string[] deviceNames;
                 deviceNamesByTargetGroup.TryGetValue(targetGroup, out deviceNames);
 
@@ -944,6 +952,7 @@ namespace VRTK
 
             if (instance != null && !instance.ManageScriptingDefineSymbols(false, false))
             {
+                instance.targetGroupsToExclude = instance.excludeTargetGroups;
                 instance.ManageVRSettings(false);
             }
         }
