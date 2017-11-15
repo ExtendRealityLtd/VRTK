@@ -180,6 +180,7 @@ namespace VRTK
         public bool autoLoadSetup = true;
         [Tooltip("The list of SDK Setups to choose from.")]
         public VRTK_SDKSetup[] setups = new VRTK_SDKSetup[0];
+#if UNITY_EDITOR
         [Tooltip("The list of Build Target Groups to exclude.")]
         public BuildTargetGroup[] excludeTargetGroups = new BuildTargetGroup[] {
 #if UNITY_2017_1_OR_NEWER
@@ -187,6 +188,7 @@ namespace VRTK
             BuildTargetGroup.Facebook
 #endif
         };
+#endif
 
         /// <summary>
         /// The loaded SDK Setup. `null` if no setup is currently loaded.
@@ -216,8 +218,9 @@ namespace VRTK
         private Coroutine checkLeftControllerReadyRoutine = null;
         private Coroutine checkRightControllerReadyRoutine = null;
         private float checkControllerReadyDelay = 1f;
+#if UNITY_EDITOR
         private BuildTargetGroup[] targetGroupsToExclude;
-
+#endif
         /// <summary>
         /// The event invoked whenever the loaded SDK Setup changes.
         /// </summary>
