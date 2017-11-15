@@ -402,7 +402,11 @@
             [InitializeOnLoadMethod]
             private static void ListenToPlayModeChanges()
             {
+#if UNITY_2017_2_OR_NEWER
                 EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
+#else
+                EditorApplication.playmodeStateChanged += () =>
+#endif
                 {
                     if (EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPlaying)
                     {
