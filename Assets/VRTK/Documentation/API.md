@@ -7919,6 +7919,7 @@ Provides the ability to interact with UICanvas elements and the contained Unity 
  * **Click Method:** Determines when the UI Click event action should happen.
  * **Attempt Click On Deactivate:** Determines whether the UI click action should be triggered when the pointer is deactivated. If the pointer is hovering over a clickable element then it will invoke the click action on that element. Note: Only works with `Click Method =  Click_On_Button_Up`
  * **Click After Hover Duration:** The amount of time the pointer can be over the same UI element before it automatically attempts to click it. 0f means no click attempt will be made.
+ * **Maximum Length:** The maximum length the UI Raycast will reach.
  * **Attached To:** An optional GameObject that determines what the pointer is to be attached to. If this is left blank then the GameObject the script is on will be used.
  * **Controller Events:** The Controller Events that will be used to toggle the pointer. If the script is being applied onto a controller then this parameter can be left blank as it will be auto populated by the controller the script is on at runtime.
  * **Custom Origin:** A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.

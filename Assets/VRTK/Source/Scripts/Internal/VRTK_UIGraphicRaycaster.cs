@@ -31,7 +31,7 @@
             }
 
             Ray ray = new Ray(eventData.pointerCurrentRaycast.worldPosition, eventData.pointerCurrentRaycast.worldNormal);
-            Raycast(canvas, eventCamera, ray, ref s_RaycastResults);
+            Raycast(canvas, eventCamera, eventData, ray, ref s_RaycastResults);
             SetNearestRaycast(ref eventData, ref resultAppendList, ref s_RaycastResults);
             s_RaycastResults.Clear();
         }
@@ -61,10 +61,8 @@
         }
 
         //[Pure]
-        protected virtual float GetHitDistance(Ray ray)
+        protected virtual float GetHitDistance(Ray ray, float hitDistance)
         {
-            float hitDistance = float.MaxValue;
-
             if (canvas.renderMode != RenderMode.ScreenSpaceOverlay && blockingObjects != BlockingObjects.None)
             {
                 float maxDistance = Vector3.Distance(ray.origin, canvas.transform.position);
@@ -73,7 +71,7 @@
                 {
                     RaycastHit hit;
                     Physics.Raycast(ray, out hit, maxDistance);
-                    if (hit.collider && !VRTK_PlayerObject.IsPlayerObject(hit.collider.gameObject))
+                    if (hit.collider != null && !VRTK_PlayerObject.IsPlayerObject(hit.collider.gameObject))
                     {
                         hitDistance = hit.distance;
                     }
@@ -93,9 +91,9 @@
         }
 
         //[Pure]
-        protected virtual void Raycast(Canvas canvas, Camera eventCamera, Ray ray, ref List<RaycastResult> results)
+        protected virtual void Raycast(Canvas canvas, Camera eventCamera, PointerEventData eventData, Ray ray, ref List<RaycastResult> results)
         {
-            float hitDistance = GetHitDistance(ray);
+            float hitDistance = GetHitDistance(ray, VRTK_UIPointer.pointerLengths[eventData.pointerId]);
             IList<Graphic> canvasGraphics = GraphicRegistry.GetGraphicsForCanvas(canvas);
             for (int i = 0; i < canvasGraphics.Count; ++i)
             {
