@@ -7967,6 +7967,17 @@ Adding the `VRTK_UIPointer_UnityEvents` component to `VRTK_UIPointer` object all
 
 ### Class Methods
 
+#### GetPointerLength/1
+
+  > `public static float GetPointerLength(int pointerId)`
+
+ * Parameters
+   * `int pointerId` - The pointer ID for the UI Pointer to recieve the length for.
+ * Returns
+   * `float` - The maximum length the UI Pointer will cast to.
+
+The GetPointerLength method retrieves the maximum UI Pointer length for the given pointer ID.
+
 #### SetEventSystem/1
 
   > `public virtual VRTK_VRInputModule SetEventSystem(EventSystem eventSystem)`
