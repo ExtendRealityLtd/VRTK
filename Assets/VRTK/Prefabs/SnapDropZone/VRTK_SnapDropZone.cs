@@ -401,10 +401,10 @@ namespace VRTK
 
         protected virtual void CheckCanSnap(VRTK_InteractableObject interactableObjectCheck)
         {
-            if (interactableObjectCheck != null)
+            if (interactableObjectCheck != null && ValidSnapObject(interactableObjectCheck, true))
             {
                 AddCurrentValidSnapObject(interactableObjectCheck);
-                if (!isSnapped && ValidSnapObject(interactableObjectCheck, true))
+                if (!isSnapped)
                 {
                     ToggleHighlight(interactableObjectCheck, true);
                     interactableObjectCheck.SetSnapDropZoneHover(this, true);
