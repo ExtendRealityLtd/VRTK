@@ -32,6 +32,7 @@
         public bool triggerAxisEvents = true;
         public bool gripAxisEvents = true;
         public bool touchpadAxisEvents = true;
+        public bool touchpadTwoAxisEvents = true;
 
         [Header("Sense Axis Events Debug")]
 
@@ -79,6 +80,7 @@
             controllerEvents.TouchpadTouchStart += DoTouchpadTouchStart;
             controllerEvents.TouchpadTouchEnd += DoTouchpadTouchEnd;
             controllerEvents.TouchpadAxisChanged += DoTouchpadAxisChanged;
+            controllerEvents.TouchpadTwoAxisChanged += DoTouchpadTwoAxisChanged;
             controllerEvents.TouchpadSenseAxisChanged += DoTouchpadSenseAxisChanged;
 
             controllerEvents.ButtonOnePressed += DoButtonOnePressed;
@@ -133,6 +135,7 @@
                 controllerEvents.TouchpadTouchStart -= DoTouchpadTouchStart;
                 controllerEvents.TouchpadTouchEnd -= DoTouchpadTouchEnd;
                 controllerEvents.TouchpadAxisChanged -= DoTouchpadAxisChanged;
+                controllerEvents.TouchpadTwoAxisChanged -= DoTouchpadTwoAxisChanged;
                 controllerEvents.TouchpadSenseAxisChanged -= DoTouchpadSenseAxisChanged;
 
                 controllerEvents.ButtonOnePressed -= DoButtonOnePressed;
@@ -173,6 +176,7 @@
                     triggerAxisEvents = false;
                     gripAxisEvents = false;
                     touchpadAxisEvents = false;
+                    touchpadTwoAxisEvents = false;
 
                     triggerSenseAxisEvents = false;
                     touchpadSenseAxisEvents = false;
@@ -191,6 +195,7 @@
                     triggerAxisEvents = true;
                     gripAxisEvents = true;
                     touchpadAxisEvents = true;
+                    touchpadTwoAxisEvents = true;
 
                     triggerSenseAxisEvents = true;
                     touchpadSenseAxisEvents = true;
@@ -209,6 +214,7 @@
                     triggerAxisEvents = false;
                     gripAxisEvents = false;
                     touchpadAxisEvents = false;
+                    touchpadTwoAxisEvents = false;
 
                     triggerSenseAxisEvents = false;
                     touchpadSenseAxisEvents = false;
@@ -227,6 +233,7 @@
                     triggerAxisEvents = true;
                     gripAxisEvents = true;
                     touchpadAxisEvents = true;
+                    touchpadTwoAxisEvents = true;
 
                     triggerSenseAxisEvents = false;
                     touchpadSenseAxisEvents = false;
@@ -245,6 +252,7 @@
                     triggerAxisEvents = false;
                     gripAxisEvents = false;
                     touchpadAxisEvents = false;
+                    touchpadTwoAxisEvents = false;
 
                     triggerSenseAxisEvents = true;
                     touchpadSenseAxisEvents = true;
@@ -258,7 +266,7 @@
         private void DebugLogger(uint index, string button, string action, ControllerInteractionEventArgs e)
         {
             string debugString = "Controller on index '" + index + "' " + button + " has been " + action
-                                 + " with a pressure of " + e.buttonPressure + " / trackpad axis at: " + e.touchpadAxis + " (" + e.touchpadAngle + " degrees)";
+                                 + " with a pressure of " + e.buttonPressure + " / Primary Touchpad axis at: " + e.touchpadAxis + " (" + e.touchpadAngle + " degrees)" + " / Secondary Touchpad axis at: " + e.touchpadTwoAxis + " (" + e.touchpadTwoAngle + " degrees)";
             VRTK_Logger.Info(debugString);
         }
 
@@ -451,6 +459,14 @@
             if (touchpadAxisEvents)
             {
                 DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "axis changed", e);
+            }
+        }
+
+        private void DoTouchpadTwoAxisChanged(object sender, ControllerInteractionEventArgs e)
+        {
+            if (touchpadTwoAxisEvents)
+            {
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPADTWO", "axis changed", e);
             }
         }
 

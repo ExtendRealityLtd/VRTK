@@ -57,6 +57,10 @@ namespace VRTK
             /// </summary>
             Touchpad,
             /// <summary>
+            /// Touchpad Two on the controller.
+            /// </summary>
+            TouchpadTwo,
+            /// <summary>
             /// Middle Finger on the controller.
             /// </summary>
             MiddleFinger,
@@ -223,7 +227,15 @@ namespace VRTK
             /// <summary>
             /// The Oculus GearVR controller for Oculus Utilities.
             /// </summary>
-            Oculus_GearVRController
+            Oculus_GearVRController,
+            /// <summary>
+            /// The Windows Mixed Reality Motion Controller for Windows Mixed Reality.
+            /// </summary>
+            WindowsMR_MotionController,
+            /// <summary>
+            /// The Windows Mixed Reality Motion Controller for SteamVR.
+            /// </summary>
+            SteamVR_WindowsMRController
         }
 
         public event VRTKSDKBaseControllerEventHandler LeftControllerReady;

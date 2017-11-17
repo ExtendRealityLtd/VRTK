@@ -62,7 +62,11 @@ namespace VRTK
             /// <summary>
             /// The HyperealVR headset.
             /// </summary>
-            HyperealVR
+            HyperealVR,
+            /// <summary>
+            /// The Windows Mixed Reality headset.
+            /// </summary>
+            WindowsMixedReality
         }
         protected Transform cachedHeadset;
         protected Transform cachedHeadsetCamera;
@@ -173,6 +177,8 @@ namespace VRTK
                     return CleanPropertyString("oculusriftdk1");
                 case "oculusriftdk2":
                     return CleanPropertyString("oculusriftdk2");
+                case "acermixedreality":
+                    return CleanPropertyString("windowsmixedreality");
             }
             return "";
         }
