@@ -3179,7 +3179,7 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `public bool gripAxisChanged` - This will be true if the grip has been squeezed more or less. Default: `false`
  * `public bool touchpadPressed` - This will be true if the touchpad is held down. Default: `false`
  * `public bool touchpadTouched` - This will be true if the touchpad is being touched. Default: `false`
- * `public bool touchpadAxisChanged` - This will be true if the touchpad touch position has changed. Default: `false`
+ * `public bool touchpadAxisChanged` - This will be true if the touchpad position has changed. Default: `false`
  * `public bool touchpadSenseAxisChanged` - This will be true if the touchpad sense is being touched more or less. Default: `false`
  * `public bool buttonOnePressed` - This will be true if button one is held down. Default: `false`
  * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
@@ -3218,6 +3218,7 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `TouchpadTouchEnd` - Emitted when the touchpad is no longer being touched.
  * `TouchpadAxisChanged` - Emitted when the touchpad is being touched in a different location.
  * `TouchpadSenseAxisChanged` - Emitted when the amount of touch on the touchpad sense changes.
+ * `TouchpadTwoAxisChanged` - Emitted when the touchpad two is being touched in a different location.
  * `ButtonOneTouchStart` - Emitted when button one is touched.
  * `ButtonOneTouchEnd` - Emitted when button one is no longer being touched.
  * `ButtonOnePressed` - Emitted when button one is pressed.
@@ -3250,6 +3251,8 @@ Adding the `VRTK_ControllerEvents_UnityEvents` component to `VRTK_ControllerEven
  * `float buttonPressure` - The amount of pressure being applied to the button pressed. `0f` to `1f`.
  * `Vector2 touchpadAxis` - The position the touchpad is touched at. `(0,0)` to `(1,1)`.
  * `float touchpadAngle` - The rotational position the touchpad is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.
+ * `Vector2 touchpadTwoAxis` - The position the touchpad two is touched at. `(0,0)` to `(1,1)`.
+ * `float touchpadTwoAngle` - The rotational position the touchpad two is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.
 
 ### Class Methods
 
@@ -3309,6 +3312,28 @@ The GetTouchpadAxis method returns the coordinates of where the touchpad is bein
    * `float` - A float representing the angle of where the touchpad is being touched. `0f` to `360f`.
 
 The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being `0` degrees and the bottom of the touchpad being `180` degrees.
+
+#### GetTouchpadTwoAxis/0
+
+  > `public virtual Vector2 GetTouchpadTwoAxis()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector2` - A two dimensional vector containing the `x` and `y` position of where the touchpad two is being touched. `(0,0)` to `(1,1)`.
+
+The GetTouchpadTwoAxis method returns the coordinates of where the touchpad two is being touched and can be used for directional input via the touchpad two. The `x` value is the horizontal touch plane and the `y` value is the vertical touch plane.
+
+#### GetTouchpadTwoAxisAngle/0
+
+  > `public virtual float GetTouchpadTwoAxisAngle()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - A float representing the angle of where the touchpad two is being touched. `0f` to `360f`.
+
+The GetTouchpadTwoAxisAngle method returns the angle of where the touchpad two is currently being touched with the top of the touchpad two being `0` degrees and the bottom of the touchpad two being `180` degrees.
 
 #### GetTriggerAxis/0
 
@@ -9927,6 +9952,7 @@ This is an abstract class to implement the interface required by all implemented
    * `GoogleDaydream` - The Google Daydream headset.
    * `GoogleCardboard` - The Google Cardboard headset.
    * `HyperealVR` - The HyperealVR headset.
+   * `WindowsMixedReality` - The Windows Mixed Reality headset.
 
 ### Class Methods
 
@@ -10064,6 +10090,7 @@ This is an abstract class to implement the interface required by all implemented
    * `Trigger` - Trigger on the controller.
    * `TriggerHairline` - Trigger Hairline on the controller.
    * `Touchpad` - Touchpad on the controller.
+   * `TouchpadTwo` - Touchpad Two on the controller.
    * `MiddleFinger` - Middle Finger on the controller.
    * `RingFinger` - Ring Finger on the controller.
    * `PinkyFinger` - Pinky Finger on the controller.
@@ -10103,6 +10130,8 @@ This is an abstract class to implement the interface required by all implemented
    * `Oculus_OculusRemote` - The Oculus Remote for Oculus Utilities.
    * `Oculus_GearVRHMD` - The Oculus GearVR HMD controls for Oculus Utilities.
    * `Oculus_GearVRController` - The Oculus GearVR controller for Oculus Utilities.
+   * `WindowsMR_MotionController` - The Windows Mixed Reality Motion Controller for Windows Mixed Reality.
+   * `SteamVR_WindowsMRController` - The Windows Mixed Reality Motion Controller for SteamVR.
 
 ### Class Methods
 

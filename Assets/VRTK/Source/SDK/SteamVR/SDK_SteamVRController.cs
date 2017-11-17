@@ -116,12 +116,14 @@ namespace VRTK
         {
             switch (GetCurrentControllerType())
             {
+                case ControllerType.SteamVR_ViveWand:
+                    return "ControllerColliders/HTCVive";
                 case ControllerType.SteamVR_OculusTouch:
                     return (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
                 case ControllerType.SteamVR_ValveKnuckles:
                     return (hand == ControllerHand.Left ? "ControllerColliders/ValveKnuckles_Left" : "ControllerColliders/ValveKnuckles_Right");
-                case ControllerType.SteamVR_ViveWand:
-                    return "ControllerColliders/HTCVive";
+                case ControllerType.SteamVR_WindowsMRController:
+                    return (hand == ControllerHand.Left ? "ControllerColliders/SteamVRWindowsMRController_Left" : "ControllerColliders/SteamVRWindowsMRController_Right");
                 default:
                     return "ControllerColliders/Fallback";
             }
@@ -489,6 +491,13 @@ namespace VRTK
             {
                 case ButtonTypes.Touchpad:
                     return device.GetAxis();
+                case ButtonTypes.TouchpadTwo:
+                    switch (VRTK_DeviceFinder.GetHeadsetType())
+                    {
+                        case SDK_BaseHeadset.HeadsetType.WindowsMixedReality:
+                            return device.GetAxis(EVRButtonId.k_EButton_Axis2);
+                    }
+                    return Vector2.zero;
                 case ButtonTypes.Trigger:
                     return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger);
                 case ButtonTypes.Grip:
@@ -734,6 +743,8 @@ namespace VRTK
                     return "button_b" + suffix;
                 case ControllerType.SteamVR_OculusTouch:
                     return "grip" + suffix;
+                case ControllerType.SteamVR_WindowsMRController:
+                    return "handgrip" + suffix;
             }
             return null;
         }
@@ -744,6 +755,7 @@ namespace VRTK
             {
                 case ControllerType.SteamVR_ViveWand:
                 case ControllerType.SteamVR_ValveKnuckles:
+                case ControllerType.SteamVR_WindowsMRController:
                     return "trackpad" + suffix;
                 case ControllerType.SteamVR_OculusTouch:
                     return "thumbstick" + suffix;
@@ -767,6 +779,7 @@ namespace VRTK
             {
                 case ControllerType.SteamVR_ViveWand:
                 case ControllerType.SteamVR_ValveKnuckles:
+                case ControllerType.SteamVR_WindowsMRController:
                     return "button" + suffix;
                 case ControllerType.SteamVR_OculusTouch:
                     return (hand == ControllerHand.Left ? "y_button" : "b_button") + suffix;
@@ -810,6 +823,8 @@ namespace VRTK
                 case "oculus rift cv1 (right controller)":
                 case "oculus rift cv1 (left controller)":
                     return ControllerType.SteamVR_OculusTouch;
+                case "windowsmr: 0x045e/0x065b/0/2":
+                    return ControllerType.SteamVR_WindowsMRController;
             }
             return FuzzyMatchControllerTypeByString(controllerModelNumber);
         }
@@ -828,6 +843,10 @@ namespace VRTK
             else if (controllerModelNumber.Contains("oculus rift"))
             {
                 return ControllerType.SteamVR_OculusTouch;
+            }
+            else if (controllerModelNumber.Contains("windowsmr"))
+            {
+                return ControllerType.SteamVR_WindowsMRController;
             }
 
             return ControllerType.Undefined;
