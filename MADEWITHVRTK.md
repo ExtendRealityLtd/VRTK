@@ -60,6 +60,8 @@ A collection of titles that have been made with VRTK.
 | VoxVR | [Steam Store Page](http://store.steampowered.com/app/502480) |
 | VR Hybrid War 2117 | [Steam Store Page](http://store.steampowered.com/app/741360) |
 | VR Shoot Around | [Steam Store Page](http://store.steampowered.com/app/671740) |
+| How To Meat People | [Steam Store Page](http://store.steampowered.com/app/735700) |
+| OfficeBots: Reality Bytes | [Steam Store Page](http://store.steampowered.com/app/649730) |
 
 ## Oculus Home
 
