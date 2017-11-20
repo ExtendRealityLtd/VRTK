@@ -48,6 +48,15 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetHeadsetType method returns a string representing the type of headset connected.
+        /// </summary>
+        /// <returns>The string of the headset connected.</returns>
+        public override string GetHeadsetType()
+        {
+            return CleanPropertyString("");
+        }
+
+        /// <summary>
         /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
         /// </summary>
         /// <returns>A Vector3 containing the current velocity of the headset.</returns>

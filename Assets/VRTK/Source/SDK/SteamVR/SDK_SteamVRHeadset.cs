@@ -4,6 +4,7 @@ namespace VRTK
 #if VRTK_DEFINE_SDK_STEAMVR
     using UnityEngine;
     using System.Collections.Generic;
+    using Valve.VR;
 #endif
 
     /// <summary>
@@ -72,6 +73,36 @@ namespace VRTK
                 }
             }
             return cachedHeadsetCamera;
+        }
+
+        /// <summary>
+        /// The GetHeadsetType method returns a string representing the type of headset connected.
+        /// </summary>
+        /// <returns>The string of the headset connected.</returns>
+        public override string GetHeadsetType()
+        {
+            if (SteamVR.instance != null)
+            {
+                string manufactuer = CleanPropertyString(SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ManufacturerName_String));
+                string model = CleanPropertyString(SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ModelNumber_String));
+
+                //Check for specific manufacturer models
+                switch (manufactuer)
+                {
+                    case "htc":
+                        if (model.Contains("vive"))
+                        {
+                            return "htcvive";
+                        }
+                        break;
+                    case "oculus":
+                        return "oculusrift";
+                }
+
+                //If no model check required then just return manufacturer
+                return CleanPropertyString(manufactuer);
+            }
+            return CleanPropertyString("");
         }
 
         /// <summary>

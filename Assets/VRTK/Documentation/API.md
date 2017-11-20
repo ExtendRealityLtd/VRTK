@@ -8445,6 +8445,14 @@ The Device Finder offers a collection of static methods that can be called to fi
    * `Headset` - The headset.
    * `LeftController` - The left hand controller.
    * `RightController` - The right hand controller.
+ * `public enum Headsets` - Possible headsets
+   * `Unknown` - An unknown headset.
+   * `OculusRift` - A summary of all Oculus Rift headset versions.
+   * `OculusRiftCV1` - A specific version of the Oculus Rift headset, the Consumer Version 1.
+   * `Vive` - A summary of all HTC Vive headset versions.
+   * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
+   * `ViveDVT` - A specific version of the HTC Vive headset, the first consumer version.
+   * `OculusRiftES07` - A specific version of the Oculus Rift headset, the rare ES07.
 
 ### Class Methods
 
@@ -8736,27 +8744,27 @@ The HeadsetTransform method is used to retrieve the transform for the VR Headset
 
 The HeadsetCamera method is used to retrieve the transform for the VR Camera in the scene.
 
-#### ResetHeadsetTypeCache/0
+#### GetHeadsetTypeAsString/0
 
-  > `public static void ResetHeadsetTypeCache()`
+  > `public static string GetHeadsetTypeAsString()`
 
  * Parameters
    * _none_
  * Returns
-   * _none_
+   * `string` - The string of the headset connected.
 
-The ResetHeadsetTypeCache resets the cache holding the current headset type value.
+The GetHeadsetTypeAsString method returns a string representing the type of headset connected.
 
-#### GetHeadsetType/1
+#### GetHeadsetType/0
 
-  > `public static SDK_BaseHeadset.Headsets GetHeadsetType(bool summary = false)`
+  > `public static SDK_BaseHeadset.HeadsetType GetHeadsetType()`
 
  * Parameters
-   * `bool summary` - If this is `true`, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).
+   * _none_
  * Returns
-   * `SDK_BaseHeadset.Headsets` - The Headset type that is connected.
+   * `SDK_BaseHeadset.HeadsetType` - The Headset type that is connected.
 
-The GetHeadsetType method returns the type of headset connected to the computer.
+The GetHeadsetType method returns the type of headset currently connected.
 
 #### PlayAreaTransform/0
 
@@ -9908,23 +9916,17 @@ This is an abstract class to implement the interface required by all implemented
 
 ### Class Variables
 
- * `public enum Headsets` - SDK Headset types.
-   * `Unknown` - An unknown headset.
-   * `OculusRift` - A summary of all Oculus Rift headset versions.
-   * `OculusRiftCV1` - A specific version of the Oculus Rift headset, the Consumer Version 1.
-   * `Vive` - A summary of all HTC Vive headset versions.
-   * `ViveMV` - A specific version of the HTC Vive headset, the first consumer version.
-   * `ViveDVT` - A specific version of the HTC Vive headset, the first consumer version.
-   * `OculusRiftES07` - A specific version of the Oculus Rift headset, the rare ES07.
-   * `GearVR` - A summary of all GearVR headset versions.
-   * `GearVRGalaxyNote5` - A specific version of the GearVR headset running on a Samsung Galaxy Note 5.
-   * `GearVRGalaxyS6` - A specific version of the GearVR headset running on a Samsung Galaxy S6.
-   * `GearVRGalaxyS6Edge` - A specific version of the GearVR headset running on a Samsung Galaxy S6 Edge.
-   * `GearVRGalaxyS7` - A specific version of the GearVR headset running on a Samsung Galaxy S7.
-   * `GearVRGalaxyS7Edge` - A specific version of the GearVR headset running on a Samsung Galaxy S7 Edge.
-   * `GearVRGalaxyS8` - A specific version of the GearVR headset running on a Samsung Galaxy S8.
-   * `GoogleCardboard` - A summary of all Google Cardboard headset versions.
-   * `Daydream` - A summary of all Google Daydream headset versions.
+ * `public enum HeadsetType` - The connected headset type
+   * `Undefined` - The headset connected is unknown.
+   * `Simulator` - The headset associated with the simulator.
+   * `HTCVive` - The HTC Vive headset.
+   * `OculusRiftDK1` - The Oculus Rift DK1 headset.
+   * `OculusRiftDK2` - The Oculus Rift DK2 headset.
+   * `OculusRift` - The Oculus Rift headset.
+   * `OculusGearVR` - The Oculus GearVR headset.
+   * `GoogleDaydream` - The Google Daydream headset.
+   * `GoogleCardboard` - The Google Cardboard headset.
+   * `HyperealVR` - The HyperealVR headset.
 
 ### Class Methods
 
@@ -9971,6 +9973,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetType/0
+
+  > `public abstract string GetHeadsetType();`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
 
 #### GetHeadsetVelocity/0
 
@@ -10644,6 +10657,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
+
 #### GetHeadsetVelocity/0
 
   > `public override Vector3 GetHeadsetVelocity()`
@@ -11251,6 +11275,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
 
 #### GetHeadsetVelocity/0
 
@@ -11883,6 +11918,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
+
 #### GetHeadsetVelocity/0
 
   > `public override Vector3 GetHeadsetVelocity()`
@@ -12495,6 +12541,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
 
 #### GetHeadsetVelocity/0
 
@@ -13118,6 +13175,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
 
 #### GetHeadsetVelocity/0
 
@@ -13752,6 +13820,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 The GetHeadsetCamera/0 method returns the Transform of the object that is used to hold the headset camera in the scene.
 
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
+
 #### GetHeadsetVelocity/0
 
   > `public override Vector3 GetHeadsetVelocity()`
@@ -14340,6 +14419,17 @@ The ProcessUpdate method enables an SDK to run logic for every Unity Update
    * _none_
 
 The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
 
 #### GetHeadsetVelocity/0
 
@@ -14973,6 +15063,17 @@ The GetHeadset method returns the Transform of the object that is used to repres
    * `Transform` - A transform of the object holding the headset camera in the scene.
 
 The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
 
 #### GetHeadsetVelocity/0
 

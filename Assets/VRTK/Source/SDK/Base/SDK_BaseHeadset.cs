@@ -3,6 +3,12 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
+#if UNITY_2017_2_OR_NEWER
+    using UnityEngine.XR;
+#else
+    using XRDevice = UnityEngine.VR.VRDevice;
+    using XRSettings = UnityEngine.VR.VRSettings;
+#endif
 
     /// <summary>
     /// The Base Headset SDK script provides a bridge to SDK methods that deal with the VR Headset.
@@ -12,78 +18,52 @@ namespace VRTK
     /// </remarks>
     public abstract class SDK_BaseHeadset : SDK_Base
     {
-
         /// <summary>
-        /// SDK Headset types.
+        /// The connected headset type
         /// </summary>
-        public enum Headsets
+        public enum HeadsetType
         {
             /// <summary>
-            /// An unknown headset.
+            /// The headset connected is unknown.
             /// </summary>
-            Unknown,
+            Undefined,
             /// <summary>
-            /// A summary of all Oculus Rift headset versions.
+            /// The headset associated with the simulator.
+            /// </summary>
+            Simulator,
+            /// <summary>
+            /// The HTC Vive headset.
+            /// </summary>
+            HTCVive,
+            /// <summary>
+            /// The Oculus Rift DK1 headset.
+            /// </summary>
+            OculusRiftDK1,
+            /// <summary>
+            /// The Oculus Rift DK2 headset.
+            /// </summary>
+            OculusRiftDK2,
+            /// <summary>
+            /// The Oculus Rift headset.
             /// </summary>
             OculusRift,
             /// <summary>
-            /// A specific version of the Oculus Rift headset, the Consumer Version 1.
+            /// The Oculus GearVR headset.
             /// </summary>
-            OculusRiftCV1,
+            OculusGearVR,
             /// <summary>
-            /// A summary of all HTC Vive headset versions.
+            /// The Google Daydream headset.
             /// </summary>
-            Vive,
+            GoogleDaydream,
             /// <summary>
-            /// A specific version of the HTC Vive headset, the first consumer version.
-            /// </summary>
-            ViveMV,
-            /// <summary>
-            /// A specific version of the HTC Vive headset, the first consumer version.
-            /// </summary>
-            ViveDVT,
-            /// <summary>
-            /// A specific version of the Oculus Rift headset, the rare ES07.
-            /// </summary>
-            OculusRiftES07,
-            /// <summary>
-            /// A summary of all GearVR headset versions.
-            /// </summary>
-            GearVR,
-            /// <summary>
-            /// A specific version of the GearVR headset running on a Samsung Galaxy Note 5.
-            /// </summary>
-            GearVRGalaxyNote5,
-            /// <summary>
-            /// A specific version of the GearVR headset running on a Samsung Galaxy S6.
-            /// </summary>
-            GearVRGalaxyS6,
-            /// <summary>
-            /// A specific version of the GearVR headset running on a Samsung Galaxy S6 Edge.
-            /// </summary>
-            GearVRGalaxyS6Edge,
-            /// <summary>
-            /// A specific version of the GearVR headset running on a Samsung Galaxy S7.
-            /// </summary>
-            GearVRGalaxyS7,
-            /// <summary>
-            /// A specific version of the GearVR headset running on a Samsung Galaxy S7 Edge.
-            /// </summary>
-            GearVRGalaxyS7Edge,
-            /// <summary>
-            /// A specific version of the GearVR headset running on a Samsung Galaxy S8.
-            /// </summary>
-            GearVRGalaxyS8,
-            /// <summary>
-            /// A summary of all Google Cardboard headset versions.
+            /// The Google Cardboard headset.
             /// </summary>
             GoogleCardboard,
             /// <summary>
-            /// A summary of all Google Daydream headset versions.
+            /// The HyperealVR headset.
             /// </summary>
-            Daydream
+            HyperealVR
         }
-
         protected Transform cachedHeadset;
         protected Transform cachedHeadsetCamera;
 
@@ -110,6 +90,12 @@ namespace VRTK
         /// </summary>
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public abstract Transform GetHeadsetCamera();
+
+        /// <summary>
+        /// The GetHeadsetType method returns a string representing the type of headset connected.
+        /// </summary>
+        /// <returns>The string of the headset connected.</returns>
+        public abstract string GetHeadsetType();
 
         /// <summary>
         /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
@@ -153,6 +139,47 @@ namespace VRTK
                 return cachedHeadset;
             }
             return null;
+        }
+
+        protected virtual string ScrapeHeadsetType()
+        {
+            string model = CleanPropertyString(XRDevice.model);
+            string deviceName = CleanPropertyString(XRSettings.loadedDeviceName);
+            switch (model)
+            {
+                case "oculusriftcv1":
+                case "oculusriftes07":
+                    return CleanPropertyString("oculusrift");
+                case "vivemv":
+                case "vivedvt":
+                    return CleanPropertyString("htcvive");
+                case "googleinc-daydreamview":
+                    return "googledaydream";
+                case "googleinc-defaultcardboard":
+                    return "googlecardboard";
+                case "galaxynote5":
+                case "galaxys6":
+                case "galaxys6edge":
+                case "galaxys7":
+                case "galaxys7edge":
+                case "galaxys8":
+                case "galaxys8+":
+                    if (deviceName == "oculus")
+                    {
+                        return "oculusgearvr";
+                    }
+                    break;
+                case "oculusriftdk1":
+                    return CleanPropertyString("oculusriftdk1");
+                case "oculusriftdk2":
+                    return CleanPropertyString("oculusriftdk2");
+            }
+            return "";
+        }
+
+        protected string CleanPropertyString(string inputString)
+        {
+            return inputString.Replace(" ", "").Replace(".", "").Replace(",", "").ToLowerInvariant();
         }
     }
 }

@@ -6,7 +6,6 @@ namespace VRTK
     using UnityEngine.XR;
 #else
     using XRDevice = UnityEngine.VR.VRDevice;
-    using XRSettings = UnityEngine.VR.VRSettings;
 #endif
 
     /// <summary>
@@ -33,8 +32,46 @@ namespace VRTK
             RightController,
         }
 
+        /// <summary>
+        /// Possible headsets
+        /// </summary>
+        [System.Obsolete("`VRTK_DeviceFinder.Headsets` has been deprecated and has been replaced with a manufacturer string. This enum will be removed in a future version of VRTK.")]
+        public enum Headsets
+        {
+            /// <summary>
+            /// An unknown headset.
+            /// </summary>
+            Unknown,
+            /// <summary>
+            /// A summary of all Oculus Rift headset versions.
+            /// </summary>
+            OculusRift,
+            /// <summary>
+            /// A specific version of the Oculus Rift headset, the Consumer Version 1.
+            /// </summary>
+            OculusRiftCV1,
+            /// <summary>
+            /// A summary of all HTC Vive headset versions.
+            /// </summary>
+            Vive,
+            /// <summary>
+            /// A specific version of the HTC Vive headset, the first consumer version.
+            /// </summary>
+            ViveMV,
+            /// <summary>
+            /// A specific version of the HTC Vive headset, the first consumer version.
+            /// </summary>
+            ViveDVT,
+            /// <summary>
+            /// A specific version of the Oculus Rift headset, the rare ES07.
+            /// </summary>
+            OculusRiftES07
+        }
+
+        /// <summary>
+        /// Obsolete
+        /// </summary>
         private static string cachedHeadsetType = "";
-        private static string cachedLoadedDeviceName = "";
 
         /// <summary>
         /// The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
@@ -375,10 +412,10 @@ namespace VRTK
         /// <summary>
         /// The ResetHeadsetTypeCache resets the cache holding the current headset type value.
         /// </summary>
+        [System.Obsolete("`VRTK_DeviceFinder.ResetHeadsetTypeCache()` has been deprecated. This method will be removed in a future version of VRTK.")]
         public static void ResetHeadsetTypeCache()
         {
             cachedHeadsetType = "";
-            cachedLoadedDeviceName = "";
         }
 
         /// <summary>
@@ -386,71 +423,28 @@ namespace VRTK
         /// </summary>
         /// <param name="summary">If this is `true`, then the generic name for the headset is returned not including the version type (e.g. OculusRift will be returned for DK2 and CV1).</param>
         /// <returns>The Headset type that is connected.</returns>
-        public static SDK_BaseHeadset.Headsets GetHeadsetType(bool summary = false)
+        [System.Obsolete("`VRTK_DeviceFinder.GetHeadsetType(summary) -> VRTK_DeviceFinder.Headsets` has been replaced with `VRTK_DeviceFinder.GetHeadsetType() -> SDK_BaseHeadset.HeadsetType`. This method will be removed in a future version of VRTK.")]
+        public static Headsets GetHeadsetType(bool summary = false)
         {
-            SDK_BaseHeadset.Headsets returnValue = SDK_BaseHeadset.Headsets.Unknown;
-            cachedHeadsetType = (cachedHeadsetType == "" ? CleanModelString(XRDevice.model) : cachedHeadsetType);
-            cachedLoadedDeviceName = (cachedLoadedDeviceName == "" ? CleanModelString(XRSettings.loadedDeviceName) : cachedLoadedDeviceName);
+            Headsets returnValue = Headsets.Unknown;
+            cachedHeadsetType = (cachedHeadsetType == "" ? XRDevice.model.Replace(" ", "").Replace(".", "").ToLowerInvariant() : cachedHeadsetType);
             switch (cachedHeadsetType)
             {
                 case "oculusriftcv1":
-                    returnValue = (summary ? SDK_BaseHeadset.Headsets.OculusRift : SDK_BaseHeadset.Headsets.OculusRiftCV1);
+                    returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftCV1);
                     break;
                 case "oculusriftes07":
-                    returnValue = (summary ? SDK_BaseHeadset.Headsets.OculusRift : SDK_BaseHeadset.Headsets.OculusRiftES07);
+                    returnValue = (summary ? Headsets.OculusRift : Headsets.OculusRiftES07);
                     break;
                 case "vivemv":
-                    returnValue = (summary ? SDK_BaseHeadset.Headsets.Vive : SDK_BaseHeadset.Headsets.ViveMV);
+                    returnValue = (summary ? Headsets.Vive : Headsets.ViveMV);
                     break;
                 case "vivedvt":
-                    returnValue = (summary ? SDK_BaseHeadset.Headsets.Vive : SDK_BaseHeadset.Headsets.ViveDVT);
-                    break;
-                case "galaxynote5":
-                    if (cachedLoadedDeviceName == "oculus")
-                    {
-                        returnValue = (summary ? SDK_BaseHeadset.Headsets.GearVR : SDK_BaseHeadset.Headsets.GearVRGalaxyNote5);
-                    }
-                    break;
-                case "galaxys6":
-                    if (cachedLoadedDeviceName == "oculus")
-                    {
-                        returnValue = (summary ? SDK_BaseHeadset.Headsets.GearVR : SDK_BaseHeadset.Headsets.GearVRGalaxyS6);
-                    }
-                    break;
-                case "galaxys6edge":
-                    if (cachedLoadedDeviceName == "oculus")
-                    {
-                        returnValue = (summary ? SDK_BaseHeadset.Headsets.GearVR : SDK_BaseHeadset.Headsets.GearVRGalaxyS6Edge);
-                    }
-                    break;
-                case "galaxys7":
-                    if (cachedLoadedDeviceName == "oculus")
-                    {
-                        returnValue = (summary ? SDK_BaseHeadset.Headsets.GearVR : SDK_BaseHeadset.Headsets.GearVRGalaxyS7);
-                    }
-                    break;
-                case "galaxys7Edge":
-                    if (cachedLoadedDeviceName == "oculus")
-                    {
-                        returnValue = (summary ? SDK_BaseHeadset.Headsets.GearVR : SDK_BaseHeadset.Headsets.GearVRGalaxyS7Edge);
-                    }
-                    break;
-                case "galaxys8":
-                case "galaxys8+":
-                    if (cachedLoadedDeviceName == "oculus")
-                    {
-                        returnValue = (summary ? SDK_BaseHeadset.Headsets.GearVR : SDK_BaseHeadset.Headsets.GearVRGalaxyS8);
-                    }
-                    break;
-                case "googleinc-daydreamview":
-                    returnValue = SDK_BaseHeadset.Headsets.Daydream;
-                    break;
-                case "googleinc-defaultcardboard":
-                    returnValue = SDK_BaseHeadset.Headsets.GoogleCardboard;
+                    returnValue = (summary ? Headsets.Vive : Headsets.ViveDVT);
                     break;
             }
 
-            if (returnValue == SDK_BaseHeadset.Headsets.Unknown)
+            if (returnValue == Headsets.Unknown)
             {
                 VRTK_Logger.Warn(
                     string.Format("Your headset is of type '{0}' which VRTK doesn't know about yet. Please report this headset type to the maintainers of VRTK."
@@ -462,16 +456,55 @@ namespace VRTK
                 {
                     if (cachedHeadsetType.Contains("rift"))
                     {
-                        return SDK_BaseHeadset.Headsets.OculusRift;
+                        return Headsets.OculusRift;
                     }
                     if (cachedHeadsetType.Contains("vive"))
                     {
-                        return SDK_BaseHeadset.Headsets.Vive;
+                        return Headsets.Vive;
                     }
                 }
             }
 
             return returnValue;
+        }
+
+        /// <summary>
+        /// The GetHeadsetTypeAsString method returns a string representing the type of headset connected.
+        /// </summary>
+        /// <returns>The string of the headset connected.</returns>
+        public static string GetHeadsetTypeAsString()
+        {
+            return VRTK_SDK_Bridge.GetHeadsetType();
+        }
+
+        /// <summary>
+        /// The GetHeadsetType method returns the type of headset currently connected.
+        /// </summary>
+        /// <returns>The Headset type that is connected.</returns>
+        public static SDK_BaseHeadset.HeadsetType GetHeadsetType()
+        {
+            switch (GetHeadsetTypeAsString())
+            {
+                case "simulator":
+                    return SDK_BaseHeadset.HeadsetType.Simulator;
+                case "htcvive":
+                    return SDK_BaseHeadset.HeadsetType.HTCVive;
+                case "oculusrift":
+                    return SDK_BaseHeadset.HeadsetType.OculusRift;
+                case "oculusgearvr":
+                    return SDK_BaseHeadset.HeadsetType.OculusGearVR;
+                case "googledaydream":
+                    return SDK_BaseHeadset.HeadsetType.GoogleDaydream;
+                case "googlecardboard":
+                    return SDK_BaseHeadset.HeadsetType.GoogleCardboard;
+                case "hyperealvr":
+                    return SDK_BaseHeadset.HeadsetType.HyperealVR;
+                case "oculusriftdk1":
+                    return SDK_BaseHeadset.HeadsetType.OculusRiftDK1;
+                case "oculusriftdk2":
+                    return SDK_BaseHeadset.HeadsetType.OculusRiftDK2;
+            }
+            return SDK_BaseHeadset.HeadsetType.Undefined;
         }
 
         /// <summary>
@@ -481,11 +514,6 @@ namespace VRTK
         public static Transform PlayAreaTransform()
         {
             return VRTK_SDK_Bridge.GetPlayArea();
-        }
-
-        private static string CleanModelString(string inputString)
-        {
-            return inputString.Replace(" ", "").Replace(".", "").Replace(",", "").ToLowerInvariant();
         }
     }
 }

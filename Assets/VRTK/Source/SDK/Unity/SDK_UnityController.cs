@@ -149,6 +149,7 @@ namespace VRTK
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
         public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
+            SetTrackedControllerCaches();
             return cachedControllerType;
         }
 
@@ -724,6 +725,19 @@ namespace VRTK
                 }
             }
 
+            //If the joystick isn't found then try and match on headset type
+            if (!joystickFound)
+            {
+                switch (VRTK_DeviceFinder.GetHeadsetType())
+                {
+                    case SDK_BaseHeadset.HeadsetType.GoogleDaydream:
+                        SetCachedControllerType("googledaydream");
+                        joystickFound = true;
+                        validJoystickIndex = 1;
+                        break;
+                }
+            }
+
             if (joystickFound)
             {
                 if (hand == ControllerHand.Right)
@@ -744,14 +758,23 @@ namespace VRTK
         protected virtual void SetCachedControllerType(string givenType)
         {
             givenType = givenType.ToLower();
+            //try direct matching
+            switch (givenType)
+            {
+                case "googledaydream":
+                    cachedControllerType = ControllerType.Daydream_Controller;
+                    return;
+            }
+
+            //fallback to fuzzy matching
             if (givenType.Contains("openvr controller"))
             {
-                switch (VRTK_DeviceFinder.GetHeadsetType(true))
+                switch (VRTK_DeviceFinder.GetHeadsetType())
                 {
-                    case SDK_BaseHeadset.Headsets.Vive:
+                    case SDK_BaseHeadset.HeadsetType.HTCVive:
                         cachedControllerType = ControllerType.SteamVR_ViveWand;
                         break;
-                    case SDK_BaseHeadset.Headsets.OculusRift:
+                    case SDK_BaseHeadset.HeadsetType.OculusRift:
                         cachedControllerType = ControllerType.SteamVR_OculusTouch;
                         break;
                 }

@@ -204,6 +204,11 @@
             return GetHeadsetSDK().GetHeadsetCamera();
         }
 
+        public static string GetHeadsetType()
+        {
+            return GetHeadsetSDK().GetHeadsetType();
+        }
+
         public static Vector3 GetHeadsetVelocity()
         {
             return GetHeadsetSDK().GetHeadsetVelocity();
