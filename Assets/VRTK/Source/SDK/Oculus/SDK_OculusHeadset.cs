@@ -66,6 +66,29 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetHeadsetType method returns a string representing the type of headset connected.
+        /// </summary>
+        /// <returns>The string of the headset connected.</returns>
+        public override string GetHeadsetType()
+        {
+            switch (OVRPlugin.GetSystemHeadsetType())
+            {
+                case OVRPlugin.SystemHeadset.Rift_CV1:
+                    return CleanPropertyString("oculusrift");
+                case OVRPlugin.SystemHeadset.GearVR_R320:
+                case OVRPlugin.SystemHeadset.GearVR_R321:
+                case OVRPlugin.SystemHeadset.GearVR_R322:
+                case OVRPlugin.SystemHeadset.GearVR_R323:
+                    return CleanPropertyString("oculusgearvr");
+                case OVRPlugin.SystemHeadset.Rift_DK1:
+                    return CleanPropertyString("oculusriftdk1");
+                case OVRPlugin.SystemHeadset.Rift_DK2:
+                    return CleanPropertyString("oculusriftdk2");
+            }
+            return CleanPropertyString("");
+        }
+
+        /// <summary>
         /// The GetHeadsetVelocity method is used to determine the current velocity of the headset.
         /// </summary>
         /// <returns>A Vector3 containing the current velocity of the headset.</returns>

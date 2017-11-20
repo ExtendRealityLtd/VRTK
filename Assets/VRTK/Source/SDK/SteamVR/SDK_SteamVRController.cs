@@ -81,14 +81,30 @@ namespace VRTK
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
         public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            uint checkIndex = uint.MaxValue;
+            if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                case SDK_BaseHeadset.Headsets.Vive:
-                    return GetSteamVRControllerType(controllerReference);
-                case SDK_BaseHeadset.Headsets.OculusRift:
-                    return ControllerType.SteamVR_OculusTouch;
+                checkIndex = controllerReference.index;
             }
-            return ControllerType.Custom;
+            else
+            {
+                VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
+                VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
+
+                if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
+                {
+                    return ControllerType.Undefined;
+                }
+                checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
+            }
+
+            ControllerType returnType = ControllerType.Undefined;
+            if (checkIndex < uint.MaxValue)
+            {
+                string controllerModelNumber = GetModelNumber(checkIndex);
+                returnType = MatchControllerTypeByString(controllerModelNumber);
+            }
+            return returnType;
         }
 
         /// <summary>
@@ -98,25 +114,17 @@ namespace VRTK
         /// <returns>A path to the resource that contains the collider GameObject.</returns>
         public override string GetControllerDefaultColliderPath(ControllerHand hand)
         {
-            string returnCollider = "ControllerColliders/Fallback";
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.OculusRift:
-                    returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
-                    break;
-                case SDK_BaseHeadset.Headsets.Vive:
-                    switch (GetCurrentControllerType())
-                    {
-                        case ControllerType.SteamVR_ValveKnuckles:
-                            returnCollider = (hand == ControllerHand.Left ? "ControllerColliders/ValveKnuckles_Left" : "ControllerColliders/ValveKnuckles_Right");
-                            break;
-                        case ControllerType.SteamVR_ViveWand:
-                            returnCollider = "ControllerColliders/HTCVive";
-                            break;
-                    }
-                    break;
+                case ControllerType.SteamVR_OculusTouch:
+                    return (hand == ControllerHand.Left ? "ControllerColliders/SteamVROculusTouch_Left" : "ControllerColliders/SteamVROculusTouch_Right");
+                case ControllerType.SteamVR_ValveKnuckles:
+                    return (hand == ControllerHand.Left ? "ControllerColliders/ValveKnuckles_Left" : "ControllerColliders/ValveKnuckles_Right");
+                case ControllerType.SteamVR_ViveWand:
+                    return "ControllerColliders/HTCVive";
+                default:
+                    return "ControllerColliders/Fallback";
             }
-            return returnCollider;
         }
 
         /// <summary>
@@ -224,9 +232,9 @@ namespace VRTK
         [System.Obsolete("GenerateControllerPointerOrigin has been deprecated and will be removed in a future version of VRTK.")]
         public override Transform GenerateControllerPointerOrigin(GameObject parent)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_OculusTouch:
                     if (IsControllerLeftHand(parent) || IsControllerRightHand(parent))
                     {
                         GameObject generatedOrigin = new GameObject(parent.name + " _CustomPointerOrigin");
@@ -718,18 +726,13 @@ namespace VRTK
 
         protected virtual string GetControllerGripPath(ControllerHand hand, string suffix, ControllerHand forceHand)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.Vive:
-                    switch (GetCurrentControllerType())
-                    {
-                        case ControllerType.SteamVR_ViveWand:
-                            return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;
-                        case ControllerType.SteamVR_ValveKnuckles:
-                            return "button_b" + suffix;
-                    }
-                    return null;
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_ViveWand:
+                    return (forceHand == ControllerHand.Left ? "lgrip" : "rgrip") + suffix;
+                case ControllerType.SteamVR_ValveKnuckles:
+                    return "button_b" + suffix;
+                case ControllerType.SteamVR_OculusTouch:
                     return "grip" + suffix;
             }
             return null;
@@ -737,11 +740,12 @@ namespace VRTK
 
         protected virtual string GetControllerTouchpadPath(ControllerHand hand, string suffix)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.Vive:
+                case ControllerType.SteamVR_ViveWand:
+                case ControllerType.SteamVR_ValveKnuckles:
                     return "trackpad" + suffix;
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_OculusTouch:
                     return "thumbstick" + suffix;
             }
             return null;
@@ -749,11 +753,9 @@ namespace VRTK
 
         protected virtual string GetControllerButtonOnePath(ControllerHand hand, string suffix)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.Vive:
-                    return null;
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_OculusTouch:
                     return (hand == ControllerHand.Left ? "x_button" : "a_button") + suffix;
             }
             return null;
@@ -761,11 +763,12 @@ namespace VRTK
 
         protected virtual string GetControllerButtonTwoPath(ControllerHand hand, string suffix)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.Vive:
+                case ControllerType.SteamVR_ViveWand:
+                case ControllerType.SteamVR_ValveKnuckles:
                     return "button" + suffix;
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_OculusTouch:
                     return (hand == ControllerHand.Left ? "y_button" : "b_button") + suffix;
             }
             return null;
@@ -773,11 +776,12 @@ namespace VRTK
 
         protected virtual string GetControllerSystemMenuPath(ControllerHand hand, string suffix)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.Vive:
+                case ControllerType.SteamVR_ViveWand:
+                case ControllerType.SteamVR_ValveKnuckles:
                     return "sys_button" + suffix;
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_OculusTouch:
                     return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
             }
             return null;
@@ -785,68 +789,53 @@ namespace VRTK
 
         protected virtual string GetControllerStartMenuPath(ControllerHand hand, string suffix)
         {
-            switch (VRTK_DeviceFinder.GetHeadsetType(true))
+            switch (GetCurrentControllerType())
             {
-                case SDK_BaseHeadset.Headsets.Vive:
-                    return null;
-                case SDK_BaseHeadset.Headsets.OculusRift:
+                case ControllerType.SteamVR_OculusTouch:
                     return (hand == ControllerHand.Left ? "enter_button" : "home_button") + suffix;
             }
             return null;
         }
 
-        protected virtual ControllerType GetSteamVRControllerType(VRTK_ControllerReference controllerReference)
+        protected virtual ControllerType MatchControllerTypeByString(string controllerModelNumber)
         {
-            uint checkIndex;
-            if (VRTK_ControllerReference.IsValid(controllerReference))
+            //Direct string matches for speed
+            switch (controllerModelNumber)
             {
-                checkIndex = controllerReference.index;
+                case "vive controller mv":
+                case "vive controller dvt":
+                    return ControllerType.SteamVR_ViveWand;
+                case "knuckles ev1.3":
+                    return ControllerType.SteamVR_ValveKnuckles;
+                case "oculus rift cv1 (right controller)":
+                case "oculus rift cv1 (left controller)":
+                    return ControllerType.SteamVR_OculusTouch;
             }
-            else
-            {
-                VRTK_ControllerReference leftHand = VRTK_ControllerReference.GetControllerReference(GetControllerLeftHand());
-                VRTK_ControllerReference rightHand = VRTK_ControllerReference.GetControllerReference(GetControllerRightHand());
+            return FuzzyMatchControllerTypeByString(controllerModelNumber);
+        }
 
-                if (!VRTK_ControllerReference.IsValid(leftHand) && !VRTK_ControllerReference.IsValid(rightHand))
-                {
-                    return ControllerType.Undefined;
-                }
-
-                checkIndex = (VRTK_ControllerReference.IsValid(rightHand) ? rightHand.index : leftHand.index);
-            }
-
-            string controllerType = GetRenderModelName(checkIndex).ToLower();
-            if (controllerType.Contains("knuckles"))
+        protected virtual ControllerType FuzzyMatchControllerTypeByString(string controllerModelNumber)
+        {
+            //Fallback to fuzzy matching
+            if (controllerModelNumber.Contains("knuckles"))
             {
                 return ControllerType.SteamVR_ValveKnuckles;
             }
-            else if (controllerType.Contains("vive"))
+            else if (controllerModelNumber.Contains("vive"))
             {
                 return ControllerType.SteamVR_ViveWand;
             }
+            else if (controllerModelNumber.Contains("oculus rift"))
+            {
+                return ControllerType.SteamVR_OculusTouch;
+            }
+
             return ControllerType.Undefined;
         }
 
-        protected virtual string GetRenderModelName(uint index)
+        protected virtual string GetModelNumber(uint index)
         {
-            CVRSystem system = OpenVR.System;
-            if (system == null)
-            {
-                return "";
-            }
-
-            ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-            uint capacity = system.GetStringTrackedDeviceProperty(index, ETrackedDeviceProperty.Prop_RenderModelName_String, null, 0, ref error);
-            if (capacity <= 1)
-            {
-                VRTK_Logger.Warn("Failed to get render model name for tracked object " + index);
-                return "";
-            }
-
-            StringBuilder buffer = new StringBuilder((int)capacity);
-            system.GetStringTrackedDeviceProperty(index, ETrackedDeviceProperty.Prop_RenderModelName_String, buffer, capacity, ref error);
-
-            return buffer.ToString();
+            return (SteamVR.instance != null ? SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.Prop_ModelNumber_String, index) : "").ToLower();
         }
 #endif
     }
