@@ -37,7 +37,7 @@ namespace VRTK
     /// </remarks>
 
     [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractObjectHighlighter")]
-    public class VRTK_InteractObjectHighlighter : MonoBehaviour
+    public class VRTK_InteractObjectHighlighter : VRTK_InteractableListener
     {
         [Header("Object Interaction Settings")]
 
@@ -93,8 +93,17 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            objectToAffect = (objectToAffect != null ? objectToAffect : GetComponentInParent<VRTK_InteractableObject>());
+            EnableListeners();
+        }
 
+        protected virtual void OnDisable()
+        {
+            DisableListeners();
+        }
+
+        protected override bool SetupListeners(bool throwError)
+        {
+            objectToAffect = (objectToAffect != null ? objectToAffect : GetComponentInParent<VRTK_InteractableObject>());
             if (objectToAffect != null)
             {
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
@@ -108,14 +117,16 @@ namespace VRTK
 
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
+                return true;
             }
-            else
+            else if (throwError)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_InteractObjectHighlighter", "VRTK_InteractableObject", "the same or parent"));
             }
+            return false;
         }
 
-        protected virtual void OnDisable()
+        protected override void TearDownListeners()
         {
             if (objectToAffect != null)
             {

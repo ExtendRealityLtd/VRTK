@@ -4142,6 +4142,7 @@ The ClearPreviousClone method resets the previous cloned Interactable Object to 
 A collection of scripts that provide the ability denote objects as being interactable and providing functionality when an object is interected with.
 
  * [Interactable Object](#interactable-object-vrtk_interactableobject)
+ * [Interactable Listener](#interactable-listener-vrtk_interactablelistener)
  * [Interact Haptics](#interact-haptics-vrtk_interacthaptics)
  * [Interact Object Appearance](#interact-object-appearance-vrtk_interactobjectappearance)
  * [Interact Object Highlighter](#interact-object-highlighter-vrtk_interactobjecthighlighter)
@@ -4746,7 +4747,19 @@ The GetSecondaryAttachPoint returns the Transform that determines where the seco
 
 ---
 
+## Interactable Listener (VRTK_InteractableListener)
+
+### Overview
+
+Provides a base that classes which require to subscribe to the interaction events of an Interactable Object can inherit from.
+
+**Script Usage:**
+  > This is an abstract class that is to be inherited to a concrete class that provides interaction event listener functionality, therefore this script should not be directly used.
+
+---
+
 ## Interact Haptics (VRTK_InteractHaptics)
+ > extends [VRTK_InteractableListener](#interactable-listener-vrtk_interactablelistener)
 
 ### Overview
 
@@ -4861,6 +4874,7 @@ The HapticsOnUse method triggers the haptic feedback on the given controller for
 ---
 
 ## Interact Object Appearance (VRTK_InteractObjectAppearance)
+ > extends [VRTK_InteractableListener](#interactable-listener-vrtk_interactablelistener)
 
 ### Overview
 
@@ -4936,6 +4950,7 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 ---
 
 ## Interact Object Highlighter (VRTK_InteractObjectHighlighter)
+ > extends [VRTK_InteractableListener](#interactable-listener-vrtk_interactablelistener)
 
 ### Overview
 
@@ -4989,6 +5004,7 @@ The GetCurrentHighlightColor returns the colour that the Interactable Object is 
 ---
 
 ## Object Touch Auto Interact (VRTK_ObjectTouchAutoInteract)
+ > extends [VRTK_InteractableListener](#interactable-listener-vrtk_interactablelistener)
 
 ### Overview
 
