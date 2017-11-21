@@ -88,6 +88,7 @@ A collection of titles that have been made with VRTK.
 | Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr) |
 | Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery) |
 | Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha) |
+| Plutonic Penguins | [Itch.io Store Page](https://plutonicpenguins.itch.io/plutonic-penguins) |
 
 ## Steam Greenlight
 
