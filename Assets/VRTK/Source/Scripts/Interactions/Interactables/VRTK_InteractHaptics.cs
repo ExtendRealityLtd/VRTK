@@ -32,7 +32,7 @@ namespace VRTK
     ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Object To Affect` parameter of this script.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractHaptics")]
-    public class VRTK_InteractHaptics : MonoBehaviour
+    public class VRTK_InteractHaptics : VRTK_InteractableListener
     {
         [Header("Haptics On Near Touch Settings")]
 
@@ -241,8 +241,17 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            objectToAffect = (objectToAffect != null ? objectToAffect : GetComponentInParent<VRTK_InteractableObject>());
+            EnableListeners();
+        }
 
+        protected virtual void OnDisable()
+        {
+            DisableListeners();
+        }
+
+        protected override bool SetupListeners(bool throwError)
+        {
+            objectToAffect = (objectToAffect != null ? objectToAffect : GetComponentInParent<VRTK_InteractableObject>());
             if (objectToAffect != null)
             {
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, CancelNearTouchHaptics);
@@ -254,14 +263,16 @@ namespace VRTK
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHaptics);
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHaptics);
                 objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHaptics);
+                return true;
             }
-            else
+            else if (throwError)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_InteractHaptics", "VRTK_InteractableObject", "the same or parent"));
             }
+            return false;
         }
 
-        protected virtual void OnDisable()
+        protected override void TearDownListeners()
         {
             if (objectToAffect != null)
             {

@@ -43,7 +43,7 @@ namespace VRTK
     /// `VRTK/Examples/008_Controller_UsingAGrabbedObject` shows that the controller can be hidden when touching, grabbing and using an object.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_InteractObjectAppearance")]
-    public class VRTK_InteractObjectAppearance : MonoBehaviour
+    public class VRTK_InteractObjectAppearance : VRTK_InteractableListener
     {
         /// <summary>
         /// The valid interacting object.
@@ -201,8 +201,22 @@ namespace VRTK
             affectingRoutines.Clear();
             nearTouchingObjects.Clear();
             touchingObjects.Clear();
-            objectToMonitor = (objectToMonitor == null ? GetComponentInParent<VRTK_InteractableObject>() : objectToMonitor);
+            EnableListeners();
+            if (objectToAffect != null)
+            {
+                ToggleState(objectToAffect, gameObjectActiveByDefault, rendererVisibleByDefault, VRTK_InteractableObject.InteractionType.None);
+            }
+        }
 
+        protected virtual void OnDisable()
+        {
+            DisableListeners();
+            CancelRoutines();
+        }
+
+        protected override bool SetupListeners(bool throwError)
+        {
+            objectToMonitor = (objectToMonitor == null ? GetComponentInParent<VRTK_InteractableObject>() : objectToMonitor);
             if (objectToMonitor != null)
             {
                 objectToMonitor.InteractableObjectDisabled += InteractableObjectDisabled;
@@ -215,19 +229,16 @@ namespace VRTK
                 objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, InteractableObjectUngrabbed);
                 objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, InteractableObjectUsed);
                 objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, InteractableObjectUnused);
+                return true;
             }
-            else
+            else if (throwError)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_NOT_INJECTED, "VRTK_InteractObjectAppearance", "VRTK_InteractableObject", "objectToMonitor", "current or parent"));
             }
-
-            if (objectToAffect != null)
-            {
-                ToggleState(objectToAffect, gameObjectActiveByDefault, rendererVisibleByDefault, VRTK_InteractableObject.InteractionType.None);
-            }
+            return false;
         }
 
-        protected virtual void OnDisable()
+        protected override void TearDownListeners()
         {
             if (objectToMonitor != null)
             {
@@ -241,7 +252,6 @@ namespace VRTK
                 objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Use, InteractableObjectUsed);
                 objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, InteractableObjectUnused);
             }
-            CancelRoutines();
         }
 
         protected virtual InteractObjectAppearanceEventArgs SetPayload(GameObject affectingObject, VRTK_InteractableObject.InteractionType interactionType)

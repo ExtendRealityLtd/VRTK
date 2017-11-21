@@ -17,7 +17,7 @@ namespace VRTK
     ///    * Any other scene GameObject and provide a valid `VRTK_InteractableObject` component to the `Interactable Object` parameter of this script.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactions/Interactables/VRTK_ObjectTouchAutoInteract")]
-    public class VRTK_ObjectTouchAutoInteract : MonoBehaviour
+    public class VRTK_ObjectTouchAutoInteract : VRTK_InteractableListener
     {
         /// <summary>
         /// Situation when auto interaction can occur.
@@ -70,27 +70,12 @@ namespace VRTK
             regrabTimer = 0f;
             reuseTimer = 0f;
             touchers = new List<GameObject>();
-
-            interactableObject = (interactableObject != null ? interactableObject : GetComponent<VRTK_InteractableObject>());
-
-            if (interactableObject != null)
-            {
-                interactableObject.InteractableObjectTouched += InteractableObjectTouched;
-                interactableObject.InteractableObjectUntouched += InteractableObjectUntouched;
-                interactableObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
-                interactableObject.InteractableObjectUnused += InteractableObjectUnused;
-            }
+            EnableListeners();
         }
 
         protected virtual void OnDisable()
         {
-            if (interactableObject != null)
-            {
-                interactableObject.InteractableObjectTouched -= InteractableObjectTouched;
-                interactableObject.InteractableObjectUntouched -= InteractableObjectUntouched;
-                interactableObject.InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
-                interactableObject.InteractableObjectUnused -= InteractableObjectUnused;
-            }
+            TearDownListeners();
         }
 
         protected virtual void Update()
@@ -108,6 +93,35 @@ namespace VRTK
                         CheckUse(touchers[i]);
                     }
                 }
+            }
+        }
+
+        protected override bool SetupListeners(bool throwError)
+        {
+            interactableObject = (interactableObject != null ? interactableObject : GetComponentInParent<VRTK_InteractableObject>());
+            if (interactableObject != null)
+            {
+                interactableObject.InteractableObjectTouched += InteractableObjectTouched;
+                interactableObject.InteractableObjectUntouched += InteractableObjectUntouched;
+                interactableObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
+                interactableObject.InteractableObjectUnused += InteractableObjectUnused;
+                return true;
+            }
+            else if (throwError)
+            {
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_ObjectTouchAutoInteract", "VRTK_InteractableObject", "the same or parent"));
+            }
+            return false;
+        }
+
+        protected override void TearDownListeners()
+        {
+            if (interactableObject != null)
+            {
+                interactableObject.InteractableObjectTouched -= InteractableObjectTouched;
+                interactableObject.InteractableObjectUntouched -= InteractableObjectUntouched;
+                interactableObject.InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
+                interactableObject.InteractableObjectUnused -= InteractableObjectUnused;
             }
         }
 
