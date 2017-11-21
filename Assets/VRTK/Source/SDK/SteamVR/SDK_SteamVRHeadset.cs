@@ -97,6 +97,8 @@ namespace VRTK
                         break;
                     case "oculus":
                         return "oculusrift";
+                    case "windowsmr":
+                        return "windowsmixedreality";
                 }
 
                 //If no model check required then just return manufacturer
