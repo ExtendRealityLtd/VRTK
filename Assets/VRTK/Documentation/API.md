@@ -2222,6 +2222,7 @@ Provides the ability to control a GameObject's position based on the position of
 
 ### Inspector Parameters
 
+ * **Coordinate Axis:** The axis to use for the direction coordinates.
  * **Primary Activation Button:** An optional button that has to be engaged to allow the touchpad control to activate.
  * **Action Modifier Button:** An optional button that when engaged will activate the modifier on the touchpad control action.
  * **Axis Deadzone:** A deadzone threshold on the touchpad that will ignore input if the touch position is within the specified deadzone. Between `0f` and `1f`.
