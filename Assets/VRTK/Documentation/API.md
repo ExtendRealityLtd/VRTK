@@ -3152,6 +3152,7 @@ A relationship to a physical VR controller and emits events based on the inputs 
    * `GripClick` - The grip button is pressed all the way down.
    * `TouchpadTouch` - The touchpad is touched (without pressing down to click).
    * `TouchpadPress` - The touchpad is pressed (to the point of hearing a click).
+   * `TouchpadTwoTouch` - The touchpad two is touched (without pressing down to click).
    * `ButtonOneTouch` - The button one is touched.
    * `ButtonOnePress` - The button one is pressed.
    * `ButtonTwoTouch` - The button two is touched.
@@ -3181,6 +3182,7 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `public bool touchpadTouched` - This will be true if the touchpad is being touched. Default: `false`
  * `public bool touchpadAxisChanged` - This will be true if the touchpad position has changed. Default: `false`
  * `public bool touchpadSenseAxisChanged` - This will be true if the touchpad sense is being touched more or less. Default: `false`
+ * `public bool touchpadTwoTouched` - This will be true if the touchpad two is being touched. Default: `false`
  * `public bool buttonOnePressed` - This will be true if button one is held down. Default: `false`
  * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
  * `public bool buttonTwoPressed` - This will be true if button two is held down. Default: `false`
@@ -3218,6 +3220,8 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `TouchpadTouchEnd` - Emitted when the touchpad is no longer being touched.
  * `TouchpadAxisChanged` - Emitted when the touchpad is being touched in a different location.
  * `TouchpadSenseAxisChanged` - Emitted when the amount of touch on the touchpad sense changes.
+ * `TouchpadTwoTouchStart` - Emitted when the touchpad two is touched (without pressing down to click).
+ * `TouchpadTwoTouchEnd` - Emitted when the touchpad two is no longer being touched.
  * `TouchpadTwoAxisChanged` - Emitted when the touchpad two is being touched in a different location.
  * `ButtonOneTouchStart` - Emitted when button one is touched.
  * `ButtonOneTouchEnd` - Emitted when button one is no longer being touched.
@@ -3291,6 +3295,17 @@ The SetControllerEvent/3 method is used to set the Controller Event payload.
 
 The GetControllerType method is a shortcut to retrieve the current controller type the Controller Events is attached to.
 
+#### GetAxis/1
+
+  > `public virtual Vector2 GetAxis(SDK_BaseController.Vector2Axis vector2AxisType)`
+
+ * Parameters
+   * `SDK_BaseController.Vector2Axis vector2AxisType` - The Vector2AxisType to check the touch position of.
+ * Returns
+   * `Vector2` - A two dimensional vector containing the `x` and `y` position of where the given axis type is being touched. `(0,0)` to `(1,1)`.
+
+The GetAxis method returns the coordinates of where the given axis type is being touched.
+
 #### GetTouchpadAxis/0
 
   > `public virtual Vector2 GetTouchpadAxis()`
@@ -3302,17 +3317,6 @@ The GetControllerType method is a shortcut to retrieve the current controller ty
 
 The GetTouchpadAxis method returns the coordinates of where the touchpad is being touched and can be used for directional input via the touchpad. The `x` value is the horizontal touch plane and the `y` value is the vertical touch plane.
 
-#### GetTouchpadAxisAngle/0
-
-  > `public virtual float GetTouchpadAxisAngle()`
-
- * Parameters
-   * _none_
- * Returns
-   * `float` - A float representing the angle of where the touchpad is being touched. `0f` to `360f`.
-
-The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being `0` degrees and the bottom of the touchpad being `180` degrees.
-
 #### GetTouchpadTwoAxis/0
 
   > `public virtual Vector2 GetTouchpadTwoAxis()`
@@ -3323,6 +3327,28 @@ The GetTouchpadAxisAngle method returns the angle of where the touchpad is curre
    * `Vector2` - A two dimensional vector containing the `x` and `y` position of where the touchpad two is being touched. `(0,0)` to `(1,1)`.
 
 The GetTouchpadTwoAxis method returns the coordinates of where the touchpad two is being touched and can be used for directional input via the touchpad two. The `x` value is the horizontal touch plane and the `y` value is the vertical touch plane.
+
+#### GetAxisAngle/1
+
+  > `public virtual float GetAxisAngle(SDK_BaseController.Vector2Axis vector2AxisType)`
+
+ * Parameters
+   * `SDK_BaseController.Vector2Axis vector2AxisType` - The Vector2AxisType to get the touch angle for.
+ * Returns
+   * `float` - A float representing the angle of where the given axis type is being touched. `0f` to `360f`.
+
+The GetAxisAngle method returns the angle of where the given axis type is currently being touched with the top of the given axis type being `0` degrees and the bottom of the given axis type being `180` degrees.
+
+#### GetTouchpadAxisAngle/0
+
+  > `public virtual float GetTouchpadAxisAngle()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - A float representing the angle of where the touchpad is being touched. `0f` to `360f`.
+
+The GetTouchpadAxisAngle method returns the angle of where the touchpad is currently being touched with the top of the touchpad being `0` degrees and the bottom of the touchpad being `180` degrees.
 
 #### GetTouchpadTwoAxisAngle/0
 
