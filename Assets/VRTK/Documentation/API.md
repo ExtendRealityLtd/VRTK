@@ -599,6 +599,7 @@ Adds a Pointer Direction Indicator to a pointer renderer and determines a given 
 ### Inspector Parameters
 
  * **Touchpad Deadzone:** The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.
+ * **Coordinate Axis:** The axis to use for the direction coordinates.
  * **Include Headset Offset:** If this is checked then the reported rotation will include the offset of the headset rotation in relation to the play area.
  * **Display On Invalid Location:** If this is checked then the direction indicator will be displayed when the location is invalid.
  * **Use Pointer Color:** If this is checked then the pointer valid/invalid colours will also be used to change the colour of the direction indicator.
@@ -3470,6 +3471,18 @@ The GetPinkyFingerSenseAxis method returns a float representing how much of the 
    * `bool` - Returns `true` if any of the controller buttons are currently being pressed.
 
 The AnyButtonPressed method returns true if any of the controller buttons are being pressed and this can be useful to determine if an action can be taken whilst the user is using the controller.
+
+#### GetAxisState/2
+
+  > `public virtual bool GetAxisState(SDK_BaseController.Vector2Axis axis, SDK_BaseController.ButtonPressTypes pressType)`
+
+ * Parameters
+   * `SDK_BaseController.Vector2Axis axis` - The axis to check on.
+   * `SDK_BaseController.ButtonPressTypes pressType` - The button press type to check for.
+ * Returns
+   * `bool` - Returns `true` if the axis is being interacted with via the given press type.
+
+The GetAxisState method takes a given Vector2Axis and returns a boolean whether that given axis is currently being touched or pressed.
 
 #### IsButtonPressed/1
 

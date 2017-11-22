@@ -1192,6 +1192,28 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The GetAxisState method takes a given Vector2Axis and returns a boolean whether that given axis is currently being touched or pressed.
+        /// </summary>
+        /// <param name="axis">The axis to check on.</param>
+        /// <param name="pressType">The button press type to check for.</param>
+        /// <returns>Returns `true` if the axis is being interacted with via the given press type.</returns>
+        public virtual bool GetAxisState(SDK_BaseController.Vector2Axis axis, SDK_BaseController.ButtonPressTypes pressType)
+        {
+            switch (pressType)
+            {
+                case SDK_BaseController.ButtonPressTypes.Press:
+                case SDK_BaseController.ButtonPressTypes.PressDown:
+                case SDK_BaseController.ButtonPressTypes.PressUp:
+                    return (axis == SDK_BaseController.Vector2Axis.Touchpad ? touchpadPressed : false);
+                case SDK_BaseController.ButtonPressTypes.Touch:
+                case SDK_BaseController.ButtonPressTypes.TouchDown:
+                case SDK_BaseController.ButtonPressTypes.TouchUp:
+                    return (axis == SDK_BaseController.Vector2Axis.Touchpad ? touchpadTouched : touchpadTwoTouched);
+            }
+            return false;
+        }
+
+        /// <summary>
         /// The IsButtonPressed method takes a given button alias and returns a boolean whether that given button is currently being pressed or not.
         /// </summary>
         /// <param name="button">The button to check if it's being pressed.</param>
