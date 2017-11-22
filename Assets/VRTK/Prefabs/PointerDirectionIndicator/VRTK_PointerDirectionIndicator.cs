@@ -37,8 +37,11 @@ namespace VRTK
         }
 
         [Header("Control Settings")]
+
         [Tooltip("The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.")]
         public Vector2 touchpadDeadzone = Vector2.zero;
+        [Tooltip("The axis to use for the direction coordinates.")]
+        public SDK_BaseController.Vector2Axis coordinateAxis = SDK_BaseController.Vector2Axis.Touchpad;
 
         [Header("Appearance Settings")]
 
@@ -135,9 +138,9 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (controllerEvents != null && controllerEvents.touchpadTouched && !InsideDeadzone(controllerEvents.GetTouchpadAxis()))
+            if (controllerEvents != null && controllerEvents.GetAxisState(coordinateAxis, SDK_BaseController.ButtonPressTypes.Touch) && !InsideDeadzone(controllerEvents.GetAxis(coordinateAxis)))
             {
-                float touchpadAngle = controllerEvents.GetTouchpadAxisAngle();
+                float touchpadAngle = controllerEvents.GetAxisAngle(coordinateAxis);
                 float angle = ((touchpadAngle > 180) ? touchpadAngle -= 360 : touchpadAngle) + headset.eulerAngles.y;
                 transform.localEulerAngles = new Vector3(0f, angle, 0f);
             }
