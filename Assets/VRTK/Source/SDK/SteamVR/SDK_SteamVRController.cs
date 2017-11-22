@@ -29,7 +29,9 @@ namespace VRTK
         protected SteamVR_TrackedObject cachedRightTrackedObject;
         protected Dictionary<GameObject, SteamVR_TrackedObject> cachedTrackedObjectsByGameObject = new Dictionary<GameObject, SteamVR_TrackedObject>();
         protected Dictionary<uint, SteamVR_TrackedObject> cachedTrackedObjectsByIndex = new Dictionary<uint, SteamVR_TrackedObject>();
+        protected Dictionary<EVRButtonId, bool> axisTouchStates = new Dictionary<EVRButtonId, bool>();
         protected ushort maxHapticVibration = 3999;
+        protected Dictionary<EVRButtonId, float> axisTouchFidelity = new Dictionary<EVRButtonId, float>() { { EVRButtonId.k_EButton_SteamVR_Touchpad, 0f }, { EVRButtonId.k_EButton_Axis2, 0.25f } };
 
 #if !VRTK_DEFINE_STEAMVR_PLUGIN_1_2_2_OR_NEWER
         /// <summary>
@@ -492,12 +494,7 @@ namespace VRTK
                 case ButtonTypes.Touchpad:
                     return device.GetAxis();
                 case ButtonTypes.TouchpadTwo:
-                    switch (VRTK_DeviceFinder.GetHeadsetType())
-                    {
-                        case SDK_BaseHeadset.HeadsetType.WindowsMixedReality:
-                            return device.GetAxis(EVRButtonId.k_EButton_Axis2);
-                    }
-                    return Vector2.zero;
+                    return (VRTK_DeviceFinder.GetCurrentControllerType() == ControllerType.SteamVR_WindowsMRController ? device.GetAxis(EVRButtonId.k_EButton_Axis2) : Vector2.zero);
                 case ButtonTypes.Trigger:
                     return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger);
                 case ButtonTypes.Grip:
@@ -601,6 +598,8 @@ namespace VRTK
                     return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.ApplicationMenu);
                 case ButtonTypes.StartMenu:
                     return IsButtonPressed(index, pressType, SteamVR_Controller.ButtonMask.System);
+                case ButtonTypes.TouchpadTwo:
+                    return (VRTK_DeviceFinder.GetCurrentControllerType() == ControllerType.SteamVR_WindowsMRController ? CheckAxisTouch(index, pressType, EVRButtonId.k_EButton_Axis2) : false);
             }
             return false;
         }
@@ -730,6 +729,49 @@ namespace VRTK
                     return device.GetTouchUp(button);
             }
 
+            return false;
+        }
+
+        protected virtual bool CheckAxisTouch(uint index, ButtonPressTypes type, EVRButtonId axisId)
+        {
+            if (index >= OpenVR.k_unTrackedDeviceIndexInvalid)
+            {
+                return false;
+            }
+            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)index);
+            Vector2 axisValue = device.GetAxis(axisId);
+            bool currentAxisPressState;
+            if (!axisTouchStates.TryGetValue(axisId, out currentAxisPressState))
+            {
+                axisTouchStates.Add(axisId, false);
+                currentAxisPressState = false;
+            }
+
+            float axisFidelity;
+            if (!axisTouchFidelity.TryGetValue(axisId, out axisFidelity))
+            {
+                axisFidelity = 0f;
+            }
+
+            switch (type)
+            {
+                case ButtonPressTypes.Touch:
+                    return (!VRTK_SharedMethods.Vector3ShallowCompare(axisValue, Vector2.zero, axisFidelity));
+                case ButtonPressTypes.TouchDown:
+                    if (!currentAxisPressState && !VRTK_SharedMethods.Vector3ShallowCompare(axisValue, Vector2.zero, axisFidelity))
+                    {
+                        axisTouchStates[axisId] = true;
+                        return true;
+                    }
+                    return false;
+                case ButtonPressTypes.TouchUp:
+                    if (currentAxisPressState && VRTK_SharedMethods.Vector3ShallowCompare(axisValue, Vector2.zero, axisFidelity))
+                    {
+                        axisTouchStates[axisId] = false;
+                        return true;
+                    }
+                    return false;
+            }
             return false;
         }
 
