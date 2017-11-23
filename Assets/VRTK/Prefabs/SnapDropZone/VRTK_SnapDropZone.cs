@@ -284,7 +284,7 @@ namespace VRTK
             List<GameObject> returnList = new List<GameObject>();
             for (int i = 0; i < currentValidSnapInteractableObjects.Count; i++)
             {
-                returnList.Add(currentValidSnapInteractableObjects[i].gameObject);
+                VRTK_SharedMethods.AddListValue(returnList, currentValidSnapInteractableObjects[i].gameObject);
             }
             return returnList;
         }
@@ -847,11 +847,10 @@ namespace VRTK
         {
             if (givenObject != null)
             {
-                if (!currentValidSnapInteractableObjects.Contains(givenObject))
+                if (VRTK_SharedMethods.AddListValue(currentValidSnapInteractableObjects, givenObject, true))
                 {
                     givenObject.InteractableObjectGrabbed += InteractableObjectGrabbed;
                     givenObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
-                    currentValidSnapInteractableObjects.Add(givenObject);
                 }
             }
         }
@@ -860,11 +859,10 @@ namespace VRTK
         {
             if (givenObject != null)
             {
-                if (currentValidSnapInteractableObjects.Contains(givenObject))
+                if (currentValidSnapInteractableObjects.Remove(givenObject))
                 {
                     givenObject.InteractableObjectGrabbed -= InteractableObjectGrabbed;
                     givenObject.InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
-                    currentValidSnapInteractableObjects.Remove(givenObject);
                 }
             }
         }

@@ -473,7 +473,7 @@ namespace VRTK
         /// <returns>whether or not the TouchModifier is active</returns>
         protected virtual bool IsTouchModifierPressed()
         {
-            return Input.GetKey(keyMappings["TouchModifier"]);
+            return Input.GetKey(VRTK_SharedMethods.GetDictionaryValue(keyMappings, "TouchModifier", KeyCode.None));
         }
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace VRTK
         /// <returns>whether or not the HairTouchModifier is active</returns>
         protected virtual bool IsHairTouchModifierPressed()
         {
-            return Input.GetKey(keyMappings["HairTouchModifier"]);
+            return Input.GetKey(VRTK_SharedMethods.GetDictionaryValue(keyMappings, "HairTouchModifier", KeyCode.None));
         }
 
         /// <summary>
@@ -518,29 +518,30 @@ namespace VRTK
         /// <returns>Returns true if the button state matches the given data.</returns>
         protected virtual bool GetControllerButtonState(uint index, string keyMapping, ButtonPressTypes pressType)
         {
+            KeyCode buttonCode = VRTK_SharedMethods.GetDictionaryValue(keyMappings, keyMapping, KeyCode.None);
             if (pressType == ButtonPressTypes.Touch)
             {
-                return IsButtonPressed(index, ButtonPressTypes.Press, keyMappings[keyMapping]);
+                return IsButtonPressed(index, ButtonPressTypes.Press, buttonCode);
             }
             else if (pressType == ButtonPressTypes.TouchDown)
             {
-                return IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings[keyMapping]);
+                return IsButtonPressed(index, ButtonPressTypes.PressDown, buttonCode);
             }
             else if (pressType == ButtonPressTypes.TouchUp)
             {
-                return IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings[keyMapping]);
+                return IsButtonPressed(index, ButtonPressTypes.PressUp, buttonCode);
             }
             else if (pressType == ButtonPressTypes.Press)
             {
-                return !IsButtonPressIgnored() && IsButtonPressed(index, ButtonPressTypes.Press, keyMappings[keyMapping]);
+                return !IsButtonPressIgnored() && IsButtonPressed(index, ButtonPressTypes.Press, buttonCode);
             }
             else if (pressType == ButtonPressTypes.PressDown)
             {
-                return !IsButtonPressIgnored() && IsButtonPressed(index, ButtonPressTypes.PressDown, keyMappings[keyMapping]);
+                return !IsButtonPressIgnored() && IsButtonPressed(index, ButtonPressTypes.PressDown, buttonCode);
             }
             else if (pressType == ButtonPressTypes.PressUp)
             {
-                return !IsButtonPressIgnored() && IsButtonPressed(index, ButtonPressTypes.PressUp, keyMappings[keyMapping]);
+                return !IsButtonPressIgnored() && IsButtonPressed(index, ButtonPressTypes.PressUp, buttonCode);
             }
             return false;
         }

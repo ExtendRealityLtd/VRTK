@@ -32,7 +32,7 @@ namespace VRTK.Highlighters
 
         protected Dictionary<string, Material[]> originalSharedRendererMaterials = new Dictionary<string, Material[]>();
         protected Dictionary<string, Material[]> originalRendererMaterials = new Dictionary<string, Material[]>();
-        protected Dictionary<string, Coroutine> faderRoutines;
+        protected Dictionary<string, Coroutine> faderRoutines = new Dictionary<string, Coroutine>();
         protected bool resetMainTexture = false;
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace VRTK.Highlighters
         public override void Initialise(Color? color = null, GameObject affectObject = null, Dictionary<string, object> options = null)
         {
             objectToAffect = (affectObject != null ? affectObject : gameObject);
-            originalSharedRendererMaterials = new Dictionary<string, Material[]>();
-            originalRendererMaterials = new Dictionary<string, Material[]>();
-            faderRoutines = new Dictionary<string, Coroutine>();
+            originalSharedRendererMaterials.Clear();
+            originalRendererMaterials.Clear();
+            faderRoutines.Clear();
             resetMainTexture = GetOption<bool>(options, "resetMainTexture");
             ResetHighlighter();
         }
@@ -80,7 +80,7 @@ namespace VRTK.Highlighters
         /// <param name="duration">Not used.</param>
         public override void Unhighlight(Color? color = null, float duration = 0f)
         {
-            if (originalRendererMaterials == null || objectToAffect == null)
+            if (objectToAffect == null)
             {
                 return;
             }
@@ -99,13 +99,20 @@ namespace VRTK.Highlighters
             {
                 Renderer renderer = renderers[i];
                 string objectReference = renderer.gameObject.GetInstanceID().ToString();
-                if (!originalRendererMaterials.ContainsKey(objectReference))
+                Material[] storedMaterials = VRTK_SharedMethods.GetDictionaryValue(originalRendererMaterials, objectReference);
+                if (storedMaterials == null)
                 {
                     continue;
                 }
 
-                renderer.materials = originalRendererMaterials[objectReference];
-                renderer.sharedMaterials = originalSharedRendererMaterials[objectReference];
+                Material[] storedSharedMaterials = VRTK_SharedMethods.GetDictionaryValue(originalSharedRendererMaterials, objectReference);
+                if (storedSharedMaterials == null)
+                {
+                    continue;
+                }
+
+                renderer.materials = storedMaterials;
+                renderer.sharedMaterials = storedSharedMaterials;
             }
         }
 
@@ -118,9 +125,9 @@ namespace VRTK.Highlighters
             {
                 Renderer renderer = renderers[i];
                 string objectReference = renderer.gameObject.GetInstanceID().ToString();
-                originalSharedRendererMaterials[objectReference] = renderer.sharedMaterials;
-                originalRendererMaterials[objectReference] = renderer.materials;
-                renderer.sharedMaterials = originalSharedRendererMaterials[objectReference];
+                VRTK_SharedMethods.AddDictionaryValue(originalSharedRendererMaterials, objectReference, renderer.sharedMaterials, true);
+                VRTK_SharedMethods.AddDictionaryValue(originalRendererMaterials, objectReference, renderer.materials, true);
+                renderer.sharedMaterials = VRTK_SharedMethods.GetDictionaryValue(originalSharedRendererMaterials, objectReference);
             }
         }
 
@@ -142,10 +149,10 @@ namespace VRTK.Highlighters
                     }
 
                     string faderRoutineID = material.GetInstanceID().ToString();
-
-                    if (faderRoutines.ContainsKey(faderRoutineID) && faderRoutines[faderRoutineID] != null)
+                    Coroutine existingFaderRoutine = VRTK_SharedMethods.GetDictionaryValue(faderRoutines, faderRoutineID);
+                    if (existingFaderRoutine != null)
                     {
-                        StopCoroutine(faderRoutines[faderRoutineID]);
+                        StopCoroutine(existingFaderRoutine);
                         faderRoutines.Remove(faderRoutineID);
                     }
 
@@ -160,7 +167,7 @@ namespace VRTK.Highlighters
                     {
                         if (duration > 0f)
                         {
-                            faderRoutines[faderRoutineID] = StartCoroutine(CycleColor(material, material.color, color, duration));
+                            VRTK_SharedMethods.AddDictionaryValue(faderRoutines, faderRoutineID, StartCoroutine(CycleColor(material, material.color, color, duration)), true);
                         }
                         else
                         {

@@ -292,10 +292,11 @@ namespace VRTK
         }
 
         protected Rigidbody interactableRigidbody;
-        protected List<GameObject> nearTouchingObjects = new List<GameObject>();
-        protected List<GameObject> touchingObjects = new List<GameObject>();
+        protected HashSet<GameObject> currentIgnoredColliders = new HashSet<GameObject>();
+        protected HashSet<GameObject> hoveredSnapObjects = new HashSet<GameObject>();
+        protected HashSet<GameObject> nearTouchingObjects = new HashSet<GameObject>();
+        protected HashSet<GameObject> touchingObjects = new HashSet<GameObject>();
         protected List<GameObject> grabbingObjects = new List<GameObject>();
-        protected List<GameObject> hoveredSnapObjects = new List<GameObject>();
         protected VRTK_InteractUse usingObject = null;
         protected Transform trackPoint;
         protected bool customTrackPoint = false;
@@ -311,7 +312,6 @@ namespace VRTK
         protected bool snappedInSnapDropZone = false;
         protected VRTK_SnapDropZone storedSnapDropZone;
         protected Vector3 previousLocalScale = Vector3.zero;
-        protected List<GameObject> currentIgnoredColliders = new List<GameObject>();
         protected bool startDisabled = false;
         protected VRTK_BaseHighlighter baseHighlighter;
 
@@ -489,10 +489,9 @@ namespace VRTK
             GameObject currentNearTouchingGameObject = (currentNearTouchingObject != null ? currentNearTouchingObject.gameObject : null);
             if (currentNearTouchingGameObject != null)
             {
-                if (!nearTouchingObjects.Contains(currentNearTouchingGameObject))
+                if (nearTouchingObjects.Add(currentNearTouchingGameObject))
                 {
                     ToggleEnableState(true);
-                    nearTouchingObjects.Add(currentNearTouchingGameObject);
                     OnInteractableObjectNearTouched(SetInteractableObjectEvent(currentNearTouchingGameObject));
                 }
             }
@@ -505,10 +504,9 @@ namespace VRTK
         public virtual void StopNearTouching(VRTK_InteractNearTouch previousNearTouchingObject = null)
         {
             GameObject previousNearTouchingGameObject = (previousNearTouchingObject != null ? previousNearTouchingObject.gameObject : null);
-            if (previousNearTouchingGameObject != null && nearTouchingObjects.Contains(previousNearTouchingGameObject))
+            if (previousNearTouchingGameObject != null && nearTouchingObjects.Remove(previousNearTouchingGameObject))
             {
                 OnInteractableObjectNearUntouched(SetInteractableObjectEvent(previousNearTouchingGameObject));
-                nearTouchingObjects.Remove(previousNearTouchingGameObject);
             }
         }
 
@@ -522,10 +520,9 @@ namespace VRTK
             if (currentTouchingGameObject != null)
             {
                 IgnoreColliders(currentTouchingGameObject);
-                if (!touchingObjects.Contains(currentTouchingGameObject))
+                if (touchingObjects.Add(currentTouchingGameObject))
                 {
                     ToggleEnableState(true);
-                    touchingObjects.Add(currentTouchingGameObject);
                     OnInteractableObjectTouched(SetInteractableObjectEvent(currentTouchingGameObject));
                 }
             }
@@ -538,11 +535,10 @@ namespace VRTK
         public virtual void StopTouching(VRTK_InteractTouch previousTouchingObject = null)
         {
             GameObject previousTouchingGameObject = (previousTouchingObject != null ? previousTouchingObject.gameObject : null);
-            if (previousTouchingGameObject != null && touchingObjects.Contains(previousTouchingGameObject))
+            if (previousTouchingGameObject != null && touchingObjects.Remove(previousTouchingGameObject))
             {
                 ResetUseState(previousTouchingGameObject);
                 OnInteractableObjectUntouched(SetInteractableObjectEvent(previousTouchingGameObject));
-                touchingObjects.Remove(previousTouchingGameObject);
             }
         }
 
@@ -729,7 +725,7 @@ namespace VRTK
         /// <returns>A list of GameObject of that are currently nearly touching the current Interactable Object.</returns>
         public virtual List<GameObject> GetNearTouchingObjects()
         {
-            return nearTouchingObjects;
+            return new List<GameObject>(nearTouchingObjects);
         }
 
         /// <summary>
@@ -738,7 +734,7 @@ namespace VRTK
         /// <returns>A list of GameObject of that are currently touching the current Interactable Object.</returns>
         public virtual List<GameObject> GetTouchingObjects()
         {
-            return touchingObjects;
+            return new List<GameObject>(touchingObjects);
         }
 
         /// <summary>
@@ -895,17 +891,15 @@ namespace VRTK
         {
             if (state)
             {
-                if (!hoveredSnapObjects.Contains(snapDropZone.gameObject))
+                if (hoveredSnapObjects.Add(snapDropZone.gameObject))
                 {
-                    hoveredSnapObjects.Add(snapDropZone.gameObject);
                     OnInteractableObjectEnteredSnapDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
                 }
             }
             else
             {
-                if (hoveredSnapObjects.Contains(snapDropZone.gameObject))
+                if (hoveredSnapObjects.Remove(snapDropZone.gameObject))
                 {
-                    hoveredSnapObjects.Remove(snapDropZone.gameObject);
                     OnInteractableObjectExitedSnapDropZone(SetInteractableObjectEvent(snapDropZone.gameObject));
                 }
             }
@@ -972,11 +966,11 @@ namespace VRTK
         public virtual void ResetIgnoredColliders()
         {
             //Go through all the existing set up ignored colliders and reset their collision state
-            for (int x = 0; x < currentIgnoredColliders.Count; x++)
+            foreach (GameObject currentIgnoredCollider in currentIgnoredColliders)
             {
-                if (currentIgnoredColliders[x] != null)
+                if (currentIgnoredCollider != null)
                 {
-                    Collider[] touchingColliders = currentIgnoredColliders[x].GetComponentsInChildren<Collider>();
+                    Collider[] touchingColliders = currentIgnoredCollider.GetComponentsInChildren<Collider>();
                     if (ignoredColliders != null)
                     {
                         for (int i = 0; i < ignoredColliders.Length; i++)
@@ -1241,7 +1235,7 @@ namespace VRTK
             }
             ForceReleaseGrab();
             RemoveTrackPoint();
-            grabbingObjects.Add(currentGrabbingObject);
+            VRTK_SharedMethods.AddListValue(grabbingObjects, currentGrabbingObject, true);
             SetTrackPoint(currentGrabbingObject);
             if (!IsSwappable())
             {
@@ -1252,9 +1246,8 @@ namespace VRTK
 
         protected virtual void SecondaryControllerGrab(GameObject currentGrabbingObject)
         {
-            if (!grabbingObjects.Contains(currentGrabbingObject))
+            if (VRTK_SharedMethods.AddListValue(grabbingObjects, currentGrabbingObject, true))
             {
-                grabbingObjects.Add(currentGrabbingObject);
                 secondaryControllerAttachPoint = CreateAttachPoint(currentGrabbingObject.name, "Secondary", currentGrabbingObject.transform);
 
                 if (secondaryGrabActionScript != null)
@@ -1280,9 +1273,8 @@ namespace VRTK
 
         protected virtual void SecondaryControllerUngrab(GameObject previousGrabbingObject)
         {
-            if (grabbingObjects.Contains(previousGrabbingObject))
+            if (grabbingObjects.Remove(previousGrabbingObject))
             {
-                grabbingObjects.Remove(previousGrabbingObject);
                 Destroy(secondaryControllerAttachPoint.gameObject);
                 secondaryControllerAttachPoint = null;
                 if (secondaryGrabActionScript != null)
@@ -1415,10 +1407,8 @@ namespace VRTK
 
         protected virtual void StopTouchingInteractions()
         {
-            for (int i = 0; i < touchingObjects.Count; i++)
+            foreach (GameObject touchingObject in touchingObjects)
             {
-                GameObject touchingObject = touchingObjects[i];
-
                 if (touchingObject.activeInHierarchy || forceDisabled)
                 {
                     touchingObject.GetComponentInChildren<VRTK_InteractTouch>().ForceStopTouching();

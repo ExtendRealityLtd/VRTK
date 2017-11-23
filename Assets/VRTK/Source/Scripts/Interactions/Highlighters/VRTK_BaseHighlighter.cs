@@ -57,11 +57,7 @@ namespace VRTK.Highlighters
         /// <returns>The value in the options at the given key returned in the provided system type.</returns>
         public virtual T GetOption<T>(Dictionary<string, object> options, string key)
         {
-            if (options != null && options.ContainsKey(key) && options[key] != null)
-            {
-                return (T)options[key];
-            }
-            return default(T);
+            return (T)VRTK_SharedMethods.GetDictionaryValue(options, key, default(T));
         }
 
         /// <summary>

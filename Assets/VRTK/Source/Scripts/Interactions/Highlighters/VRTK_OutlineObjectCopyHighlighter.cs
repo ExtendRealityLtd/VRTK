@@ -1,9 +1,10 @@
-// Outline Object Copy|Highlighters|40030
+﻿// Outline Object Copy|Highlighters|40030
 namespace VRTK.Highlighters
 {
     using UnityEngine;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Creates a mesh copy and applies an outline shader which is toggled on and off when highlighting the object.
@@ -262,8 +263,7 @@ namespace VRTK.Highlighters
             {
                 if (enableSubmeshHighlight)
                 {
-                    List<CombineInstance> combine = new List<CombineInstance>();
-
+                    HashSet<CombineInstance> combine = new HashSet<CombineInstance>();
                     for (int i = 0; i < copyMesh.mesh.subMeshCount; i++)
                     {
                         CombineInstance ci = new CombineInstance();

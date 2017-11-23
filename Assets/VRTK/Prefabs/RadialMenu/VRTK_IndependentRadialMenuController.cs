@@ -37,8 +37,8 @@ namespace VRTK
         [Tooltip("The object the RadialMenu should face towards. If left empty, it will automatically try to find the Headset Camera.")]
         public GameObject rotateTowards;
 
-        protected List<GameObject> interactingObjects; // Objects (controllers) that are either colliding with the menu or clicking the menu
-        protected List<GameObject> collidingObjects; // Just objects that are currently colliding with the menu or its parent
+        protected List<GameObject> interactingObjects = new List<GameObject>(); // Objects (controllers) that are either colliding with the menu or clicking the menu
+        protected HashSet<GameObject> collidingObjects = new HashSet<GameObject>(); // Just objects that are currently colliding with the menu or its parent
         protected SphereCollider menuCollider;
         protected Coroutine delayedSetColliderEnabledRoutine;
         protected Vector3 desiredColliderCenter;
@@ -87,8 +87,8 @@ namespace VRTK
             }
 
             // Reset variables
-            interactingObjects = new List<GameObject>();
-            collidingObjects = new List<GameObject>();
+            interactingObjects.Clear();
+            collidingObjects.Clear();
             if (delayedSetColliderEnabledRoutine != null)
             {
                 StopCoroutine(delayedSetColliderEnabledRoutine);
@@ -262,8 +262,7 @@ namespace VRTK
         {
             DoShowMenu(CalculateAngle(e.interactingObject), sender);
             collidingObjects.Add(e.interactingObject);
-
-            interactingObjects.Add(e.interactingObject);
+            VRTK_SharedMethods.AddListValue(interactingObjects, e.interactingObject, true);
             if (addMenuCollider && menuCollider != null)
             {
                 SetColliderState(true, e);
@@ -280,7 +279,6 @@ namespace VRTK
             if (((!menu.executeOnUnclick || !isClicked) && menu.hideOnRelease) || (Object)sender == this)
             {
                 DoHideMenu(hideAfterExecution, sender);
-
                 interactingObjects.Remove(e.interactingObject);
                 if (addMenuCollider && menuCollider != null)
                 {

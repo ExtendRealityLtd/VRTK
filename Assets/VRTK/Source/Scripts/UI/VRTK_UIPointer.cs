@@ -199,12 +199,7 @@ namespace VRTK
         /// <returns>The maximum length the UI Pointer will cast to.</returns>
         public static float GetPointerLength(int pointerId)
         {
-            float maxLength;
-            if (!pointerLengths.TryGetValue(pointerId, out maxLength))
-            {
-                maxLength = float.MaxValue;
-            }
-            return maxLength;
+            return VRTK_SharedMethods.GetDictionaryValue(pointerLengths, pointerId, float.MaxValue);
         }
 
         public virtual void OnUIPointerElementEnter(UIPointerEventArgs e)
@@ -489,7 +484,7 @@ namespace VRTK
             if (controllerEvents != null)
             {
                 pointerEventData.pointerId = (int)VRTK_ControllerReference.GetRealIndex(GetControllerReference());
-                pointerLengths[pointerEventData.pointerId] = maximumLength;
+                VRTK_SharedMethods.AddDictionaryValue(pointerLengths, pointerEventData.pointerId, maximumLength, true);
             }
             if (controllerRenderModel == null && VRTK_ControllerReference.IsValid(GetControllerReference()))
             {

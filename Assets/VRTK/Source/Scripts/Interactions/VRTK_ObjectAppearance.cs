@@ -157,11 +157,7 @@ namespace VRTK
                 else
                 {
                     CancelSetOpacityCoroutine(model);
-                    Coroutine setOpacityCoroutine = StartCoroutine(TransitionRendererOpacity(model, GetInitialAlpha(model), alpha, transitionDuration));
-                    if (!setOpacityCoroutines.ContainsKey(model))
-                    {
-                        setOpacityCoroutines.Add(model, setOpacityCoroutine);
-                    }
+                    VRTK_SharedMethods.AddDictionaryValue(setOpacityCoroutines, model, StartCoroutine(TransitionRendererOpacity(model, GetInitialAlpha(model), alpha, transitionDuration)));
                 }
             }
         }
@@ -316,9 +312,10 @@ namespace VRTK
 
         protected virtual void CancelSetOpacityCoroutine(GameObject model)
         {
-            if (setOpacityCoroutines.ContainsKey(model) && setOpacityCoroutines[model] != null)
+            Coroutine currentOpacityRoutine = VRTK_SharedMethods.GetDictionaryValue(setOpacityCoroutines, model);
+            if (currentOpacityRoutine != null)
             {
-                StopCoroutine(setOpacityCoroutines[model]);
+                StopCoroutine(currentOpacityRoutine);
             }
         }
     }
