@@ -66,7 +66,7 @@ namespace VRTK
         public Transform customOrigin;
 
         [System.Obsolete("`VRTK_Pointer.controller` has been replaced with `VRTK_Pointer.controllerEvents`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
+        [ObsoleteInspector]
         public VRTK_ControllerEvents controller;
 
         /// <summary>

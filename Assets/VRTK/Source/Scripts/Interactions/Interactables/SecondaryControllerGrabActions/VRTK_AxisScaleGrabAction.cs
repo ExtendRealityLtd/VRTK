@@ -22,17 +22,17 @@ namespace VRTK.SecondaryControllerGrabActions
         public float ungrabDistance = 1f;
         [Tooltip("Locks the specified checked axes so they won't be scaled")]
         public Vector3State lockAxis = Vector3State.False;
-        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockXAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
-        public bool lockXAxis = false;
-        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockYAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
-        public bool lockYAxis = false;
-        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockZAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
-        public bool lockZAxis = false;
         [Tooltip("If checked all the axes will be scaled together (unless locked)")]
         public bool uniformScaling = false;
+        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockXAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
+        public bool lockXAxis = false;
+        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockYAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
+        public bool lockYAxis = false;
+        [System.Obsolete("`VRTK_AxisScaleGrabAction.lockZAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
+        public bool lockZAxis = false;
 
         protected Vector3 initialScale;
         protected float initalLength;

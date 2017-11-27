@@ -290,8 +290,6 @@ Adds a collection of Object Tooltips to the Controller providing information to 
  * **Controller Events:** The controller to read the controller events from. If this is blank then it will attempt to get a controller events script from the same or parent GameObject.
  * **Headset Controller Aware:** The headset controller aware script to use to see if the headset is looking at the controller. If this is blank then it will attempt to get a controller events script from the same or parent GameObject.
  * **Hide When Not In View:** If this is checked then the tooltips will be hidden when the headset is not looking at the controller.
- * **Retry Init Max Tries:** The total number of initialisation attempts to make when waiting for the button transforms to initialise.
- * **Retry Init Counter:** The amount of seconds to wait before re-attempting to initialise the controller tooltips if the button transforms have not been initialised yet.
 
 ### Class Events
 
@@ -4254,7 +4252,6 @@ Determines if the GameObject can be interacted with.
 
  * **Disable When Idle:** If this is checked then the Interactable Object component will be disabled when the Interactable Object is not being interacted with.
  * **Allowed Near Touch Controllers:** Determines which controller can initiate a near touch action.
- * **Touch Highlight Color:** The Color to highlight the object when it is touched.
  * **Allowed Touch Controllers:** Determines which controller can initiate a touch action.
  * **Ignored Colliders:** An array of colliders on the GameObject to ignore when being touched.
  * **Is Grabbable:** Determines if the Interactable Object can be grabbed.
