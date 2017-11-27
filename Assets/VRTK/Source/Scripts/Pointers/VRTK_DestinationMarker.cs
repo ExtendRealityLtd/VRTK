@@ -2,7 +2,6 @@
 namespace VRTK
 {
     using UnityEngine;
-    using System;
 
     /// <summary>
     /// Event Payload
@@ -66,7 +65,7 @@ namespace VRTK
         /// </summary>
         public event DestinationMarkerEventHandler DestinationMarkerSet;
 
-        [Obsolete("`VRTK_DestinationMarker.navMeshCheckDistance` is no longer used. This parameter will be removed in a future version of VRTK.")]
+        [System.Obsolete("`VRTK_DestinationMarker.navMeshCheckDistance` is no longer used. This parameter will be removed in a future version of VRTK.")]
         protected float navMeshCheckDistance = 0f;
 
         protected VRTK_NavMeshData navmeshData;
@@ -117,7 +116,7 @@ namespace VRTK
         /// The SetNavMeshCheckDistance method sets the max distance the destination marker position can be from the edge of a nav mesh to be considered a valid destination.
         /// </summary>
         /// <param name="distance">The max distance the nav mesh can be from the sample point to be valid.</param>
-        [Obsolete("`DestinationMarker.SetNavMeshCheckDistance(distance)` has been replaced with the method `DestinationMarker.SetNavMeshCheckDistance(givenData)`. This method will be removed in a future version of VRTK.")]
+        [System.Obsolete("`DestinationMarker.SetNavMeshCheckDistance(distance)` has been replaced with the method `DestinationMarker.SetNavMeshCheckDistance(givenData)`. This method will be removed in a future version of VRTK.")]
         public virtual void SetNavMeshCheckDistance(float distance)
         {
             VRTK_NavMeshData givenData = gameObject.AddComponent<VRTK_NavMeshData>();

@@ -155,17 +155,16 @@ namespace VRTK
         [Tooltip("Determines which controller can initiate a near touch action.")]
         public AllowedController allowedNearTouchControllers = AllowedController.Both;
 
-        [System.Obsolete("`VRTK_InteractableObject.touchHighlightColor` has been replaced with `VRTK_InteractObjectHighlighter.touchHighlight`. This parameter will be removed in a future version of VRTK.")]
-        [Tooltip("The Color to highlight the object when it is touched.")]
-        [HideInInspector]
-        public Color touchHighlightColor = Color.clear;
-
         [Header("Touch Settings")]
 
         [Tooltip("Determines which controller can initiate a touch action.")]
         public AllowedController allowedTouchControllers = AllowedController.Both;
         [Tooltip("An array of colliders on the GameObject to ignore when being touched.")]
         public Collider[] ignoredColliders;
+
+        [System.Obsolete("`VRTK_InteractableObject.touchHighlightColor` has been replaced with `VRTK_InteractObjectHighlighter.touchHighlight`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
+        public Color touchHighlightColor = Color.clear;
 
         [Header("Grab Settings")]
 

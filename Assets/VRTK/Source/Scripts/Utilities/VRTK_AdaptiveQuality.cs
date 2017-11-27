@@ -112,11 +112,12 @@ namespace VRTK
         public Limits2D renderScaleLimits = new Limits2D(0.8f, 1.4f);
 
         [Obsolete("`VRTK_AdaptiveQuality.minimumRenderScale` has been replaced with the `VRTK_AdaptiveQuality.renderScaleLimits`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
+        [ObsoleteInspector]
         public float minimumRenderScale = 0.8f;
         [Obsolete("`VRTK_AdaptiveQuality.maximumRenderScale` has been replaced with the `VRTK_AdaptiveQuality.renderScaleLimits`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
+        [ObsoleteInspector]
         public float maximumRenderScale = 1.4f;
+
         [Tooltip("The maximum allowed render target dimension.\n\n"
                  + "This puts an upper limit on the size of the render target regardless of the maximum render scale.")]
         public int maximumRenderTargetDimension = 4096;

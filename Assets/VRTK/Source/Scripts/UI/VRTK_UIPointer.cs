@@ -114,10 +114,10 @@ namespace VRTK
         public Transform customOrigin = null;
 
         [System.Obsolete("`VRTK_UIPointer.controller` has been replaced with `VRTK_UIPointer.controllerEvents`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
+        [ObsoleteInspector]
         public VRTK_ControllerEvents controller;
         [System.Obsolete("`VRTK_UIPointer.pointerOriginTransform` has been replaced with `VRTK_UIPointer.customOrigin`. This parameter will be removed in a future version of VRTK.")]
-        [HideInInspector]
+        [ObsoleteInspector]
         public Transform pointerOriginTransform = null;
 
         [HideInInspector]
