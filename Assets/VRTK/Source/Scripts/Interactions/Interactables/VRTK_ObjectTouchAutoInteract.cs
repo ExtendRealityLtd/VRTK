@@ -63,13 +63,13 @@ namespace VRTK
 
         protected float regrabTimer;
         protected float reuseTimer;
-        protected List<GameObject> touchers;
+        protected HashSet<GameObject> touchers = new HashSet<GameObject>();
 
         protected virtual void OnEnable()
         {
             regrabTimer = 0f;
             reuseTimer = 0f;
-            touchers = new List<GameObject>();
+            touchers.Clear();
             EnableListeners();
         }
 
@@ -82,15 +82,15 @@ namespace VRTK
         {
             if (interactableObject != null && (continuousGrabCheck || continuousUseCheck))
             {
-                for (int i = 0; i < touchers.Count; i++)
+                foreach (GameObject toucher in touchers)
                 {
                     if (continuousGrabCheck)
                     {
-                        CheckGrab(touchers[i]);
+                        CheckGrab(toucher);
                     }
                     if (continuousUseCheck)
                     {
-                        CheckUse(touchers[i]);
+                        CheckUse(toucher);
                     }
                 }
             }
@@ -150,11 +150,11 @@ namespace VRTK
 
         protected virtual void ManageTouchers(GameObject interactingObject, bool add)
         {
-            if (add && !touchers.Contains(interactingObject))
+            if (add)
             {
                 touchers.Add(interactingObject);
             }
-            else if (!add && touchers.Contains(interactingObject))
+            else
             {
                 touchers.Remove(interactingObject);
             }

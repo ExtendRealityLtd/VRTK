@@ -211,7 +211,7 @@ namespace VRTK
         protected const string FOOT_COLLIDER_CONTAINER_NAME = "FootColliderContainer";
         protected bool enableBodyCollisionsStartingValue;
         protected float fallMinTime;
-        protected List<GameObject> ignoreCollisionsOnGameObjects = new List<GameObject>();
+        protected HashSet<GameObject> ignoreCollisionsOnGameObjects = new HashSet<GameObject>();
         protected Transform cachedGrabbedObjectTransform = null;
         protected VRTK_InteractableObject cachedGrabbedObject;
         protected LayerMask defaultIgnoreLayer = Physics.IgnoreRaycastLayer;
@@ -393,11 +393,11 @@ namespace VRTK
         public virtual void ResetIgnoredCollisions()
         {
             //Go through all the existing set up ignored colliders and reset their collision state
-            for (int i = 0; i < ignoreCollisionsOnGameObjects.Count; i++)
+            foreach (GameObject ignoreCollisionsOnGameObject in ignoreCollisionsOnGameObjects)
             {
-                if (ignoreCollisionsOnGameObjects[i] != null)
+                if (ignoreCollisionsOnGameObject != null)
                 {
-                    Collider[] objectColliders = ignoreCollisionsOnGameObjects[i].GetComponentsInChildren<Collider>();
+                    Collider[] objectColliders = ignoreCollisionsOnGameObject.GetComponentsInChildren<Collider>();
                     for (int j = 0; j < objectColliders.Length; j++)
                     {
                         ManagePhysicsCollider(objectColliders[j], false);
@@ -821,7 +821,7 @@ namespace VRTK
 
         protected virtual void UpdateStandingPosition(Vector2 currentHeadsetPosition)
         {
-            standingPositionHistory.Add(currentHeadsetPosition);
+            VRTK_SharedMethods.AddListValue(standingPositionHistory, currentHeadsetPosition);
             if (standingPositionHistory.Count > standingHistorySamples)
             {
                 if (!isLeaning && currentCollidingObject == null)

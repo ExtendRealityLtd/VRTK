@@ -41,10 +41,7 @@ namespace VRTK
 
         public virtual void OnControllerNearTouchInteractableObject(ObjectInteractEventArgs e)
         {
-            if (!nearTouchedObjects.Contains(e.target))
-            {
-                nearTouchedObjects.Add(e.target);
-            }
+            VRTK_SharedMethods.AddListValue(nearTouchedObjects, e.target, true);
 
             if (ControllerNearTouchInteractableObject != null)
             {
@@ -54,10 +51,7 @@ namespace VRTK
 
         public virtual void OnControllerNearUntouchInteractableObject(ObjectInteractEventArgs e)
         {
-            if (nearTouchedObjects.Contains(e.target))
-            {
-                nearTouchedObjects.Remove(e.target);
-            }
+            nearTouchedObjects.Remove(e.target);
 
             if (ControllerNearUntouchInteractableObject != null)
             {
@@ -238,19 +232,13 @@ namespace VRTK
         protected virtual void OnTriggerEnter(Collider collider)
         {
             StartNearTouch(collider);
-            if (!nearTouchedObjects.Contains(collider.gameObject))
-            {
-                nearTouchedObjects.Add(collider.gameObject);
-            }
+            VRTK_SharedMethods.AddListValue(nearTouchedObjects, collider.gameObject, true);
         }
 
         protected virtual void OnTriggerExit(Collider collider)
         {
             EndNearTouch(collider);
-            if (nearTouchedObjects.Contains(collider.gameObject))
-            {
-                nearTouchedObjects.Remove(collider.gameObject);
-            }
+            nearTouchedObjects.Remove(collider.gameObject);
         }
 
         protected virtual void OnEnable()

@@ -48,7 +48,7 @@
                 {
                     nearestRaycast = castResult;
                 }
-                resultAppendList.Add(castResult);
+                VRTK_SharedMethods.AddListValue(resultAppendList, castResult);
             }
 
             if (nearestRaycast.HasValue)
@@ -140,7 +140,7 @@
                         sortingLayer = canvas.sortingLayerID,
                         sortingOrder = canvas.sortingOrder,
                     };
-                    results.Add(result);
+                    VRTK_SharedMethods.AddListValue(results, result);
                 }
             }
 

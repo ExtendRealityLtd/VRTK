@@ -101,10 +101,7 @@ namespace VRTK
             float hapticPulseStrength = Mathf.Clamp(strength, 0f, 1f);
             SDK_ControllerHapticModifiers hapticModifiers = VRTK_SDK_Bridge.GetHapticModifiers();
             Coroutine hapticLoop = StartCoroutine(SimpleHapticPulseRoutine(controllerReference, duration * hapticModifiers.durationModifier, hapticPulseStrength, pulseInterval * hapticModifiers.intervalModifier));
-            if (!hapticLoopCoroutines.ContainsKey(controllerReference))
-            {
-                hapticLoopCoroutines.Add(controllerReference, hapticLoop);
-            }
+            VRTK_SharedMethods.AddDictionaryValue(hapticLoopCoroutines, controllerReference, hapticLoop);
         }
 
         protected virtual void InternalTriggerHapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)
@@ -114,18 +111,16 @@ namespace VRTK
             {
                 //If the SDK Bridge doesn't support audio clips then defer to a local version
                 Coroutine hapticLoop = StartCoroutine(AudioClipHapticsRoutine(controllerReference, clip));
-                if (!hapticLoopCoroutines.ContainsKey(controllerReference))
-                {
-                    hapticLoopCoroutines.Add(controllerReference, hapticLoop);
-                }
+                VRTK_SharedMethods.AddDictionaryValue(hapticLoopCoroutines, controllerReference, hapticLoop);
             }
         }
 
         protected virtual void InternalCancelHapticPulse(VRTK_ControllerReference controllerReference)
         {
-            if (hapticLoopCoroutines.ContainsKey(controllerReference) && hapticLoopCoroutines[controllerReference] != null)
+            Coroutine currentHapticLoopRoutine = VRTK_SharedMethods.GetDictionaryValue(hapticLoopCoroutines, controllerReference);
+            if (currentHapticLoopRoutine != null)
             {
-                StopCoroutine(hapticLoopCoroutines[controllerReference]);
+                StopCoroutine(currentHapticLoopRoutine);
                 hapticLoopCoroutines.Remove(controllerReference);
             }
         }

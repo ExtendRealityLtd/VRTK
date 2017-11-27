@@ -79,10 +79,7 @@ namespace VRTK
             }
             else
             {
-                if (!VRTK_ObjectCache.registeredTrackedColliderToInteractTouches.ContainsKey(interactTouch))
-                {
-                    VRTK_ObjectCache.registeredTrackedColliderToInteractTouches.Add(interactTouch, this);
-                }
+                VRTK_SharedMethods.AddDictionaryValue(VRTK_ObjectCache.registeredTrackedColliderToInteractTouches, interactTouch, this);
             }
             base.OnEnable();
         }

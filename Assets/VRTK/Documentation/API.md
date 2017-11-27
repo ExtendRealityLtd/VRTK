@@ -8472,32 +8472,32 @@ Holds all the info necessary to describe an SDK.
 
 ### Class Methods
 
-#### ActualType>/0
+#### Create<BaseType, FallbackType, ActualType>/0
 
   > `public static VRTK_SDKInfo[] Create<BaseType, FallbackType, ActualType>() where BaseType : SDK_Base where FallbackType : BaseType where ActualType : BaseType`
 
  * Type Params
-   * `FallbackType,` - The SDK base type. Must be a subclass of SDK_Base.
-   * `FallbackType,` - The SDK type to fall back on if problems occur. Must be a subclass of `BaseType`.
-   * `FallbackType,` - The SDK type to use. Must be a subclass of `BaseType`.
+   * `BaseType` - The SDK base type. Must be a subclass of SDK_Base.
+   * `FallbackType` - The SDK type to fall back on if problems occur. Must be a subclass of `BaseType`.
+   * `ActualType` - The SDK type to use. Must be a subclass of `BaseType`.
  * Parameters
    * _none_
  * Returns
-   * `FallbackType,` - Multiple newly created instances.
+   * `VRTK_SDKInfo[]` - Multiple newly created instances.
 
 Creates new SDK infos for a type that is known at compile time.
 
-#### FallbackType>/1
+#### Create<BaseType, FallbackType>/1
 
   > `public static VRTK_SDKInfo[] Create<BaseType, FallbackType>(Type actualType) where BaseType : SDK_Base where FallbackType : BaseType`
 
  * Type Params
-   * `Create<BaseType,` - The SDK base type. Must be a subclass of SDK_Base.
-   * `Create<BaseType,` - The SDK type to fall back on if problems occur. Must be a subclass of `BaseType.
+   * `BaseType` - The SDK base type. Must be a subclass of SDK_Base.
+   * `FallbackType` - The SDK type to fall back on if problems occur. Must be a subclass of `BaseType.
  * Parameters
    * `Type actualType` - The SDK type to use. Must be a subclass of `BaseType.
  * Returns
-   * `Create<BaseType,` - Multiple newly created instances.
+   * `VRTK_SDKInfo[]` - Multiple newly created instances.
 
 Creates new SDK infos for a type.
 
@@ -9006,7 +9006,7 @@ The Mod method is used to find the remainder of the sum a/b.
   > `public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component`
 
  * Type Params
-   * `GameObject` - The component type that needs to be on an ancestor of the wanted GameObject. Must be a subclass of `Component`.
+   * `T` - The component type that needs to be on an ancestor of the wanted GameObject. Must be a subclass of `Component`.
  * Parameters
    * `string gameObjectName` - The name of the wanted GameObject. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type `T`.
  * Returns
@@ -9019,7 +9019,7 @@ Finds the first GameObject with a given name and an ancestor that has a specific
   > `public static T[] FindEvenInactiveComponents<T>() where T : Component`
 
  * Type Params
-   * `T[]` - The component type to search for. Must be a subclass of `Component`.
+   * `T` - The component type to search for. Must be a subclass of `Component`.
  * Parameters
    * _none_
  * Returns
@@ -9173,6 +9173,73 @@ The NormalizeValue method takes a given value between a specified range and retu
    * `Vector3` - The direction Vector3 based on the given axis index.
 
 The AxisDirection method returns the relevant direction Vector3 based on the axis index in relation to x,y,z.
+
+#### AddListValue<TValue>/3
+
+  > `public static bool AddListValue<TValue>(List<TValue> list, TValue value, bool preventDuplicates = false)`
+
+ * Type Params
+   * `TValue` - The datatype for the list value.
+ * Parameters
+   * `List<TValue> list` - The list to retrieve the value from.
+   * `TValue value` - The value to attempt to add to the list.
+   * `bool preventDuplicates` - If this is `false` then the value provided will always be appended to the list. If this is `true` the value provided will only be added to the list if it doesn't already exist.
+ * Returns
+   * `bool` - Returns `true` if the given value was successfully added to the list. Returns `false` if the given value already existed in the list and `preventDuplicates` is `true`.
+
+The AddListValue method adds the given value to the given list. If `preventDuplicates` is `true` then the given value will only be added if it doesn't already exist in the given list.
+
+#### GetDictionaryValue<TKey, TValue>/4
+
+  > `public static TValue GetDictionaryValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default(TValue), bool setMissingKey = false)`
+
+ * Type Params
+   * `TKey` - The datatype for the dictionary key.
+   * `TValue` - The datatype for the dictionary value.
+ * Parameters
+   * `Dictionary<TKey, TValue> dictionary` - The dictionary to retrieve the value from.
+   * `TKey key` - The key to retrieve the value for.
+   * `TValue defaultValue` - The value to utilise when either setting the missing key (if `setMissingKey` is `true`) or the default value to return when no key is found (if `setMissingKey` is `false`).
+   * `bool setMissingKey` - If this is `true` and the given key is not present, then the dictionary value for the given key will be set to the `defaultValue` parameter. If this is `false` and the given key is not present then the `defaultValue` parameter will be returned as the value.
+ * Returns
+   * `TValue` - The found value for the given key in the given dictionary, or the default value if no key is found.
+
+The GetDictionaryValue method attempts to retrieve a value from a given dictionary for the given key. It removes the need for a double dictionary lookup to ensure the key is valid and has the option of also setting the missing key value to ensure the dictionary entry is valid.
+
+#### GetDictionaryValue<TKey, TValue>/5
+
+  > `public static TValue GetDictionaryValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, out bool keyExists, TValue defaultValue = default(TValue), bool setMissingKey = false)`
+
+ * Type Params
+   * `TKey` - The datatype for the dictionary key.
+   * `TValue` - The datatype for the dictionary value.
+ * Parameters
+   * `Dictionary<TKey, TValue> dictionary` - The dictionary to retrieve the value from.
+   * `TKey key` - The key to retrieve the value for.
+   * `out bool keyExists` - Sets the given parameter to `true` if the key exists in the given dictionary or sets to `false` if the key didn't existing in the given dictionary.
+   * `TValue defaultValue` - The value to utilise when either setting the missing key (if `setMissingKey` is `true`) or the default value to return when no key is found (if `setMissingKey` is `false`).
+   * `bool setMissingKey` - If this is `true` and the given key is not present, then the dictionary value for the given key will be set to the `defaultValue` parameter. If this is `false` and the given key is not present then the `defaultValue` parameter will be returned as the value.
+ * Returns
+   * `TValue` - The found value for the given key in the given dictionary, or the default value if no key is found.
+
+The GetDictionaryValue method attempts to retrieve a value from a given dictionary for the given key. It removes the need for a double dictionary lookup to ensure the key is valid and has the option of also setting the missing key value to ensure the dictionary entry is valid.
+
+#### AddDictionaryValue<TKey, TValue>/4
+
+  > `public static bool AddDictionaryValue<TKey, TValue>(Dictionary<TKey, TValue> dictionary, TKey key, TValue value, bool overwriteExisting = false)`
+
+ * Type Params
+   * `TKey` - The datatype for the dictionary key.
+   * `TValue` - The datatype for the dictionary value.
+ * Parameters
+   * `Dictionary<TKey, TValue> dictionary` - The dictionary to set the value for.
+   * `TKey key` - The key to set the value for.
+   * `TValue value` - The value to set at the given key in the given dictionary.
+   * `bool overwriteExisting` - If this is `true` then the value for the given key will always be set to the provided value. If this is `false` then the value for the given key will only be set if the given key is not found in the given dictionary.
+ * Returns
+   * `bool` - Returns `true` if the given value was successfully added to the dictionary at the given key. Returns `false` if the given key already existed in the dictionary and `overwriteExisting` is `false`.
+
+The AddDictionaryValue method attempts to add a value for the given key in the given dictionary if the key does not already exist. If `overwriteExisting` is `true` then it always set the value even if they key exists.
 
 #### GetTypeUnknownAssembly/1
 

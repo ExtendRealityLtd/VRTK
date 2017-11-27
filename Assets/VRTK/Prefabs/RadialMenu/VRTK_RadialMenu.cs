@@ -59,7 +59,7 @@ namespace VRTK
         }
 
         [Tooltip("An array of Buttons that define the interactive buttons required to be displayed as part of the radial menu.")]
-        public List<RadialMenuButton> buttons;
+        public List<RadialMenuButton> buttons = new List<RadialMenuButton>();
         [Tooltip("The base for each button in the menu, by default set to a dynamic circle arc that will fill up a portion of the menu.")]
         public GameObject buttonPrefab;
         [Tooltip("If checked, then the buttons will be auto generated on awake.")]
@@ -95,7 +95,7 @@ namespace VRTK
 
         //Has to be public to keep state from editor -> play mode?
         [Tooltip("The actual GameObjects that make up the radial menu.")]
-        public List<GameObject> menuButtons;
+        public List<GameObject> menuButtons = new List<GameObject>();
 
         protected int currentHover = -1;
         protected int currentPress = -1;
@@ -295,8 +295,7 @@ namespace VRTK
                         buttonIcon.transform.eulerAngles = GetComponentInParent<Canvas>().transform.eulerAngles;
                     }
                 }
-                menuButtons.Add(newButton);
-
+                VRTK_SharedMethods.AddListValue(menuButtons, newButton, true);
             }
         }
 
@@ -306,7 +305,7 @@ namespace VRTK
         /// <param name="newButton">The button to add.</param>
         public void AddButton(RadialMenuButton newButton)
         {
-            buttons.Add(newButton);
+            VRTK_SharedMethods.AddListValue(buttons, newButton, true);
             RegenerateButtons();
         }
 
@@ -437,15 +436,14 @@ namespace VRTK
 
         protected virtual void RemoveAllButtons()
         {
-            if (menuButtons == null)
+            if (menuButtons != null)
             {
-                menuButtons = new List<GameObject>();
+                for (int i = 0; i < menuButtons.Count; i++)
+                {
+                    DestroyImmediate(menuButtons[i]);
+                }
+                menuButtons.Clear();
             }
-            for (int i = 0; i < menuButtons.Count; i++)
-            {
-                DestroyImmediate(menuButtons[i]);
-            }
-            menuButtons = new List<GameObject>();
         }
     }
 }

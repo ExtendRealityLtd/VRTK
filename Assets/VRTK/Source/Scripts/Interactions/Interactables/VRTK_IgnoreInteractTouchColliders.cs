@@ -99,9 +99,10 @@ namespace VRTK
         protected virtual void ManageTouchCollision(VRTK_InteractTouch touchToIgnore, bool ignore)
         {
             Collider[] interactTouchColliders = touchToIgnore.ControllerColliders();
-            if (VRTK_ObjectCache.registeredTrackedColliderToInteractTouches.ContainsKey(touchToIgnore) && VRTK_ObjectCache.registeredTrackedColliderToInteractTouches[touchToIgnore] != null)
+            VRTK_ControllerTrackedCollider trackedColliderValue = VRTK_SharedMethods.GetDictionaryValue(VRTK_ObjectCache.registeredTrackedColliderToInteractTouches, touchToIgnore);
+            if (trackedColliderValue != null)
             {
-                Collider[] trackedColliders = VRTK_ObjectCache.registeredTrackedColliderToInteractTouches[touchToIgnore].TrackedColliders();
+                Collider[] trackedColliders = trackedColliderValue.TrackedColliders();
                 interactTouchColliders = interactTouchColliders.Concat(trackedColliders).ToArray();
             }
 

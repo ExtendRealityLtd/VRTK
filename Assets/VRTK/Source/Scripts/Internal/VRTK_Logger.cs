@@ -91,15 +91,16 @@
             CreateIfNotExists();
 
             string returnMessage = "";
-            if (commonMessages.ContainsKey(messageKey))
+            string outputMessage = VRTK_SharedMethods.GetDictionaryValue(commonMessages, messageKey);
+            if (outputMessage != null)
             {
-                if (parameters.Length != commonMessageParts[messageKey])
+                int outputMessageParts = VRTK_SharedMethods.GetDictionaryValue(commonMessageParts, messageKey);
+                if (parameters.Length != outputMessageParts)
                 {
-                    Array.Resize(ref parameters, commonMessageParts[messageKey]);
+                    Array.Resize(ref parameters, outputMessageParts);
                 }
-                returnMessage = string.Format(commonMessages[messageKey], parameters);
+                returnMessage = string.Format(outputMessage, parameters);
             }
-
             return returnMessage;
         }
 

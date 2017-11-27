@@ -4,6 +4,7 @@ namespace VRTK
     using UnityEngine;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Holds all the info necessary to describe an SDK.
@@ -63,7 +64,7 @@ namespace VRTK
                 return new VRTK_SDKInfo[0];
             }
 
-            List<VRTK_SDKInfo> sdkInfos = new List<VRTK_SDKInfo>(descriptions.Length);
+            HashSet<VRTK_SDKInfo> sdkInfos = new HashSet<VRTK_SDKInfo>();
             foreach (SDK_DescriptionAttribute description in descriptions)
             {
                 VRTK_SDKInfo sdkInfo = new VRTK_SDKInfo();

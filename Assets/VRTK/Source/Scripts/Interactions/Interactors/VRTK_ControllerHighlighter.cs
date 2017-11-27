@@ -71,8 +71,8 @@ namespace VRTK
         public VRTK_BaseHighlighter controllerHighlighter;
 
         protected bool controllerHighlighted = false;
-        protected Dictionary<string, Transform> cachedElements;
-        protected Dictionary<string, object> highlighterOptions;
+        protected Dictionary<string, Transform> cachedElements = new Dictionary<string, Transform>();
+        protected Dictionary<string, object> highlighterOptions = new Dictionary<string, object>();
         protected VRTK_BaseHighlighter baseHighlighter;
         protected bool autoHighlighter = false;
         protected bool trackedControllerReady = false;
@@ -106,7 +106,7 @@ namespace VRTK
         /// </summary>
         public virtual void ConfigureControllerPaths()
         {
-            cachedElements = new Dictionary<string, Transform>();
+            cachedElements.Clear();
             modelElementPaths.bodyModelPath = GetElementPath(modelElementPaths.bodyModelPath, SDK_BaseController.ControllerElements.Body);
             modelElementPaths.triggerModelPath = GetElementPath(modelElementPaths.triggerModelPath, SDK_BaseController.ControllerElements.Trigger);
             modelElementPaths.leftGripModelPath = GetElementPath(modelElementPaths.leftGripModelPath, SDK_BaseController.ControllerElements.GripLeft);
@@ -125,8 +125,8 @@ namespace VRTK
         {
             if (actualController != null)
             {
-                highlighterOptions = new Dictionary<string, object>();
-                highlighterOptions.Add("resetMainTexture", true);
+                highlighterOptions.Clear();
+                VRTK_SharedMethods.AddDictionaryValue(highlighterOptions, "resetMainTexture", true, true);
 
                 autoHighlighter = false;
                 baseHighlighter = GetValidHighlighter();
@@ -475,22 +475,18 @@ namespace VRTK
 
         protected virtual Transform GetElementTransform(string path)
         {
-            if (cachedElements == null || path == null)
+            if (path == null)
             {
                 return null;
             }
 
-            if (!cachedElements.ContainsKey(path) || cachedElements[path] == null)
+            if (actualModelContainer == null && VRTK_SharedMethods.GetDictionaryValue(cachedElements, path) == null)
             {
-                if (actualModelContainer == null)
-                {
-                    VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "Controller Model", "Controller SDK"));
-                    return null;
-                }
-
-                cachedElements[path] = actualModelContainer.transform.Find(path);
+                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "Controller Model", "Controller SDK"));
+                return null;
             }
-            return cachedElements[path];
+
+            return VRTK_SharedMethods.GetDictionaryValue(cachedElements, path, actualModelContainer.transform.Find(path), true);
         }
 
         protected virtual void ToggleHighlightAlias(bool state, string transformPath, Color? highlight, float duration = 0f)

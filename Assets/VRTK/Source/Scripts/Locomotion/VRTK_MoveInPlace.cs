@@ -129,9 +129,9 @@ namespace VRTK
         protected bool currentlyFalling;
 
         protected int averagePeriod;
-        protected List<Transform> trackedObjects;
-        protected Dictionary<Transform, List<float>> movementList;
-        protected Dictionary<Transform, float> previousYPositions;
+        protected List<Transform> trackedObjects = new List<Transform>();
+        protected Dictionary<Transform, List<float>> movementList = new Dictionary<Transform, List<float>>();
+        protected Dictionary<Transform, float> previousYPositions = new Dictionary<Transform, float>();
         protected Vector3 initialGaze;
         protected float currentSpeed;
         protected Vector3 currentDirection;
@@ -149,13 +149,13 @@ namespace VRTK
 
             if (controllerLeftHand != null && controllerRightHand != null && (controlOptions == ControlOptions.HeadsetAndControllers || controlOptions == ControlOptions.ControllersOnly))
             {
-                trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerLeftHand).transform);
-                trackedObjects.Add(VRTK_DeviceFinder.GetActualController(controllerRightHand).transform);
+                VRTK_SharedMethods.AddListValue(trackedObjects, VRTK_DeviceFinder.GetActualController(controllerLeftHand).transform, true);
+                VRTK_SharedMethods.AddListValue(trackedObjects, VRTK_DeviceFinder.GetActualController(controllerRightHand).transform, true);
             }
 
             if (headset != null && (controlOptions == ControlOptions.HeadsetAndControllers || controlOptions == ControlOptions.HeadsetOnly))
             {
-                trackedObjects.Add(headset.transform);
+                VRTK_SharedMethods.AddListValue(trackedObjects, headset.transform, true);
             }
         }
 
@@ -184,9 +184,9 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            trackedObjects = new List<Transform>();
-            movementList = new Dictionary<Transform, List<float>>();
-            previousYPositions = new Dictionary<Transform, float>();
+            trackedObjects.Clear();
+            movementList.Clear();
+            previousYPositions.Clear();
             initialGaze = Vector3.zero;
             currentDirection = Vector3.zero;
             previousDirection = Vector3.zero;
@@ -212,8 +212,8 @@ namespace VRTK
             for (int i = 0; i < trackedObjects.Count; i++)
             {
                 Transform trackedObj = trackedObjects[i];
-                movementList.Add(trackedObj, new List<float>());
-                previousYPositions.Add(trackedObj, trackedObj.transform.localPosition.y);
+                VRTK_SharedMethods.AddDictionaryValue(movementList, trackedObj, new List<float>(), true);
+                VRTK_SharedMethods.AddDictionaryValue(previousYPositions, trackedObj, trackedObj.transform.localPosition.y, true);
             }
             if (playArea == null)
             {
@@ -294,19 +294,20 @@ namespace VRTK
             {
                 Transform trackedObj = trackedObjects[i];
                 // Get the amount of Y movement that's occured since the last update.
-                float deltaYPostion = Mathf.Abs(previousYPositions[trackedObj] - trackedObj.transform.localPosition.y);
+                float previousYPosition = VRTK_SharedMethods.GetDictionaryValue(previousYPositions, trackedObj);
+                float deltaYPostion = Mathf.Abs(previousYPosition - trackedObj.transform.localPosition.y);
 
                 // Convenience code.
-                List<float> trackedObjList = movementList[trackedObj];
+                List<float> trackedObjList = VRTK_SharedMethods.GetDictionaryValue(movementList, trackedObj, new List<float>(), true);
 
                 // Cap off the speed.
                 if (deltaYPostion > sensitivity)
                 {
-                    trackedObjList.Add(sensitivity);
+                    VRTK_SharedMethods.AddListValue(trackedObjList, sensitivity);
                 }
                 else
                 {
-                    trackedObjList.Add(deltaYPostion);
+                    VRTK_SharedMethods.AddListValue(trackedObjList, deltaYPostion);
                 }
 
                 // Keep our tracking list at m_averagePeriod number of elements.
@@ -395,7 +396,7 @@ namespace VRTK
             {
                 Transform trackedObj = trackedObjects[i];
                 // Get delta postions and rotations
-                previousYPositions[trackedObj] = trackedObj.transform.localPosition.y;
+                VRTK_SharedMethods.AddDictionaryValue(previousYPositions, trackedObj, trackedObj.transform.localPosition.y, true);
             }
         }
 
@@ -447,7 +448,7 @@ namespace VRTK
             for (int i = 0; i < trackedObjects.Count; i++)
             {
                 Transform trackedObj = trackedObjects[i];
-                movementList[trackedObj].Clear();
+                VRTK_SharedMethods.GetDictionaryValue(movementList, trackedObj, new List<float>()).Clear();
             }
             initialGaze = Vector3.zero;
 

@@ -96,7 +96,7 @@ namespace VRTK
         protected Rigidbody savedAttachPoint;
         protected bool attachedToInteractorAttachPoint = false;
         protected float savedBeamLength = 0f;
-        protected List<GameObject> makeRendererVisible;
+        protected HashSet<GameObject> makeRendererVisible = new HashSet<GameObject>();
 
         protected bool tracerVisible;
         protected bool cursorVisible;
@@ -275,7 +275,7 @@ namespace VRTK
         protected virtual void OnEnable()
         {
             defaultMaterial = Resources.Load("WorldPointer") as Material;
-            makeRendererVisible = new List<GameObject>();
+            makeRendererVisible.Clear();
             CreatePointerOriginTransformFollow();
             CreatePointerObjects();
         }
@@ -439,17 +439,14 @@ namespace VRTK
 
         protected virtual void AddVisibleRenderer(GameObject givenObject)
         {
-            if (!makeRendererVisible.Contains(givenObject))
-            {
-                makeRendererVisible.Add(givenObject);
-            }
+            makeRendererVisible.Add(givenObject);
         }
 
         protected virtual void MakeRenderersVisible()
         {
-            for (int i = 0; i < makeRendererVisible.Count; i++)
+            foreach (GameObject currentRenderer in makeRendererVisible)
             {
-                ToggleRendererVisibility(makeRendererVisible[i], true);
+                ToggleRendererVisibility(currentRenderer, true);
             }
             makeRendererVisible.Clear();
         }
