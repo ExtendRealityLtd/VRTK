@@ -309,7 +309,7 @@ namespace VRTK
         /// Finds the first <see cref="GameObject"/> with a given name and an ancestor that has a specific component.
         /// </summary>
         /// <remarks>
-        /// This method returns active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// This method returns active as well as inactive <see cref="GameObject"/>s in all loaded scenes. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted <see cref="GameObject"/>. Must be a subclass of <see cref="Component"/>.</typeparam>
@@ -323,14 +323,7 @@ namespace VRTK
                 return foundComponent == null ? null : foundComponent.gameObject;
             }
 
-            Scene activeScene = SceneManager.GetActiveScene();
-            IEnumerable<GameObject> gameObjects = Resources.FindObjectsOfTypeAll<T>()
-                                                           .Select(component => component.gameObject)
-                                                           .Where(gameObject => gameObject.scene == activeScene);
-
-#if UNITY_EDITOR
-            gameObjects = gameObjects.Where(gameObject => !AssetDatabase.Contains(gameObject));
-#endif
+            var gameObjects = FindEvenInactiveComponents<T>().Select(component => component.gameObject);
 
             return gameObjects.Select(gameObject =>
                               {
@@ -344,41 +337,59 @@ namespace VRTK
         /// Finds all components of a given type.
         /// </summary>
         /// <remarks>
-        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in all loaded scenes. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
         /// <returns>All the found components. If no component is found an empty array is returned.</returns>
         public static T[] FindEvenInactiveComponents<T>() where T : Component
         {
-            Scene activeScene = SceneManager.GetActiveScene();
-            return Resources.FindObjectsOfTypeAll<T>()
-                            .Where(@object => @object.gameObject.scene == activeScene)
-#if UNITY_EDITOR
-                            .Where(@object => !AssetDatabase.Contains(@object))
-#endif
-                            .ToArray();
+            List<T> results = new List<T>();
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.isLoaded)
+                {
+                    var rootObjects = scene.GetRootGameObjects();
+                    for (int j = 0; j < rootObjects.Length; j++)
+                    {
+                        var go = rootObjects[j];
+                        results.AddRange(go.GetComponentsInChildren<T>(true));
+                    }
+                }
+            }
+            return results.ToArray();
         }
 
         /// <summary>
         /// Finds the first component of a given type.
         /// </summary>
         /// <remarks>
-        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in the scene. It doesn't return assets.
+        /// This method returns components from active as well as inactive <see cref="GameObject"/>s in all loaded scenes. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type to search for. Must be a subclass of <see cref="Component"/>.</typeparam>
         /// <returns>The found component. If no component is found <see langword="null"/> is returned.</returns>
         public static T FindEvenInactiveComponent<T>() where T : Component
         {
-            Scene activeScene = SceneManager.GetActiveScene();
-            return Resources.FindObjectsOfTypeAll<T>()
-                            .Where(@object => @object.gameObject.scene == activeScene)
-#if UNITY_EDITOR
-                            .FirstOrDefault(@object => !AssetDatabase.Contains(@object));
-#else
-                            .FirstOrDefault();
-#endif
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                if (scene.isLoaded)
+                {
+                    var rootObjects = scene.GetRootGameObjects();
+                    for (int j = 0; j < rootObjects.Length; j++)
+                    {
+                        var go = rootObjects[j];
+                        var component = go.GetComponentInChildren<T>(true);
+                        if(component)
+                        {
+                            return component;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>
