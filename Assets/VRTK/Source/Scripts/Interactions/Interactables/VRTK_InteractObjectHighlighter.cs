@@ -2,18 +2,23 @@
 namespace VRTK
 {
     using UnityEngine;
+    using Highlighters;
 
     /// <summary>
     /// Event Payload
     /// </summary>
+    /// <param name="interactionType">The type of interaction occuring on the object to monitor.</param>
+    /// <param name="highlightColor">The colour being provided to highlight the affected object with.</param>
+    /// <param name="affectingObject">The GameObject is initiating the highlight via an interaction.</param>
+    /// <param name="objectToMonitor">The Interactable Object that is being interacted with.</param>
     /// <param name="affectedObject">The GameObject that is being highlighted.</param>
-    /// /// <param name="affectingObject">The GameObject is initiating the highlight via an interaction.</param>
     public struct InteractObjectHighlighterEventArgs
     {
         public VRTK_InteractableObject.InteractionType interactionType;
         public Color highlightColor;
-        public VRTK_InteractableObject affectedObject;
         public GameObject affectingObject;
+        public VRTK_InteractableObject objectToMonitor;
+        public GameObject affectedObject;
     }
 
     /// <summary>
@@ -28,7 +33,10 @@ namespace VRTK
     /// </summary>
     /// <remarks>
     /// **Required Components:**
-    ///  * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+    ///  * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Monitor` parameter.
+    ///
+    /// **Optional Components:**
+    ///  * `VRTK_BaseHighlighter` - The highlighter to use when highligting the Object. If one is not already injected in the `Object Highlighter` parameter then the component on the same GameObject will be used.
     ///
     /// **Script Usage:**
     ///  * Place the `VRTK_InteractObjectHighlighter` script on either:
@@ -52,10 +60,21 @@ namespace VRTK
 
         [Header("Custom Settings")]
 
-        [Tooltip("The Interactable Object to affect the highlighter of. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.")]
+        [Tooltip("The Interactable Object to monitor the interactions on. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.")]
+        public VRTK_InteractableObject objectToMonitor;
+        [Tooltip("The GameObject to highlight.")]
+        public GameObject objectToHighlight;
+        [Tooltip("An optional Highlighter to use when highlighting the specified Object. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.")]
+        public VRTK_BaseHighlighter objectHighlighter;
+
+        [System.Obsolete("`objectToAffect` has been replaced with `objectToHighlight`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
         public VRTK_InteractableObject objectToAffect;
 
         protected Color currentColour = Color.clear;
+        protected VRTK_BaseHighlighter baseHighlighter;
+        protected bool createBaseHighlighter;
+        protected GameObject currentAffectingObject;
 
         /// <summary>
         /// Emitted when the object is highlighted
@@ -83,6 +102,45 @@ namespace VRTK
         }
 
         /// <summary>
+        /// The ResetHighlighter method is used to reset the currently attached highlighter.
+        /// </summary>
+        public virtual void ResetHighlighter()
+        {
+            if (baseHighlighter != null)
+            {
+                baseHighlighter.ResetHighlighter();
+            }
+        }
+
+        /// <summary>
+        /// The Highlight method turns on the highlighter with the given Color.
+        /// </summary>
+        /// <param name="highlightColor">The colour to apply to the highlighter.</param>
+        public virtual void Highlight(Color highlightColor)
+        {
+            InitialiseHighlighter(highlightColor);
+            if (baseHighlighter != null && highlightColor != Color.clear)
+            {
+                baseHighlighter.Highlight(highlightColor);
+            }
+            else
+            {
+                Unhighlight();
+            }
+        }
+
+        /// <summary>
+        /// The Unhighlight method turns off the highlighter.
+        /// </summary>
+        public virtual void Unhighlight()
+        {
+            if (baseHighlighter != null)
+            {
+                baseHighlighter.Unhighlight();
+            }
+        }
+
+        /// <summary>
         /// The GetCurrentHighlightColor returns the colour that the Interactable Object is currently being highlighted to.
         /// </summary>
         /// <returns>The Color that the Interactable Object is being highlighted to.</returns>
@@ -91,32 +149,51 @@ namespace VRTK
             return currentColour;
         }
 
+        public virtual GameObject GetAffectingObject()
+        {
+            return currentAffectingObject;
+        }
+
         protected virtual void OnEnable()
         {
+#pragma warning disable 0618
+            objectToMonitor = (objectToMonitor == null ? objectToAffect : objectToMonitor);
+            objectToHighlight = (objectToHighlight == null && objectToAffect != null ? objectToAffect.gameObject : objectToHighlight);
+#pragma warning restore 0618
+
+            objectToHighlight = (objectToHighlight != null ? objectToHighlight : gameObject);
+            if (GetValidHighlighter() != baseHighlighter)
+            {
+                baseHighlighter = null;
+            }
             EnableListeners();
         }
 
         protected virtual void OnDisable()
         {
+            if (createBaseHighlighter)
+            {
+                Destroy(baseHighlighter);
+            }
             DisableListeners();
         }
 
         protected override bool SetupListeners(bool throwError)
         {
-            objectToAffect = (objectToAffect != null ? objectToAffect : GetComponentInParent<VRTK_InteractableObject>());
-            if (objectToAffect != null)
+            objectToMonitor = (objectToMonitor != null ? objectToMonitor : GetComponentInParent<VRTK_InteractableObject>());
+            if (objectToMonitor != null)
             {
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
 
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
 
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
 
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
-                objectToAffect.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
+                objectToMonitor.SubscribeToInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
                 return true;
             }
             else if (throwError)
@@ -128,36 +205,37 @@ namespace VRTK
 
         protected override void TearDownListeners()
         {
-            if (objectToAffect != null)
+            if (objectToMonitor != null)
             {
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearTouch, NearTouchHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.NearUntouch, NearTouchUnHighlightObject);
 
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Touch, TouchHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Untouch, TouchUnHighlightObject);
 
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Grab, GrabHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Ungrab, GrabUnHighlightObject);
 
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
-                objectToAffect.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Use, UseHighlightObject);
+                objectToMonitor.UnsubscribeFromInteractionEvent(VRTK_InteractableObject.InteractionType.Unuse, UseUnHighlightObject);
             }
         }
 
         protected virtual InteractObjectHighlighterEventArgs SetEventArgs(VRTK_InteractableObject.InteractionType interactionType, GameObject affectingObject)
         {
+            currentAffectingObject = affectingObject;
             InteractObjectHighlighterEventArgs e;
             e.interactionType = interactionType;
-            e.affectedObject = objectToAffect;
-            e.affectingObject = affectingObject;
             e.highlightColor = currentColour;
+            e.affectingObject = affectingObject;
+            e.objectToMonitor = objectToMonitor;
+            e.affectedObject = objectToHighlight;
             return e;
         }
 
         protected virtual void NearTouchHighlightObject(object sender, InteractableObjectEventArgs e)
         {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            Highlight(interactableObject, nearTouchHighlight);
+            Highlight(nearTouchHighlight);
             OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
         }
 
@@ -166,15 +244,14 @@ namespace VRTK
             VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
             if (!interactableObject.IsTouched())
             {
-                Unhighlight(interactableObject);
+                Unhighlight();
                 OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearUntouch, e.interactingObject));
             }
         }
 
         protected virtual void TouchHighlightObject(object sender, InteractableObjectEventArgs e)
         {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            Highlight(interactableObject, touchHighlight);
+            Highlight(touchHighlight);
             OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Touch, e.interactingObject));
         }
 
@@ -183,12 +260,12 @@ namespace VRTK
             VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
             if (interactableObject.IsNearTouched())
             {
-                Highlight(sender as VRTK_InteractableObject, nearTouchHighlight);
+                Highlight(nearTouchHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
             }
             else
             {
-                Unhighlight(interactableObject);
+                Unhighlight();
                 OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Untouch, e.interactingObject));
             }
         }
@@ -198,7 +275,7 @@ namespace VRTK
             VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
             if (!interactableObject.IsUsing())
             {
-                Highlight(interactableObject, grabHighlight);
+                Highlight(grabHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Grab, e.interactingObject));
             }
         }
@@ -208,25 +285,24 @@ namespace VRTK
             VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
             if (interactableObject.IsTouched())
             {
-                Highlight(interactableObject, touchHighlight);
+                Highlight(touchHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Touch, e.interactingObject));
             }
             else if (interactableObject.IsNearTouched())
             {
-                Highlight(sender as VRTK_InteractableObject, nearTouchHighlight);
+                Highlight(nearTouchHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
             }
             else
             {
-                Unhighlight(interactableObject);
+                Unhighlight();
                 OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Ungrab, e.interactingObject));
             }
         }
 
         protected virtual void UseHighlightObject(object sender, InteractableObjectEventArgs e)
         {
-            VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
-            Highlight(interactableObject, useHighlight);
+            Highlight(useHighlight);
             OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Use, e.interactingObject));
         }
 
@@ -235,41 +311,44 @@ namespace VRTK
             VRTK_InteractableObject interactableObject = sender as VRTK_InteractableObject;
             if (interactableObject.IsGrabbed())
             {
-                Highlight(sender as VRTK_InteractableObject, grabHighlight);
+                Highlight(grabHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Grab, e.interactingObject));
             }
             else if (interactableObject.IsTouched())
             {
-                Highlight(interactableObject, touchHighlight);
+                Highlight(touchHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Touch, e.interactingObject));
             }
             else if (interactableObject.IsNearTouched())
             {
-                Highlight(sender as VRTK_InteractableObject, nearTouchHighlight);
+                Highlight(nearTouchHighlight);
                 OnInteractObjectHighlighterHighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.NearTouch, e.interactingObject));
             }
             else
             {
-                Unhighlight(interactableObject);
+                Unhighlight();
                 OnInteractObjectHighlighterUnhighlighted(SetEventArgs(VRTK_InteractableObject.InteractionType.Unuse, e.interactingObject));
             }
         }
 
-        protected virtual void Highlight(VRTK_InteractableObject interactableObject, Color highlightColor)
+        protected virtual void InitialiseHighlighter(Color highlightColor)
         {
-            if (interactableObject != null)
+            if (baseHighlighter == null && highlightColor != Color.clear)
             {
-                interactableObject.Highlight(highlightColor);
-                currentColour = highlightColor;
+                createBaseHighlighter = false;
+                baseHighlighter = GetValidHighlighter();
+                if (baseHighlighter == null)
+                {
+                    createBaseHighlighter = true;
+                    baseHighlighter = objectToHighlight.AddComponent<VRTK_MaterialColorSwapHighlighter>();
+                }
+                baseHighlighter.Initialise(highlightColor, objectToHighlight);
             }
         }
 
-        protected virtual void Unhighlight(VRTK_InteractableObject interactableObject)
+        protected virtual VRTK_BaseHighlighter GetValidHighlighter()
         {
-            if (interactableObject != null)
-            {
-                interactableObject.Unhighlight();
-            }
+            return (objectHighlighter != null ? objectHighlighter : VRTK_BaseHighlighter.GetActiveHighlighter(objectToHighlight));
         }
     }
 }

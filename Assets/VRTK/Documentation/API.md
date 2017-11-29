@@ -4227,7 +4227,6 @@ Determines if the GameObject can be interacted with.
  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System (not required for Climbable Grab Attach Types).
  * `VRTK_BaseGrabAttach` - A Grab Attach mechanic for determining how the Interactable Object is grabbed by the primary interacting object.
  * `VRTK_BaseGrabAction` - A Grab Action mechanic for determining how to manipulate the Interactable Object when grabbed by the secondary interacting object.
- * `VRTK_BaseHighlighter` - The highlighter to use when highligting the Interactable Object. If one is not already injected in the `Object Highlighter` parameter then the component on the same GameObject will be used.
 
 **Script Usage:**
  * Place the `VRTK_InteractableObject` script onto the GameObject that is to be interactable.
@@ -4268,7 +4267,6 @@ Determines if the GameObject can be interacted with.
  * **Pointer Activates Use Action:** If this is checked then when a Pointer collides with the Interactable Object it will activate it's use action. If the the `Hold Button To Use` parameter is unchecked then whilst the Pointer is collising with the Interactable Object it will run the `Using` method. If `Hold Button To Use` is unchecked then the `Using` method will be run when the Pointer is deactivated. The Pointer will not emit the `Destination Set` event if it is affecting an Interactable Object with this setting checked as this prevents unwanted teleporting from happening when using an Interactable Object with a pointer.
  * **Use Override Button:** Setting to a button will ensure the override button is used to use this specific Interactable Object. Setting to `Undefined` will mean the `Use Button` on the Interact Use script will use the object.
  * **Allowed Use Controllers:** Determines which controller can initiate a use action.
- * **Object Highlighter:** An optional Highlighter to use when highlighting this Interactable Object. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
 
 ### Class Variables
 
@@ -4454,39 +4452,6 @@ The StartUsing method is called automatically when the Interactable Object is us
    * _none_
 
 The StopUsing method is called automatically when the Interactable Object has stopped being used.
-
-#### Highlight/1
-
-  > `public virtual void Highlight(Color highlightColor)`
-
- * Parameters
-   * `Color highlightColor` - The colour to apply to the highlighter.
- * Returns
-   * _none_
-
-The Highlight method turns on the highlighter attached to the Interactable Object with the given Color.
-
-#### Unhighlight/0
-
-  > `public virtual void Unhighlight()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The Unhighlight method turns off the highlighter attached to the Interactable Object.
-
-#### ResetHighlighter/0
-
-  > `public virtual void ResetHighlighter()`
-
- * Parameters
-   * _none_
- * Returns
-   * _none_
-
-The ResetHighlighter method is used to reset the currently attached highlighter.
 
 #### PauseCollisions/1
 
@@ -5019,7 +4984,10 @@ Adding the `VRTK_InteractObjectAppearance_UnityEvents` component to `VRTK_Intera
 Enable highlighting of an Interactable Object base on interaction type.
 
 **Required Components:**
- * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Affect` parameter.
+ * `VRTK_InteractableObject` - The Interactable Object component to detect interactions on. This must be applied on the same GameObject as this script if one is not provided via the `Object To Monitor` parameter.
+
+**Optional Components:**
+ * `VRTK_BaseHighlighter` - The highlighter to use when highligting the Object. If one is not already injected in the `Object Highlighter` parameter then the component on the same GameObject will be used.
 
 **Script Usage:**
  * Place the `VRTK_InteractObjectHighlighter` script on either:
@@ -5032,7 +5000,8 @@ Enable highlighting of an Interactable Object base on interaction type.
  * **Touch Highlight:** The colour to highlight the object on the touch interaction.
  * **Grab Highlight:** The colour to highlight the object on the grab interaction.
  * **Use Highlight:** The colour to highlight the object on the use interaction.
- * **Object To Affect:** The Interactable Object to affect the highlighter of. If this is left blank, then the Interactable Object will need to be on the current or a parent GameObject.
+ * **Object To Highlight:** The GameObject to highlight.
+ * **Object Highlighter:** An optional Highlighter to use when highlighting the specified Object. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.
 
 ### Class Events
 
@@ -5047,10 +5016,46 @@ Adding the `VRTK_InteractObjectHighlighter_UnityEvents` component to `VRTK_Inter
 
 ### Event Payload
 
- * `VRTK_InteractableObject affectedObject` - The GameObject that is being highlighted.
+ * `VRTK_InteractableObject.InteractionType interactionType` - The type of interaction occuring on the object to monitor.
+ * `Color highlightColor` - The colour being provided to highlight the affected object with.
  * `GameObject affectingObject` - The GameObject is initiating the highlight via an interaction.
+ * `VRTK_InteractableObject objectToMonitor` - The Interactable Object that is being interacted with.
+ * `GameObject affectedObject` - The GameObject that is being highlighted.
 
 ### Class Methods
+
+#### ResetHighlighter/0
+
+  > `public virtual void ResetHighlighter()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ResetHighlighter method is used to reset the currently attached highlighter.
+
+#### Highlight/1
+
+  > `public virtual void Highlight(Color highlightColor)`
+
+ * Parameters
+   * `Color highlightColor` - The colour to apply to the highlighter.
+ * Returns
+   * _none_
+
+The Highlight method turns on the highlighter with the given Color.
+
+#### Unhighlight/0
+
+  > `public virtual void Unhighlight()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The Unhighlight method turns off the highlighter.
 
 #### GetCurrentHighlightColor/0
 
