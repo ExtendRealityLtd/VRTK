@@ -667,6 +667,17 @@ The GetRotation method returns the current reported rotation of the direction in
 
 The SetMaterialColor method sets the current material colour on the direction indicator.
 
+#### GetControllerEvents/0
+
+  > `public virtual VRTK_ControllerEvents GetControllerEvents()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `VRTK_ControllerEvents` - The associated Controller Events script.
+
+The GetControllerEvents method returns the associated Controller Events script with the Pointer Direction Indicator script.
+
 ---
 
 ## Radial Menu (VRTK_RadialMenu)
@@ -8240,6 +8251,7 @@ A collection of scripts that provide useful functionality to aid the creation pr
  * [SDK Object Alias](#sdk-object-alias-vrtk_sdkobjectalias)
  * [SDK Transform Modify](#sdk-transform-modify-vrtk_sdktransformmodify)
  * [SDK Object State](#sdk-object-state-vrtk_sdkobjectstate)
+ * [SDK Input Override](#sdk-input-override-vrtk_sdkinputoverride)
  * [Velocity Estimator](#velocity-estimator-vrtk_velocityestimator)
 
 ---
@@ -9775,6 +9787,66 @@ The state can be determined by:
    * _none_
 
 The SetStateByControllerReference method sets the object state based on the controller type of the given controller reference.
+
+---
+
+## SDK Input Override (VRTK_SDKInputOverride)
+ > extends VRTK_SDKControllerReady
+
+### Overview
+
+Provides the ability to switch button mappings based on the current SDK or controller type
+
+**Script Usage:**
+ * Place the `VRTK_PlayerClimb` script on any active scene GameObject.
+
+### Inspector Parameters
+
+ * **Loaded SDK Setup:** An optional SDK Setup to use to determine when to modify the transform.
+ * **Controller Type:** An optional SDK controller type to use to determine when to modify the transform.
+ * **Override Button:** The button to override to.
+ * **Override Axis:** The Vector2 axis to override to.
+ * **Interact Grab Script:** The Interact Grab script to override the controls on.
+ * **Interact Grab Overrides:** The list of overrides.
+ * **Interact Use Script:** The Interact Use script to override the controls on.
+ * **Interact Use Overrides:** The list of overrides.
+ * **Pointer Script:** The Pointer script to override the controls on.
+ * **Pointer Activation Overrides:** The list of overrides for the activation button.
+ * **Pointer Selection Overrides:** The list of overrides for the selection button.
+ * **Ui Pointer Script:** The UI Pointer script to override the controls on.
+ * **Ui Pointer Activation Overrides:** The list of overrides for the activation button.
+ * **Ui Pointer Selection Overrides:** The list of overrides for the selection button.
+ * **Pointer Direction Indicator Script:** The Pointer Direction Indicator script to override the controls on.
+ * **Direction Indicator Coordinate Overrides:** The list of overrides for the coordinate axis.
+ * **Touchpad Control Script:** The Touchpad Control script to override the controls on.
+ * **Touchpad Control Coordinate Overrides:** The list of overrides for the Touchpad Control coordinate axis.
+ * **Touchpad Control Activation Overrides:** The list of overrides for the activation button.
+ * **Touchpad Control Modifier Overrides:** The list of overrides for the modifier button.
+ * **Button Control Script:** The ButtonControl script to override the controls on.
+ * **Button Control Forward Overrides:** The list of overrides for the forward button.
+ * **Button Control Backward Overrides:** The list of overrides for the backward button.
+ * **Button Control Left Overrides:** The list of overrides for the left button.
+ * **Button Control Right Overrides:** The list of overrides for the right button.
+ * **Slingshot Jump Script:** The SlingshotJump script to override the controls on.
+ * **Slingshot Jump Activation Overrides:** The list of overrides for the activation button.
+ * **Slingshot Jump Cancel Overrides:** The list of overrides for the cancel button.
+ * **Move In Place Script:** The MoveInPlace script to override the controls on.
+ * **Move In Place Engage Overrides:** The list of overrides for the engage button.
+ * **Step Multiplier Script:** The Step Multiplier script to override the controls on.
+ * **Step Multiplier Activation Overrides:** The list of overrides for the activation button.
+
+### Class Methods
+
+#### ForceManage/0
+
+  > `public virtual void ForceManage()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The ForceManage method forces the inputs to be updated even without an SDK change event occuring.
 
 ---
 

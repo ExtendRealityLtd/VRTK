@@ -129,6 +129,15 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The GetControllerEvents method returns the associated Controller Events script with the Pointer Direction Indicator script.
+        /// </summary>
+        /// <returns>The associated Controller Events script.</returns>
+        public virtual VRTK_ControllerEvents GetControllerEvents()
+        {
+            return controllerEvents;
+        }
+
         protected virtual void Awake()
         {
             validLocation = transform.Find("ValidLocation").gameObject;
