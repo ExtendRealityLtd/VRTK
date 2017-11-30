@@ -3163,6 +3163,10 @@ A relationship to a physical VR controller and emits events based on the inputs 
    * `MiddleFingerSense` - The middle finger sense touch is active.
    * `RingFingerSense` - The ring finger sense touch is active.
    * `PinkyFingerSense` - The pinky finger sense touch is active.
+ * `public enum Vector2AxisAlias` - Vector2 Axis Types.
+   * `Undefined` - No axis specified.
+   * `Touchpad` - Touchpad on the controller.
+   * `TouchpadTwo` - Touchpad Two on the controller.
  * `public enum AxisType` - Axis Types
    * `Digital` - A digital axis with a binary result of 0f not pressed or 1f is pressed.
    * `Axis` - An analog axis ranging from no squeeze at 0f to full squeeze at 1f.
@@ -3297,10 +3301,10 @@ The GetControllerType method is a shortcut to retrieve the current controller ty
 
 #### GetAxis/1
 
-  > `public virtual Vector2 GetAxis(SDK_BaseController.Vector2Axis vector2AxisType)`
+  > `public virtual Vector2 GetAxis(Vector2AxisAlias vector2AxisType)`
 
  * Parameters
-   * `SDK_BaseController.Vector2Axis vector2AxisType` - The Vector2AxisType to check the touch position of.
+   * `Vector2AxisAlias vector2AxisType` - The Vector2AxisType to check the touch position of.
  * Returns
    * `Vector2` - A two dimensional vector containing the `x` and `y` position of where the given axis type is being touched. `(0,0)` to `(1,1)`.
 
@@ -3330,10 +3334,10 @@ The GetTouchpadTwoAxis method returns the coordinates of where the touchpad two 
 
 #### GetAxisAngle/1
 
-  > `public virtual float GetAxisAngle(SDK_BaseController.Vector2Axis vector2AxisType)`
+  > `public virtual float GetAxisAngle(Vector2AxisAlias vector2AxisType)`
 
  * Parameters
-   * `SDK_BaseController.Vector2Axis vector2AxisType` - The Vector2AxisType to get the touch angle for.
+   * `Vector2AxisAlias vector2AxisType` - The Vector2AxisType to get the touch angle for.
  * Returns
    * `float` - A float representing the angle of where the given axis type is being touched. `0f` to `360f`.
 
@@ -3473,10 +3477,10 @@ The AnyButtonPressed method returns true if any of the controller buttons are be
 
 #### GetAxisState/2
 
-  > `public virtual bool GetAxisState(SDK_BaseController.Vector2Axis axis, SDK_BaseController.ButtonPressTypes pressType)`
+  > `public virtual bool GetAxisState(Vector2AxisAlias axis, SDK_BaseController.ButtonPressTypes pressType)`
 
  * Parameters
-   * `SDK_BaseController.Vector2Axis axis` - The axis to check on.
+   * `Vector2AxisAlias axis` - The axis to check on.
    * `SDK_BaseController.ButtonPressTypes pressType` - The button press type to check for.
  * Returns
    * `bool` - Returns `true` if the axis is being interacted with via the given press type.

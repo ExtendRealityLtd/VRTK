@@ -19,19 +19,6 @@ namespace VRTK
     /// </remarks>
     public abstract class SDK_BaseController : SDK_Base
     {
-        //Controller axes that provide a Vector2
-        public enum Vector2Axis
-        {
-            /// <summary>
-            /// Touchpad on the controller.
-            /// </summary>
-            Touchpad,
-            /// <summary>
-            /// Touchpad Two on the controller.
-            /// </summary>
-            TouchpadTwo
-        }
-
         /// <summary>
         /// Types of buttons on a controller
         /// </summary>
