@@ -7,7 +7,7 @@
     /// </summary>
     /// <remarks>
     /// **Script Usage:**
-    ///  * Place the `VRTK_HamsterBall` script on a scene GameObject containing a SphereCollider. Assign a CameraRig alias (using VRTK_SDKObjectAlias) at least one controller alias, 
+    ///  * Place the `VRTK_HamsterBall` script on a scene GameObject containing a SphereCollider. Assign a CameraRig alias (using VRTK_SDKObjectAlias) and at least one controller alias. 
     ///
     /// **Script Dependencies:**
     ///  * An optional Sphere Renderer should by on or on a child of the game object. It's important that there is no collider on the child.
@@ -29,7 +29,7 @@
         [Tooltip("Left controller alias. Requires VRTK_ControllerEvents component.")]
         [SerializeField]
         private VRTK_ControllerEvents leftControllerAlias;
-        [Tooltip("Left controller alias. Requires VRTK_ControllerEvents component.")]
+        [Tooltip("Right controller alias. Requires VRTK_ControllerEvents component.")]
         [SerializeField]
         private VRTK_ControllerEvents rightControllerAlias;
         [Header("Settings")]
@@ -53,10 +53,10 @@
         [SerializeField]
         private float fadeTime = 1f;
 
-        private Rigidbody RigidBody;
+        private Rigidbody rigidBody;
         private bool bIsRolling;
-        private Rigidbody ConnectedBody;
-        private SpringJoint Joint;
+        private Rigidbody connectedBody;
+        private SpringJoint joint;
         private int nGrabbedCount;
         private float fIdleTimer;
         private bool bIsBallHidden;
@@ -66,8 +66,7 @@
 
         private void Start()
         {
-            print(GetComponent<SphereCollider>().radius);
-            RigidBody = GetComponent<Rigidbody>();
+            rigidBody = GetComponent<Rigidbody>();
 
             // Subscribe to controller events
             if (leftControllerAlias != null)
@@ -128,7 +127,7 @@
             if (!bIsRolling)
             {
                 // We're not rolling, so slow down and decerement IdleTimer
-                RigidBody.AddForce(-brakeStrength * RigidBody.velocity);
+                rigidBody.AddForce(-brakeStrength * rigidBody.velocity);
                 fIdleTimer = fIdleTimer - Time.deltaTime;
             }
 
@@ -139,20 +138,20 @@
                 StartCoroutine(FadeBall(true));
             }
 
-            if (Joint != null)
+            if (joint != null)
             {
                 // We have a joint. so..
                 // Parent our temp transform to the controller
-                bodyAnchorTransform.parent = Joint.connectedBody.transform;
+                bodyAnchorTransform.parent = joint.connectedBody.transform;
                 // Get the position the controller's pointing to
-                Vector3 hitPosition = GetBallPointerPosition(Joint.connectedBody.transform);
+                Vector3 hitPosition = GetBallPointerPosition(joint.connectedBody.transform);
                 // set the Joint's connected anchor to that position (in controller's local space)
-                Joint.connectedAnchor = Joint.connectedBody.transform.InverseTransformPoint(hitPosition);
+                joint.connectedAnchor = joint.connectedBody.transform.InverseTransformPoint(hitPosition);
                 // Position the temp transform
-                bodyAnchorTransform.localPosition = Joint.connectedAnchor;
+                bodyAnchorTransform.localPosition = joint.connectedAnchor;
                 // Scale spring strength based on the distance between the temp transforms. 
                 // This prevents boingy boingy stuff from happening when the ball reaches it's goal position
-                Joint.spring = Mathf.Lerp(strength, 0, Mathf.InverseLerp(5, 0, Vector3.Distance(anchorTransform.position, bodyAnchorTransform.position)));
+                joint.spring = Mathf.Lerp(strength, 0, Mathf.InverseLerp(5, 0, Vector3.Distance(anchorTransform.position, bodyAnchorTransform.position)));
             }
         }
 
@@ -184,16 +183,16 @@
             controllerBody.isKinematic = true;
 
             // Make a joint if we don't have one already
-            if (Joint == null)
-                Joint = gameObject.AddComponent<SpringJoint>();
+            if (joint == null)
+                joint = gameObject.AddComponent<SpringJoint>();
             // Joint set up
-            Joint.spring = strength;
-            Joint.autoConfigureConnectedAnchor = false;
+            joint.spring = strength;
+            joint.autoConfigureConnectedAnchor = false;
             // Connect the controller and set the anchor position in controller's local space.
-            Joint.connectedBody = controllerBody;
-            Joint.connectedAnchor = controllerBody.transform.InverseTransformPoint(anchor);
+            joint.connectedBody = controllerBody;
+            joint.connectedAnchor = controllerBody.transform.InverseTransformPoint(anchor);
             // Set the the local anchor in the ball's local space.
-            Joint.anchor = RigidBody.transform.InverseTransformPoint(anchor);
+            joint.anchor = rigidBody.transform.InverseTransformPoint(anchor);
             anchorTransform.position = anchor;
         }
 
@@ -201,10 +200,10 @@
         {
             // Kill the joint. Sadly, there's no way I could find to simply disable the joint.
             // TODO: experiment with setting a super high MinDistance rather than destroying HamsterBall Joint on release.
-            if (Joint != null)
+            if (joint != null)
             {
-                Destroy(Joint);
-                Joint = null;
+                Destroy(joint);
+                joint = null;
             }
         }
 
