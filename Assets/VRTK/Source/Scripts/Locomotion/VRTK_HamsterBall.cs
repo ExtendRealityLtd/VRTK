@@ -8,12 +8,15 @@
     /// <remarks>
     /// **Script Usage:**
     ///  * Place the `VRTK_HamsterBall` script on a scene GameObject containing a SphereCollider. Assign a CameraRig alias (using VRTK_SDKObjectAlias) and at least one controller alias. 
-    ///
+    /// **To prevent collisions with scene objects:
+    /// *Create 2 layers, "Ground" and "Ball" for example
+    /// *Ensure all navigable surfaces/objects are on the "Ground" layer
+    /// *Set the HamsterBall object to the "Ball" layer
+    /// *In EDIT>SETTINGS>PROJECT SETTINGS>PHYSICS ensure that "Ball" has nothing checked except for "Ground"
     /// **Script Dependencies:**
     ///  * An optional Sphere Renderer should by on or on a child of the game object. It's important that there is no collider on the child.
     /// **Questions:**
     ///  *Should the ball reposition to the HMD when we're not rolling?
-    ///  *Should there be an option to add a ground collision layer, so can roll, but you don't knock things over when you approach them?
     /// </remarks>
     /// <example>
     /// `VRTK/Examples/045_CameraRig_HamsterBall` uses the `Trigger ON` event on the Controllers to Instantiate a joint. Pull the invisible joint downward to move forward. Try to knock over the objects.  
