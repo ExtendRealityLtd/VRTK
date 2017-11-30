@@ -272,8 +272,15 @@ namespace VRTK
         protected abstract void DestroyPointerObjects();
         protected abstract void ToggleRenderer(bool pointerState, bool actualState);
 
+        protected virtual void Awake()
+        {
+            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+        }
+
         protected virtual void OnEnable()
         {
+            cachedPointerAttachPoint = null;
+            cachedAttachedHand = SDK_BaseController.ControllerHand.None;
             defaultMaterial = Resources.Load("WorldPointer") as Material;
             makeRendererVisible.Clear();
             CreatePointerOriginTransformFollow();
@@ -289,6 +296,11 @@ namespace VRTK
             }
             controllerGrabScript = null;
             Destroy(pointerOriginTransformFollowGameObject);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnValidate()
