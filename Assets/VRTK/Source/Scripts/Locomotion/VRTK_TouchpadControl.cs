@@ -29,7 +29,7 @@ namespace VRTK
         [Header("Touchpad Control Settings")]
 
         [Tooltip("The axis to use for the direction coordinates.")]
-        public SDK_BaseController.Vector2Axis coordinateAxis = SDK_BaseController.Vector2Axis.Touchpad;
+        public VRTK_ControllerEvents.Vector2AxisAlias coordinateAxis = VRTK_ControllerEvents.Vector2AxisAlias.Touchpad;
         [Tooltip("An optional button that has to be engaged to allow the touchpad control to activate.")]
         public VRTK_ControllerEvents.ButtonAlias primaryActivationButton = VRTK_ControllerEvents.ButtonAlias.TouchpadTouch;
         [Tooltip("An optional button that when engaged will activate the modifier on the touchpad control action.")]
@@ -47,7 +47,7 @@ namespace VRTK
             base.OnEnable();
             touchpadFirstChange = true;
             otherTouchpadControlEnabledStateSet = false;
-            coordniateButtonAlias = (coordinateAxis == SDK_BaseController.Vector2Axis.Touchpad ? VRTK_ControllerEvents.ButtonAlias.TouchpadTouch : VRTK_ControllerEvents.ButtonAlias.TouchpadTwoTouch);
+            coordniateButtonAlias = (coordinateAxis == VRTK_ControllerEvents.Vector2AxisAlias.Touchpad ? VRTK_ControllerEvents.ButtonAlias.TouchpadTouch : VRTK_ControllerEvents.ButtonAlias.TouchpadTwoTouch);
         }
 
         protected override void ControlFixedUpdate()
@@ -82,11 +82,11 @@ namespace VRTK
                 {
                     switch (coordinateAxis)
                     {
-                        case SDK_BaseController.Vector2Axis.Touchpad:
+                        case VRTK_ControllerEvents.Vector2AxisAlias.Touchpad:
                             controllerEvents.TouchpadAxisChanged += TouchpadAxisChanged;
                             controllerEvents.TouchpadTouchEnd += TouchpadTouchEnd;
                             break;
-                        case SDK_BaseController.Vector2Axis.TouchpadTwo:
+                        case VRTK_ControllerEvents.Vector2AxisAlias.TouchpadTwo:
                             controllerEvents.TouchpadTwoAxisChanged += TouchpadAxisChanged;
                             controllerEvents.TouchpadTwoTouchEnd += TouchpadTouchEnd;
                             break;
@@ -96,11 +96,11 @@ namespace VRTK
                 {
                     switch (coordinateAxis)
                     {
-                        case SDK_BaseController.Vector2Axis.Touchpad:
+                        case VRTK_ControllerEvents.Vector2AxisAlias.Touchpad:
                             controllerEvents.TouchpadAxisChanged -= TouchpadAxisChanged;
                             controllerEvents.TouchpadTouchEnd -= TouchpadTouchEnd;
                             break;
-                        case SDK_BaseController.Vector2Axis.TouchpadTwo:
+                        case VRTK_ControllerEvents.Vector2AxisAlias.TouchpadTwo:
                             controllerEvents.TouchpadTwoAxisChanged -= TouchpadAxisChanged;
                             controllerEvents.TouchpadTwoTouchEnd -= TouchpadTouchEnd;
                             break;
@@ -121,22 +121,22 @@ namespace VRTK
 
         protected virtual bool ValidPrimaryButton()
         {
-            return (controllerEvents && (primaryActivationButton == VRTK_ControllerEvents.ButtonAlias.Undefined || controllerEvents.IsButtonPressed(primaryActivationButton)));
+            return (controllerEvents != null && (primaryActivationButton == VRTK_ControllerEvents.ButtonAlias.Undefined || controllerEvents.IsButtonPressed(primaryActivationButton)));
         }
 
         protected virtual void ModifierButtonActive()
         {
-            modifierActive = (controllerEvents && actionModifierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(actionModifierButton));
+            modifierActive = (controllerEvents != null && actionModifierButton != VRTK_ControllerEvents.ButtonAlias.Undefined && controllerEvents.IsButtonPressed(actionModifierButton));
         }
 
         protected virtual bool TouchpadTouched()
         {
-            return (controllerEvents && controllerEvents.IsButtonPressed(coordniateButtonAlias));
+            return (controllerEvents != null && controllerEvents.IsButtonPressed(coordniateButtonAlias));
         }
 
         protected virtual void TouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
         {
-            Vector2 actualAxis = (coordinateAxis == SDK_BaseController.Vector2Axis.Touchpad ? e.touchpadAxis : e.touchpadTwoAxis);
+            Vector2 actualAxis = (coordinateAxis == VRTK_ControllerEvents.Vector2AxisAlias.Touchpad ? e.touchpadAxis : e.touchpadTwoAxis);
             if (touchpadFirstChange && otherObjectControl != null && disableOtherControlsOnActive && actualAxis != Vector2.zero)
             {
                 otherTouchpadControlEnabledState = otherObjectControl.enabled;

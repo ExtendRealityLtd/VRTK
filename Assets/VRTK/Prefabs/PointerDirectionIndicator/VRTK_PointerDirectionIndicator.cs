@@ -41,7 +41,7 @@ namespace VRTK
         [Tooltip("The touchpad axis needs to be above this deadzone for it to register as a valid touchpad angle.")]
         public Vector2 touchpadDeadzone = Vector2.zero;
         [Tooltip("The axis to use for the direction coordinates.")]
-        public SDK_BaseController.Vector2Axis coordinateAxis = SDK_BaseController.Vector2Axis.Touchpad;
+        public VRTK_ControllerEvents.Vector2AxisAlias coordinateAxis = VRTK_ControllerEvents.Vector2AxisAlias.Touchpad;
 
         [Header("Appearance Settings")]
 

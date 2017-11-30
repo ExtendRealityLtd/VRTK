@@ -138,6 +138,25 @@ namespace VRTK
         }
 
         /// <summary>
+        /// Vector2 Axis Types.
+        /// </summary>
+        public enum Vector2AxisAlias
+        {
+            /// <summary>
+            /// No axis specified.
+            /// </summary>
+            Undefined,
+            /// <summary>
+            /// Touchpad on the controller.
+            /// </summary>
+            Touchpad,
+            /// <summary>
+            /// Touchpad Two on the controller.
+            /// </summary>
+            TouchpadTwo
+        }
+
+        /// <summary>
         /// Axis Types
         /// </summary>
         public enum AxisType
@@ -1030,13 +1049,13 @@ namespace VRTK
         /// </summary>
         /// <param name="vector2AxisType">The Vector2AxisType to check the touch position of.</param>
         /// <returns>A two dimensional vector containing the `x` and `y` position of where the given axis type is being touched. `(0,0)` to `(1,1)`.</returns>
-        public virtual Vector2 GetAxis(SDK_BaseController.Vector2Axis vector2AxisType)
+        public virtual Vector2 GetAxis(Vector2AxisAlias vector2AxisType)
         {
             switch (vector2AxisType)
             {
-                case SDK_BaseController.Vector2Axis.Touchpad:
+                case Vector2AxisAlias.Touchpad:
                     return GetTouchpadAxis();
-                case SDK_BaseController.Vector2Axis.TouchpadTwo:
+                case Vector2AxisAlias.TouchpadTwo:
                     return GetTouchpadTwoAxis();
             }
             return Vector2.zero;
@@ -1065,13 +1084,13 @@ namespace VRTK
         /// </summary>
         /// <param name="vector2AxisType">The Vector2AxisType to get the touch angle for.</param>
         /// <returns>A float representing the angle of where the given axis type is being touched. `0f` to `360f`.</returns>
-        public virtual float GetAxisAngle(SDK_BaseController.Vector2Axis vector2AxisType)
+        public virtual float GetAxisAngle(Vector2AxisAlias vector2AxisType)
         {
             switch (vector2AxisType)
             {
-                case SDK_BaseController.Vector2Axis.Touchpad:
+                case Vector2AxisAlias.Touchpad:
                     return GetTouchpadAxisAngle();
-                case SDK_BaseController.Vector2Axis.TouchpadTwo:
+                case Vector2AxisAlias.TouchpadTwo:
                     return GetTouchpadTwoAxisAngle();
             }
             return 0f;
@@ -1197,18 +1216,18 @@ namespace VRTK
         /// <param name="axis">The axis to check on.</param>
         /// <param name="pressType">The button press type to check for.</param>
         /// <returns>Returns `true` if the axis is being interacted with via the given press type.</returns>
-        public virtual bool GetAxisState(SDK_BaseController.Vector2Axis axis, SDK_BaseController.ButtonPressTypes pressType)
+        public virtual bool GetAxisState(Vector2AxisAlias axis, SDK_BaseController.ButtonPressTypes pressType)
         {
             switch (pressType)
             {
                 case SDK_BaseController.ButtonPressTypes.Press:
                 case SDK_BaseController.ButtonPressTypes.PressDown:
                 case SDK_BaseController.ButtonPressTypes.PressUp:
-                    return (axis == SDK_BaseController.Vector2Axis.Touchpad ? touchpadPressed : false);
+                    return (axis == Vector2AxisAlias.Touchpad ? touchpadPressed : false);
                 case SDK_BaseController.ButtonPressTypes.Touch:
                 case SDK_BaseController.ButtonPressTypes.TouchDown:
                 case SDK_BaseController.ButtonPressTypes.TouchUp:
-                    return (axis == SDK_BaseController.Vector2Axis.Touchpad ? touchpadTouched : touchpadTwoTouched);
+                    return (axis == Vector2AxisAlias.Touchpad ? touchpadTouched : touchpadTwoTouched);
             }
             return false;
         }
