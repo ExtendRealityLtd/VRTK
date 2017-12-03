@@ -5,7 +5,9 @@ namespace VRTK
     using System.Collections;
     using System.Collections.Generic;
     using GrabAttachMechanics;
+    using SnapAttachMechanics;
     using SecondaryControllerGrabActions;
+    using System;
 
     /// <summary>
     /// Event Payload
@@ -198,6 +200,12 @@ namespace VRTK
         [Tooltip("Determines which controller can initiate a use action.")]
         public AllowedController allowedUseControllers = AllowedController.Both;
 
+        [Header("Stack Settings")]
+        [Tooltip("Determines if the object can be grouped with identical objects within a `VRTK_SnapDropZone`.")]
+        public bool isStackable = false;
+        [Tooltip("Used to determine whether objects are the same and therefore stackable within a `VRTK_SnapDropZone`.")]
+        public string objectID = "defaultInteractableObjectID";
+
         [Header("Custom Settings")]
 
         [System.Obsolete("`VRTK_InteractableObject.objectHighlighter` has been replaced with `VRTK_InteractObjectHighlighter.objectHighlighter`. This parameter will be removed in a future version of VRTK.")]
@@ -218,6 +226,8 @@ namespace VRTK
         protected Transform previousParent;
         protected bool previousKinematicState;
         protected bool previousIsGrabbable;
+        protected bool[] previousColliderTriggerStates = new bool[0];
+        protected bool colliderStatesSaved = false;
         protected bool forcedDropped;
         protected bool forceDisabled;
         protected bool hoveredOverSnapDropZone = false;
@@ -713,6 +723,50 @@ namespace VRTK
                 {
                     previousKinematicState = interactableRigidbody.isKinematic;
                 }
+            }
+        }
+
+        /// <summary>
+        /// The SaveColliderStates method stores the isTrigger states of the object's colliders.
+        /// </summary>
+        public virtual void SaveColliderStates(bool overwriteOriginalState)
+        {
+            if (colliderStatesSaved && overwriteOriginalState || !colliderStatesSaved)
+            {
+                Collider[] colliderTriggerStates = gameObject.GetComponentsInChildren<Collider>();
+                previousColliderTriggerStates = new bool[colliderTriggerStates.Length];
+                for (int i = 0; i < colliderTriggerStates.Length; i++)
+                {
+                    previousColliderTriggerStates[i] = colliderTriggerStates[i].isTrigger;
+                }
+              
+                colliderStatesSaved = true;
+            }
+        }
+
+        /// <summary>
+        /// The LoadPreviousColliderStates method loads and applies the isTrigger states previously saved for this Interactable Object's colliders.
+        /// </summary>
+        public virtual void LoadPreviousColliderStates()
+        {
+            if (colliderStatesSaved)
+            {
+                Collider[] objectColliders = gameObject.GetComponentsInChildren<Collider>();
+                if (objectColliders.Length == previousColliderTriggerStates.Length)
+                {
+                    for (int i = 0; i < objectColliders.Length; i++)
+                    {
+                        objectColliders[i].isTrigger = previousColliderTriggerStates[i];
+                    }
+                }
+                else
+                {
+                    VRTK_Logger.Warn("`VRTK_InteractableObject` " + name + " now has a different number of colliders than saved collider states");
+                }
+            }
+            else
+            {
+                VRTK_Logger.Warn("`VRTK_InteractableObject` " + name + " was asked to load its prevous collider states when none have been saved.");
             }
         }
 

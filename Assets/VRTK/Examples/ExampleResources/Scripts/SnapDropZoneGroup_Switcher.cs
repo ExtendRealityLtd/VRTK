@@ -25,7 +25,7 @@
 
         private void DoCubeZoneSnapped(object sender, SnapDropZoneEventArgs e)
         {
-            if (sphereZone.GetCurrentSnappedObject() == null)
+            if (sphereZone.snapAttachMechanicScript.GetCurrentSnappedObject() == null)
             {
                 sphereZone.gameObject.SetActive(false);
             }
@@ -33,7 +33,7 @@
 
         private void DoCubeZoneUnsnapped(object sender, SnapDropZoneEventArgs e)
         {
-            if (cubeZone.GetCurrentSnappedObject() == null)
+            if (cubeZone.snapAttachMechanicScript.GetCurrentSnappedObject() == null)
             {
                 sphereZone.gameObject.SetActive(true);
             }
@@ -41,7 +41,7 @@
 
         private void DoSphereZoneSnapped(object sender, SnapDropZoneEventArgs e)
         {
-            if (cubeZone.GetCurrentSnappedObject() == null)
+            if (cubeZone.snapAttachMechanicScript.GetCurrentSnappedObject() == null)
             {
                 cubeZone.gameObject.SetActive(false);
             }
@@ -49,7 +49,7 @@
 
         private void DoSphereZoneUnsnapped(object sender, SnapDropZoneEventArgs e)
         {
-            if (sphereZone.GetCurrentSnappedObject() == null)
+            if (sphereZone.snapAttachMechanicScript.GetCurrentSnappedObject() == null)
             {
                 cubeZone.gameObject.SetActive(true);
             }
