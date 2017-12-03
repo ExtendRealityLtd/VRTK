@@ -82,10 +82,14 @@ namespace VRTK.Highlighters
             {
                 Renderer renderer = renderers[i];
                 string objectReference = renderer.gameObject.GetInstanceID().ToString();
-                MaterialPropertyBlock blankPropertyBlock = new MaterialPropertyBlock();
-                VRTK_SharedMethods.AddDictionaryValue(originalMaterialPropertyBlocks, objectReference, blankPropertyBlock, true);
-                VRTK_SharedMethods.AddDictionaryValue(highlightMaterialPropertyBlocks, objectReference, blankPropertyBlock, true);
-                renderer.GetPropertyBlock(blankPropertyBlock);
+                // get the initial material property block to restore the original material properties later on
+                MaterialPropertyBlock originalPropertyBlock = new MaterialPropertyBlock();
+                renderer.GetPropertyBlock(originalPropertyBlock);
+                VRTK_SharedMethods.AddDictionaryValue(originalMaterialPropertyBlocks, objectReference, originalPropertyBlock, true);
+                // we need a second instance of the original material property block which will be modified for highlighting
+                MaterialPropertyBlock highlightPropertyBlock = new MaterialPropertyBlock();
+                renderer.GetPropertyBlock(highlightPropertyBlock);
+                VRTK_SharedMethods.AddDictionaryValue(highlightMaterialPropertyBlocks, objectReference, highlightPropertyBlock, true);
             }
         }
 
