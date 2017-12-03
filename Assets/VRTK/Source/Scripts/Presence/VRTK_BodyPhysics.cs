@@ -78,6 +78,8 @@ namespace VRTK
         public bool ignoreGrabbedCollisions = true;
         [Tooltip("An array of GameObjects that will not collide with the body collider.")]
         public GameObject[] ignoreCollisionsWith;
+        [Tooltip("A custom raycaster to use when detecting body collisions during movement.")]
+        public VRTK_CustomRaycast customBodyCollisionRaycast;
         [Tooltip("The collider which is created for the user is set at a height from the user's headset position. If the collider is required to be lower to allow for room between the play area collider and the headset then this offset value will shorten the height of the generated collider.")]
         public float headsetYOffset = 0.2f;
         [Tooltip("The amount of movement of the headset between the headset's current position and the current standing position to determine if the user is walking in play space and to ignore the body physics collisions if the movement delta is above this threshold.")]
@@ -419,7 +421,20 @@ namespace VRTK
             Vector3 point1 = bodyCollider.transform.parent.TransformPoint(bodyCollider.transform.localPosition + (bodyCollider.center)) + (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
             Vector3 point2 = bodyCollider.transform.parent.TransformPoint(bodyCollider.transform.localPosition + (bodyCollider.center)) - (Vector3.up * ((bodyCollider.height * 0.5f) - bodyCollider.radius));
             RaycastHit collisionHit;
-            return VRTK_CustomRaycast.CapsuleCast(customRaycast, point1, point2, bodyCollider.radius, direction, maxDistance, out collisionHit, defaultIgnoreLayer, QueryTriggerInteraction.Ignore);
+            return VRTK_CustomRaycast.CapsuleCast(customBodyCollisionRaycast, point1, point2, bodyCollider.radius, direction, maxDistance, out collisionHit, defaultIgnoreLayer, QueryTriggerInteraction.Ignore);
+        }
+
+        /// <summary>
+        /// CanMove method determines if the body is able to move to the proposed direction via SweepCollision method.
+        /// </summary>
+        /// <param name="proposedPosition">Where the body collider wants to go.</param>
+        /// <returns>True if body collider can move to the proposed position.</returns>
+        public virtual bool CanMove(Vector3 proposedPosition)
+        {
+            var currentPosition = bodyCollider.transform.position;
+            Vector3 proposedDirection = (proposedPosition - currentPosition).normalized;
+            float distance = Vector3.Distance(currentPosition, proposedPosition);
+            return !SweepCollision(proposedDirection, distance);
         }
 
         protected virtual void Awake()
@@ -1363,7 +1378,7 @@ namespace VRTK
             isMoving = false;
             isLeaning = false;
             onGround = false;
-            fallMinTime = Time.time + (Time.fixedDeltaTime * 3.0f); // Wait at least 3 fixed update frames before declaring falling finished 
+            fallMinTime = Time.time + (Time.fixedDeltaTime * 3.0f); // Wait at least 3 fixed update frames before declaring falling finished
             OnStartFalling(SetBodyPhysicsEvent(targetFloor, null));
         }
 
