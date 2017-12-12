@@ -635,7 +635,7 @@ namespace VRTK
         public virtual void Highlight(Color highlightColor)
         {
             VRTK_InteractObjectHighlighter interactObjectHighlighter = GetComponentInChildren<VRTK_InteractObjectHighlighter>();
-            if(interactObjectHighlighter != null)
+            if (interactObjectHighlighter != null)
             {
                 interactObjectHighlighter.Highlight(highlightColor);
             }

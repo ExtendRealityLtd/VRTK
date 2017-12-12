@@ -260,6 +260,7 @@ namespace VRTK
         protected virtual void OnEnable()
         {
             destroyColliderOnDisable = false;
+            controllerCollisionDetector = (customColliderContainer != null ? customColliderContainer : controllerCollisionDetector);
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Controller);
             CreateTouchRigidBody();
             trackedController = GetComponentInParent<VRTK_TrackedController>();
