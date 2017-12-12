@@ -116,8 +116,15 @@ namespace VRTK
         /// <param name="validity">Determines if the colour being set is based from a valid location or invalid location.</param>
         public virtual void SetMaterialColor(Color color, bool validity)
         {
-            validLocation.SetActive(validity);
-            invalidLocation.SetActive((displayOnInvalidLocation ? !validity : validity));
+            if (validLocation != null)
+            {
+                validLocation.SetActive(validity);
+            }
+
+            if (invalidLocation != null)
+            {
+                invalidLocation.SetActive((displayOnInvalidLocation ? !validity : validity));
+            }
 
             if (usePointerColor)
             {
