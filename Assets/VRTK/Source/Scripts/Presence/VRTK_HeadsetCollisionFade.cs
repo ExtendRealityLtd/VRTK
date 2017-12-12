@@ -28,6 +28,8 @@ namespace VRTK
         public float blinkTransitionSpeed = 0.1f;
         [Tooltip("The colour to fade the headset to on collision.")]
         public Color fadeColor = Color.black;
+        [Tooltip("A specified VRTK_PolicyList to use to determine whether any objects will be acted upon by the Headset Collision Fade.")]
+        public VRTK_PolicyList targetListPolicy;
 
         [Header("Custom Settings")]
 
@@ -68,18 +70,29 @@ namespace VRTK
 
         protected virtual void OnHeadsetCollisionDetect(object sender, HeadsetCollisionEventArgs e)
         {
-            Invoke("StartFade", timeTillFade);
+            if (ValidTarget(e.collider))
+            {
+                Invoke("StartFade", timeTillFade);
+            }
         }
 
         protected virtual void OnHeadsetCollisionEnded(object sender, HeadsetCollisionEventArgs e)
         {
-            CancelInvoke("StartFade");
-            headsetFade.Unfade(blinkTransitionSpeed);
+            if (ValidTarget(e.collider))
+            {
+                CancelInvoke("StartFade");
+                headsetFade.Unfade(blinkTransitionSpeed);
+            }
         }
 
         protected virtual void StartFade()
         {
             headsetFade.Fade(fadeColor, blinkTransitionSpeed);
+        }
+
+        protected virtual bool ValidTarget(Collider target)
+        {
+            return (target != null && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
     }
 }
