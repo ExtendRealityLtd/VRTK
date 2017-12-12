@@ -198,7 +198,7 @@ namespace VRTK
                         headsetOutOfBounds = false;
                     }
                 }
-                playAreaCursor.transform.rotation = (directionIndicator != null ? directionIndicator.transform.rotation : playArea.rotation);
+                playAreaCursor.transform.rotation = (directionIndicator != null && directionIndicator.gameObject.activeInHierarchy ? directionIndicator.transform.rotation : playArea.rotation);
                 playAreaCursor.transform.position = location + offset;
             }
         }

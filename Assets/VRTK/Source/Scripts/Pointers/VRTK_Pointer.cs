@@ -300,7 +300,10 @@ namespace VRTK
 #pragma warning restore 0618
             base.OnEnable();
             attachedTo = (attachedTo == null ? gameObject : attachedTo);
-            VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
+            if (!VRTK_PlayerObject.IsPlayerObject(gameObject))
+            {
+                VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
+            }
             SetDefaultValues();
 
             if (NoPointerRenderer())
@@ -389,7 +392,7 @@ namespace VRTK
 
         protected virtual Quaternion? GetCursorRotation()
         {
-            if (EnabledPointerRenderer() && pointerRenderer.directionIndicator != null)
+            if (EnabledPointerRenderer() && pointerRenderer.directionIndicator != null && pointerRenderer.directionIndicator.gameObject.activeInHierarchy)
             {
                 return pointerRenderer.directionIndicator.GetRotation();
             }
