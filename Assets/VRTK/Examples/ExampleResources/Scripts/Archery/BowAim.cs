@@ -28,6 +28,8 @@
         private float currentPull;
         private float previousPull;
 
+        private AudioSource source;
+
         public VRTK_InteractGrab GetPullHand()
         {
             return stringControl;
@@ -46,14 +48,24 @@
         public void SetArrow(GameObject arrow)
         {
             currentArrow = arrow;
+            PlaySound();
         }
 
         private void Start()
         {
+            source = GetComponent<AudioSource>();
             bowAnimation = GetComponent<BowAnimation>();
             handle = GetComponentInChildren<BowHandle>();
             interact = GetComponent<VRTK_InteractableObject>();
             interact.InteractableObjectGrabbed += new InteractableObjectEventHandler(DoObjectGrab);
+        }
+
+        private void PlaySound()
+        {
+            if (source != null && !source.isPlaying)
+            {
+                source.Play();
+            }
         }
 
         private void DoObjectGrab(object sender, InteractableObjectEventArgs e)
