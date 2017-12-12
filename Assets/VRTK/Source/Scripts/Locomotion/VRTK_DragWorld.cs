@@ -374,7 +374,7 @@ namespace VRTK
             Vector3 newPosition = controllingTransform.localPosition - Vector3.Scale((movementOffset * movementMultiplier), controllingTransform.localScale);
             controllingTransform.localPosition = new Vector3((movementPositionLock.xState ? controllingTransform.localPosition.x : newPosition.x), (movementPositionLock.yState ? controllingTransform.localPosition.y : newPosition.y), (movementPositionLock.zState ? controllingTransform.localPosition.z : newPosition.z));
             SetControllerPositions();
-        }
+Signed        }
 
         protected virtual void Rotate()
         {
@@ -386,7 +386,7 @@ namespace VRTK
             if (rotationTrackingController == TrackingController.BothControllers && VRTK_ControllerReference.IsValid(leftControllerReference) && VRTK_ControllerReference.IsValid(rightControllerReference))
             {
                 Vector2 currentRotationAngle = GetControllerRotation();
-                float newAngle = Vector2.Angle(currentRotationAngle, previousRotationAngle) * Mathf.Sign(currentRotationAngle.x * currentRotationAngle.y - previousRotationAngle.x * previousRotationAngle.y);
+                float newAngle = Vector2.Angle(currentRotationAngle, previousRotationAngle)*Mathf.Sign(Vector3.Cross(currentRotationAngle, previousRotationAngle).z);
                 RotateByAngle(newAngle);
                 previousRotationAngle = currentRotationAngle;
             }
