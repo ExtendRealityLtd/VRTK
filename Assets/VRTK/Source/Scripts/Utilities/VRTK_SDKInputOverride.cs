@@ -163,8 +163,12 @@ namespace VRTK
 
         protected virtual VRTK_SDKButtonInputOverrideType GetSelectedModifier(List<VRTK_SDKButtonInputOverrideType> overrideTypes, VRTK_ControllerReference controllerReference)
         {
+            VRTK_SDKButtonInputOverrideType selectedModifier = null;
             //attempt to find by the overall SDK set up to start with
-            VRTK_SDKButtonInputOverrideType selectedModifier = overrideTypes.FirstOrDefault(item => item.loadedSDKSetup == sdkManager.loadedSetup);
+            if (sdkManager.loadedSetup != null)
+            {
+                selectedModifier = overrideTypes.FirstOrDefault(item => item.loadedSDKSetup == sdkManager.loadedSetup);
+            }
 
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)
@@ -220,7 +224,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(interactGrabScript.controllerEvents);
                 VRTK_SDKButtonInputOverrideType selectedModifier = GetSelectedModifier(interactGrabOverrides, controllerReference);
-                if (selectedModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedModifier != null && selectedModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     interactGrabScript.enabled = false;
                     interactGrabScript.grabButton = selectedModifier.overrideButton;
@@ -235,7 +239,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(interactUseScript.controllerEvents);
                 VRTK_SDKButtonInputOverrideType selectedModifier = GetSelectedModifier(interactUseOverrides, controllerReference);
-                if (selectedModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedModifier != null && selectedModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     interactUseScript.enabled = false;
                     interactUseScript.useButton = selectedModifier.overrideButton;
@@ -250,7 +254,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(pointerScript.controllerEvents);
                 VRTK_SDKButtonInputOverrideType selectedActivationModifier = GetSelectedModifier(pointerActivationOverrides, controllerReference);
-                if (selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedActivationModifier != null && selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     pointerScript.enabled = false;
                     pointerScript.activationButton = selectedActivationModifier.overrideButton;
@@ -258,7 +262,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedSelectionModifier = GetSelectedModifier(pointerSelectionOverrides, controllerReference);
-                if (selectedSelectionModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedSelectionModifier != null && selectedSelectionModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     pointerScript.enabled = false;
                     pointerScript.selectionButton = selectedSelectionModifier.overrideButton;
@@ -273,7 +277,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(uiPointerScript.controllerEvents);
                 VRTK_SDKButtonInputOverrideType selectedActivationModifier = GetSelectedModifier(uiPointerActivationOverrides, controllerReference);
-                if (selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedActivationModifier != null && selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     uiPointerScript.enabled = false;
                     uiPointerScript.activationButton = selectedActivationModifier.overrideButton;
@@ -281,7 +285,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedSelectionModifier = GetSelectedModifier(uiPointerSelectionOverrides, controllerReference);
-                if (selectedSelectionModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedSelectionModifier != null && selectedSelectionModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     uiPointerScript.enabled = false;
                     uiPointerScript.selectionButton = selectedSelectionModifier.overrideButton;
@@ -296,7 +300,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(pointerDirectionIndicatorScript.GetControllerEvents());
                 VRTK_SDKVector2AxisInputOverrideType selectedCoorinateModifier = GetSelectedModifier(directionIndicatorCoordinateOverrides, controllerReference);
-                if (selectedCoorinateModifier.overrideAxis != VRTK_ControllerEvents.Vector2AxisAlias.Undefined)
+                if (selectedCoorinateModifier != null && selectedCoorinateModifier.overrideAxis != VRTK_ControllerEvents.Vector2AxisAlias.Undefined)
                 {
                     pointerDirectionIndicatorScript.enabled = false;
                     pointerDirectionIndicatorScript.coordinateAxis = selectedCoorinateModifier.overrideAxis;
@@ -311,7 +315,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(touchpadControlScript.controller);
                 VRTK_SDKVector2AxisInputOverrideType selectedCoorinateModifier = GetSelectedModifier(touchpadControlCoordinateOverrides, controllerReference);
-                if (selectedCoorinateModifier.overrideAxis != VRTK_ControllerEvents.Vector2AxisAlias.Undefined)
+                if (selectedCoorinateModifier != null && selectedCoorinateModifier.overrideAxis != VRTK_ControllerEvents.Vector2AxisAlias.Undefined)
                 {
                     touchpadControlScript.enabled = false;
                     touchpadControlScript.coordinateAxis = selectedCoorinateModifier.overrideAxis;
@@ -319,7 +323,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedActivationModifier = GetSelectedModifier(touchpadControlActivationOverrides, controllerReference);
-                if (selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedActivationModifier != null && selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     touchpadControlScript.enabled = false;
                     touchpadControlScript.primaryActivationButton = selectedActivationModifier.overrideButton;
@@ -327,7 +331,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedActionModifier = GetSelectedModifier(touchpadControlModifierOverrides, controllerReference);
-                if (selectedActionModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedActionModifier != null && selectedActionModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     touchpadControlScript.enabled = false;
                     touchpadControlScript.actionModifierButton = selectedActionModifier.overrideButton;
@@ -342,7 +346,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(buttonControlScript.controller);
                 VRTK_SDKButtonInputOverrideType selectedForwardModifier = GetSelectedModifier(buttonControlForwardOverrides, controllerReference);
-                if (selectedForwardModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedForwardModifier != null && selectedForwardModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     buttonControlScript.enabled = false;
                     buttonControlScript.forwardButton = selectedForwardModifier.overrideButton;
@@ -350,7 +354,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedBackwardModifier = GetSelectedModifier(buttonControlBackwardOverrides, controllerReference);
-                if (selectedBackwardModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedBackwardModifier != null && selectedBackwardModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     buttonControlScript.enabled = false;
                     buttonControlScript.backwardButton = selectedBackwardModifier.overrideButton;
@@ -358,7 +362,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedLeftModifier = GetSelectedModifier(buttonControlLeftOverrides, controllerReference);
-                if (selectedLeftModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedLeftModifier != null && selectedLeftModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     buttonControlScript.enabled = false;
                     buttonControlScript.leftButton = selectedLeftModifier.overrideButton;
@@ -366,7 +370,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedRightModifier = GetSelectedModifier(buttonControlRightOverrides, controllerReference);
-                if (selectedRightModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedRightModifier != null && selectedRightModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     buttonControlScript.enabled = false;
                     buttonControlScript.rightButton = selectedRightModifier.overrideButton;
@@ -381,7 +385,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetRightThenLeftReference();
                 VRTK_SDKButtonInputOverrideType selectedActivationModifier = GetSelectedModifier(slingshotJumpActivationOverrides, controllerReference);
-                if (selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedActivationModifier != null && selectedActivationModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     slingshotJumpScript.enabled = false;
                     slingshotJumpScript.SetActivationButton(selectedActivationModifier.overrideButton);
@@ -389,7 +393,7 @@ namespace VRTK
                 }
 
                 VRTK_SDKButtonInputOverrideType selectedCancelModifier = GetSelectedModifier(slingshotJumpCancelOverrides, controllerReference);
-                if (selectedCancelModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedCancelModifier != null && selectedCancelModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     slingshotJumpScript.enabled = false;
                     slingshotJumpScript.SetCancelButton(selectedCancelModifier.overrideButton);
@@ -404,7 +408,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetRightThenLeftReference();
                 VRTK_SDKButtonInputOverrideType selectedEngageModifier = GetSelectedModifier(moveInPlaceEngageOverrides, controllerReference);
-                if (selectedEngageModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedEngageModifier != null && selectedEngageModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     moveInPlaceScript.enabled = false;
                     moveInPlaceScript.engageButton = selectedEngageModifier.overrideButton;
@@ -419,7 +423,7 @@ namespace VRTK
             {
                 VRTK_ControllerReference controllerReference = GetReferenceFromEvents(stepMultiplierScript.controllerEvents);
                 VRTK_SDKButtonInputOverrideType selectedModifier = GetSelectedModifier(stepMultiplierActivationOverrides, controllerReference);
-                if (selectedModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
+                if (selectedModifier != null && selectedModifier.overrideButton != VRTK_ControllerEvents.ButtonAlias.Undefined)
                 {
                     stepMultiplierScript.enabled = false;
                     stepMultiplierScript.activationButton = selectedModifier.overrideButton;

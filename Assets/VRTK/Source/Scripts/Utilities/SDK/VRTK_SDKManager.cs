@@ -218,6 +218,7 @@ namespace VRTK
         private Coroutine checkLeftControllerReadyRoutine = null;
         private Coroutine checkRightControllerReadyRoutine = null;
         private float checkControllerReadyDelay = 1f;
+        private int checkControllerValidTimer = 50;
 #if UNITY_EDITOR
         private BuildTargetGroup[] targetGroupsToExclude;
 #endif
@@ -793,12 +794,14 @@ namespace VRTK
         private IEnumerator CheckLeftControllerReady()
         {
             WaitForSeconds delayInstruction = new WaitForSeconds(checkControllerReadyDelay);
+            int maxCheckTime = checkControllerValidTimer;
             while (true)
             {
-                if (loadedSetup != null && loadedSetup.actualLeftController != null && loadedSetup.actualLeftController.activeInHierarchy)
+                if (loadedSetup != null && loadedSetup.actualLeftController != null && loadedSetup.actualLeftController.activeInHierarchy && (loadedSetup.controllerSDK.GetCurrentControllerType() != SDK_BaseController.ControllerType.Undefined || maxCheckTime < 0))
                 {
                     break;
                 }
+                maxCheckTime--;
                 yield return delayInstruction;
             }
             loadedSetup.controllerSDK.OnControllerReady(SDK_BaseController.ControllerHand.Left);
@@ -807,12 +810,14 @@ namespace VRTK
         private IEnumerator CheckRightControllerReady()
         {
             WaitForSeconds delayInstruction = new WaitForSeconds(checkControllerReadyDelay);
+            int maxCheckTime = checkControllerValidTimer;
             while (true)
             {
-                if (loadedSetup != null && loadedSetup.actualRightController != null && loadedSetup.actualRightController.activeInHierarchy)
+                if (loadedSetup != null && loadedSetup.actualRightController != null && loadedSetup.actualRightController.activeInHierarchy && (loadedSetup.controllerSDK.GetCurrentControllerType() != SDK_BaseController.ControllerType.Undefined || maxCheckTime < 0))
                 {
                     break;
                 }
+                maxCheckTime--;
                 yield return delayInstruction;
             }
             loadedSetup.controllerSDK.OnControllerReady(SDK_BaseController.ControllerHand.Right);
