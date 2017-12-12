@@ -940,8 +940,14 @@ namespace VRTK
 
         protected virtual void ManagePhysicsCollider(Collider collider, bool state)
         {
-            Physics.IgnoreCollision(bodyCollider, collider, state);
-            Physics.IgnoreCollision(footCollider, collider, state);
+            if (bodyCollider != null)
+            {
+                Physics.IgnoreCollision(bodyCollider, collider, state);
+            }
+            if (footCollider != null)
+            {
+                Physics.IgnoreCollision(footCollider, collider, state);
+            }
         }
 
         protected virtual void CheckStepUpCollision(Collision collision)
