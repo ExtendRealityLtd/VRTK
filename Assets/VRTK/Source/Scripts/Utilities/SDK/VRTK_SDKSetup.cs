@@ -2,6 +2,7 @@
 namespace VRTK
 {
     using UnityEngine;
+    using System.Reflection;
 #if UNITY_EDITOR
     using UnityEditor;
     using UnityEditor.Callbacks;
@@ -331,7 +332,11 @@ namespace VRTK
                 ReadOnlyCollection<VRTK_SDKInfo> installedSDKInfos = installedSDKInfosList[index];
                 VRTK_SDKInfo currentSDKInfo = currentSDKInfos[index];
 
+#if UNITY_WSA && !UNITY_EDITOR
+                Type baseType = currentSDKInfo.type.GetTypeInfo().BaseType;
+#else
                 Type baseType = currentSDKInfo.type.BaseType;
+#endif
                 if (baseType == null)
                 {
                     continue;
@@ -473,7 +478,11 @@ namespace VRTK
                 return string.Format("The fallback {0} SDK is being used because there is no other {0} SDK set in the SDK Setup.", prettyName);
             }
 
+#if UNITY_WSA && !UNITY_EDITOR
+            if (!baseType.GetTypeInfo().IsAssignableFrom(selectedType.GetTypeInfo()) || fallbackType.GetTypeInfo().IsAssignableFrom(selectedType.GetTypeInfo()))
+#else
             if (!baseType.IsAssignableFrom(selectedType) || fallbackType.IsAssignableFrom(selectedType))
+#endif
             {
                 string description = string.Format("The fallback {0} SDK is being used despite being set to '{1}'.", prettyName, selectedType.Name);
 

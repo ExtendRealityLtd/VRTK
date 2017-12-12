@@ -115,7 +115,11 @@ namespace VRTK
             {
                 ToggleGameObject();
             }
+#if UNITY_WSA && !UNITY_EDITOR
+            else if (target.GetType().GetTypeInfo().IsSubclassOf(typeof(Component)))
+#else
             else if (target.GetType().IsSubclassOf(typeof(Component)))
+#endif
             {
                 ToggleComponent();
             }
