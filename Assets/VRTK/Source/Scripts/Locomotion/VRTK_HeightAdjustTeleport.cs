@@ -58,20 +58,20 @@ namespace VRTK
 
         protected virtual void AdjustForParentOffset()
         {
-            if (snapToNearestFloor && applyPlayareaParentOffset && TransformToTeleport != null && TransformToTeleport.parent != null)
+            if (snapToNearestFloor && applyPlayareaParentOffset && transformToTeleport != null && transformToTeleport.parent != null)
             {
-                Ray ray = new Ray(TransformToTeleport.parent.position, -TransformToTeleport.up);
+                Ray ray = new Ray(transformToTeleport.parent.position, -transformToTeleport.up);
                 RaycastHit rayCollidedWith;
                 if (VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, Physics.IgnoreRaycastLayer, Mathf.Infinity, QueryTriggerInteraction.Ignore))
                 {
-                    TransformToTeleport.position = new Vector3(TransformToTeleport.position.x, TransformToTeleport.position.y + rayCollidedWith.point.y, TransformToTeleport.position.z);
+                    transformToTeleport.position = new Vector3(transformToTeleport.position.x, transformToTeleport.position.y + rayCollidedWith.point.y, transformToTeleport.position.z);
                 }
             }
         }
 
         protected virtual float GetParentOffset()
         {
-            return (applyPlayareaParentOffset && TransformToTeleport.parent != null ? TransformToTeleport.parent.transform.localPosition.y : 0f);
+            return (applyPlayareaParentOffset && transformToTeleport.parent != null ? transformToTeleport.parent.transform.localPosition.y : 0f);
         }
 
         protected virtual float GetTeleportY(Transform target, Vector3 tipPosition)
@@ -82,11 +82,11 @@ namespace VRTK
                 return tipPosition.y + parentOffset;
             }
 
-            float newY = TransformToTeleport.position.y;
+            float newY = transformToTeleport.position.y;
             float heightOffset = 0.1f;
             //Check to see if the tip is on top of an object
             Vector3 rayStartPositionOffset = Vector3.up * heightOffset;
-            Ray ray = new Ray(tipPosition + rayStartPositionOffset, -TransformToTeleport.up);
+            Ray ray = new Ray(tipPosition + rayStartPositionOffset, -transformToTeleport.up);
             RaycastHit rayCollidedWith;
             if (target != null && VRTK_CustomRaycast.Raycast(customRaycast, ray, out rayCollidedWith, Physics.IgnoreRaycastLayer, Mathf.Infinity, QueryTriggerInteraction.Ignore))
             {
