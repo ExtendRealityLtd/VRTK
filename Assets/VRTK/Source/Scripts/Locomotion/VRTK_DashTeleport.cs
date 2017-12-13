@@ -103,7 +103,7 @@ namespace VRTK
         {
             if (ValidRigObjects())
             {
-                return (rotation != null ? (Quaternion)rotation : playArea.rotation);
+                return (rotation != null ? (Quaternion)rotation : TransformToTeleport.rotation);
             }
             return Quaternion.identity;
         }
@@ -118,7 +118,7 @@ namespace VRTK
             if (ValidRigObjects())
             {
                 Vector3 finalPosition = CalculateOffsetPosition(targetPosition, targetRotation);
-                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, playArea.position, finalPosition, playArea.rotation, targetRotation));
+                attemptLerpRoutine = StartCoroutine(lerpToPosition(sender, e, TransformToTeleport.position, finalPosition, TransformToTeleport.rotation, targetRotation));
             }
         }
 
@@ -129,8 +129,8 @@ namespace VRTK
                 return targetPosition;
             }
 
-            Vector3 playerOffset = new Vector3(headset.position.x - playArea.position.x, 0, headset.position.z - playArea.position.z);
-            Quaternion relativeRotation = Quaternion.Inverse(playArea.rotation) * targetRotation;
+            Vector3 playerOffset = new Vector3(headset.position.x - TransformToTeleport.position.x, 0, headset.position.z - TransformToTeleport.position.z);
+            Quaternion relativeRotation = Quaternion.Inverse(TransformToTeleport.rotation) * targetRotation;
             Vector3 adjustedOffset = relativeRotation * playerOffset;
             return targetPosition - (adjustedOffset - playerOffset);
         }
@@ -146,13 +146,13 @@ namespace VRTK
 
             // Find the objects we will be dashing through and broadcast them via events
             Vector3 eyeCameraPosition = headset.transform.position;
-            Vector3 eyeCameraPositionOnGround = new Vector3(eyeCameraPosition.x, playArea.position.y, eyeCameraPosition.z);
-            Vector3 eyeCameraRelativeToRig = eyeCameraPosition - playArea.position;
+            Vector3 eyeCameraPositionOnGround = new Vector3(eyeCameraPosition.x, TransformToTeleport.position.y, eyeCameraPosition.z);
+            Vector3 eyeCameraRelativeToRig = eyeCameraPosition - TransformToTeleport.position;
             Vector3 targetEyeCameraPosition = targetPosition + eyeCameraRelativeToRig;
             Vector3 direction = (targetEyeCameraPosition - eyeCameraPosition).normalized;
             Vector3 bottomPoint = eyeCameraPositionOnGround + (Vector3.up * capsuleBottomOffset) + direction;
             Vector3 topPoint = eyeCameraPosition + (Vector3.up * capsuleTopOffset) + direction;
-            float maxDistance = Vector3.Distance(playArea.position, targetPosition - direction * 0.5f);
+            float maxDistance = Vector3.Distance(TransformToTeleport.position, targetPosition - direction * 0.5f);
             RaycastHit[] allHits = Physics.CapsuleCastAll(bottomPoint, topPoint, capsuleRadius, direction, maxDistance);
 
             for (int i = 0; i < allHits.Length; i++)
@@ -173,15 +173,15 @@ namespace VRTK
 
             while (currentLerpedTime < 1f)
             {
-                playArea.position = Vector3.Lerp(startPosition, targetPosition, currentLerpedTime);
-                playArea.rotation = Quaternion.Lerp(startRotation, targetRotation, currentLerpedTime);
+                TransformToTeleport.position = Vector3.Lerp(startPosition, targetPosition, currentLerpedTime);
+                TransformToTeleport.rotation = Quaternion.Lerp(startRotation, targetRotation, currentLerpedTime);
                 elapsedTime += Time.deltaTime;
                 currentLerpedTime = elapsedTime / lerpTime;
                 yield return delayInstruction;
             }
 
-            playArea.position = targetPosition;
-            playArea.rotation = targetRotation;
+            TransformToTeleport.position = targetPosition;
+            TransformToTeleport.rotation = targetRotation;
 
             if (gameObjectInTheWay)
             {

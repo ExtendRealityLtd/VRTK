@@ -47,6 +47,8 @@ namespace VRTK
         public VRTK_PolicyList targetListPolicy;
         [Tooltip("An optional NavMeshData object that will be utilised for limiting the teleport to within any scene NavMesh.")]
         public VRTK_NavMeshData navMeshData;
+        [Tooltip("This is the transform that will be moved when a Teleport occurs. Be default this is the vr play area.")]
+        public Transform TransformToTeleport;
 
         [System.Obsolete("`VRTK_BasicTeleport.navMeshLimitDistance` is no longer used, use `VRTK_BasicTeleport.processNavMesh` instead. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
@@ -62,7 +64,6 @@ namespace VRTK
         public event TeleportEventHandler Teleported;
 
         protected Transform headset;
-        protected Transform playArea;
         protected bool adjustYForTerrain = false;
         protected bool enableTeleport = true;
 
@@ -184,7 +185,7 @@ namespace VRTK
             Blink(blinkTransitionSpeed);
             if (ValidRigObjects())
             {
-                playArea.position = finalDestination;
+                TransformToTeleport.position = finalDestination;
             }
             ProcessOrientation(this, teleportArgs, finalDestination, updatedRotation);
             EndTeleport(this, teleportArgs);
@@ -219,7 +220,7 @@ namespace VRTK
         {
             VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.CameraRig);
             headset = VRTK_SharedMethods.AddCameraFade();
-            playArea = VRTK_DeviceFinder.PlayAreaTransform();
+            TransformToTeleport = VRTK_DeviceFinder.PlayAreaTransform();
 
             adjustYForTerrain = false;
             enableTeleport = true;
@@ -255,7 +256,7 @@ namespace VRTK
         protected virtual DestinationMarkerEventArgs BuildTeleportArgs(Transform target, Vector3 destinationPosition, Quaternion? destinationRotation = null, bool forceDestinationPosition = false)
         {
             DestinationMarkerEventArgs teleportArgs = new DestinationMarkerEventArgs();
-            teleportArgs.distance = (ValidRigObjects() ? Vector3.Distance(new Vector3(headset.position.x, playArea.position.y, headset.position.z), destinationPosition) : 0f);
+            teleportArgs.distance = (ValidRigObjects() ? Vector3.Distance(new Vector3(headset.position.x, TransformToTeleport.position.y, headset.position.z), destinationPosition) : 0f);
             teleportArgs.target = target;
             teleportArgs.raycastHit = new RaycastHit();
             teleportArgs.destinationPosition = destinationPosition;
@@ -272,7 +273,7 @@ namespace VRTK
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_BasicTeleport", "rig headset", ". Are you trying to access the headset before the SDK Manager has initialised it?"));
                 return false;
             }
-            if (playArea == null)
+            if (TransformToTeleport == null)
             {
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_SCENE, "VRTK_BasicTeleport", "rig boundaries", ". Are you trying to access the boundaries before the SDK Manager has initialised it?"));
                 return false;
@@ -319,8 +320,8 @@ namespace VRTK
         {
             if (ValidRigObjects())
             {
-                playArea.position = CheckTerrainCollision(position, target, forceDestinationPosition);
-                return playArea.position;
+                TransformToTeleport.position = CheckTerrainCollision(position, target, forceDestinationPosition);
+                return TransformToTeleport.position;
             }
             return Vector3.zero;
         }
@@ -331,9 +332,9 @@ namespace VRTK
             {
                 if (rotation != null)
                 {
-                    playArea.rotation = (Quaternion)rotation;
+                    TransformToTeleport.rotation = (Quaternion)rotation;
                 }
-                return playArea.rotation;
+                return TransformToTeleport.rotation;
             }
             return Quaternion.identity;
         }
@@ -345,7 +346,7 @@ namespace VRTK
                 return tipPosition;
             }
 
-            return GetCompensatedPosition(tipPosition, playArea.position);
+            return GetCompensatedPosition(tipPosition, TransformToTeleport.position);
         }
 
         protected virtual Vector3 GetCompensatedPosition(Vector3 givenPosition, Vector3 defaultPosition)
@@ -356,9 +357,9 @@ namespace VRTK
 
             if (ValidRigObjects())
             {
-                newX = (headsetPositionCompensation ? (givenPosition.x - (headset.position.x - playArea.position.x)) : givenPosition.x);
+                newX = (headsetPositionCompensation ? (givenPosition.x - (headset.position.x - TransformToTeleport.position.x)) : givenPosition.x);
                 newY = defaultPosition.y;
-                newZ = (headsetPositionCompensation ? (givenPosition.z - (headset.position.z - playArea.position.z)) : givenPosition.z);
+                newZ = (headsetPositionCompensation ? (givenPosition.z - (headset.position.z - TransformToTeleport.position.z)) : givenPosition.z);
             }
 
             return new Vector3(newX, newY, newZ);
@@ -398,7 +399,7 @@ namespace VRTK
             if (distanceBlinkDelay > 0f)
             {
                 float minBlink = 0.5f;
-                float distance = (ValidRigObjects() ? Vector3.Distance(playArea.position, newPosition) : 0f);
+                float distance = (ValidRigObjects() ? Vector3.Distance(TransformToTeleport.position, newPosition) : 0f);
                 blinkPause = Mathf.Clamp((distance * blinkTransitionSpeed) / (maxBlinkDistance - distanceBlinkDelay), minBlink, maxBlinkTransitionSpeed);
                 blinkPause = (blinkSpeed <= 0.25 ? minBlink : blinkPause);
             }
