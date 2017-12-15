@@ -386,7 +386,7 @@ namespace VRTK
             if (rotationTrackingController == TrackingController.BothControllers && VRTK_ControllerReference.IsValid(leftControllerReference) && VRTK_ControllerReference.IsValid(rightControllerReference))
             {
                 Vector2 currentRotationAngle = GetControllerRotation();
-                float newAngle = Vector2.Angle(currentRotationAngle, previousRotationAngle) * Mathf.Sign(currentRotationAngle.x * currentRotationAngle.y - previousRotationAngle.x * previousRotationAngle.y);
+                float newAngle = Vector2.Angle(currentRotationAngle, previousRotationAngle)*Mathf.Sign(Vector3.Cross(currentRotationAngle, previousRotationAngle).z);
                 RotateByAngle(newAngle);
                 previousRotationAngle = currentRotationAngle;
             }
