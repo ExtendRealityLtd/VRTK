@@ -514,9 +514,9 @@ namespace VRTK
         protected virtual void DoActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
         {
             OnActivationButtonPressed(controller.SetControllerEvent(ref activationButtonPressed, true));
+	    controllerReference = e.controllerReference; // needed in case the renderer is enabled later
             if (EnabledPointerRenderer())
             {
-                controllerReference = e.controllerReference;
                 Toggle(true);
             }
         }
