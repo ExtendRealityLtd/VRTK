@@ -40,7 +40,8 @@ namespace VRTK
     /// </summary>
     /// <remarks>
     /// **Script Usage:**
-    ///  * Place the `VRTK_PlayerClimb` script on any active scene GameObject.
+    ///  * Place the `VRTK_SDKInputOverride` script on any active scene GameObject.
+    ///  * Customise the input button for each script type for each SDK controller type.
     /// </remarks>
     public class VRTK_SDKInputOverride : VRTK_SDKControllerReady
     {

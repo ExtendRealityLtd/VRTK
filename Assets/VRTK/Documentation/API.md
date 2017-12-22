@@ -9799,7 +9799,8 @@ The SetStateByControllerReference method sets the object state based on the cont
 Provides the ability to switch button mappings based on the current SDK or controller type
 
 **Script Usage:**
- * Place the `VRTK_PlayerClimb` script on any active scene GameObject.
+ * Place the `VRTK_SDKInputOverride` script on any active scene GameObject.
+ * Customise the input button for each script type for each SDK controller type.
 
 ### Inspector Parameters
 
