@@ -552,26 +552,36 @@ namespace VRTK
             }
         }
 
-        protected virtual void DoActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
+        protected virtual void PointerActivated()
         {
-            OnActivationButtonPressed(controllerEvents.SetControllerEvent(ref activationButtonPressed, true));
             if (EnabledPointerRenderer())
             {
-                controllerReference = e.controllerReference;
                 Toggle(true);
             }
         }
 
-        protected virtual void DoActivationButtonReleased(object sender, ControllerInteractionEventArgs e)
+        protected virtual void PointerDeactivated()
         {
             if (EnabledPointerRenderer())
             {
-                controllerReference = e.controllerReference;
                 if (IsPointerActive())
                 {
                     Toggle(false);
                 }
             }
+        }
+
+        protected virtual void DoActivationButtonPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            controllerReference = e.controllerReference;
+            OnActivationButtonPressed(controllerEvents.SetControllerEvent(ref activationButtonPressed, true));
+            PointerActivated();
+        }
+
+        protected virtual void DoActivationButtonReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            controllerReference = e.controllerReference;
+            PointerDeactivated();
             OnActivationButtonReleased(controllerEvents.SetControllerEvent(ref activationButtonPressed, false));
         }
 
