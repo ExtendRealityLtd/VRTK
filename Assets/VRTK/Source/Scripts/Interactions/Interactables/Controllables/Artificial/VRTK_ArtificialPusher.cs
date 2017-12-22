@@ -43,6 +43,7 @@ namespace VRTK.Controllables.ArtificialBased
         public float returnSpeed = 10f;
 
         protected Coroutine positionLerpRoutine;
+        protected Coroutine setTargetPositionRoutine;
         protected float vectorEqualityThreshold = 0.001f;
         protected bool isPressed = false;
         protected bool isMoving = false;
@@ -99,6 +100,32 @@ namespace VRTK.Controllables.ArtificialBased
             SetTargetPosition();
         }
 
+        protected override void OnDrawGizmosSelected()
+        {
+            base.OnDrawGizmosSelected();
+            Vector3 objectHalf = AxisDirection(true) * (transform.lossyScale[(int)operateAxis] * 0.5f);
+            Vector3 initialPoint = actualTransformPosition + (objectHalf * Mathf.Sign(pressedDistance));
+            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * pressedDistance);
+            Gizmos.DrawLine(initialPoint, destinationPoint);
+            Gizmos.DrawSphere(destinationPoint, 0.01f);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            isPressed = false;
+            isMoving = false;
+            isTouched = false;
+            setTargetPositionRoutine = StartCoroutine(SetTargetPositionAtEndOfFrame());
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            CancelPositionLerp();
+            CancelSetTargetPosition();
+        }
+
         protected override void EmitEvents()
         {
             float currentPosition = GetNormalizedValue();
@@ -139,31 +166,6 @@ namespace VRTK.Controllables.ArtificialBased
             }
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            isPressed = false;
-            isMoving = false;
-            isTouched = false;
-            SetTargetPosition();
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            CancelPositionLerp();
-        }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            base.OnDrawGizmosSelected();
-            Vector3 objectHalf = AxisDirection(true) * (transform.lossyScale[(int)operateAxis] * 0.5f);
-            Vector3 initialPoint = actualTransformPosition + (objectHalf * Mathf.Sign(pressedDistance));
-            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * pressedDistance);
-            Gizmos.DrawLine(initialPoint, destinationPoint);
-            Gizmos.DrawSphere(destinationPoint, 0.01f);
-        }
-
         protected override void OnTouched(Collider collider)
         {
             if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) || VRTK_PlayerObject.IsPlayerObject(collider.gameObject, VRTK_PlayerObject.ObjectTypes.Controller))
@@ -190,13 +192,13 @@ namespace VRTK.Controllables.ArtificialBased
 
         protected virtual void SetTargetPosition()
         {
-            transform.localPosition = Vector3.Lerp(originalLocalPosition, PressedPosition(), positionTarget);
+            transform.localPosition = Vector3.Lerp(originalLocalPosition, PressedPosition(), (stayPressed && AtPressedPosition() ? 1f : positionTarget));
             EmitEvents();
         }
 
         protected virtual Vector3 PressedPosition()
         {
-            return originalLocalPosition + (AxisDirection(true) * pressedDistance);
+            return originalLocalPosition + (AxisDirection() * pressedDistance);
         }
 
         protected virtual void CancelPositionLerp()
@@ -206,6 +208,15 @@ namespace VRTK.Controllables.ArtificialBased
                 StopCoroutine(positionLerpRoutine);
             }
             positionLerpRoutine = null;
+        }
+
+        protected virtual void CancelSetTargetPosition()
+        {
+            if (setTargetPositionRoutine != null)
+            {
+                StopCoroutine(setTargetPositionRoutine);
+            }
+            setTargetPositionRoutine = null;
         }
 
         protected virtual IEnumerator PositionLerp(Vector3 targetPosition, float moveSpeed)
@@ -223,6 +234,12 @@ namespace VRTK.Controllables.ArtificialBased
 
             ManageAtPressedPosition();
             ManageAtOriginPosition();
+        }
+
+        protected virtual IEnumerator SetTargetPositionAtEndOfFrame()
+        {
+            yield return new WaitForEndOfFrame();
+            SetTargetPosition();
         }
 
         protected virtual void ManageAtPressedPosition()

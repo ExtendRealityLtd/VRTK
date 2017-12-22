@@ -185,6 +185,44 @@ namespace VRTK.Controllables.ArtificialBased
             return controlInteractableObject;
         }
 
+        protected override void OnDrawGizmosSelected()
+        {
+            base.OnDrawGizmosSelected();
+            if (hingePoint != null)
+            {
+                Bounds rotatorBounds = VRTK_SharedMethods.GetBounds(transform, transform);
+                Vector3 limits = transform.rotation * ((AxisDirection() * rotatorBounds.size[(int)operateAxis]) * 0.53f);
+                Vector3 hingeStart = hingePoint.transform.position - limits;
+                Vector3 hingeEnd = hingePoint.transform.position + limits;
+                Gizmos.DrawLine(hingeStart, hingeEnd);
+                Gizmos.DrawSphere(hingeStart, 0.01f);
+                Gizmos.DrawSphere(hingeEnd, 0.01f);
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            rotatorContainer = gameObject;
+            rotationReset = false;
+            previousValue = float.MaxValue;
+            SetupParentContainer();
+            SetupInteractableObject();
+            SetAngleTarget(angleTarget);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            ManageInteractableListeners(false);
+            ManageGrabbableListeners(false);
+            if (createInteractableObject)
+            {
+                Destroy(controlInteractableObject);
+            }
+            RemoveParentContainer();
+        }
+
         protected override void EmitEvents()
         {
             bool valueChanged = Mathf.Abs(GetValue() - previousValue) >= equalityFidelity;
@@ -230,44 +268,6 @@ namespace VRTK.Controllables.ArtificialBased
             {
                 OnRestingPointReached(EventPayload());
                 stillResting = true;
-            }
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            rotatorContainer = gameObject;
-            rotationReset = false;
-            previousValue = float.MaxValue;
-            SetupParentContainer();
-            SetupInteractableObject();
-            SetAngleTarget(angleTarget);
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            ManageInteractableListeners(false);
-            ManageGrabbableListeners(false);
-            if (createInteractableObject)
-            {
-                Destroy(controlInteractableObject);
-            }
-            RemoveParentContainer();
-        }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            base.OnDrawGizmosSelected();
-            if (hingePoint != null)
-            {
-                Bounds rotatorBounds = VRTK_SharedMethods.GetBounds(transform, transform);
-                Vector3 limits = transform.rotation * ((AxisDirection() * rotatorBounds.size[(int)operateAxis]) * 0.53f);
-                Vector3 hingeStart = hingePoint.transform.position - limits;
-                Vector3 hingeEnd = hingePoint.transform.position + limits;
-                Gizmos.DrawLine(hingeStart, hingeEnd);
-                Gizmos.DrawSphere(hingeStart, 0.01f);
-                Gizmos.DrawSphere(hingeEnd, 0.01f);
             }
         }
 

@@ -14,7 +14,7 @@ namespace VRTK.Controllables.PhysicsBased
     ///  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
     ///
     /// **Optional Components:**
-    ///  * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the slider. Will be automatically created if the `Auto Interaction` paramter is checked.
+    ///  * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the slider.
     /// 
     /// **Script Usage:**
     ///  * Create a slider container GameObject and set the GameObject that is to become the slider as a child of the container.
@@ -69,7 +69,7 @@ namespace VRTK.Controllables.PhysicsBased
         public GameObject[] onlyInteractWith = new GameObject[0];
 
         protected ConfigurableJoint controlJoint;
-        protected bool createCustomJoint;
+        protected bool createControlJoint;
         protected VRTK_InteractableObject controlInteractableObject;
         protected VRTK_TrackObjectGrabAttach controlGrabAttach;
         protected VRTK_SwapControllerGrabAction controlSecondaryGrabAction;
@@ -164,6 +164,62 @@ namespace VRTK.Controllables.PhysicsBased
             return controlInteractableObject;
         }
 
+        protected override void OnDrawGizmosSelected()
+        {
+            Vector3 initialPoint = transform.position;
+            base.OnDrawGizmosSelected();
+            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * maximumLength);
+            Gizmos.DrawLine(initialPoint, destinationPoint);
+            Gizmos.DrawSphere(initialPoint, 0.01f);
+            Gizmos.DrawSphere(destinationPoint, 0.01f);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            SetupInteractableObject();
+            SetupJoint();
+            previousLocalPosition = Vector3.one * float.MaxValue;
+            previousPositionTarget = float.MaxValue;
+            stillResting = false;
+            SetPositionWithNormalizedValue(positionTarget);
+        }
+
+        protected override void OnDisable()
+        {
+            if (createControlInteractableObject)
+            {
+                ManageInteractableObjectListeners(false);
+                Destroy(controlSecondaryGrabAction);
+                Destroy(controlGrabAttach);
+                Destroy(controlInteractableObject);
+            }
+            else
+            {
+                ManageInteractableObjectListeners(false);
+            }
+            if (createControlJoint)
+            {
+                Destroy(controlJoint);
+            }
+            base.OnDisable();
+        }
+
+        protected virtual void Update()
+        {
+            ForceRestingPosition();
+            ForcePositionTarget();
+            ForceSnapToStep();
+            EmitEvents();
+        }
+
+        protected override void ConfigueRigidbody()
+        {
+            SetRigidbodyGravity(false);
+            controlRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            controlRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+
         protected override void EmitEvents()
         {
             bool valueChanged = !VRTK_SharedMethods.Vector3ShallowCompare(transform.localPosition, previousLocalPosition, equalityFidelity);
@@ -211,62 +267,6 @@ namespace VRTK.Controllables.PhysicsBased
             }
 
             previousLocalPosition = transform.localPosition;
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            SetupInteractableObject();
-            SetupJoint();
-            previousLocalPosition = Vector3.one * float.MaxValue;
-            previousPositionTarget = float.MaxValue;
-            stillResting = false;
-            SetPositionWithNormalizedValue(positionTarget);
-        }
-
-        protected override void OnDisable()
-        {
-            if (createControlInteractableObject)
-            {
-                ManageInteractableObjectListeners(false);
-                Destroy(controlSecondaryGrabAction);
-                Destroy(controlGrabAttach);
-                Destroy(controlInteractableObject);
-            }
-            else
-            {
-                ManageInteractableObjectListeners(false);
-            }
-            if (createCustomJoint)
-            {
-                Destroy(controlJoint);
-            }
-            base.OnDisable();
-        }
-
-        protected virtual void Update()
-        {
-            ForceRestingPosition();
-            ForcePositionTarget();
-            ForceSnapToStep();
-            EmitEvents();
-        }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            Vector3 initialPoint = transform.position;
-            base.OnDrawGizmosSelected();
-            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * maximumLength);
-            Gizmos.DrawLine(initialPoint, destinationPoint);
-            Gizmos.DrawSphere(initialPoint, 0.01f);
-            Gizmos.DrawSphere(destinationPoint, 0.01f);
-        }
-
-        protected override void ConfigueRigidbody()
-        {
-            SetRigidbodyGravity(false);
-            controlRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            controlRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
         protected override ControllableEventArgs EventPayload()
@@ -364,14 +364,14 @@ namespace VRTK.Controllables.PhysicsBased
         protected virtual void SetupJoint()
         {
             //move transform towards activation distance
-            transform.localPosition += AxisDirection() * (maximumLength * 0.5f);
+            transform.localPosition = originalLocalPosition + (AxisDirection() * (maximumLength * 0.5f));
 
             controlJoint = GetComponent<ConfigurableJoint>();
-            createCustomJoint = false;
+            createControlJoint = false;
             if (controlJoint == null)
             {
                 controlJoint = gameObject.AddComponent<ConfigurableJoint>();
-                createCustomJoint = true;
+                createControlJoint = true;
 
                 controlJoint.angularXMotion = ConfigurableJointMotion.Locked;
                 controlJoint.angularYMotion = ConfigurableJointMotion.Locked;

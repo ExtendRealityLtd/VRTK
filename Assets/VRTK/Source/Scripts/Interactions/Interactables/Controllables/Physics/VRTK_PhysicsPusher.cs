@@ -12,10 +12,13 @@ namespace VRTK.Controllables.PhysicsBased
     ///  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
     ///
     /// **Optional Components:**
-    ///  * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody upon touching the pusher. Will be automatically created if the `Auto Interaction` paramter is checked.
+    ///  * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody upon touching the pusher.
     /// 
     /// **Script Usage:**
+    ///  * Create a pusher container GameObject and set the GameObject that is to become the pusher as a child of the newly created container GameObject.
     ///  * Place the `VRTK_PhysicsPusher` script onto the GameObject that is to become the pusher.
+    ///
+    ///   > The Physics Pusher script must not be on a root level GameObject. Any runtime world positioning of the pusher must be set on the parent container GameObject.
     /// </remarks>
     [AddComponentMenu("VRTK/Scripts/Interactables/Controllables/Physics/VRTK_PhysicsPusher")]
     public class VRTK_PhysicsPusher : VRTK_BasePhysicsControllable
@@ -42,9 +45,10 @@ namespace VRTK.Controllables.PhysicsBased
         public float targetForce = 10f;
 
         protected ConfigurableJoint controlJoint;
-        protected bool createCustomJoint;
+        protected bool createControlJoint;
         protected Vector3 previousLocalPosition;
         protected bool pressedDown;
+        protected float previousPositionTarget;
 
         /// <summary>
         /// The GetValue method returns the current position value of the pusher.
@@ -83,9 +87,80 @@ namespace VRTK.Controllables.PhysicsBased
             return controlJoint;
         }
 
+        protected override void OnDrawGizmosSelected()
+        {
+            base.OnDrawGizmosSelected();
+            Vector3 objectHalf = AxisDirection(true) * (transform.lossyScale[(int)operateAxis] * 0.5f);
+            Vector3 initialPoint = transform.position + (objectHalf * Mathf.Sign(pressedDistance));
+            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * pressedDistance);
+            Gizmos.DrawLine(initialPoint, destinationPoint);
+            Gizmos.DrawSphere(destinationPoint, 0.01f);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            SetupJoint();
+            previousLocalPosition = Vector3.one * float.MaxValue;
+            pressedDown = false;
+        }
+
+        protected override void OnDisable()
+        {
+            if (stayPressed && pressedDown)
+            {
+                previousPositionTarget = positionTarget;
+                positionTarget = 1f;
+            }
+
+            if (createControlJoint)
+            {
+                Destroy(controlJoint);
+            }
+            base.OnDisable();
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            SetRigidbodyVelocity(Vector3.zero);
+            ForceLocalPosition();
+        }
+
+        protected virtual void Update()
+        {
+            CheckUnpress();
+            SetTargetPosition();
+            EmitEvents();
+            if (!pressedDown && stayPressed && AtMaxLimit())
+            {
+                StayPressed();
+            }
+        }
+
+        protected override void ConfigueRigidbody()
+        {
+            SetRigidbodyGravity(false);
+            SetRigidbodyCollisionDetectionMode(CollisionDetectionMode.ContinuousDynamic);
+            SetRigidbodyConstraints(RigidbodyConstraints.FreezeRotation);
+        }
+
         protected override void EmitEvents()
         {
-            if (!VRTK_SharedMethods.Vector3ShallowCompare(transform.localPosition, previousLocalPosition, equalityFidelity))
+            bool positionChanged = !VRTK_SharedMethods.Vector3ShallowCompare(transform.localPosition, previousLocalPosition, equalityFidelity);
+
+            //Force the position to the max position if it should be there but isn't
+            if (!positionChanged && positionTarget == 1f && !VRTK_SharedMethods.Vector3ShallowCompare(transform.localPosition, transform.localPosition + (pressedDistance * AxisDirection()), equalityFidelity))
+            {
+                Vector3 fixedPosition = Vector3.zero;
+                for (int axis = 0; axis < 3; axis++)
+                {
+                    fixedPosition[axis] = (axis == (int)operateAxis ? originalLocalPosition[axis] + pressedDistance : transform.localPosition[axis]);
+                }
+                transform.localPosition = fixedPosition;
+                positionChanged = true;
+            }
+
+            if (positionChanged)
             {
                 float currentPosition = GetNormalizedValue();
                 ControllableEventArgs payload = EventPayload();
@@ -124,55 +199,7 @@ namespace VRTK.Controllables.PhysicsBased
             {
                 OnRestingPointReached(EventPayload());
             }
-
             previousLocalPosition = transform.localPosition;
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            SetupJoint();
-            previousLocalPosition = Vector3.one * float.MaxValue;
-            pressedDown = false;
-        }
-
-        protected override void OnDisable()
-        {
-            if (createCustomJoint)
-            {
-                Destroy(controlJoint);
-            }
-            base.OnDisable();
-        }
-
-        protected virtual void FixedUpdate()
-        {
-            SetRigidbodyVelocity(Vector3.zero);
-            ForceLocalPosition();
-        }
-
-        protected virtual void Update()
-        {
-            CheckUnpress();
-            SetTargetPosition();
-            EmitEvents();
-        }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            base.OnDrawGizmosSelected();
-            Vector3 objectHalf = AxisDirection(true) * (transform.lossyScale[(int)operateAxis] * 0.5f);
-            Vector3 initialPoint = transform.position + (objectHalf * Mathf.Sign(pressedDistance));
-            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * pressedDistance);
-            Gizmos.DrawLine(initialPoint, destinationPoint);
-            Gizmos.DrawSphere(destinationPoint, 0.01f);
-        }
-
-        protected override void ConfigueRigidbody()
-        {
-            SetRigidbodyGravity(false);
-            SetRigidbodyCollisionDetectionMode(CollisionDetectionMode.ContinuousDynamic);
-            SetRigidbodyConstraints(RigidbodyConstraints.FreezeRotation);
         }
 
         protected virtual void ForceLocalPosition()
@@ -188,6 +215,8 @@ namespace VRTK.Controllables.PhysicsBased
             if (!stayPressed && pressedDown)
             {
                 SetRigidbodyConstraints(RigidbodyConstraints.FreezeRotation);
+                positionTarget = previousPositionTarget;
+                pressedDown = false;
             }
         }
 
@@ -207,14 +236,14 @@ namespace VRTK.Controllables.PhysicsBased
         protected virtual void SetupJoint()
         {
             //move transform towards activation distance
-            transform.localPosition += AxisDirection() * (pressedDistance * 0.5f);
+            transform.localPosition = originalLocalPosition + (AxisDirection() * (pressedDistance * 0.5f));
 
             controlJoint = GetComponent<ConfigurableJoint>();
-            createCustomJoint = false;
+            createControlJoint = false;
             if (controlJoint == null)
             {
                 controlJoint = gameObject.AddComponent<ConfigurableJoint>();
-                createCustomJoint = true;
+                createControlJoint = true;
 
                 controlJoint.angularXMotion = ConfigurableJointMotion.Locked;
                 controlJoint.angularYMotion = ConfigurableJointMotion.Locked;
