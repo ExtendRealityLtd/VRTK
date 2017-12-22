@@ -14,7 +14,7 @@ namespace VRTK.Controllables.PhysicsBased
     ///  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
     ///
     /// **Optional Components:**
-    ///  * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the rotator. Will be automatically created if the `Auto Interaction` paramter is checked.
+    ///  * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the rotator.
     /// 
     /// **Script Usage:**
     ///  * Create a rotator container GameObject and set the GameObject that is to become the rotator as a child of the newly created container GameObject.
@@ -196,6 +196,65 @@ namespace VRTK.Controllables.PhysicsBased
             return controlInteractableObject;
         }
 
+        protected override void OnDrawGizmosSelected()
+        {
+            base.OnDrawGizmosSelected();
+            if (hingePoint != null)
+            {
+                Bounds rotatorBounds = VRTK_SharedMethods.GetBounds(transform, transform);
+                Vector3 limits = transform.rotation * ((AxisDirection() * rotatorBounds.size[(int)operateAxis]) * 0.53f);
+                Vector3 hingeStart = hingePoint.transform.position - limits;
+                Vector3 hingeEnd = hingePoint.transform.position + limits;
+                Gizmos.DrawLine(hingeStart, hingeEnd);
+                Gizmos.DrawSphere(hingeStart, 0.01f);
+                Gizmos.DrawSphere(hingeEnd, 0.01f);
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            stillLocked = false;
+            stillResting = false;
+            previousAngleTarget = float.MaxValue;
+            previousValue = float.MaxValue;
+            savedConstraints = controlRigidbody.constraints;
+            SetupInteractableObject();
+            SetupJoint();
+            SetFrictions(releasedFriction);
+            CheckLock();
+            UpdateToAngle(angleTarget);
+        }
+
+        protected override void OnDisable()
+        {
+            if (createControlJoint)
+            {
+                Destroy(controlJoint);
+            }
+            base.OnDisable();
+            if (createControlInteractableObject)
+            {
+                ManageInteractableObjectListeners(false);
+                Destroy(controlSecondaryGrabAction);
+                Destroy(controlGrabAttach);
+                Destroy(controlInteractableObject);
+            }
+            else
+            {
+                ManageInteractableObjectListeners(false);
+            }
+        }
+
+        protected virtual void Update()
+        {
+            ForceRestingPosition();
+            ForceAngleTarget();
+            ForceSnapToStep();
+            SetJointLimits();
+            EmitEvents();
+        }
+
         protected override void EmitEvents()
         {
             bool valueChanged = Mathf.Abs(GetValue() - previousValue) >= equalityFidelity;
@@ -241,65 +300,6 @@ namespace VRTK.Controllables.PhysicsBased
             {
                 OnRestingPointReached(EventPayload());
                 stillResting = true;
-            }
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            stillLocked = false;
-            stillResting = false;
-            previousAngleTarget = float.MaxValue;
-            previousValue = float.MaxValue;
-            savedConstraints = controlRigidbody.constraints;
-            SetupInteractableObject();
-            SetupJoint();
-            SetFrictions(releasedFriction);
-            CheckLock();
-            UpdateToAngle(angleTarget);
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            if (createControlInteractableObject)
-            {
-                ManageInteractableObjectListeners(false);
-                Destroy(controlSecondaryGrabAction);
-                Destroy(controlGrabAttach);
-                Destroy(controlInteractableObject);
-            }
-            else
-            {
-                ManageInteractableObjectListeners(false);
-            }
-            if (createControlJoint)
-            {
-                Destroy(controlJoint);
-            }
-        }
-
-        protected virtual void Update()
-        {
-            ForceRestingPosition();
-            ForceAngleTarget();
-            ForceSnapToStep();
-            SetJointLimits();
-            EmitEvents();
-        }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            base.OnDrawGizmosSelected();
-            if (hingePoint != null)
-            {
-                Bounds rotatorBounds = VRTK_SharedMethods.GetBounds(transform, transform);
-                Vector3 limits = transform.rotation * ((AxisDirection() * rotatorBounds.size[(int)operateAxis]) * 0.53f);
-                Vector3 hingeStart = hingePoint.transform.position - limits;
-                Vector3 hingeEnd = hingePoint.transform.position + limits;
-                Gizmos.DrawLine(hingeStart, hingeEnd);
-                Gizmos.DrawSphere(hingeStart, 0.01f);
-                Gizmos.DrawSphere(hingeEnd, 0.01f);
             }
         }
 

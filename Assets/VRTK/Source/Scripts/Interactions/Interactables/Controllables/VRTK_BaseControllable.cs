@@ -90,9 +90,7 @@ namespace VRTK.Controllables
         /// </summary>
         public event ControllableEventHandler MaxLimitExited;
 
-        protected Vector3 originalPosition;
         protected Vector3 originalLocalPosition;
-        protected Quaternion originalRotation;
         protected Quaternion originalLocalRotation;
         protected Vector3 actualTransformPosition;
         protected bool atMinLimit;
@@ -174,23 +172,21 @@ namespace VRTK.Controllables
         }
 
         /// <summary>
-        /// The GetOriginalPosition method returns the original position of the control.
+        /// The GetOriginalLocalPosition method returns the original local position of the control.
         /// </summary>
-        /// <param name="useLocal">If `true` the the original local position will be returned.</param>
-        /// <returns></returns>
-        public virtual Vector3 GetOriginalPosition(bool useLocal = false)
+        /// <returns>A Vector3 of the original local position.</returns>
+        public virtual Vector3 GetOriginalLocalPosition()
         {
-            return (useLocal ? originalLocalPosition : originalPosition);
+            return originalLocalPosition;
         }
 
         /// <summary>
-        /// The GetOriginalRotation method returns the original rotation of the control.
+        /// The GetOriginalLocalRotation method returns the original local rotation of the control.
         /// </summary>
-        /// <param name="useLocal">If `true` the the original local rotation will be returned.</param>
-        /// <returns></returns>
-        public virtual Quaternion GetOriginalRotation(bool useLocal = false)
+        /// <returns>A quaternion of the original local rotation.</returns>
+        public virtual Quaternion GetOriginalLocalRotation()
         {
-            return (useLocal ? originalLocalRotation : originalRotation);
+            return originalLocalRotation;
         }
 
         /// <summary>
@@ -222,14 +218,16 @@ namespace VRTK.Controllables
 
         protected abstract void EmitEvents();
 
+        protected virtual void Awake()
+        {
+            originalLocalPosition = transform.localPosition;
+            originalLocalRotation = transform.localRotation;
+        }
+
         protected virtual void OnEnable()
         {
             atMinLimit = false;
             atMaxLimit = false;
-            originalPosition = transform.position;
-            originalRotation = transform.rotation;
-            originalLocalPosition = transform.localPosition;
-            originalLocalRotation = transform.localRotation;
             SetupCollider();
             processAtEndOfFrame = StartCoroutine(ProcessAtEndOfFrame());
         }
@@ -253,7 +251,7 @@ namespace VRTK.Controllables
         protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
-            actualTransformPosition = (Application.isPlaying ? originalPosition : transform.position);
+            actualTransformPosition = transform.position;
         }
 
         protected virtual void OnCollisionEnter(Collision collision)

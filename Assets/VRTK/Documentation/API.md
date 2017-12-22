@@ -6452,27 +6452,27 @@ The AtMinLimit method returns whether the Controllable is currently at it's mini
 
 The AtMaxLimit method returns whether the Controllable is currently at it's maximum limit.
 
-#### GetOriginalPosition/1
+#### GetOriginalLocalPosition/0
 
-  > `public virtual Vector3 GetOriginalPosition(bool useLocal = false)`
-
- * Parameters
-   * `bool useLocal` - If `true` the the original local position will be returned.
- * Returns
-   * `Vector3` -
-
-The GetOriginalPosition method returns the original position of the control.
-
-#### GetOriginalRotation/1
-
-  > `public virtual Quaternion GetOriginalRotation(bool useLocal = false)`
+  > `public virtual Vector3 GetOriginalLocalPosition()`
 
  * Parameters
-   * `bool useLocal` - If `true` the the original local rotation will be returned.
+   * _none_
  * Returns
-   * `Quaternion` -
+   * `Vector3` - A Vector3 of the original local position.
 
-The GetOriginalRotation method returns the original rotation of the control.
+The GetOriginalLocalPosition method returns the original local position of the control.
+
+#### GetOriginalLocalRotation/0
+
+  > `public virtual Quaternion GetOriginalLocalRotation()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Quaternion` - A quaternion of the original local rotation.
+
+The GetOriginalLocalRotation method returns the original local rotation of the control.
 
 #### GetControlColliders/0
 
@@ -6572,10 +6572,13 @@ A physics based pushable pusher.
  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
 
 **Optional Components:**
- * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody upon touching the pusher. Will be automatically created if the `Auto Interaction` paramter is checked.
+ * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody upon touching the pusher.
 
 **Script Usage:**
+ * Create a pusher container GameObject and set the GameObject that is to become the pusher as a child of the newly created container GameObject.
  * Place the `VRTK_PhysicsPusher` script onto the GameObject that is to become the pusher.
+
+  > The Physics Pusher script must not be on a root level GameObject. Any runtime world positioning of the pusher must be set on the parent container GameObject.
 
 ### Inspector Parameters
 
@@ -6647,7 +6650,7 @@ A physics based rotatable object.
  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
 
 **Optional Components:**
- * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the rotator. Will be automatically created if the `Auto Interaction` paramter is checked.
+ * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the rotator.
 
 **Script Usage:**
  * Create a rotator container GameObject and set the GameObject that is to become the rotator as a child of the newly created container GameObject.
@@ -6800,7 +6803,7 @@ A physics based slider.
  * `Rigidbody` - A Unity Rigidbody to allow the GameObject to be affected by the Unity Physics System. Will be automatically added at runtime.
 
 **Optional Components:**
- * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the slider. Will be automatically created if the `Auto Interaction` paramter is checked.
+ * `VRTK_ControllerRigidbodyActivator` - A Controller Rigidbody Activator to automatically enable the controller rigidbody when near the slider.
 
 **Script Usage:**
  * Create a slider container GameObject and set the GameObject that is to become the slider as a child of the container.

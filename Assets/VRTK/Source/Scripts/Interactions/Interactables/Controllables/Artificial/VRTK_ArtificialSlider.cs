@@ -165,6 +165,39 @@ namespace VRTK.Controllables.ArtificialBased
             return controlInteractableObject;
         }
 
+        protected override void OnDrawGizmosSelected()
+        {
+            Vector3 initialPoint = transform.position;
+            base.OnDrawGizmosSelected();
+            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * maximumLength);
+            Gizmos.DrawLine(initialPoint, destinationPoint);
+            Gizmos.DrawSphere(initialPoint, 0.01f);
+            Gizmos.DrawSphere(destinationPoint, 0.01f);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            previousLocalPosition = Vector3.one * float.MaxValue;
+            stillResting = false;
+            SetupInteractableObject();
+            setPositionTargetAtEndOfFrameRoutine = StartCoroutine(SetPositionTargetAtEndOfFrameRoutine());
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            ManageInteractableListeners(false);
+            if (createInteractableObject)
+            {
+                Destroy(controlInteractableObject);
+            }
+            if (setPositionTargetAtEndOfFrameRoutine != null)
+            {
+                StopCoroutine(setPositionTargetAtEndOfFrameRoutine);
+            }
+        }
+
         protected override void EmitEvents()
         {
             bool valueChanged = !VRTK_SharedMethods.Vector3ShallowCompare(transform.localPosition, previousLocalPosition, equalityFidelity);
@@ -212,39 +245,6 @@ namespace VRTK.Controllables.ArtificialBased
             }
 
             previousLocalPosition = transform.localPosition;
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            previousLocalPosition = Vector3.one * float.MaxValue;
-            stillResting = false;
-            SetupInteractableObject();
-            setPositionTargetAtEndOfFrameRoutine = StartCoroutine(SetPositionTargetAtEndOfFrameRoutine());
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            ManageInteractableListeners(false);
-            if (createInteractableObject)
-            {
-                Destroy(controlInteractableObject);
-            }
-            if (setPositionTargetAtEndOfFrameRoutine != null)
-            {
-                StopCoroutine(setPositionTargetAtEndOfFrameRoutine);
-            }
-        }
-
-        protected override void OnDrawGizmosSelected()
-        {
-            Vector3 initialPoint = transform.position;
-            base.OnDrawGizmosSelected();
-            Vector3 destinationPoint = initialPoint + (AxisDirection(true) * maximumLength);
-            Gizmos.DrawLine(initialPoint, destinationPoint);
-            Gizmos.DrawSphere(initialPoint, 0.01f);
-            Gizmos.DrawSphere(destinationPoint, 0.01f);
         }
 
         protected override ControllableEventArgs EventPayload()
