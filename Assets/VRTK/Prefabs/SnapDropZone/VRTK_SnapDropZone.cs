@@ -5,6 +5,7 @@ namespace VRTK
     using System.Collections;
     using System.Collections.Generic;
     using Highlighters;
+    using VRTK.SnapAttachMechanics;
 
     /// <summary>
     /// Event Payload
@@ -63,10 +64,16 @@ namespace VRTK
         [Tooltip("The Snap Type to apply when a valid interactable object is dropped within the snap zone.")]
         public SnapTypes snapType = SnapTypes.UseKinematic;
         [Tooltip("The amount of time it takes for the object being snapped to move into the new snapped position, rotation and scale.")]
+        [HideInInspector]
+        [System.Obsolete("`VRTK_SnapDropZone.snapDuration` has been moved to `VRTK_BaseSnapAttach.snapDuration`. This parameter will be removed in a future version of VRTK.")]
         public float snapDuration = 0f;
-        [Tooltip("If this is checked then the scaled size of the snap drop zone will be applied to the object that is snapped to it.")]
+        [Tooltip("If this is checked then the scaled size  of the snap drop zone will be applied to the object that is snapped to it.")]
+        [HideInInspector]
+        [System.Obsolete("`VRTK_SnapDropZone.applyScalingOnSnap` has been moved to `VRTK_BaseSnapAttach.applyScalingOnSnap`. This parameter will be removed in a future version of VRTK.")]
         public bool applyScalingOnSnap = false;
         [Tooltip("If this is checked then when the snapped object is unsnapped from the drop zone, a clone of the unsnapped object will be snapped back into the drop zone.")]
+        [System.Obsolete("`VRTK_SnapDropZone.cloneNewOnUnsnap` is obselete and will be removed in a future version of VRTK. The same functionality is now enabled by setting VRTK_SnapDropZone.snapAttachMechanicScript to `VRTK_CloneSnapAttach`")]
+        [HideInInspector]
         public bool cloneNewOnUnsnap = false;
         [Tooltip("The colour to use when showing the snap zone is active. This is used as the highlight colour when no object is hovering but `Highlight Always Active` is true.")]
         public Color highlightColor = Color.clear;
@@ -75,16 +82,19 @@ namespace VRTK
         [Tooltip("The highlight object will always be displayed when the snap drop zone is available even if a valid item isn't being hovered over.")]
         public bool highlightAlwaysActive = false;
         [Tooltip("A specified VRTK_PolicyList to use to determine which interactable objects will be snapped to the snap drop zone on release.")]
+        [HideInInspector]
+        [System.Obsolete("`VRTK_SnapDropZone.validObjectListPolicy` has been moved to `VRTK_BaseSnapAttach.validObjectListPolicy`. This parameter will be removed in a future version of VRTK.")]
         public VRTK_PolicyList validObjectListPolicy;
         [Tooltip("If this is checked then the drop zone highlight section will be displayed in the scene editor window.")]
         public bool displayDropZoneInEditor = true;
-
-        [Tooltip("The Interactable Object to snap into the dropzone when the drop zone is enabled. The Interactable Object must be valid in any given policy list to snap.")]
-        public VRTK_InteractableObject defaultSnappedInteractableObject;
-
+        [Tooltip("This determines how the grabbed Interactable Object will attach to a `VRTK_SnapDropZone`. If one isn't provided then the first Snap Attach script on the GameObject will be used, if one is not found then a Basic Snap Grab Attach script will be created at runtime.")]
+        public VRTK_BaseSnapAttach snapAttachMechanicScript;
         [System.Obsolete("`VRTK_SnapDropZone.defaultSnappedObject` has been replaced with the `VRTK_SnapDropZone.defaultSnappedInteractableObject`. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
         public GameObject defaultSnappedObject;
+        [System.Obsolete("`VRTK_SnapDropZone.defaultSnappedInteractableObject` has been moved to `VRTK_BaseSnapAttach.defaultSnappedInteractableObject`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
+        public VRTK_InteractableObject defaultSnappedInteractableObject;
 
         /// <summary>
         /// Emitted when a valid interactable object enters the snap drop zone trigger collider.
@@ -104,25 +114,13 @@ namespace VRTK
         public event SnapDropZoneEventHandler ObjectUnsnappedFromDropZone;
 
         protected GameObject previousPrefab;
-        protected GameObject highlightContainer;
+        public GameObject highlightContainer { get; private set;}
         protected GameObject highlightObject;
         protected GameObject highlightEditorObject = null;
 
-        protected List<VRTK_InteractableObject> currentValidSnapInteractableObjects = new List<VRTK_InteractableObject>();
-        protected VRTK_InteractableObject currentSnappedObject = null;
-        protected GameObject objectToClone = null;
-        protected bool[] clonedObjectColliderStates = new bool[0];
-
-        protected bool willSnap = false;
-        protected bool isSnapped = false;
-        protected bool wasSnapped = false;
         protected bool isHighlighted = false;
 
         protected VRTK_BaseHighlighter objectHighlighter;
-        protected Coroutine transitionInPlaceRoutine;
-        protected Coroutine attemptTransitionAtEndOfFrameRoutine;
-        protected Coroutine checkCanSnapRoutine;
-        protected bool originalJointCollisionState = false;
 
         protected const string HIGHLIGHT_CONTAINER_NAME = "HighlightContainer";
         protected const string HIGHLIGHT_OBJECT_NAME = "HighlightObject";
@@ -154,7 +152,7 @@ namespace VRTK
 
         public virtual void OnObjectUnsnappedFromDropZone(SnapDropZoneEventArgs e)
         {
-            UnsnapObject();
+            snapAttachMechanicScript.UnsnapObject();
             if (ObjectUnsnappedFromDropZone != null)
             {
                 ObjectUnsnappedFromDropZone(this, e);
@@ -174,7 +172,7 @@ namespace VRTK
         /// <param name="removeOldObject">If this is set to true then it attempts to delete the old highlight object if it exists. Defaults to `false`</param>
         public virtual void InitaliseHighlightObject(bool removeOldObject = false)
         {
-            //force delete previous created highlight object
+            //Force delete previous created highlight object
             if (removeOldObject)
             {
                 DeleteHighlightObject();
@@ -187,64 +185,14 @@ namespace VRTK
         }
 
         /// <summary>
-        /// the ForceSnap method attempts to automatically attach a valid GameObject to the snap drop zone.
-        /// </summary>
-        /// <param name="objectToSnap">The GameObject to attempt to snap.</param>
-        public virtual void ForceSnap(GameObject objectToSnap)
-        {
-            ForceSnap(objectToSnap.GetComponentInParent<VRTK_InteractableObject>());
-        }
-
-        /// <summary>
-        /// the ForceSnap method attempts to automatically attach a valid Interactable Object to the snap drop zone.
-        /// </summary>
-        /// <param name="objectToSnap">The Interactable Object to attempt to snap.</param>
-        protected virtual void ForceSnap(VRTK_InteractableObject interactableObjectToSnap)
-        {
-            if (interactableObjectToSnap != null)
-            {
-                if (attemptTransitionAtEndOfFrameRoutine != null)
-                {
-                    StopCoroutine(attemptTransitionAtEndOfFrameRoutine);
-                }
-
-                if (checkCanSnapRoutine != null)
-                {
-                    StopCoroutine(checkCanSnapRoutine);
-                }
-
-                if (interactableObjectToSnap.IsGrabbed())
-                {
-                    interactableObjectToSnap.ForceStopInteracting();
-                }
-
-                if (gameObject.activeInHierarchy)
-                {
-                    attemptTransitionAtEndOfFrameRoutine = StartCoroutine(AttemptForceSnapAtEndOfFrame(interactableObjectToSnap));
-                }
-            }
-        }
-
-        /// <summary>
-        /// The ForceUnsnap method attempts to automatically remove the current snapped game object from the snap drop zone.
-        /// </summary>
-        public virtual void ForceUnsnap()
-        {
-            if (isSnapped && ValidSnapObject(currentSnappedObject, false))
-            {
-                currentSnappedObject.ToggleSnapDropZone(this, false);
-            }
-        }
-
-        /// <summary>
         /// The ValidSnappableObjectIsHovering method determines if any valid objects are currently hovering in the snap drop zone area.
         /// </summary>
         /// <returns>Returns true if a valid object is currently in the snap drop zone area.</returns>
         public virtual bool ValidSnappableObjectIsHovering()
         {
-            for (int i = 0; i < currentValidSnapInteractableObjects.Count; i++)
+            for (int i = 0; i < snapAttachMechanicScript.GetHoveringInteractableObjects().Count; i++)
             {
-                if (currentValidSnapInteractableObjects[i].IsGrabbed())
+                if (snapAttachMechanicScript.GetHoveringInteractableObjects()[i].IsGrabbed())
                 {
                     return true;
                 }
@@ -260,7 +208,7 @@ namespace VRTK
         public virtual bool IsObjectHovering(GameObject checkObject)
         {
             VRTK_InteractableObject interactableObjectToCheck = checkObject.GetComponentInParent<VRTK_InteractableObject>();
-            return (interactableObjectToCheck != null ? currentValidSnapInteractableObjects.Contains(interactableObjectToCheck) : false);
+            return (interactableObjectToCheck != null ? snapAttachMechanicScript.GetHoveringInteractableObjects().Contains(interactableObjectToCheck) : false);
         }
 
         /// <summary>
@@ -270,7 +218,7 @@ namespace VRTK
         /// <returns>Returns true if the given Interactable Object script is hovering (but not snapped) in the snap drop zone area.</returns>
         public virtual bool IsInteractableObjectHovering(VRTK_InteractableObject checkObject)
         {
-            return (checkObject != null ? currentValidSnapInteractableObjects.Contains(checkObject) : false);
+            return (checkObject != null ? snapAttachMechanicScript.GetHoveringInteractableObjects().Contains(checkObject) : false);
         }
 
         /// <summary>
@@ -280,39 +228,13 @@ namespace VRTK
         public virtual List<GameObject> GetHoveringObjects()
         {
             List<GameObject> returnList = new List<GameObject>();
-            for (int i = 0; i < currentValidSnapInteractableObjects.Count; i++)
+            for (int i = 0; i < snapAttachMechanicScript.GetHoveringInteractableObjects().Count; i++)
             {
-                VRTK_SharedMethods.AddListValue(returnList, currentValidSnapInteractableObjects[i].gameObject);
+                VRTK_SharedMethods.AddListValue(returnList, snapAttachMechanicScript.GetHoveringInteractableObjects()[i].gameObject);
             }
             return returnList;
         }
 
-        /// <summary>
-        /// The GetHoveringInteractableObjects method returns a List of valid Interactable Object scripts that are currently hovering (but not snapped) in the snap drop zone area.
-        /// </summary>
-        /// <returns>The List of valid Interactable Object scripts that are hovering (but not snapped) in the snap drop zone area.</returns>
-        public virtual List<VRTK_InteractableObject> GetHoveringInteractableObjects()
-        {
-            return currentValidSnapInteractableObjects;
-        }
-
-        /// <summary>
-        /// The GetCurrentSnappedObejct method returns the GameObject that is currently snapped in the snap drop zone area.
-        /// </summary>
-        /// <returns>The GameObject that is currently snapped in the snap drop zone area.</returns>
-        public virtual GameObject GetCurrentSnappedObject()
-        {
-            return (currentSnappedObject != null ? currentSnappedObject.gameObject : null);
-        }
-
-        /// <summary>
-        /// The GetCurrentSnappedInteractableObject method returns the Interactable Object script that is currently snapped in the snap drop zone area.
-        /// </summary>
-        /// <returns>The Interactable Object script that is currently snapped in the snap drop zone area.</returns>
-        public virtual VRTK_InteractableObject GetCurrentSnappedInteractableObject()
-        {
-            return currentSnappedObject;
-        }
 
         protected virtual void Awake()
         {
@@ -332,54 +254,20 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            currentValidSnapInteractableObjects.Clear();
-            currentSnappedObject = null;
-            objectToClone = null;
-            clonedObjectColliderStates = new bool[0];
-            willSnap = false;
-            isSnapped = false;
-            wasSnapped = false;
             isHighlighted = false;
-
-#pragma warning disable 618
-            if (defaultSnappedObject != null && defaultSnappedInteractableObject == null)
-            {
-                defaultSnappedInteractableObject = defaultSnappedObject.GetComponentInParent<VRTK_InteractableObject>();
-            }
-#pragma warning restore 618
-
             DisableHighlightShadows();
-            if (!VRTK_SharedMethods.IsEditTime() && Application.isPlaying && defaultSnappedInteractableObject != null)
-            {
-                ForceSnap(defaultSnappedInteractableObject);
-            }
+            AttemptSetSnapMechanic();
         }
 
         protected virtual void OnDisable()
         {
-            if (transitionInPlaceRoutine != null)
-            {
-                StopCoroutine(transitionInPlaceRoutine);
-            }
-
-            if (attemptTransitionAtEndOfFrameRoutine != null)
-            {
-                StopCoroutine(attemptTransitionAtEndOfFrameRoutine);
-            }
-
-            if (checkCanSnapRoutine != null)
-            {
-                StopCoroutine(checkCanSnapRoutine);
-            }
-
-            ForceUnsnap();
             SetHighlightObjectActive(false);
-            UnregisterAllUngrabEvents();
         }
 
         protected virtual void Update()
         {
-            CheckSnappedItemExists();
+            AttemptSetSnapMechanic();
+            snapAttachMechanicScript.CheckSnappedItemExists();
             CheckPrefabUpdate();
             CreateHighlightersInEditor();
             CheckCurrentValidSnapObjectStillValid();
@@ -389,99 +277,42 @@ namespace VRTK
 
         protected virtual void OnTriggerEnter(Collider collider)
         {
-            CheckCanSnap(collider.GetComponentInParent<VRTK_InteractableObject>());
+            snapAttachMechanicScript.CheckCanSnap(collider.GetComponentInParent<VRTK_InteractableObject>());
         }
 
         protected virtual void OnTriggerExit(Collider collider)
         {
-            CheckCanUnsnap(collider.GetComponentInParent<VRTK_InteractableObject>());
+            snapAttachMechanicScript.CheckCanUnsnap(collider.GetComponentInParent<VRTK_InteractableObject>());
         }
 
-        protected virtual void CheckCanSnap(VRTK_InteractableObject interactableObjectCheck)
+        /// <summary>
+        /// The AttemptSetSnapMechanic method looks for and assigns the first Snap Attach Mechanic component it finds if the 'snapAttachMechanicScript' property hasn't been assigned already.
+        /// </summary>
+        protected virtual void AttemptSetSnapMechanic()
         {
-            if (interactableObjectCheck != null && ValidSnapObject(interactableObjectCheck, true))
+            if (snapAttachMechanicScript == null)
             {
-                AddCurrentValidSnapObject(interactableObjectCheck);
-                if (!isSnapped)
+                VRTK_BaseSnapAttach setSnapMechanic = GetComponentInChildren<VRTK_BaseSnapAttach>();
+                if (setSnapMechanic == null)
                 {
-                    ToggleHighlight(interactableObjectCheck, true);
-                    interactableObjectCheck.SetSnapDropZoneHover(this, true);
-                    if (!willSnap)
+#pragma warning disable 618
+                    if (cloneNewOnUnsnap == true)
                     {
-                        OnObjectEnteredSnapDropZone(SetSnapDropZoneEvent(interactableObjectCheck.gameObject));
+                        setSnapMechanic = gameObject.AddComponent<VRTK_CloneSnapAttach>();
                     }
-                    willSnap = true;
-                    ToggleHighlightColor();
+#pragma warning restore 618
+                    else
+                    {
+                        setSnapMechanic = gameObject.AddComponent<VRTK_SimpleSnapAttach>();
+                    }
                 }
+                snapAttachMechanicScript = setSnapMechanic;
             }
-        }
-
-        protected virtual void CheckCanUnsnap(VRTK_InteractableObject interactableObjectCheck)
-        {
-            if (interactableObjectCheck != null && currentValidSnapInteractableObjects.Contains(interactableObjectCheck) && ValidUnsnap(interactableObjectCheck))
-            {
-                if (isSnapped && currentSnappedObject == interactableObjectCheck)
-                {
-                    ForceUnsnap();
-                }
-
-                RemoveCurrentValidSnapObject(interactableObjectCheck);
-
-                if (!ValidSnappableObjectIsHovering())
-                {
-                    ToggleHighlight(interactableObjectCheck, false);
-                    willSnap = false;
-                }
-
-                interactableObjectCheck.SetSnapDropZoneHover(this, false);
-
-                if (ValidSnapObject(interactableObjectCheck, true))
-                {
-                    ToggleHighlightColor();
-                    OnObjectExitedSnapDropZone(SetSnapDropZoneEvent(interactableObjectCheck.gameObject));
-                }
-            }
-        }
-
-        protected virtual bool ValidUnsnap(VRTK_InteractableObject interactableObjectCheck)
-        {
-            return (interactableObjectCheck.IsGrabbed() || ((snapType != SnapTypes.UseJoint || !float.IsInfinity(GetComponent<Joint>().breakForce)) && interactableObjectCheck.validDrop == VRTK_InteractableObject.ValidDropTypes.DropAnywhere));
-        }
-
-        protected virtual void SnapObjectToZone(VRTK_InteractableObject objectToSnap)
-        {
-            if (!isSnapped && ValidSnapObject(objectToSnap, false))
-            {
-                SnapObject(objectToSnap);
-            }
-        }
-
-        protected virtual void UnregisterAllUngrabEvents()
-        {
-            for (int i = 0; i < currentValidSnapInteractableObjects.Count; i++)
-            {
-                currentValidSnapInteractableObjects[i].InteractableObjectGrabbed -= InteractableObjectGrabbed;
-                currentValidSnapInteractableObjects[i].InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
-            }
-        }
-
-        protected virtual bool ValidSnapObject(VRTK_InteractableObject interactableObjectCheck, bool grabState, bool checkGrabState = true)
-        {
-            return (interactableObjectCheck != null && (!checkGrabState || interactableObjectCheck.IsGrabbed() == grabState) && !VRTK_PolicyList.Check(interactableObjectCheck.gameObject, validObjectListPolicy));
         }
 
         protected virtual string ObjectPath(string name)
         {
             return HIGHLIGHT_CONTAINER_NAME + "/" + name;
-        }
-
-        protected virtual void CheckSnappedItemExists()
-        {
-            if (isSnapped && (currentSnappedObject == null || !currentSnappedObject.gameObject.activeInHierarchy))
-            {
-                ForceUnsnap();
-                OnObjectUnsnappedFromDropZone(SetSnapDropZoneEvent((currentSnappedObject != null ? currentSnappedObject.gameObject : null)));
-            }
         }
 
         protected virtual void CheckPrefabUpdate()
@@ -495,7 +326,7 @@ namespace VRTK
 
         protected virtual void SetObjectHighlight()
         {
-            if (highlightAlwaysActive && !isSnapped && !isHighlighted)
+            if (highlightAlwaysActive && !snapAttachMechanicScript.IsSnapped() && !isHighlighted)
             {
                 SetHighlightObjectActive(true);
                 ToggleHighlightColor();
@@ -507,11 +338,11 @@ namespace VRTK
             }
         }
 
-        protected virtual void ToggleHighlightColor()
+        public virtual void ToggleHighlightColor()
         {
-            if (Application.isPlaying && highlightAlwaysActive && !isSnapped && objectHighlighter != null)
+            if (Application.isPlaying && highlightAlwaysActive && !snapAttachMechanicScript.IsSnapped() && objectHighlighter != null)
             {
-                objectHighlighter.Highlight((willSnap && validHighlightColor != Color.clear ? validHighlightColor : highlightColor));
+                objectHighlighter.Highlight((snapAttachMechanicScript.WillSnap() && validHighlightColor != Color.clear ? validHighlightColor : highlightColor));
             }
         }
 
@@ -535,15 +366,18 @@ namespace VRTK
             }
         }
 
+        /// <summary>
+        /// The CheckCurrentValidSnapObjectStillValid method checks to see if any of the Interactable Objects previously previously hovering around this Snap Drop Zone are now snapped to another zone, and then updates the list of valid snap objects accordingly.
+        /// </summary>
         protected virtual void CheckCurrentValidSnapObjectStillValid()
         {
-            for (int i = 0; i < currentValidSnapInteractableObjects.Count; i++)
+            for (int i = 0; i < snapAttachMechanicScript.GetHoveringInteractableObjects().Count; i++)
             {
-                VRTK_InteractableObject interactableObjectCheck = currentValidSnapInteractableObjects[i];
-                //if the interactable object associated with it has been snapped to another zone, then unset the current valid snap object
+                VRTK_InteractableObject interactableObjectCheck = snapAttachMechanicScript.GetHoveringInteractableObjects()[i];
+                //If this particular Interactable Object has been snapped to another zone, then remove it from the list of valid snappable objects for this Snap Drop Zone and deactivate the highlighter
                 if (interactableObjectCheck != null && interactableObjectCheck.GetStoredSnapDropZone() != null && interactableObjectCheck.GetStoredSnapDropZone() != this)
                 {
-                    RemoveCurrentValidSnapObject(interactableObjectCheck);
+                    snapAttachMechanicScript.RemoveCurrentValidSnapObject(interactableObjectCheck);
                     if (isHighlighted && highlightObject != null && !highlightAlwaysActive)
                     {
                         SetHighlightObjectActive(false);
@@ -616,294 +450,10 @@ namespace VRTK
             }
         }
 
-        protected virtual void SnapObject(VRTK_InteractableObject interactableObjectCheck)
+        public virtual void ToggleHighlight(VRTK_InteractableObject checkObject, bool state)
         {
-            //If the item is in a snappable position and this drop zone isn't snapped and the collider is a valid interactable object
-            if (willSnap && !isSnapped && ValidSnapObject(interactableObjectCheck, false))
+            if (highlightObject != null && snapAttachMechanicScript.ValidSnapObject(checkObject, true, state))
             {
-                //Only snap it to the drop zone if it's not already in a drop zone
-                if (!interactableObjectCheck.IsInSnapDropZone())
-                {
-                    if (highlightObject != null)
-                    {
-                        //Turn off the drop zone highlighter
-                        SetHighlightObjectActive(false);
-                    }
-
-                    Vector3 newLocalScale = GetNewLocalScale(interactableObjectCheck);
-                    if (transitionInPlaceRoutine != null)
-                    {
-                        StopCoroutine(transitionInPlaceRoutine);
-                    }
-
-                    isSnapped = true;
-                    currentSnappedObject = interactableObjectCheck;
-                    if (cloneNewOnUnsnap)
-                    {
-                        CreatePermanentClone();
-                    }
-
-                    if (gameObject.activeInHierarchy)
-                    {
-                        transitionInPlaceRoutine = StartCoroutine(UpdateTransformDimensions(interactableObjectCheck, highlightContainer, newLocalScale, snapDuration));
-                    }
-
-                    interactableObjectCheck.ToggleSnapDropZone(this, true);
-                }
-            }
-
-            //Force reset isSnapped if the item is grabbed but isSnapped is still true
-            isSnapped = (isSnapped && interactableObjectCheck != null && interactableObjectCheck.IsGrabbed() ? false : isSnapped);
-            willSnap = !isSnapped;
-            wasSnapped = false;
-        }
-
-        protected virtual void CreatePermanentClone()
-        {
-            VRTK_BaseHighlighter currentSnappedObjectHighlighter = currentSnappedObject.GetComponent<VRTK_BaseHighlighter>();
-            if (currentSnappedObjectHighlighter != null)
-            {
-                currentSnappedObjectHighlighter.Unhighlight();
-            }
-            objectToClone = Instantiate(currentSnappedObject.gameObject);
-            objectToClone.transform.position = highlightContainer.transform.position;
-            objectToClone.transform.rotation = highlightContainer.transform.rotation;
-            Collider[] clonedObjectStates = currentSnappedObject.GetComponentsInChildren<Collider>();
-            clonedObjectColliderStates = new bool[clonedObjectStates.Length];
-            for (int i = 0; i < clonedObjectStates.Length; i++)
-            {
-                Collider clonedObjectColliderState = clonedObjectStates[i];
-                clonedObjectColliderStates[i] = clonedObjectColliderState.isTrigger;
-                clonedObjectColliderState.isTrigger = true;
-            }
-            objectToClone.SetActive(false);
-        }
-
-        protected virtual void ResetPermanentCloneColliders(GameObject objectToReset)
-        {
-            if (objectToReset != null && clonedObjectColliderStates.Length > 0)
-            {
-                Collider[] clonedObjectStates = objectToReset.GetComponentsInChildren<Collider>();
-                for (int i = 0; i < clonedObjectStates.Length; i++)
-                {
-                    Collider clonedObjectColliderState = clonedObjectStates[i];
-                    if (clonedObjectColliderStates.Length > i)
-                    {
-                        clonedObjectColliderState.isTrigger = clonedObjectColliderStates[i];
-                    }
-                }
-            }
-        }
-
-        protected virtual void ResnapPermanentClone()
-        {
-            if (objectToClone != null)
-            {
-                float savedSnapDuration = snapDuration;
-                snapDuration = 0f;
-                objectToClone.SetActive(true);
-                ResetPermanentCloneColliders(objectToClone);
-                ForceSnap(objectToClone);
-                snapDuration = savedSnapDuration;
-            }
-        }
-
-        protected virtual void UnsnapObject()
-        {
-            if (currentSnappedObject != null)
-            {
-                ResetPermanentCloneColliders(currentSnappedObject.gameObject);
-                RemoveCurrentValidSnapObject(currentSnappedObject);
-            }
-
-            isSnapped = false;
-            wasSnapped = true;
-            VRTK_InteractableObject checkCanSnapObject = currentSnappedObject;
-            currentSnappedObject = null;
-            ResetSnapDropZoneJoint();
-
-            if (transitionInPlaceRoutine != null)
-            {
-                StopCoroutine(transitionInPlaceRoutine);
-            }
-
-            if (cloneNewOnUnsnap)
-            {
-                ResnapPermanentClone();
-            }
-
-            if (checkCanSnapRoutine != null)
-            {
-                StopCoroutine(checkCanSnapRoutine);
-            }
-
-            if (gameObject.activeInHierarchy)
-            {
-                checkCanSnapRoutine = StartCoroutine(CheckCanSnapObjectAtEndOfFrame(checkCanSnapObject));
-            }
-            checkCanSnapObject = null;
-        }
-
-        protected virtual Vector3 GetNewLocalScale(VRTK_InteractableObject checkObject)
-        {
-            // If apply scaling is checked then use the drop zone scale to resize the object
-            Vector3 newLocalScale = checkObject.transform.localScale;
-            if (applyScalingOnSnap)
-            {
-                checkObject.StoreLocalScale();
-                newLocalScale = Vector3.Scale(checkObject.transform.localScale, transform.localScale);
-            }
-            return newLocalScale;
-        }
-
-        protected virtual IEnumerator CheckCanSnapObjectAtEndOfFrame(VRTK_InteractableObject interactableObjectCheck)
-        {
-            yield return new WaitForEndOfFrame();
-            CheckCanSnap(interactableObjectCheck);
-        }
-
-        protected virtual IEnumerator UpdateTransformDimensions(VRTK_InteractableObject ioCheck, GameObject endSettings, Vector3 endScale, float duration)
-        {
-            float elapsedTime = 0f;
-            Transform ioTransform = ioCheck.transform;
-            Vector3 startPosition = ioTransform.position;
-            Quaternion startRotation = ioTransform.rotation;
-            Vector3 startScale = ioTransform.localScale;
-            bool storedKinematicState = ioCheck.isKinematic;
-            ioCheck.isKinematic = true;
-            while (elapsedTime <= duration)
-            {
-                elapsedTime += Time.deltaTime;
-                if (ioTransform != null && endSettings != null)
-                {
-                    ioTransform.position = Vector3.Lerp(startPosition, endSettings.transform.position, (elapsedTime / duration));
-                    ioTransform.rotation = Quaternion.Lerp(startRotation, endSettings.transform.rotation, (elapsedTime / duration));
-                    ioTransform.localScale = Vector3.Lerp(startScale, endScale, (elapsedTime / duration));
-                }
-                yield return null;
-            }
-
-            //Force all to the last setting in case anything has moved during the transition
-            ioTransform.position = endSettings.transform.position;
-            ioTransform.rotation = endSettings.transform.rotation;
-            ioTransform.localScale = endScale;
-
-            ioCheck.isKinematic = storedKinematicState;
-            SetDropSnapType(ioCheck);
-        }
-
-        protected virtual void SetDropSnapType(VRTK_InteractableObject ioCheck)
-        {
-            switch (snapType)
-            {
-                case SnapTypes.UseKinematic:
-                    ioCheck.SaveCurrentState();
-                    ioCheck.isKinematic = true;
-                    break;
-                case SnapTypes.UseParenting:
-                    ioCheck.SaveCurrentState();
-                    ioCheck.isKinematic = true;
-                    ioCheck.transform.SetParent(transform);
-                    break;
-                case SnapTypes.UseJoint:
-                    SetSnapDropZoneJoint(ioCheck.GetComponent<Rigidbody>());
-                    break;
-            }
-            OnObjectSnappedToDropZone(SetSnapDropZoneEvent(ioCheck.gameObject));
-        }
-
-        protected virtual void SetSnapDropZoneJoint(Rigidbody snapTo)
-        {
-            Joint snapDropZoneJoint = GetComponent<Joint>();
-            if (snapDropZoneJoint == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "SnapDropZone:" + name, "Joint", "the same", " because the `Snap Type` is set to `Use Joint`"));
-                return;
-            }
-            if (snapTo == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_SnapDropZone", "Rigidbody", "the `VRTK_InteractableObject`"));
-                return;
-            }
-
-            snapDropZoneJoint.connectedBody = snapTo;
-            originalJointCollisionState = snapDropZoneJoint.enableCollision;
-            //need to set this to true otherwise highlighting doesn't work again on grab
-            snapDropZoneJoint.enableCollision = true;
-        }
-
-        protected virtual void ResetSnapDropZoneJoint()
-        {
-            Joint snapDropZoneJoint = GetComponent<Joint>();
-            if (snapDropZoneJoint != null)
-            {
-                snapDropZoneJoint.enableCollision = originalJointCollisionState;
-            }
-        }
-
-        protected virtual void AddCurrentValidSnapObject(VRTK_InteractableObject givenObject)
-        {
-            if (givenObject != null)
-            {
-                if (VRTK_SharedMethods.AddListValue(currentValidSnapInteractableObjects, givenObject, true))
-                {
-                    givenObject.InteractableObjectGrabbed += InteractableObjectGrabbed;
-                    givenObject.InteractableObjectUngrabbed += InteractableObjectUngrabbed;
-                }
-            }
-        }
-
-        protected virtual void RemoveCurrentValidSnapObject(VRTK_InteractableObject givenObject)
-        {
-            if (givenObject != null)
-            {
-                if (currentValidSnapInteractableObjects.Remove(givenObject))
-                {
-                    givenObject.InteractableObjectGrabbed -= InteractableObjectGrabbed;
-                    givenObject.InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
-                }
-            }
-        }
-
-        protected virtual void InteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
-        {
-            VRTK_InteractableObject grabbedInteractableObject = sender as VRTK_InteractableObject;
-            if (!grabbedInteractableObject.IsInSnapDropZone())
-            {
-                CheckCanSnap(grabbedInteractableObject);
-            }
-        }
-
-        protected virtual void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
-        {
-            VRTK_InteractableObject releasedInteractableObject = sender as VRTK_InteractableObject;
-            if (attemptTransitionAtEndOfFrameRoutine != null)
-            {
-                StopCoroutine(attemptTransitionAtEndOfFrameRoutine);
-            }
-            attemptTransitionAtEndOfFrameRoutine = StartCoroutine(AttemptForceSnapAtEndOfFrame(releasedInteractableObject));
-        }
-
-        protected virtual void AttemptForceSnap(VRTK_InteractableObject objectToSnap)
-        {
-            //force snap settings on
-            willSnap = true;
-            //Force touch one of the object's colliders on this trigger collider
-            SnapObjectToZone(objectToSnap);
-        }
-
-        protected virtual IEnumerator AttemptForceSnapAtEndOfFrame(VRTK_InteractableObject objectToSnap)
-        {
-            yield return new WaitForEndOfFrame();
-            objectToSnap.SaveCurrentState();
-            AttemptForceSnap(objectToSnap);
-        }
-
-        protected virtual void ToggleHighlight(VRTK_InteractableObject checkObject, bool state)
-        {
-            if (highlightObject != null && ValidSnapObject(checkObject, true, state))
-            {
-                //Toggle the highlighter state
                 SetHighlightObjectActive(state);
             }
         }
@@ -917,7 +467,7 @@ namespace VRTK
             clonedObject = Instantiate(objectBlueprint, highlightContainer.transform) as GameObject;
             clonedObject.name = givenName;
 
-            //default position of new highlight object
+            //Default position of new highlight object
             clonedObject.transform.localPosition = Vector3.zero;
             clonedObject.transform.localRotation = Quaternion.identity;
 
@@ -933,14 +483,14 @@ namespace VRTK
                 CopyObject(highlightObjectPrefab, ref highlightObject, HIGHLIGHT_OBJECT_NAME);
             }
 
-            //if highlight object exists but not in the variable then force grab it
+            //If highlight object exists but not in the variable then force grab it
             Transform checkForChild = transform.Find(ObjectPath(HIGHLIGHT_OBJECT_NAME));
             if (checkForChild != null && highlightObject == null)
             {
                 highlightObject = checkForChild.gameObject;
             }
 
-            //if no highlight object prefab is set but a highlight object is found then destroy the highlight object
+            //If no highlight object prefab is set but a highlight object is found then destroy the highlight object
             if (highlightObjectPrefab == null && highlightObject != null)
             {
                 DeleteHighlightObject();
@@ -951,7 +501,7 @@ namespace VRTK
             SetContainer();
         }
 
-        protected virtual void SetHighlightObjectActive(bool state)
+        public virtual void SetHighlightObjectActive(bool state)
         {
             if (highlightObject != null)
             {
@@ -991,7 +541,7 @@ namespace VRTK
                 ChooseDestroyType(deleteSnapZones[i].gameObject);
             }
 
-            //determine components that shouldn't be deleted from highlight object
+            //Determine components that shouldn't be deleted from highlight object
             string[] validComponents = new string[] { "Transform", "MeshFilter", "MeshRenderer", "SkinnedMeshRenderer", "VRTK_GameObjectLinker" };
 
             //First clean out the joints cause RigidBodys depends on them.
@@ -1011,7 +561,7 @@ namespace VRTK
                 //Loop through each valid component and check to see if this component is valid
                 for (int j = 0; j < validComponents.Length; j++)
                 {
-                    //if it's a valid component then break the check
+                    //If it's a valid component then break the check
                     if (component.GetType().ToString().Contains("." + validComponents[j]))
                     {
                         valid = true;
@@ -1019,7 +569,7 @@ namespace VRTK
                     }
                 }
 
-                //if this is a valid component then just continue to the next component
+                //If this is a valid component then just continue to the next component
                 if (valid)
                 {
                     continue;
