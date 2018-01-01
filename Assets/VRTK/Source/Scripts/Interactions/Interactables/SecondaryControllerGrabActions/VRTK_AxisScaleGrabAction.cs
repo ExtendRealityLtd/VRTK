@@ -24,6 +24,9 @@ namespace VRTK.SecondaryControllerGrabActions
         public Vector3State lockAxis = Vector3State.False;
         [Tooltip("If checked all the axes will be scaled together (unless locked)")]
         public bool uniformScaling = false;
+
+        [Header("Obsolete Settings")]
+
         [System.Obsolete("`VRTK_AxisScaleGrabAction.lockXAxis` has been replaced with the `VRTK_AxisScaleGrabAction.lockAxis`. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
         public bool lockXAxis = false;

@@ -67,6 +67,8 @@ namespace VRTK
         [Tooltip("An optional Highlighter to use when highlighting the specified Object. If this is left blank, then the first active highlighter on the same GameObject will be used, if one isn't found then a Material Color Swap Highlighter will be created at runtime.")]
         public VRTK_BaseHighlighter objectHighlighter;
 
+        [Header("Obsolete Settings")]
+
         [System.Obsolete("`objectToAffect` has been replaced with `objectToHighlight`. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
         public VRTK_InteractableObject objectToAffect;

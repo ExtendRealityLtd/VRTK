@@ -160,9 +160,6 @@
             serializedObject.Update();
 
             VRTK_SDKManager sdkManager = (VRTK_SDKManager)target;
-
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("persistOnLoad"));
-
             const string manageNowButtonText = "Manage Now";
 
             using (new EditorGUILayout.VerticalScope("Box"))
@@ -418,6 +415,8 @@
                     EditorGUILayout.PropertyField(excludeTargetGroups.GetArrayElementAtIndex(i));
                 }
             }
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("persistOnLoad"));
 
             serializedObject.ApplyModifiedProperties();
         }

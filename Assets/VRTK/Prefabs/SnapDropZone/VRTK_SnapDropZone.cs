@@ -82,6 +82,8 @@ namespace VRTK
         [Tooltip("The Interactable Object to snap into the dropzone when the drop zone is enabled. The Interactable Object must be valid in any given policy list to snap.")]
         public VRTK_InteractableObject defaultSnappedInteractableObject;
 
+        [Header("Obsolete Settings")]
+
         [System.Obsolete("`VRTK_SnapDropZone.defaultSnappedObject` has been replaced with the `VRTK_SnapDropZone.defaultSnappedInteractableObject`. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
         public GameObject defaultSnappedObject;
