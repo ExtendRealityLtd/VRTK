@@ -25,7 +25,7 @@
 
         public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
         {
-            if (canvas == null)
+            if (canvas == null || eventCamera == null)
             {
                 return;
             }
