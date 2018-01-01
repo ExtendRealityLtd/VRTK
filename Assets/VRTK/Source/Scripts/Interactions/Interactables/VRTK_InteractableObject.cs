@@ -160,10 +160,6 @@ namespace VRTK
         [Tooltip("An array of colliders on the GameObject to ignore when being touched.")]
         public Collider[] ignoredColliders;
 
-        [System.Obsolete("`VRTK_InteractableObject.touchHighlightColor` has been replaced with `VRTK_InteractObjectHighlighter.touchHighlight`. This parameter will be removed in a future version of VRTK.")]
-        [ObsoleteInspector]
-        public Color touchHighlightColor = Color.clear;
-
         [Header("Grab Settings")]
 
         [Tooltip("Determines if the Interactable Object can be grabbed.")]
@@ -198,11 +194,14 @@ namespace VRTK
         [Tooltip("Determines which controller can initiate a use action.")]
         public AllowedController allowedUseControllers = AllowedController.Both;
 
-        [Header("Custom Settings")]
+        [Header("Obsolete Settings")]
 
         [System.Obsolete("`VRTK_InteractableObject.objectHighlighter` has been replaced with `VRTK_InteractObjectHighlighter.objectHighlighter`. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
         public Highlighters.VRTK_BaseHighlighter objectHighlighter;
+        [System.Obsolete("`VRTK_InteractableObject.touchHighlightColor` has been replaced with `VRTK_InteractObjectHighlighter.touchHighlight`. This parameter will be removed in a future version of VRTK.")]
+        [ObsoleteInspector]
+        public Color touchHighlightColor = Color.clear;
 
         protected Rigidbody interactableRigidbody;
         protected HashSet<GameObject> currentIgnoredColliders = new HashSet<GameObject>();

@@ -157,10 +157,6 @@ namespace VRTK
         }
         private static VRTK_SDKManager _instance;
 
-        [Obsolete("`VRTK_SDKManager.persistOnLoad` has been deprecated and will be removed in a future version of VRTK. See https://github.com/thestonefox/VRTK/issues/1316 for details.")]
-        [ObsoleteInspector]
-        public bool persistOnLoad;
-
         [Tooltip("Determines whether the scripting define symbols required by the installed SDKs are automatically added to and removed from the player settings.")]
         public bool autoManageScriptDefines = true;
 
@@ -189,6 +185,12 @@ namespace VRTK
 #endif
         };
 #endif
+
+        [Header("Obsolete Settings")]
+
+        [Obsolete("`VRTK_SDKManager.persistOnLoad` has been deprecated and will be removed in a future version of VRTK. See https://github.com/thestonefox/VRTK/issues/1316 for details.")]
+        [ObsoleteInspector]
+        public bool persistOnLoad;
 
         /// <summary>
         /// The loaded SDK Setup. `null` if no setup is currently loaded.

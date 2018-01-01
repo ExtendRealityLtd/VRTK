@@ -113,6 +113,8 @@ namespace VRTK
         [Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
         public Transform customOrigin = null;
 
+        [Header("Obsolete Settings")]
+
         [System.Obsolete("`VRTK_UIPointer.controller` has been replaced with `VRTK_UIPointer.controllerEvents`. This parameter will be removed in a future version of VRTK.")]
         [ObsoleteInspector]
         public VRTK_ControllerEvents controller;
