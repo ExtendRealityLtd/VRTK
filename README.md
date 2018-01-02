@@ -14,27 +14,11 @@
 | VR Simulator | _Included_ |
 | SteamVR | [SteamVR Plugin] |
 | Oculus | [Oculus Utilities] |
-| *Ximmerse | [Ximmerse Unity SDK] |
-| *Daydream | [Google VR SDK for Unity]
-| *HyperealVR | [Hypereal VR Unity Plugin]
+| * Ximmerse | [Ximmerse Unity SDK] |
+| * Daydream | [Google VR SDK for Unity]
+| * HyperealVR | [Hypereal VR Unity Plugin]
 
-_*experimental_
-
-## Thank You
-
-A big thank you to all those who support VRTK via [Patreon]. A list of supports can be seen in [THANK_YOU_CREDITS.md].
-
-[![patreon_logo](https://user-images.githubusercontent.com/1029673/28471651-be40a2ea-6e35-11e7-9b01-e1b4a7d533b3.png)](https://www.patreon.com/vrtk)
-
-### Sponsors
-
-An extra special thank you to our sponsors via [Patreon].
-
-[![image](https://user-images.githubusercontent.com/1029673/27898738-28f0e226-621f-11e7-9fdb-8618d85ba372.png)](https://www.realestate.com.au) [![image](https://user-images.githubusercontent.com/1029673/29113652-8fa11ca4-7ce9-11e7-9e33-88308af369b9.png)](http://alvios.com/)
-
-### Awards
-
-![image](https://user-images.githubusercontent.com/1029673/31736514-e813fa84-b43c-11e7-8444-f8159d2f0085.png)
+_* experimental_
 
 ## Documentation
 
@@ -147,4 +131,3 @@ Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
 
 [Fork]: http://help.github.com/fork-a-repo/
 [Open a Pull Request]: https://help.github.com/articles/using-pull-requests/
-[Patreon]: https://www.patreon.com/vrtk
