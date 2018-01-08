@@ -962,7 +962,7 @@ namespace VRTK
         public virtual void ResetIgnoredColliders()
         {
             //Go through all the existing set up ignored colliders and reset their collision state
-            foreach (GameObject currentIgnoredCollider in currentIgnoredColliders)
+            foreach (GameObject currentIgnoredCollider in new HashSet<GameObject>(currentIgnoredColliders))
             {
                 if (currentIgnoredCollider != null)
                 {
@@ -1374,7 +1374,7 @@ namespace VRTK
 
         protected virtual void StopTouchingInteractions()
         {
-            foreach (GameObject touchingObject in touchingObjects)
+            foreach (GameObject touchingObject in new HashSet<GameObject>(touchingObjects))
             {
                 if (touchingObject.activeInHierarchy || forceDisabled)
                 {

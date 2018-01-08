@@ -456,7 +456,7 @@ namespace VRTK
 
         protected virtual void MakeRenderersVisible()
         {
-            foreach (GameObject currentRenderer in makeRendererVisible)
+            foreach (GameObject currentRenderer in new HashSet<GameObject>(makeRendererVisible))
             {
                 ToggleRendererVisibility(currentRenderer, true);
             }
