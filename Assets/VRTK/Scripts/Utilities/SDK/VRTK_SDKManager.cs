@@ -451,16 +451,19 @@ namespace VRTK
             {
                 // If '-vrmode none' was used try to load the respective SDK Setup
                 string[] commandLineArgs = Environment.GetCommandLineArgs();
-                int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
-                if (VRSettings.loadedDeviceName == "None"
-                    || (commandLineArgIndex != -1
-                        && commandLineArgIndex + 1 < commandLineArgs.Length
-                        && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none"))
-                {
-                    index = Array.FindIndex(
-                        setups,
-                        setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
-                    );
+                if(commandLineArgs != null)
+                { 
+                    int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
+                    if (VRSettings.loadedDeviceName == "None"
+                        || (commandLineArgIndex != -1
+                            && commandLineArgIndex + 1 < commandLineArgs.Length
+                            && commandLineArgs[commandLineArgIndex + 1].ToLowerInvariant() == "none"))
+                    {
+                        index = Array.FindIndex(
+                            setups,
+                            setup => setup.usedVRDeviceNames.All(vrDeviceName => vrDeviceName == "None")
+                        );
+                    }
                 }
             }
 
