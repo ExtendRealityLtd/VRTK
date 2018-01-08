@@ -29,6 +29,7 @@ namespace VRTK.GrabAttachMechanics
         protected bool tracked;
         protected bool climbable;
         protected bool kinematic;
+        protected bool lerpable;
         protected GameObject grabbedObject;
         protected Rigidbody grabbedObjectRigidBody;
         protected VRTK_InteractableObject grabbedObjectScript;
@@ -62,6 +63,15 @@ namespace VRTK.GrabAttachMechanics
         public virtual bool IsKinematic()
         {
             return kinematic;
+        }
+
+        /// <summary>
+        /// The IsLerpable method determines if the grab attach mechanic is a lerpable object type.
+        /// </summary>
+        /// <returns>Is true if the mechanic is of type lerpable.</returns>
+        public virtual bool IsLerpable()
+        {
+            return lerpable;
         }
 
         /// <summary>
@@ -142,6 +152,31 @@ namespace VRTK.GrabAttachMechanics
         {
             customTrackPoint = false;
             return controllerPoint;
+        }
+
+        public virtual Transform GetSnapHandle(GameObject grabbingObject)
+        {
+            if (rightSnapHandle == null && leftSnapHandle != null)
+            {
+                rightSnapHandle = leftSnapHandle;
+            }
+
+            if (leftSnapHandle == null && rightSnapHandle != null)
+            {
+                leftSnapHandle = rightSnapHandle;
+            }
+
+            if (VRTK_DeviceFinder.IsControllerRightHand(grabbingObject))
+            {
+                return rightSnapHandle;
+            }
+
+            if (VRTK_DeviceFinder.IsControllerLeftHand(grabbingObject))
+            {
+                return leftSnapHandle;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -244,31 +279,6 @@ namespace VRTK.GrabAttachMechanics
                     }
                 }
             }
-        }
-
-        protected virtual Transform GetSnapHandle(GameObject grabbingObject)
-        {
-            if (rightSnapHandle == null && leftSnapHandle != null)
-            {
-                rightSnapHandle = leftSnapHandle;
-            }
-
-            if (leftSnapHandle == null && rightSnapHandle != null)
-            {
-                leftSnapHandle = rightSnapHandle;
-            }
-
-            if (VRTK_DeviceFinder.IsControllerRightHand(grabbingObject))
-            {
-                return rightSnapHandle;
-            }
-
-            if (VRTK_DeviceFinder.IsControllerLeftHand(grabbingObject))
-            {
-                return leftSnapHandle;
-            }
-
-            return null;
         }
 
         protected virtual void FlipSnapHandle(Transform snapHandle)

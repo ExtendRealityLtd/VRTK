@@ -61,6 +61,7 @@ namespace VRTK.GrabAttachMechanics
             tracked = false;
             climbable = false;
             kinematic = false;
+            lerpable = false;
             controllerAttachJoint = null;
         }
 

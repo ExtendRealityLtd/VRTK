@@ -123,6 +123,7 @@ namespace VRTK.GrabAttachMechanics
             tracked = true;
             climbable = false;
             kinematic = false;
+            lerpable = false;
             FlipSnapHandles();
         }
 

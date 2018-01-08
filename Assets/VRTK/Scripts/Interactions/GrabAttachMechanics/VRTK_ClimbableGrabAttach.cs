@@ -22,6 +22,7 @@ namespace VRTK.GrabAttachMechanics
             tracked = false;
             climbable = true;
             kinematic = true;
+            lerpable = false;
         }
     }
 }
