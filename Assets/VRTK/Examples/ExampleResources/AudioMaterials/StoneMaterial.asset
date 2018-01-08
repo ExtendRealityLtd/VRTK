@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47ea50e5b5797944bd9a4dba56108b3, type: 3}
+  m_Name: StoneMaterial
+  m_EditorClassIdentifier: 
+  hitAudioClip: {fileID: 8300000, guid: 7b3b66b096c32a54da09b78bcc9a968e, type: 3}
+  slideAudioClip: {fileID: 8300000, guid: b2c37a834421fd347842c1e30de280c2, type: 3}
+  minPitch: 0.9
+  maxPitch: 1.1
