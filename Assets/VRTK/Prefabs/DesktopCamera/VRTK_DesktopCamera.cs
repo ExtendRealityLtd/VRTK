@@ -32,7 +32,6 @@ namespace VRTK
 
         protected Camera headsetCameraCopy;
         protected VRTK_TransformFollow headsetCameraTransformFollow;
-        protected VRTK_SDKManager sdkManager;
 
         protected virtual void OnEnable()
         {
@@ -54,24 +53,15 @@ namespace VRTK
             headsetCameraTransformFollow = gameObject.AddComponent<VRTK_TransformFollow>();
             headsetCameraTransformFollow.moment = VRTK_TransformFollow.FollowMoment.OnLateUpdate;
 
-            sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
+            if (VRTK_SDKManager.SubscribeLoadedSetupChanged(LoadedSetupChanged) && VRTK_SDKManager.GetLoadedSDKSetup() != null)
             {
-                sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-                if (sdkManager.loadedSetup != null)
-                {
-                    ConfigureForCurrentSDKSetup();
-                }
+                ConfigureForCurrentSDKSetup();
             }
         }
 
         protected virtual void OnDisable()
         {
-            if (sdkManager != null)
-            {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
-            }
-
+            VRTK_SDKManager.UnsubscribeLoadedSetupChanged(LoadedSetupChanged);
             Destroy(headsetCameraTransformFollow);
             if (headsetCameraCopy != null)
             {
@@ -94,7 +84,7 @@ namespace VRTK
             headsetCameraTransformFollow.enabled = false;
             followScript.enabled = false;
 
-            if (sdkManager.loadedSetup == null)
+            if (VRTK_SDKManager.GetLoadedSDKSetup() == null)
             {
                 return;
             }

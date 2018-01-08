@@ -94,7 +94,7 @@ namespace VRTK
 
         protected override void ControllerReady(VRTK_ControllerReference passedControllerReference)
         {
-            if (sdkManager != null && sdkManager.loadedSetup != null && gameObject.activeInHierarchy && VRTK_ControllerReference.IsValid(passedControllerReference))
+            if (VRTK_SDKManager.GetLoadedSDKSetup() != null && gameObject.activeInHierarchy && VRTK_ControllerReference.IsValid(passedControllerReference))
             {
                 Cleanup(true);
                 controllerReference = passedControllerReference;

@@ -48,7 +48,6 @@ namespace VRTK
             Selection
         }
 
-        protected VRTK_SDKManager sdkManager;
         protected readonly List<GameObject> chooseButtonGameObjects = new List<GameObject>();
         protected Transform currentPlayarea;
 
@@ -61,8 +60,7 @@ namespace VRTK
 
         protected virtual void OnEnable()
         {
-            sdkManager = VRTK_SDKManager.instance;
-            sdkManager.LoadedSetupChanged += OnLoadedSetupChanged;
+            VRTK_SDKManager.SubscribeLoadedSetupChanged(OnLoadedSetupChanged);
 
             switchButton.onClick.AddListener(OnSwitchButtonClick);
             cancelButton.onClick.AddListener(OnCancelButtonClick);
@@ -72,7 +70,7 @@ namespace VRTK
 
         protected virtual void OnDisable()
         {
-            sdkManager.LoadedSetupChanged -= OnLoadedSetupChanged;
+            VRTK_SDKManager.UnsubscribeLoadedSetupChanged(OnLoadedSetupChanged);
 
             switchButton.onClick.RemoveListener(OnSwitchButtonClick);
             cancelButton.onClick.RemoveListener(OnCancelButtonClick);
@@ -125,7 +123,7 @@ namespace VRTK
                     return;
             }
 
-            bool isAnyOtherCameraUsed = sdkManager.setups.Any(setup => setup != null && setup.gameObject.activeSelf)
+            bool isAnyOtherCameraUsed = VRTK_SDKManager.GetAllSDKSetups().Any(setup => setup != null && setup.gameObject.activeSelf)
                                         || VRTK_DeviceFinder.HeadsetCamera() != null;
             fallbackCamera.gameObject.SetActive(!isAnyOtherCameraUsed);
             eventSystem.gameObject.SetActive(EventSystem.current == null || EventSystem.current == eventSystem);
@@ -133,14 +131,13 @@ namespace VRTK
 
         protected virtual void UpdateCurrentText()
         {
-            VRTK_SDKSetup loadedSetup = sdkManager.loadedSetup;
-            currentText.text = loadedSetup == null ? "None" : loadedSetup.name;
+            VRTK_SDKSetup loadedSetup = VRTK_SDKManager.GetLoadedSDKSetup();
+            currentText.text = (loadedSetup == null ? "None" : loadedSetup.name);
         }
 
         protected virtual void AddSelectionButtons()
         {
-            VRTK_SDKSetup loadedSetup = sdkManager.loadedSetup;
-            if (loadedSetup != null)
+            if (VRTK_SDKManager.GetLoadedSDKSetup() != null)
             {
                 GameObject chooseNoneButton = Instantiate(chooseButton.gameObject, chooseButton.transform.parent);
                 chooseNoneButton.GetComponentInChildren<Text>().text = "None";
@@ -148,17 +145,17 @@ namespace VRTK
                 chooseNoneButton.SetActive(true);
 
                 chooseNoneButton.GetComponent<Button>().onClick.AddListener(
-                    () => sdkManager.UnloadSDKSetup(true)
+                    () => VRTK_SDKManager.AttemptUnloadSDKSetup(true)
                 );
 
                 chooseButtonGameObjects.Add(chooseNoneButton);
             }
 
-            VRTK_SDKSetup[] setups = sdkManager.setups;
+            VRTK_SDKSetup[] setups = VRTK_SDKManager.GetAllSDKSetups();
             for (int index = 0; index < setups.Length; index++)
             {
                 VRTK_SDKSetup setup = setups[index];
-                if (setup == null || setup == loadedSetup)
+                if (setup == null || setup == VRTK_SDKManager.GetLoadedSDKSetup())
                 {
                     continue;
                 }
@@ -171,7 +168,7 @@ namespace VRTK
                 int indexCopy = index;
                 Button button = chooseButtonCopy.GetComponent<Button>();
                 button.onClick.AddListener(
-                    () => sdkManager.TryLoadSDKSetup(indexCopy, true, setups)
+                    () => VRTK_SDKManager.AttemptTryLoadSDKSetup(indexCopy, true, setups)
                 );
 
                 ColorBlock buttonColors = button.colors;

@@ -4,24 +4,18 @@
 
     public abstract class VRTK_SDKControllerReady : MonoBehaviour
     {
-        protected VRTK_SDKManager sdkManager;
         protected SDK_BaseController previousControllerSDK;
 
         protected virtual void OnEnable()
         {
-            sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-            }
+            VRTK_SDKManager.SubscribeLoadedSetupChanged(LoadedSetupChanged);
             CheckControllersReady();
         }
 
         protected virtual void OnDisable()
         {
-            if (sdkManager != null)
+            if (VRTK_SDKManager.UnsubscribeLoadedSetupChanged(LoadedSetupChanged))
             {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
                 UnregisterPreviousLeftController();
                 UnregisterPreviousRightController();
             }

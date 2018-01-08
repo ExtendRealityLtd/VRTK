@@ -27,29 +27,23 @@ namespace VRTK
         [Tooltip("The specific SDK Object to child this GameObject to.")]
         public SDKObject sdkObject = SDKObject.Boundary;
 
-        protected VRTK_SDKManager sdkManager;
-
         protected virtual void OnEnable()
         {
-            sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-            }
+            VRTK_SDKManager.SubscribeLoadedSetupChanged(LoadedSetupChanged);
             ChildToSDKObject();
         }
 
         protected virtual void OnDisable()
         {
-            if (sdkManager != null && !gameObject.activeSelf)
+            if (!gameObject.activeSelf)
             {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
+                VRTK_SDKManager.UnsubscribeLoadedSetupChanged(LoadedSetupChanged);
             }
         }
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
-            if (sdkManager != null && gameObject.activeInHierarchy)
+            if (VRTK_SDKManager.ValidInstance() && gameObject.activeInHierarchy)
             {
                 ChildToSDKObject();
             }

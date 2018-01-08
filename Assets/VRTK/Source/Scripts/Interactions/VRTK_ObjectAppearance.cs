@@ -140,7 +140,7 @@ namespace VRTK
 
         protected static void SetupInstance()
         {
-            if (instance == null && VRTK_SDKManager.instance != null)
+            if (instance == null && VRTK_SDKManager.ValidInstance())
             {
                 instance = VRTK_SDKManager.instance.gameObject.AddComponent<VRTK_ObjectAppearance>();
             }

@@ -38,23 +38,18 @@ namespace VRTK
         protected float framesTime;
         protected Canvas canvas;
         protected Text text;
-        protected VRTK_SDKManager sdkManager;
 
         protected virtual void OnEnable()
         {
-            sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                sdkManager.LoadedSetupChanged += LoadedSetupChanged;
-            }
+            VRTK_SDKManager.SubscribeLoadedSetupChanged(LoadedSetupChanged);
             InitCanvas();
         }
 
         protected virtual void OnDisable()
         {
-            if (sdkManager != null && !gameObject.activeSelf)
+            if (!gameObject.activeSelf)
             {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
+                VRTK_SDKManager.UnsubscribeLoadedSetupChanged(LoadedSetupChanged);
             }
         }
 
@@ -87,7 +82,7 @@ namespace VRTK
 
         protected virtual void LoadedSetupChanged(VRTK_SDKManager sender, VRTK_SDKManager.LoadedSetupChangeEventArgs e)
         {
-            if (this != null && sdkManager != null && gameObject.activeInHierarchy)
+            if (this != null && VRTK_SDKManager.ValidInstance() && gameObject.activeInHierarchy)
             {
                 SetCanvasCamera();
             }
