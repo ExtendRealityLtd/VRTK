@@ -268,12 +268,12 @@ namespace VRTK
         {
             if (objectToMonitor != null && objectToMonitor.IsTouched())
             {
-                foreach (GameObject touchingObject in touchingObjects)
+                foreach (GameObject touchingObject in new HashSet<GameObject>(touchingObjects))
                 {
                     ToggleState(touchingObject, gameObjectActiveByDefault, rendererVisibleByDefault, VRTK_InteractableObject.InteractionType.None);
                 }
 
-                foreach (GameObject nearTouchingObject in nearTouchingObjects)
+                foreach (GameObject nearTouchingObject in new HashSet<GameObject>(nearTouchingObjects))
                 {
                     ToggleState(nearTouchingObject, gameObjectActiveByDefault, rendererVisibleByDefault, VRTK_InteractableObject.InteractionType.None);
                 }

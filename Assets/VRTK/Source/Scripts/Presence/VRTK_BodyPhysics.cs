@@ -393,7 +393,7 @@ namespace VRTK
         public virtual void ResetIgnoredCollisions()
         {
             //Go through all the existing set up ignored colliders and reset their collision state
-            foreach (GameObject ignoreCollisionsOnGameObject in ignoreCollisionsOnGameObjects)
+            foreach (GameObject ignoreCollisionsOnGameObject in new HashSet<GameObject>(ignoreCollisionsOnGameObjects))
             {
                 if (ignoreCollisionsOnGameObject != null)
                 {

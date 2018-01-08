@@ -209,7 +209,7 @@ namespace VRTK
         {
             if (ValidInstance())
             {
-                foreach (Behaviour currentBehaviour in delayedToggleBehaviours)
+                foreach (Behaviour currentBehaviour in new HashSet<Behaviour>(delayedToggleBehaviours))
                 {
                     instance.AddBehaviourToToggleOnLoadedSetupChange(currentBehaviour);
                 }
