@@ -155,6 +155,171 @@ namespace VRTK
                 return _instance;
             }
         }
+
+        /// <summary>
+        /// A collection of behaviours to toggle on loaded setup change.
+        /// </summary>
+        public static HashSet<Behaviour> delayedToggleBehaviours = new HashSet<Behaviour>();
+
+        /// <summary>
+        /// The ValidInstance method returns whether the SDK Manager isntance is valid (i.e. it's not null).
+        /// </summary>
+        /// <returns>Returns `true` if the SDK Manager instance is valid or returns `false` if it is null.</returns>
+        public static bool ValidInstance()
+        {
+            return (instance != null);
+        }
+
+        /// <summary>
+        /// The AttemptAddBehaviourToToggleOnLoadedSetupChange method will attempt to add the given behaviour to the loaded setup change toggle if the SDK Manager instance exists. If it doesn't exist then it adds it to the `delayedToggleBehaviours` HashSet to be manually added later with the `ProcessDelayedToggleBehaviours` method.
+        /// </summary>
+        /// <param name="givenBehaviour">The behaviour to add.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool AttemptAddBehaviourToToggleOnLoadedSetupChange(Behaviour givenBehaviour)
+        {
+            if (ValidInstance())
+            {
+                instance.AddBehaviourToToggleOnLoadedSetupChange(givenBehaviour);
+                return true;
+            }
+            delayedToggleBehaviours.Add(givenBehaviour);
+            return false;
+        }
+
+        /// <summary>
+        /// The AttemptRemoveBehaviourToToggleOnLoadedSetupChange method will attempt to remove the given behaviour from the loaded setup change toggle if the SDK Manager instance exists.
+        /// </summary>
+        /// <param name="givenBehaviour">The behaviour to remove.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool AttemptRemoveBehaviourToToggleOnLoadedSetupChange(Behaviour givenBehaviour)
+        {
+            if (ValidInstance())
+            {
+                instance.RemoveBehaviourToToggleOnLoadedSetupChange(givenBehaviour);
+                delayedToggleBehaviours.Remove(givenBehaviour);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The ProcessDelayedToggleBehaviours method will attempt to addd the behaviours in the `delayedToggleBehaviours` HashSet to the loaded setup change toggle.
+        /// </summary>
+        public static void ProcessDelayedToggleBehaviours()
+        {
+            if (ValidInstance())
+            {
+                foreach (Behaviour currentBehaviour in delayedToggleBehaviours)
+                {
+                    instance.AddBehaviourToToggleOnLoadedSetupChange(currentBehaviour);
+                }
+                delayedToggleBehaviours.Clear();
+            }
+        }
+
+        /// <summary>
+        /// The SubscribeLoadedSetupChanged method attempts to register the given callback with the `LoadedSetupChanged` event.
+        /// </summary>
+        /// <param name="callback">The callback to register.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool SubscribeLoadedSetupChanged(LoadedSetupChangeEventHandler callback)
+        {
+            if (ValidInstance())
+            {
+                instance.LoadedSetupChanged += callback;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The UnsubscribeLoadedSetupChanged method attempts to unregister the given callback from the `LoadedSetupChanged` event. 
+        /// </summary>
+        /// <param name="callback">The callback to unregister.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool UnsubscribeLoadedSetupChanged(LoadedSetupChangeEventHandler callback)
+        {
+            if (ValidInstance())
+            {
+                instance.LoadedSetupChanged -= callback;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The GetLoadedSDKSetup method returns the current loaded SDK Setup for the SDK Manager instance.
+        /// </summary>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static VRTK_SDKSetup GetLoadedSDKSetup()
+        {
+            if (ValidInstance())
+            {
+                return instance.loadedSetup;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The GetAllSDKSetups method returns all valid SDK Setups attached to the SDK Manager instance.
+        /// </summary>
+        /// <returns>An SDKSetup array of all valid SDK Setups for the current SDK Manager instance. If no SDK Manager instance is found then an empty array is returned.</returns>
+        public static VRTK_SDKSetup[] GetAllSDKSetups()
+        {
+            if (ValidInstance())
+            {
+                return instance.setups;
+            }
+            return new VRTK_SDKSetup[0];
+        }
+
+        /// <summary>
+        /// The AttemptTryLoadSDKSetup method attempts to load a valid VRTK_SDKSetup from a list if the SDK Manager instance is valid.
+        /// </summary>
+        /// <param name="startIndex">The index of the VRTK_SDKSetup to start the loading with.</param>
+        /// <param name="tryToReinitialize">Whether or not to retry initializing and using the currently set but unusable VR Device.</param>
+        /// <param name="sdkSetups">The list to try to load a VRTK_SDKSetup from.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool AttemptTryLoadSDKSetup(int startIndex, bool tryToReinitialize, params VRTK_SDKSetup[] sdkSetups)
+        {
+            if (ValidInstance())
+            {
+                instance.TryLoadSDKSetup(startIndex, tryToReinitialize, sdkSetups);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The AttemptUnloadSDKSetup method tries to load a valid VRTK_SDKSetup from setups if the SDK Manager instance is valid.
+        /// </summary>
+        /// <param name="tryUseLastLoadedSetup">Attempt to use the last loaded setup if it's available.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool AttemptTryLoadSDKSetupFromList(bool tryUseLastLoadedSetup = true)
+        {
+            if (ValidInstance())
+            {
+                instance.TryLoadSDKSetupFromList(tryUseLastLoadedSetup);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// The AttemptUnloadSDKSetup method attempts to unload the currently loaded VRTK_SDKSetup, if there is one and if the SDK Manager instance is valid.
+        /// </summary>
+        /// <param name="disableVR">Whether to disable VR altogether after unloading the SDK Setup.</param>
+        /// <returns>Returns `true` if the SDK Manager instance was valid.</returns>
+        public static bool AttemptUnloadSDKSetup(bool disableVR = false)
+        {
+            if (ValidInstance())
+            {
+                instance.UnloadSDKSetup(disableVR);
+                return true;
+            }
+            return false;
+        }
+
         private static VRTK_SDKManager _instance;
 
         [Tooltip("Determines whether the scripting define symbols required by the installed SDKs are automatically added to and removed from the player settings.")]
@@ -208,6 +373,7 @@ namespace VRTK
             }
             private set { _loadedSetup = value; }
         }
+
         private VRTK_SDKSetup _loadedSetup;
         private static HashSet<VRTK_SDKInfo> _previouslyUsedSetupInfos = new HashSet<VRTK_SDKInfo>();
 
@@ -231,7 +397,7 @@ namespace VRTK
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Manages (i.e. adds and removes) the scripting define symbols of the PlayerSettings for the currently set SDK infos.
+        /// The ManageScriptingDefineSymbols method manages (i.e. adds and removes) the scripting define symbols of the PlayerSettings for the currently set SDK infos.
         /// This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used
         /// in a type that is also compiled for a standalone build.
         /// </summary>
@@ -346,7 +512,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Manages (i.e. adds and removes) the VR SDKs of the PlayerSettings for the currently set SDK infos.
+        /// The ManageVRSettings method manages (i.e. adds and removes) the VR SDKs of the PlayerSettings for the currently set SDK infos.
         /// This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used
         /// in a type that is also compiled for a standalone build.
         /// </summary>
@@ -418,7 +584,7 @@ namespace VRTK
 #endif
 
         /// <summary>
-        /// Adds a behaviour to the list of behaviours to toggle when `loadedSetup` changes.
+        /// The AddBehaviourToToggleOnLoadedSetupChange method adds a behaviour to the list of behaviours to toggle when `loadedSetup` changes.
         /// </summary>
         /// <param name="behaviour">The behaviour to add.</param>
         public void AddBehaviourToToggleOnLoadedSetupChange(Behaviour behaviour)
@@ -436,7 +602,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Removes a behaviour of the list of behaviours to toggle when `loadedSetup` changes.
+        /// The RemoveBehaviourToToggleOnLoadedSetupChange method removes a behaviour of the list of behaviours to toggle when `loadedSetup` changes.
         /// </summary>
         /// <param name="behaviour">The behaviour to remove.</param>
         public void RemoveBehaviourToToggleOnLoadedSetupChange(Behaviour behaviour)
@@ -445,8 +611,9 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Tries to load a valid VRTK_SDKSetup from setups.
+        /// The TryLoadSDKSetupFromList method tries to load a valid VRTK_SDKSetup from setups.
         /// </summary>
+        /// <param name="tryUseLastLoadedSetup">Attempt to use the last loaded setup if it's available.</param>
         public void TryLoadSDKSetupFromList(bool tryUseLastLoadedSetup = true)
         {
             int index = 0;
@@ -496,7 +663,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// Tries to load a valid VRTK_SDKSetup from a list.
+        /// The TryLoadSDKSetup method tries to load a valid VRTK_SDKSetup from a list.
         /// </summary>
         /// <remarks>
         /// The first loadable VRTK_SDKSetup in the list will be loaded. Will fall back to disable VR if none of the provided Setups is useable.
@@ -581,11 +748,13 @@ namespace VRTK
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Sets a given VRTK_SDKSetup as the loaded SDK Setup to be able to use it when populating object references in the SDK Setup.
+        /// The SetLoadedSDKSetupToPopulateObjectReferences method sets a given VRTK_SDKSetup as the loaded SDK Setup to be able to use it when populating object references in the SDK Setup.
+        /// </summary>
+        /// <remarks>
         /// This method should only be called when not playing as it's only for populating the object references.
         /// This method is only available in the editor, so usage of the method needs to be surrounded by `#if UNITY_EDITOR` and `#endif` when used
         /// in a type that is also compiled for a standalone build.
-        /// </summary>
+        /// </remarks>
         /// <param name="setup">The SDK Setup to set as the loaded SDK.</param>
         public void SetLoadedSDKSetupToPopulateObjectReferences(VRTK_SDKSetup setup)
         {
@@ -600,7 +769,7 @@ namespace VRTK
 #endif
 
         /// <summary>
-        /// Unloads the currently loaded VRTK_SDKSetup, if there is one.
+        /// The UnloadSDKSetup method unloads the currently loaded VRTK_SDKSetup, if there is one.
         /// </summary>
         /// <param name="disableVR">Whether to disable VR altogether after unloading the SDK Setup.</param>
         public void UnloadSDKSetup(bool disableVR = false)

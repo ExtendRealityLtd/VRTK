@@ -98,7 +98,7 @@ namespace VRTK
 
         protected override void ControllerReady(VRTK_ControllerReference controllerReference)
         {
-            if (sdkManager != null && sdkManager.loadedSetup != null && gameObject.activeInHierarchy)
+            if (VRTK_SDKManager.GetLoadedSDKSetup() != null && gameObject.activeInHierarchy)
             {
                 UpdateTransform(controllerReference);
             }
@@ -107,7 +107,7 @@ namespace VRTK
         protected virtual VRTK_SDKTransformModifiers GetSelectedModifier(VRTK_ControllerReference controllerReference)
         {
             //attempt to find by the overall SDK set up to start with
-            VRTK_SDKTransformModifiers selectedModifier = sdkOverrides.FirstOrDefault(item => item.loadedSDKSetup == sdkManager.loadedSetup);
+            VRTK_SDKTransformModifiers selectedModifier = sdkOverrides.FirstOrDefault(item => item.loadedSDKSetup == VRTK_SDKManager.GetLoadedSDKSetup());
 
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)

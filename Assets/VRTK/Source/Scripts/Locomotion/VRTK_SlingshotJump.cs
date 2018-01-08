@@ -124,7 +124,7 @@ namespace VRTK
         {
             bodyPhysics = (bodyPhysics != null ? bodyPhysics : FindObjectOfType<VRTK_BodyPhysics>());
             playerClimb = (playerClimb != null ? playerClimb : FindObjectOfType<VRTK_PlayerClimb>());
-            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+            VRTK_SDKManager.AttemptAddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnEnable()
@@ -142,7 +142,7 @@ namespace VRTK
 
         protected virtual void OnDestroy()
         {
-            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+            VRTK_SDKManager.AttemptRemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void LeftButtonPressed(object sender, ControllerInteractionEventArgs e)

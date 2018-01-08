@@ -70,7 +70,7 @@ namespace VRTK
             shaderPropertyAV = Shader.PropertyToID("_AngularVelocity");
             shaderPropertyFeather = Shader.PropertyToID("_FeatherSize");
             shaderPropertySkyboxTexture = Shader.PropertyToID("_SecondarySkyBox");
-            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+            VRTK_SDKManager.AttemptAddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void OnEnable()
@@ -115,7 +115,7 @@ namespace VRTK
 
         protected virtual void OnDestroy()
         {
-            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+            VRTK_SDKManager.AttemptRemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         protected virtual void FixedUpdate()

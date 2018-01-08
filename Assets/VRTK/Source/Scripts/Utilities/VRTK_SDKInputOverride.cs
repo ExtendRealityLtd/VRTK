@@ -147,16 +147,15 @@ namespace VRTK
 
         protected override void OnDisable()
         {
-            base.OnDisable();
-            if (sdkManager != null && !gameObject.activeSelf)
+            if (!gameObject.activeSelf)
             {
-                sdkManager.LoadedSetupChanged -= LoadedSetupChanged;
+                base.OnDisable();
             }
         }
 
         protected override void ControllerReady(VRTK_ControllerReference controllerReference)
         {
-            if (sdkManager != null && sdkManager.loadedSetup != null && gameObject.activeInHierarchy)
+            if (VRTK_SDKManager.GetLoadedSDKSetup() != null && gameObject.activeInHierarchy)
             {
                 ManageInputs();
             }
@@ -166,9 +165,9 @@ namespace VRTK
         {
             VRTK_SDKButtonInputOverrideType selectedModifier = null;
             //attempt to find by the overall SDK set up to start with
-            if (sdkManager.loadedSetup != null)
+            if (VRTK_SDKManager.GetLoadedSDKSetup() != null)
             {
-                selectedModifier = overrideTypes.FirstOrDefault(item => item.loadedSDKSetup == sdkManager.loadedSetup);
+                selectedModifier = overrideTypes.FirstOrDefault(item => item.loadedSDKSetup == VRTK_SDKManager.GetLoadedSDKSetup());
             }
 
             //If no sdk set up is found or it is null then try and find by the SDK controller
@@ -183,7 +182,7 @@ namespace VRTK
         protected virtual VRTK_SDKVector2AxisInputOverrideType GetSelectedModifier(List<VRTK_SDKVector2AxisInputOverrideType> overrideTypes, VRTK_ControllerReference controllerReference)
         {
             //attempt to find by the overall SDK set up to start with
-            VRTK_SDKVector2AxisInputOverrideType selectedModifier = overrideTypes.FirstOrDefault(item => item.loadedSDKSetup == sdkManager.loadedSetup);
+            VRTK_SDKVector2AxisInputOverrideType selectedModifier = overrideTypes.FirstOrDefault(item => item.loadedSDKSetup == VRTK_SDKManager.GetLoadedSDKSetup());
 
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)

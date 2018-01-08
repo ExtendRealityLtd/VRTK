@@ -303,7 +303,7 @@ namespace VRTK
 
         private void Awake()
         {
-            VRTK_SDKManager.instance.AddBehaviourToToggleOnLoadedSetupChange(this);
+            VRTK_SDKManager.AttemptAddBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         private void OnEnable()
@@ -331,7 +331,7 @@ namespace VRTK
 
         private void OnDestroy()
         {
-            VRTK_SDKManager.instance.RemoveBehaviourToToggleOnLoadedSetupChange(this);
+            VRTK_SDKManager.AttemptRemoveBehaviourToToggleOnLoadedSetupChange(this);
         }
 
         private void OnValidate()

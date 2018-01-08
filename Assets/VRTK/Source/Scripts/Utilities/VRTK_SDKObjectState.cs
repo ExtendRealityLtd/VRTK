@@ -83,7 +83,7 @@ namespace VRTK
 
         protected virtual void ToggleOnSDK()
         {
-            if (loadedSDKSetup != null && loadedSDKSetup == sdkManager.loadedSetup)
+            if (loadedSDKSetup != null && loadedSDKSetup == VRTK_SDKManager.GetLoadedSDKSetup())
             {
                 ToggleObject();
             }
