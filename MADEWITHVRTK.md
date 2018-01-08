@@ -62,6 +62,7 @@ A collection of titles that have been made with VRTK.
 | VR Shoot Around | [Steam Store Page](http://store.steampowered.com/app/671740) |
 | How To Meat People | [Steam Store Page](http://store.steampowered.com/app/735700) |
 | OfficeBots: Reality Bytes | [Steam Store Page](http://store.steampowered.com/app/649730) |
+| Comets Wake | [Steam Store Page](http://store.steampowered.com/app/763650) |
 
 ## Oculus Home
 
