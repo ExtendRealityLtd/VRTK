@@ -12,6 +12,7 @@ namespace VRTK
     /// <param name="touchpadAngle">The rotational position the touchpad is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.</param>
     /// <param name="touchpadTwoAxis">The position the touchpad two is touched at. `(0,0)` to `(1,1)`.</param>
     /// <param name="touchpadTwoAngle">The rotational position the touchpad two is being touched at, 0 being top, 180 being bottom and all other angles accordingly. `0f` to `360f`.</param>
+    /// <param name="touchpadSwipeDirection">The direction of the swipe mouvement on the touchpad one</param>
     public struct ControllerInteractionEventArgs
     {
         public VRTK_ControllerReference controllerReference;
@@ -20,6 +21,7 @@ namespace VRTK
         public float touchpadAngle;
         public Vector2 touchpadTwoAxis;
         public float touchpadTwoAngle;
+        public Vector2 touchpadSwipeDirection;
     }
 
     /// <summary>
@@ -185,7 +187,8 @@ namespace VRTK
         [Tooltip("The amount of pressure required to be applied to a sense button before considering the sense button pressed.")]
         [Range(0f, 1f)]
         public float senseAxisPressThreshold = 0.95f;
-
+        [Tooltip("The minimum distance for the swipe before raising event.")]
+        public float swipeThreshold = 0.01f;
         [Header("Trigger Refinement Settings")]
 
         [Tooltip("The level on the trigger axis to reach before a click is registered.")]
@@ -470,7 +473,10 @@ namespace VRTK
         /// Emitted when the touchpad is no longer being touched.
         /// </summary>
         public event ControllerInteractionEventHandler TouchpadTouchEnd;
-
+        /// <summary>
+        /// Emitted when detected the user have swiped after the touchpad is no longer being touched.
+        /// </summary>
+        public event ControllerInteractionEventHandler TouchpadSwiped;
         /// <summary>
         /// Emitted when the touchpad is being touched in a different location.
         /// </summary>
@@ -489,6 +495,10 @@ namespace VRTK
         /// Emitted when the touchpad two is no longer being touched.
         /// </summary>
         public event ControllerInteractionEventHandler TouchpadTwoTouchEnd;
+        /// <summary>
+        /// Emitted when detected the user have swiped after the touchpad  two is no longer being touched.
+        /// </summary>
+        public event ControllerInteractionEventHandler TouchpadTwoSwiped;
 
         /// <summary>
         /// Emitted when the touchpad two is being touched in a different location.
@@ -593,7 +603,9 @@ namespace VRTK
         #endregion controller events
 
         protected Vector2 touchpadAxis = Vector2.zero;
+        protected Vector2 touchpadAxisStartTouch = Vector2.zero;
         protected Vector2 touchpadTwoAxis = Vector2.zero;
+        protected Vector2 touchpadTwoAxisStartTouch = Vector2.zero;
         protected Vector2 triggerAxis = Vector2.zero;
         protected Vector2 gripAxis = Vector2.zero;
         protected float touchpadSenseAxis = 0f;
@@ -795,7 +807,13 @@ namespace VRTK
                 TouchpadTouchEnd(this, e);
             }
         }
-
+        public virtual void OnTouchpadSwiped(ControllerInteractionEventArgs e)
+        {
+            if (TouchpadSwiped != null)
+            {
+                TouchpadSwiped(this, e);
+            }
+        }
         public virtual void OnTouchpadAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TouchpadAxisChanged != null)
@@ -827,7 +845,13 @@ namespace VRTK
                 TouchpadTwoTouchEnd(this, e);
             }
         }
-
+        public virtual void OnTouchpadTwoSwiped(ControllerInteractionEventArgs e)
+        {
+            if (TouchpadSwiped != null)
+            {
+                TouchpadTwoSwiped(this, e);
+            }
+        }
         public virtual void OnTouchpadTwoAxisChanged(ControllerInteractionEventArgs e)
         {
             if (TouchpadTwoAxisChanged != null)
@@ -1019,8 +1043,9 @@ namespace VRTK
         /// <param name="buttonBool">The state of the pressed button if required.</param>
         /// <param name="value">The value to set the `buttonBool` reference to.</param>
         /// <param name="buttonPressure">The pressure of the button pressed if required.</param>
+        /// <param name="swipeDirection">The swipe on the button if required.</param>
         /// <returns>The payload for a Controller Event.</returns>
-        public virtual ControllerInteractionEventArgs SetControllerEvent(ref bool buttonBool, bool value = false, float buttonPressure = 0f)
+        public virtual ControllerInteractionEventArgs SetControllerEvent(ref bool buttonBool, bool value = false, float buttonPressure = 0f,Vector2 swipeDirection = new Vector2())
         {
             VRTK_ControllerReference controllerReference = VRTK_ControllerReference.GetControllerReference(gameObject);
             buttonBool = value;
@@ -1031,6 +1056,7 @@ namespace VRTK
             e.touchpadAngle = CalculateVector2AxisAngle(e.touchpadAxis);
             e.touchpadTwoAxis = VRTK_SDK_Bridge.GetControllerAxis(SDK_BaseController.ButtonTypes.TouchpadTwo, controllerReference);
             e.touchpadTwoAngle = CalculateVector2AxisAngle(e.touchpadTwoAxis);
+            e.touchpadSwipeDirection = swipeDirection;
             return e;
         }
 
@@ -1543,6 +1569,7 @@ namespace VRTK
             if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.TouchDown, controllerReference))
             {
                 OnTouchpadTouchStart(SetControllerEvent(ref touchpadTouched, true, 1f));
+                touchpadAxisStartTouch = currentTouchpadAxis;
             }
 
             //Touchpad Pressed
@@ -1558,6 +1585,13 @@ namespace VRTK
             //Touchpad Untouched
             if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.Touchpad, SDK_BaseController.ButtonPressTypes.TouchUp, controllerReference))
             {
+                Vector2 direction = touchpadAxis - touchpadAxisStartTouch;
+                if(direction.magnitude > swipeThreshold)
+                {
+                    OnTouchpadSwiped(SetControllerEvent(ref touchpadTouched, false, 0f,direction));
+                }
+                touchpadAxisStartTouch = Vector2.zero;
+
                 OnTouchpadTouchEnd(SetControllerEvent(ref touchpadTouched, false, 0f));
                 touchpadAxis = Vector2.zero;
             }
@@ -1594,11 +1628,19 @@ namespace VRTK
             if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.TouchpadTwo, SDK_BaseController.ButtonPressTypes.TouchDown, controllerReference))
             {
                 OnTouchpadTwoTouchStart(SetControllerEvent(ref touchpadTwoTouched, true, 1f));
+                touchpadTwoAxisStartTouch = currentTouchpadTwoAxis;
             }
 
             //Touchpad Two Untouched
             if (VRTK_SDK_Bridge.GetControllerButtonState(SDK_BaseController.ButtonTypes.TouchpadTwo, SDK_BaseController.ButtonPressTypes.TouchUp, controllerReference))
             {
+                Vector2 direction = touchpadTwoAxis - touchpadTwoAxisStartTouch;
+                if(direction.magnitude > swipeThreshold)
+                {
+                    OnTouchpadSwiped(SetControllerEvent(ref touchpadTouched, false, 0f,direction));
+                }
+                touchpadTwoAxisStartTouch = Vector2.zero;
+
                 OnTouchpadTwoTouchEnd(SetControllerEvent(ref touchpadTwoTouched, false, 0f));
                 touchpadTwoAxis = Vector2.zero;
             }

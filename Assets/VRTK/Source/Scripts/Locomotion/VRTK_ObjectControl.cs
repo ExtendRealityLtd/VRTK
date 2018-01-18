@@ -9,6 +9,7 @@ namespace VRTK
     /// <param name="controlledGameObject">The GameObject that is going to be affected.</param>
     /// <param name="directionDevice">The device that is used for the direction.</param>
     /// <param name="axisDirection">The axis that is being affected.</param>
+    /// <param name="swipeDirection">The directione of the swipe</param>
     /// <param name="axis">The value of the current touchpad touch point based across the axis direction.</param>
     /// <param name="deadzone">The value of the deadzone based across the axis direction.</param>
     /// <param name="currentlyFalling">Whether the controlled GameObject is currently falling.</param>
@@ -18,6 +19,7 @@ namespace VRTK
         public GameObject controlledGameObject;
         public Transform directionDevice;
         public Vector3 axisDirection;
+        public Vector3 swipeDirection;
         public float axis;
         public float deadzone;
         public bool currentlyFalling;
@@ -90,6 +92,14 @@ namespace VRTK
         /// Emitted when the Y Axis Changes.
         /// </summary>
         public event ObjectControlEventHandler YAxisChanged;
+        /// <summary>
+        /// Emited when Horizontal swiped.
+        /// </summary>
+        public event ObjectControlEventHandler HorizontalSwiped;
+        /// <summary>
+        /// Emited when Vertical swiped.
+        /// </summary>
+        public event ObjectControlEventHandler VerticalSwiped;
 
         protected VRTK_ControllerEvents controllerEvents;
         protected VRTK_ObjectControl otherObjectControl;
@@ -99,11 +109,12 @@ namespace VRTK
         protected DirectionDevices previousDeviceForDirection;
         protected Vector2 currentAxis;
         protected Vector2 storedAxis;
+        protected Vector2 currentSwipe;
         protected bool currentlyFalling = false;
         protected bool modifierActive = false;
         protected float controlledGameObjectPreviousY = 0f;
         protected float controlledGameObjectPreviousYOffset = 0.01f;
-
+        
         public virtual void OnXAxisChanged(ObjectControlEventArgs e)
         {
             if (XAxisChanged != null)
@@ -117,6 +128,20 @@ namespace VRTK
             if (YAxisChanged != null)
             {
                 YAxisChanged(this, e);
+            }
+        }
+
+        public virtual void OnHorizontalSwiped(ObjectControlEventArgs e){
+            if(HorizontalSwiped != null)
+            {
+                HorizontalSwiped(this,e);
+            }
+        }
+
+        public virtual void OnVerticalSwiped(ObjectControlEventArgs e){
+            if(VerticalSwiped != null)
+            {
+                VerticalSwiped(this,e);
             }
         }
 
@@ -134,6 +159,7 @@ namespace VRTK
         {
             currentAxis = Vector2.zero;
             storedAxis = Vector2.zero;
+            currentSwipe = Vector2.zero;
             controllerEvents = (controller != null ? controller : GetComponentInParent<VRTK_ControllerEvents>());
             if (!controllerEvents)
             {
@@ -173,7 +199,7 @@ namespace VRTK
             ControlFixedUpdate();
         }
 
-        protected virtual ObjectControlEventArgs SetEventArguements(Vector3 axisDirection, float axis, float axisDeadzone)
+        protected virtual ObjectControlEventArgs SetEventArguements(Vector3 axisDirection, float axis, float axisDeadzone,Vector3 swipeDirection = new Vector3())
         {
             ObjectControlEventArgs e;
             e.controlledGameObject = controlledGameObject;
@@ -183,7 +209,7 @@ namespace VRTK
             e.deadzone = axisDeadzone;
             e.currentlyFalling = currentlyFalling;
             e.modifierActive = modifierActive;
-
+            e.swipeDirection = swipeDirection;
             return e;
         }
 

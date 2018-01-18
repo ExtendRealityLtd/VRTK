@@ -24,7 +24,15 @@ namespace VRTK
             /// <summary>
             /// Listen for changes on the vertical y axis.
             /// </summary>
-            YAxisChanged
+            YAxisChanged,
+            /// <summary>
+            /// Listen for horizontal swipe
+            /// </summary>
+            SwipeHorizontal,
+            /// <summary>
+            /// Listen for vertical swipe
+            /// </summary>
+            SwipeVertical
         }
 
         [Tooltip("The Object Control script to receive axis change events from.")]
@@ -60,6 +68,12 @@ namespace VRTK
                     case AxisListeners.YAxisChanged:
                         objectControlScript.YAxisChanged += AxisChanged;
                         break;
+                    case AxisListeners.SwipeHorizontal:
+                        objectControlScript.HorizontalSwiped += AxisChanged;
+                        break;
+                    case AxisListeners.SwipeVertical:
+                        objectControlScript.VerticalSwiped += AxisChanged;
+                        break;
                 }
             }
             internalBodyPhysics = (internalBodyPhysics == null ? VRTK_SharedMethods.FindEvenInactiveComponent<VRTK_BodyPhysics>() : internalBodyPhysics);
@@ -76,6 +90,12 @@ namespace VRTK
                         break;
                     case AxisListeners.YAxisChanged:
                         objectControlScript.YAxisChanged -= AxisChanged;
+                        break;
+                    case AxisListeners.SwipeHorizontal:
+                        objectControlScript.HorizontalSwiped -= AxisChanged;
+                        break;
+                    case AxisListeners.SwipeVertical:
+                        objectControlScript.VerticalSwiped -= AxisChanged;
                         break;
                 }
             }
