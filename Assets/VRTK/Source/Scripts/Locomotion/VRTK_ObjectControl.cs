@@ -189,9 +189,14 @@ namespace VRTK
 
         protected virtual void SetControlledObject()
         {
+            Transform playArea = VRTK_DeviceFinder.PlayAreaTransform();
+
             setControlOverrideObject = controlOverrideObject;
-            controlledGameObject = (controlOverrideObject ? controlOverrideObject : VRTK_DeviceFinder.PlayAreaTransform().gameObject);
-            controlledGameObjectPreviousY = controlledGameObject.transform.position.y;
+            controlledGameObject = (controlOverrideObject ? controlOverrideObject : (playArea != null ? playArea.gameObject : null));
+            if (controlledGameObject != null)
+            {
+                controlledGameObjectPreviousY = controlledGameObject.transform.position.y;
+            }
         }
 
         protected virtual void CheckFalling()

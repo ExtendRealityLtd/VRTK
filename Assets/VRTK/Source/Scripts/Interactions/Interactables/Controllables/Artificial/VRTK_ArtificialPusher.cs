@@ -168,7 +168,7 @@ namespace VRTK.Controllables.ArtificialBased
 
         protected override void OnTouched(Collider collider)
         {
-            if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) || VRTK_PlayerObject.IsPlayerObject(collider.gameObject, VRTK_PlayerObject.ObjectTypes.Controller))
+            if ((!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) || VRTK_PlayerObject.IsPlayerObject(collider.gameObject, VRTK_PlayerObject.ObjectTypes.Controller)) && collider.GetComponent<VRTK_InteractNearTouchCollider>() == false)
             {
                 base.OnTouched(collider);
 

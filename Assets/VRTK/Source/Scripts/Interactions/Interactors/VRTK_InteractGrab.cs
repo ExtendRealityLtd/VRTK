@@ -176,6 +176,16 @@ namespace VRTK
             return grabbedObject;
         }
 
+        /// <summary>
+        /// The ForceControllerAttachPoint method updates the rigidbody being used as the controller grab attach position.
+        /// </summary>
+        /// <param name="forcedAttachPoint">The rigidbody to use as the controller attach point.</param>
+        public virtual void ForceControllerAttachPoint(Rigidbody forcedAttachPoint)
+        {
+            originalControllerAttachPoint = forcedAttachPoint;
+            controllerAttachPoint = forcedAttachPoint;
+        }
+
         protected virtual void Awake()
         {
             originalControllerAttachPoint = controllerAttachPoint;

@@ -13,6 +13,10 @@
 /[Aa]ssets/[Oo]culus[Pp]latform.meta
 /[Aa]ssets/[Oo][Vv][Rr][Aa]vatar/*
 /[Aa]ssets/[Oo][Vv][Rr][Aa]vatar.meta
+/[Aa]ssets/[Oo][Vv][Rr][Aa]udio[Mm]anager/*
+/[Aa]ssets/[Oo][Vv][Rr][Aa]udio[Mm]anager.meta
+/[Aa]ssets/[Oo][Ss][Pp][Nn]ative/*
+/[Aa]ssets/[Oo][Ss][Pp][Nn]ative.meta
 /[Aa]ssets/[Rr]esources/OculusPlatformSettings.asset
 /[Aa]ssets/[Rr]esources/OculusPlatformSettings.asset.meta
 /[Aa]ssets/[Rr]esources/OvrAvatarSettings.asset

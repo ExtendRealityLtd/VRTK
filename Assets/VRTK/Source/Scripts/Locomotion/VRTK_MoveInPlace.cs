@@ -215,10 +215,6 @@ namespace VRTK
                 VRTK_SharedMethods.AddDictionaryValue(movementList, trackedObj, new List<float>(), true);
                 VRTK_SharedMethods.AddDictionaryValue(previousYPositions, trackedObj, trackedObj.transform.localPosition.y, true);
             }
-            if (playArea == null)
-            {
-                VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "PlayArea", "Boundaries SDK"));
-            }
         }
 
         protected virtual void OnDisable()
@@ -332,6 +328,11 @@ namespace VRTK
             return listAverage;
         }
 
+        protected virtual Vector3 HeadsetPosition()
+        {
+            return (headset != null ? new Vector3(headset.forward.x, 0, headset.forward.z) : Vector3.zero);
+        }
+
         protected virtual Vector3 SetDirection()
         {
             switch (directionMethod)
@@ -348,7 +349,7 @@ namespace VRTK
                 case DirectionalMethod.EngageControllerRotationOnly:
                     return CalculateControllerRotationDirection((engagedController != null ? engagedController.scriptAlias.transform.rotation : Quaternion.identity) * Vector3.forward);
                 case DirectionalMethod.Gaze:
-                    return new Vector3(headset.forward.x, 0, headset.forward.z);
+                    return HeadsetPosition();
             }
 
             return Vector2.zero;
@@ -360,14 +361,14 @@ namespace VRTK
             // If we're doing dumb decoupling, this is what we'll be sticking with.
             if (initialGaze == Vector3.zero)
             {
-                initialGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                initialGaze = HeadsetPosition();
             }
 
             // If we're doing smart decoupling, check to see if we want to reset our distance.
             if (directionMethod == DirectionalMethod.SmartDecoupling)
             {
                 bool closeEnough = true;
-                float curXDir = headset.rotation.eulerAngles.y;
+                float curXDir = (headset != null ? headset.rotation.eulerAngles.y : 0f);
                 if (curXDir <= smartDecoupleThreshold)
                 {
                     curXDir += 360;
@@ -379,7 +380,7 @@ namespace VRTK
                 // If the controllers and the headset are pointing the same direction (within the threshold) reset the direction the player's moving.
                 if (closeEnough)
                 {
-                    initialGaze = new Vector3(headset.forward.x, 0, headset.forward.z);
+                    initialGaze = HeadsetPosition();
                 }
             }
             return initialGaze;
@@ -403,10 +404,13 @@ namespace VRTK
         protected virtual void MovePlayArea(Vector3 moveDirection, float moveSpeed)
         {
             Vector3 movement = (moveDirection * moveSpeed) * Time.fixedDeltaTime;
-            Vector3 finalPosition = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
-            if (playArea != null && CanMove(bodyPhysics, playArea.position, finalPosition))
+            if (playArea != null)
             {
-                playArea.position = finalPosition;
+                Vector3 finalPosition = new Vector3(movement.x + playArea.position.x, playArea.position.y, movement.z + playArea.position.z);
+                if (CanMove(bodyPhysics, playArea.position, finalPosition))
+                {
+                    playArea.position = finalPosition;
+                }
             }
         }
 

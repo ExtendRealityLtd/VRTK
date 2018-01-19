@@ -99,6 +99,7 @@ namespace VRTK
         protected VRTK_BasePointerRenderer.VisibilityStates storedCursorState;
         protected bool storedDirectionIndicatorState;
         protected bool currentTeleportState;
+        protected bool customTeleporter;
         protected Transform playArea;
         protected Transform headset;
 
@@ -158,6 +159,7 @@ namespace VRTK
         protected override void OnEnable()
         {
             base.OnEnable();
+            customTeleporter = (teleporter != null);
             CreateColliderIfRequired();
             SetupRigidbody();
             initaliseListeners = StartCoroutine(ManageDestinationMarkersAtEndOfFrame());
@@ -180,11 +182,18 @@ namespace VRTK
             if (createdCollider)
             {
                 Destroy(pointCollider);
+                pointCollider = null;
             }
 
             if (createdRigidbody)
             {
                 Destroy(pointRigidbody);
+                pointRigidbody = null;
+            }
+
+            if (!customTeleporter)
+            {
+                teleporter = null;
             }
         }
 
@@ -386,9 +395,17 @@ namespace VRTK
             OnDestinationPointEnabled();
         }
 
+        protected virtual void SetColliderState(bool state)
+        {
+            if (pointCollider != null)
+            {
+                pointCollider.enabled = state;
+            }
+        }
+
         protected virtual void DisablePoint()
         {
-            pointCollider.enabled = false;
+            SetColliderState(false);
             ToggleObject(lockedCursorObject, false);
             ToggleObject(defaultCursorObject, false);
             ToggleObject(hoverCursorObject, false);
@@ -405,14 +422,14 @@ namespace VRTK
             ToggleObject(hoverCursorObject, false);
             if (enableTeleport)
             {
-                pointCollider.enabled = true;
+                SetColliderState(true);
                 ToggleObject(defaultCursorObject, true);
                 ToggleObject(lockedCursorObject, false);
                 OnDestinationPointUnlocked();
             }
             else
             {
-                pointCollider.enabled = false;
+                SetColliderState(false);
                 ToggleObject(lockedCursorObject, true);
                 ToggleObject(defaultCursorObject, false);
                 OnDestinationPointLocked();

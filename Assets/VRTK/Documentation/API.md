@@ -3878,6 +3878,17 @@ The AttemptGrab method will attempt to grab the currently touched Interactable O
 
 The GetGrabbedObject method returns the current Interactable Object being grabbed by the this Interact Grab.
 
+#### ForceControllerAttachPoint/1
+
+  > `public virtual void ForceControllerAttachPoint(Rigidbody forcedAttachPoint)`
+
+ * Parameters
+   * `Rigidbody forcedAttachPoint` - The rigidbody to use as the controller attach point.
+ * Returns
+   * _none_
+
+The ForceControllerAttachPoint method updates the rigidbody being used as the controller grab attach position.
+
 ### Example
 
 `VRTK/Examples/005_Controller/BasicObjectGrabbing` demonstrates the grabbing of interactable objects that have the `VRTK_InteractableObject` script attached to them. The objects can be picked up and thrown around.

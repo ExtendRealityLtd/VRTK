@@ -307,11 +307,6 @@ namespace VRTK
                 VRTK_PlayerObject.SetPlayerObject(gameObject, VRTK_PlayerObject.ObjectTypes.Pointer);
             }
             SetDefaultValues();
-
-            if (NoPointerRenderer())
-            {
-                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_PARAMETER, "VRTK_Pointer", "VRTK_BasePointerRenderer", "Pointer Renderer"));
-            }
         }
 
         protected override void OnDisable()
