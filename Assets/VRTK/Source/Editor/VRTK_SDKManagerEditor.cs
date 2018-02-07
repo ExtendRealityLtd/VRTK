@@ -380,7 +380,7 @@
                     SerializedProperty serializedProperty = setupsList.serializedProperty;
                     serializedProperty.ClearArray();
                     VRTK_SDKSetup[] setups = sdkManager.GetComponentsInChildren<VRTK_SDKSetup>(true)
-                                                       .Concat(VRTK_SharedMethods.FindEvenInactiveComponents<VRTK_SDKSetup>())
+                                                       .Concat(VRTK_SharedMethods.FindEvenInactiveComponents<VRTK_SDKSetup>(true))
                                                        .Distinct()
                                                        .ToArray();
 

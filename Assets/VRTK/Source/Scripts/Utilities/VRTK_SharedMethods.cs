@@ -251,76 +251,59 @@ namespace VRTK
         /// Finds the first GameObject with a given name and an ancestor that has a specific component.
         /// </summary>
         /// <remarks>
-        /// This method returns active as well as inactive GameObjects in the scene. It doesn't return assets.
+        /// This method returns active as well as inactive GameObjects in all scenes. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type that needs to be on an ancestor of the wanted GameObject. Must be a subclass of `Component`.</typeparam>
         /// <param name="gameObjectName">The name of the wanted GameObject. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type `T`.</param>
+        /// <param name="searchAllScenes">If this is true, all loaded scenes will be searched. If this is false, only the active scene will be searched.</param>
         /// <returns>The GameObject with name `gameObjectName` and an ancestor that has a `T`. If no such GameObject is found then `null` is returned.</returns>
-        public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component
+        public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null, bool searchAllScenes = false) where T : Component
         {
             if (string.IsNullOrEmpty(gameObjectName))
             {
-                T foundComponent = FindEvenInactiveComponent<T>();
+                T foundComponent = FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes, true).FirstOrDefault();
                 return foundComponent == null ? null : foundComponent.gameObject;
             }
 
-            Scene activeScene = SceneManager.GetActiveScene();
-            IEnumerable<GameObject> gameObjects = Resources.FindObjectsOfTypeAll<T>()
-                                                           .Select(component => component.gameObject)
-                                                           .Where(gameObject => gameObject.scene == activeScene);
-
-#if UNITY_EDITOR
-            gameObjects = gameObjects.Where(gameObject => !AssetDatabase.Contains(gameObject));
-#endif
-
-            return gameObjects.Select(gameObject =>
-                              {
-                                  Transform transform = gameObject.transform.Find(gameObjectName);
-                                  return transform == null ? null : transform.gameObject;
-                              })
-                              .FirstOrDefault(gameObject => gameObject != null);
+            return FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes)
+                       .Select(component => 
+                       {
+                            Transform transform = component.gameObject.transform.Find(gameObjectName);
+                            return transform == null ? null : transform.gameObject;
+                       })
+                       .FirstOrDefault(gameObject => gameObject != null);
         }
 
         /// <summary>
         /// Finds all components of a given type.
         /// </summary>
         /// <remarks>
-        /// This method returns components from active as well as inactive GameObjects in the scene. It doesn't return assets.
+        /// This method returns components from active as well as inactive GameObjects in all scenes. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type to search for. Must be a subclass of `Component`.</typeparam>
+        /// <param name="searchAllScenes">If this is true, all loaded scenes will be searched. If this is false, only the active scene will be searched.</param>
         /// <returns>All the found components. If no component is found an empty array is returned.</returns>
-        public static T[] FindEvenInactiveComponents<T>() where T : Component
+        public static T[] FindEvenInactiveComponents<T>(bool searchAllScenes = false) where T : Component
         {
-            Scene activeScene = SceneManager.GetActiveScene();
-            return Resources.FindObjectsOfTypeAll<T>()
-                            .Where(@object => @object.gameObject.scene == activeScene)
-#if UNITY_EDITOR
-                            .Where(@object => !AssetDatabase.Contains(@object))
-#endif
-                            .ToArray();
+            IEnumerable<T> results = FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes);
+            return results.ToArray();
         }
 
         /// <summary>
         /// Finds the first component of a given type.
         /// </summary>
         /// <remarks>
-        /// This method returns components from active as well as inactive GameObjects in the scene. It doesn't return assets.
+        /// This method returns components from active as well as inactive GameObjects in all scenes. It doesn't return assets.
         /// For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
         /// </remarks>
         /// <typeparam name="T">The component type to search for. Must be a subclass of `Component`.</typeparam>
+        /// <param name="searchAllScenes">If this is true, all loaded scenes will be searched. If this is false, only the active scene will be searched.</param>
         /// <returns>The found component. If no component is found `null` is returned.</returns>
-        public static T FindEvenInactiveComponent<T>() where T : Component
+        public static T FindEvenInactiveComponent<T>(bool searchAllScenes = false) where T : Component
         {
-            Scene activeScene = SceneManager.GetActiveScene();
-            return Resources.FindObjectsOfTypeAll<T>()
-                            .Where(@object => @object.gameObject.scene == activeScene)
-#if UNITY_EDITOR
-                            .FirstOrDefault(@object => !AssetDatabase.Contains(@object));
-#else
-                            .FirstOrDefault();
-#endif
+            return FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes, true).FirstOrDefault();
         }
 
         /// <summary>
@@ -634,5 +617,43 @@ namespace VRTK
             }).ToArray();
         }
 #endif
+
+        /// <summary>
+        /// The FindEvenInactiveComponentsInLoadedScenes method searches active and inactive game objects in all
+        /// loaded scenes for components matching the type supplied. 
+        /// </summary>
+        /// <param name="searchAllScenes">If true, will search all loaded scenes, otherwise just the active scene.</param>
+        /// <param name="stopOnMatch">If true, will stop searching objects as soon as a match is found.</param>
+        /// <returns></returns>
+        private static IEnumerable<T> FindEvenInactiveComponentsInLoadedScenes<T>(bool searchAllScenes, bool stopOnMatch = false) where T : Component
+        {
+            List<T> results = new List<T>();
+
+            for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+            {
+                Scene scene = SceneManager.GetSceneAt(sceneIndex);
+                if (scene.isLoaded && (searchAllScenes || scene == SceneManager.GetActiveScene()))
+                {
+                    GameObject[] rootObjects = scene.GetRootGameObjects();
+                    foreach (GameObject rootObject in scene.GetRootGameObjects())
+                    {
+                        if (stopOnMatch)
+                        {
+                            T foundComponent = rootObject.GetComponentInChildren<T>(true);
+                            if (foundComponent != null)
+                            {
+                                results.Add(foundComponent);
+                                return results;
+                            }
+                        }
+                        else
+                        {
+                            results.AddRange(rootObject.GetComponentsInChildren<T>(true));
+                        }
+                    }
+                }
+            }
+            return results;
+        }
     }
 }
