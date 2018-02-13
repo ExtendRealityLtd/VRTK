@@ -83,19 +83,13 @@ namespace VRTK
         /// <returns>A string containing the path to the game object that the controller element resides in.</returns>
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
-            //TODO: Use Gvr's tooltips or add an attach object ourselves
-            string dd = "Controller/ddcontroller/";
-            string pad = dd + "Tooltips/TouchPadOutside";
-            string app = dd + "Tooltips/AppButtonOutside";
+            //TODO: Use Gvr ddcontroller mesh doesn't have separate components; manually attach objects?
+            string dd = "ControllerVisual";
 
             switch (element)
             {
                 case ControllerElements.AttachPoint:
-                    return pad; //TODO: attach point at tip of controller?
-                case ControllerElements.Touchpad:
-                    return pad;
-                case ControllerElements.ButtonOne:
-                    return app;
+                    return dd;
                 default:
                     return dd;
             }
@@ -163,7 +157,7 @@ namespace VRTK
             controller = GetSDKManagerControllerRightHand(actual);
             if ((controller == null) && actual)
             {
-                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<GvrControllerVisualManager>("Controller");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<GvrTrackedController>("ControllerVisual");
             }
             if (controller != null)
             {
@@ -352,7 +346,7 @@ namespace VRTK
         /// <returns>A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.</returns>
         public override Vector2 GetButtonAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)
         {
-            return (buttonType == ButtonTypes.Touchpad ? GvrController.TouchPos : Vector2.zero);
+            return (buttonType == ButtonTypes.Touchpad ? GvrControllerInput.TouchPos : Vector2.zero);
         }
 
         /// <summary>
@@ -392,28 +386,28 @@ namespace VRTK
                     switch (pressType)
                     {
                         case ButtonPressTypes.Press:
-                            return GvrController.ClickButton;
+                            return GvrControllerInput.ClickButton;
                         case ButtonPressTypes.PressDown:
-                            return GvrController.ClickButtonDown;
+                            return GvrControllerInput.ClickButtonDown;
                         case ButtonPressTypes.PressUp:
-                            return GvrController.ClickButtonUp;
+                            return GvrControllerInput.ClickButtonUp;
                         case ButtonPressTypes.Touch:
-                            return GvrController.IsTouching;
+                            return GvrControllerInput.IsTouching;
                         case ButtonPressTypes.TouchDown:
-                            return GvrController.TouchDown;
+                            return GvrControllerInput.TouchDown;
                         case ButtonPressTypes.TouchUp:
-                            return GvrController.TouchUp;
+                            return GvrControllerInput.TouchUp;
                     }
                     break;
                 case ButtonTypes.ButtonOne:
                     switch (pressType)
                     {
                         case ButtonPressTypes.Press:
-                            return GvrController.AppButton;
+                            return GvrControllerInput.AppButton;
                         case ButtonPressTypes.PressDown:
-                            return GvrController.AppButtonDown;
+                            return GvrControllerInput.AppButtonDown;
                         case ButtonPressTypes.PressUp:
-                            return GvrController.AppButtonUp;
+                            return GvrControllerInput.AppButtonUp;
                     }
                     break;
             }

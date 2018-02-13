@@ -27,7 +27,7 @@ namespace VRTK
 
         protected virtual void Update()
         {
-            if (!GvrController.IsTouching)
+            if (!GvrControllerInput.IsTouching)
             {
                 // snap back to origin
                 transform.position = positionOrigin;
@@ -57,12 +57,12 @@ namespace VRTK
         /// <returns>A Vector2 of the touch position.</returns>
         private Vector2 GetTouch(int origin = 5)
         {
-            if (!GvrController.IsTouching)
+            if (!GvrControllerInput.IsTouching)
             {
                 return Vector2.zero;
             }
 
-            Vector2 touch = GvrController.TouchPos;
+            Vector2 touch = GvrControllerInput.TouchPos;
             // raw: 0,0 is top left, x is left-right, y is front-back
             // invert y axis
             touch.y = 1.0f - touch.y;
