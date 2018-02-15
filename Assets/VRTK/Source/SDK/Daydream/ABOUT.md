@@ -1,5 +1,5 @@
 ## Daydream SDK for VRTK
-_Jonathan Linowes (@linojon)_ & _Prashant Naidu (@prashant-naidu)_
+_Jonathan Linowes (@linojon)_, _Prashant Naidu (@prashant-naidu)_
 
 The Daydream SDK for VRTK integrates the Daydream platform with VRTK. It can use Unity's built-in VR supported Camera with Daydream support. 
 
@@ -94,6 +94,7 @@ The following shows the events supported directly by the VRTK Daydream SDK. Othe
 * Touchpad_Touch
 * Touchpad_Press
 * Button_One_Press
+* Button_Two_Press
 
 **Ignored**
 * Trigger_Hairline
