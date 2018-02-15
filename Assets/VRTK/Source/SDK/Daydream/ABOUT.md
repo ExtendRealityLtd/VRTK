@@ -30,12 +30,6 @@ Instructions for setting up your Unity project for Daydream with VRTK. Uses the 
 	* Virtual Reality Supported > Daydream
 	* API Level: Nougat
 	* Bundle Identifier and other settings you'd use to run on Android
-* In Hierarchy, create empty, named "DaydreamCameraRig"
-	* Create a Camera as child of DaydreamCameraRig, reset its transform (position 0,0,0) and set its tag to MainCamera
-	* Add GvrControllerPointer prefab from Assets/GoogleVR/Prefabs/Controller/
-	* Add GvrControllerMain prefab from Assets/GoogleVR/Prefabs/Controller/
-* Disable Daydream's native pointer tools
-	* Delete GvrControllerPointer/Laser
 
 
 ### Setup VRTK Components
@@ -52,7 +46,7 @@ Instructions for setting up your Unity project for Daydream with VRTK. Uses the 
 	* That should populate the four SDKs, and add the necessary define symbol
 	* In Player Settings, ensure Scripting Define Symbols: VRTK_SDK_DAYDREAM
 * Linked Objects:
-	* Actual Boundaries: DaydreamCameraRig
+	* Actual Boundaries: Daydream
 	* Actual Headset: Camera
 	* Actual Left Controller: empty
 	* Actual Right Controller: GvrControllerPointer
