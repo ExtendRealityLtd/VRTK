@@ -39,16 +39,18 @@ Instructions for setting up your Unity project for Daydream with VRTK. Uses the 
 
 
 ### Setup VRTK Components
-* In Hierarchy, create an Empty named "[VRTK]"
+* In Hierarchy, create an Empty named "[VRTK_SDK_Manager]"
 * Add component VRTK_SDKManager
+* Add a child Empty named "SDK_Setups"
+* Add Daydream prefab from Assets/VRTK/Examples/ExampleResources/Prefabs/SDKSetups/ as a child of "SDK_Setups"
+* In Hierarchy, create an Empty named "[VRTK_Scripts]"
 * Add a child Empty named "RightController"
 * Note, Daydream supports only one controller, LeftController will not be used. If present, can be disabled or deleted.
-* SDK Selection
+* Daydream (SDK_Setup)
 	* In Inspector, choose Quick Select SDK: Daydream
-	* that should populate the four SDKs, 
+	* That should populate the four SDKs, and add the necessary define symbol
 	* In Player Settings, ensure Scripting Define Symbols: VRTK_SDK_DAYDREAM
-* Linked Objects: 
-	* Click "Auto Populate Linked Objects", that should set:
+* Linked Objects:
 	* Actual Boundaries: DaydreamCameraRig
 	* Actual Headset: Camera
 	* Actual Left Controller: empty
