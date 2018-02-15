@@ -148,7 +148,7 @@ namespace VRTK
         {
             if (actual)
             {
-                HyTrackObjRig trackedObjRig = VRTK_SharedMethods.FindEvenInactiveComponent<HyTrackObjRig>();
+                HyTrackObjRig trackedObjRig = VRTK_SharedMethods.FindEvenInactiveComponent<HyTrackObjRig>(true);
                 if (trackedObjRig)
                 {
                     return trackedObjRig.leftController;
@@ -174,7 +174,7 @@ namespace VRTK
         {
             if (actual)
             {
-                HyTrackObjRig trackedObjRig = VRTK_SharedMethods.FindEvenInactiveComponent<HyTrackObjRig>();
+                HyTrackObjRig trackedObjRig = VRTK_SharedMethods.FindEvenInactiveComponent<HyTrackObjRig>(true);
                 if (trackedObjRig)
                 {
                     return trackedObjRig.rightController;

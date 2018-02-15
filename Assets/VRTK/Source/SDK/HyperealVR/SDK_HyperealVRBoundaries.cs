@@ -37,7 +37,7 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                GameObject myHeadGO = VRTK_SharedMethods.FindEvenInactiveGameObject<HyHead>();
+                GameObject myHeadGO = VRTK_SharedMethods.FindEvenInactiveGameObject<HyHead>(null, true);
                 cachedPlayArea = (myHeadGO != null ? myHeadGO.transform.parent : null);
             }
             return cachedPlayArea;

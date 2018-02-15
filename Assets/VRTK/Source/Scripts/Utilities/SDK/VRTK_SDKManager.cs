@@ -145,7 +145,7 @@ namespace VRTK
             {
                 if (_instance == null)
                 {
-                    VRTK_SDKManager sdkManager = VRTK_SharedMethods.FindEvenInactiveComponent<VRTK_SDKManager>();
+                    VRTK_SDKManager sdkManager = VRTK_SharedMethods.FindEvenInactiveComponent<VRTK_SDKManager>(true);
                     if (sdkManager != null)
                     {
                         sdkManager.CreateInstance();

@@ -35,7 +35,7 @@ namespace VRTK
             cachedPlayArea = GetSDKManagerPlayArea();
             if (cachedPlayArea == null)
             {
-                VRContext vrContext = VRTK_SharedMethods.FindEvenInactiveComponent<VRContext>();
+                VRContext vrContext = VRTK_SharedMethods.FindEvenInactiveComponent<VRContext>(true);
                 if (Application.isPlaying)
                 {
                     vrContext.InitVRContext();

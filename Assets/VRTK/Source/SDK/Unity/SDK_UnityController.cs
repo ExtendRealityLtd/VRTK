@@ -247,7 +247,7 @@ namespace VRTK
             GameObject controller = GetSDKManagerControllerLeftHand(actual);
             if (controller == null && actual)
             {
-                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SDK_UnityCameraRig>("LeftHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SDK_UnityCameraRig>("LeftHandAnchor", true);
             }
             return controller;
         }
@@ -262,7 +262,7 @@ namespace VRTK
             GameObject controller = GetSDKManagerControllerRightHand(actual);
             if (controller == null && actual)
             {
-                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SDK_UnityCameraRig>("RightHandAnchor");
+                controller = VRTK_SharedMethods.FindEvenInactiveGameObject<SDK_UnityCameraRig>("RightHandAnchor", true);
             }
             return controller;
         }

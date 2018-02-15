@@ -44,7 +44,7 @@ namespace VRTK
             cachedHeadset = GetSDKManagerHeadset();
             if (cachedHeadset == null)
             {
-                GameObject myHeadGO = VRTK_SharedMethods.FindEvenInactiveGameObject<HyHead>();
+                GameObject myHeadGO = VRTK_SharedMethods.FindEvenInactiveGameObject<HyHead>(null, true);
                 cachedHeadset = (myHeadGO != null ? myHeadGO.transform : null);
             }
             return cachedHeadset;
@@ -56,7 +56,7 @@ namespace VRTK
         /// <returns>A transform of the object holding the headset camera in the scene.</returns>
         public override Transform GetHeadsetCamera()
         {
-            GameObject myHeadsetCameraGO = VRTK_SharedMethods.FindEvenInactiveGameObject<HyCamera>();
+            GameObject myHeadsetCameraGO = VRTK_SharedMethods.FindEvenInactiveGameObject<HyCamera>(null, true);
             cachedHeadsetCamera = (myHeadsetCameraGO != null ? myHeadsetCameraGO.transform : null);
             return cachedHeadsetCamera;
         }
