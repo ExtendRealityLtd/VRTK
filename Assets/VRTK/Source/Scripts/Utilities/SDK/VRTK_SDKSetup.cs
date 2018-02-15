@@ -434,7 +434,7 @@ namespace VRTK
                 return;
             }
 
-            foreach (VRTK_SDKSetup setup in VRTK_SharedMethods.FindEvenInactiveComponents<VRTK_SDKSetup>())
+            foreach (VRTK_SDKSetup setup in VRTK_SharedMethods.FindEvenInactiveComponents<VRTK_SDKSetup>(true))
             {
                 setup.PopulateObjectReferences(false);
             }
