@@ -84,14 +84,15 @@ namespace VRTK
         public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)
         {
             //TODO: Use Gvr ddcontroller mesh doesn't have separate components; manually attach objects?
-            string dd = "ControllerVisual";
+            string parent = "ControllerVisual";
+            string tip = "/ControllerTip";
 
             switch (element)
             {
                 case ControllerElements.AttachPoint:
-                    return dd;
+                    return parent + tip;
                 default:
-                    return dd;
+                    return parent;
             }
         }
 
@@ -399,7 +400,20 @@ namespace VRTK
                             return GvrControllerInput.TouchUp;
                     }
                     break;
+
                 case ButtonTypes.ButtonOne:
+                    switch (pressType)
+                    {
+                        case ButtonPressTypes.Press:
+                            return GvrControllerInput.ClickButton;
+                        case ButtonPressTypes.PressDown:
+                            return GvrControllerInput.ClickButtonDown;
+                        case ButtonPressTypes.PressUp:
+                            return GvrControllerInput.ClickButtonUp;
+                    }
+                    break;
+
+                case ButtonTypes.ButtonTwo:
                     switch (pressType)
                     {
                         case ButtonPressTypes.Press:
