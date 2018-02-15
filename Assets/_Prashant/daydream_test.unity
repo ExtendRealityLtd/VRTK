@@ -108,6 +108,16 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &192174652 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1456506931515546, guid: 440565f0e6daad846a94b14ee4318097,
+    type: 2}
+  m_PrefabInternal: {fileID: 1494635783}
+--- !u!1 &302838751 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1800771640477052, guid: 440565f0e6daad846a94b14ee4318097,
+    type: 2}
+  m_PrefabInternal: {fileID: 1494635783}
 --- !u!1 &321695734
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +159,7 @@ GameObject:
   - component: {fileID: 609782674}
   - component: {fileID: 609782673}
   - component: {fileID: 609782671}
+  - component: {fileID: 609782675}
   m_Layer: 0
   m_Name: RightController
   m_TagString: Untagged
@@ -192,6 +203,7 @@ MonoBehaviour:
   invalidCollisionColor: {r: 1, g: 0, b: 0, a: 1}
   tracerVisibility: 0
   cursorVisibility: 0
+  cachedPointerAttachPoint: {fileID: 0}
   maximumLength: 100
   scaleFactor: 0.002
   cursorScaleMultiplier: 25
@@ -304,6 +316,17 @@ MonoBehaviour:
   interactUse: {fileID: 0}
   customOrigin: {fileID: 0}
   controller: {fileID: 0}
+--- !u!114 &609782675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 609782669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36b6470166be7046a8f4a543b22e84d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &690923325
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +492,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 867795159}
+--- !u!1 &1005581979 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1323723095620920, guid: 440565f0e6daad846a94b14ee4318097,
+    type: 2}
+  m_PrefabInternal: {fileID: 1494635783}
 --- !u!4 &1097275030 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4880875389311708, guid: 440565f0e6daad846a94b14ee4318097,
@@ -569,6 +597,50 @@ Prefab:
     - target: {fileID: 4880875389311708, guid: 440565f0e6daad846a94b14ee4318097, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: actualRightController
+      value: 
+      objectReference: {fileID: 302838751}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: modelAliasRightController
+      value: 
+      objectReference: {fileID: 302838751}
+    - target: {fileID: 1464895443416510, guid: 440565f0e6daad846a94b14ee4318097, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: actualHeadset
+      value: 
+      objectReference: {fileID: 192174652}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: actualBoundaries
+      value: 
+      objectReference: {fileID: 1005581979}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: cachedSystemSDKInfo.typeName
+      value: VRTK.SDK_DaydreamSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: cachedBoundariesSDKInfo.typeName
+      value: VRTK.SDK_DaydreamBoundaries
+      objectReference: {fileID: 0}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: cachedHeadsetSDKInfo.typeName
+      value: VRTK.SDK_DaydreamHeadset
+      objectReference: {fileID: 0}
+    - target: {fileID: 114571334303449910, guid: 440565f0e6daad846a94b14ee4318097,
+        type: 2}
+      propertyPath: cachedControllerSDKInfo.typeName
+      value: VRTK.SDK_DaydreamController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 440565f0e6daad846a94b14ee4318097, type: 2}
