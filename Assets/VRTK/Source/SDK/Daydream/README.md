@@ -10,6 +10,7 @@
    * API Level to `Nougat`.
    * Bundle Identifier and other settings for use with Android.
  * In the `Hierarchy` window, create a new empty GameObject named `[VRTK_SDK_Manager]`.
+ * Add Component `VRTK_SDKManager`.
  * Add `SDKSetups` prefab from Assets/VRTK/Examples/ExampleResources/Prefabs/SDKSetups/ as a child of `[VRTK_SDK_Manager]`.
  * Delete all the SDKs except `Daydream` from children of `SDKSetups`.
  * Click Auto Populate in the inspector of `[VRTK_SDK_Manager]`.
