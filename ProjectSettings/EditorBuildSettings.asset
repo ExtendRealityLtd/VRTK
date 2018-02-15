@@ -5,6 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/_Scenes/daydream_test.unity
+  - enabled: 0
+    path: 
     guid: d749e3203bb46724299fb2e819d45e7c
