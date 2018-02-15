@@ -12,7 +12,7 @@ Further, this VRTK Daydream SDK provides a DaydreamReach component to facilitate
 
 For first time users, see the Unity docs [Getting started with Android development](https://docs.unity3d.com/Manual/android-GettingStarted.html) and Google documentation [Get Started Guides for Android Daydream](https://developers.google.com/vr/unity/get-started-controller). In particular, 
 
-* Use a version of Unity that natively support Google VR with Daydream (as of 2018, 5.6.x [Daydream technical preview] @ https://unity3d.com/partners/google/daydream#section-download). Install with "Android Build Support"
+* Use a version of Unity that natively support Google VR with Daydream (as of 2018, 5.6 or newer [Daydream technical preview] @ https://unity3d.com/partners/google/daydream#section-download). Install with "Android Build Support"
 *  If this is your first time developing Android applications in Unity, follow Unity's [Android SDK setup](https://docs.unity3d.com/Manual/android-sdksetup.html)
 * Download the [Google VR SDK for Unity](https://developers.google.com/vr/unity/download#google-vr-sdk-for-unity)
 * You'll need [Daydream hardware](https://developers.google.com/vr/daydream/hardware) to run your app, including a Daydream-ready phone and Daydream headset (Note, I use a Nexus 6P running Nougat, although not offically Daydream ready, it does work with some complaining)
