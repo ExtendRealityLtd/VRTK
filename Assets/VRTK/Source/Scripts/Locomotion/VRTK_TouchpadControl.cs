@@ -36,6 +36,8 @@ namespace VRTK
         public VRTK_ControllerEvents.ButtonAlias actionModifierButton = VRTK_ControllerEvents.ButtonAlias.TouchpadPress;
         [Tooltip("A deadzone threshold on the touchpad that will ignore input if the touch position is within the specified deadzone. Between `0f` and `1f`.")]
         public Vector2 axisDeadzone = new Vector2(0.2f, 0.2f);
+        [Tooltip("Mininum lenght for reacting to swipe Between `0f` and `2f` ")]
+        public float swipeMinLenght = 0.5f;
 
         protected bool touchpadFirstChange;
         protected bool otherTouchpadControlEnabledState;
@@ -62,6 +64,18 @@ namespace VRTK
             {
                 OnYAxisChanged(SetEventArguements(directionDevice.forward, currentAxis.y, axisDeadzone.y));
             }
+
+            if(Mathf.Abs(currentSwipe.x) >= swipeMinLenght)
+            {
+                OnHorizontalSwiped(SetEventArguements(directionDevice.right, currentSwipe.x, 0));
+                currentSwipe.x = 0f;
+            }
+
+            if(Mathf.Abs(currentSwipe.y) >= swipeMinLenght)
+            {
+                OnVerticalSwiped(SetEventArguements(directionDevice.forward, currentSwipe.y, 0));
+                currentSwipe.y = 0f;
+            }
         }
 
         protected override VRTK_ObjectControl GetOtherControl()
@@ -84,10 +98,12 @@ namespace VRTK
                     {
                         case VRTK_ControllerEvents.Vector2AxisAlias.Touchpad:
                             controllerEvents.TouchpadAxisChanged += TouchpadAxisChanged;
+                            controllerEvents.TouchpadSwiped += TouchpadSwiped;
                             controllerEvents.TouchpadTouchEnd += TouchpadTouchEnd;
                             break;
                         case VRTK_ControllerEvents.Vector2AxisAlias.TouchpadTwo:
                             controllerEvents.TouchpadTwoAxisChanged += TouchpadAxisChanged;
+                            controllerEvents.TouchpadTwoSwiped += TouchpadSwiped;
                             controllerEvents.TouchpadTwoTouchEnd += TouchpadTouchEnd;
                             break;
                     }
@@ -98,10 +114,12 @@ namespace VRTK
                     {
                         case VRTK_ControllerEvents.Vector2AxisAlias.Touchpad:
                             controllerEvents.TouchpadAxisChanged -= TouchpadAxisChanged;
+                            controllerEvents.TouchpadSwiped -= TouchpadSwiped;
                             controllerEvents.TouchpadTouchEnd -= TouchpadTouchEnd;
                             break;
                         case VRTK_ControllerEvents.Vector2AxisAlias.TouchpadTwo:
                             controllerEvents.TouchpadTwoAxisChanged -= TouchpadAxisChanged;
+                            controllerEvents.TouchpadTwoSwiped -= TouchpadSwiped;
                             controllerEvents.TouchpadTwoTouchEnd -= TouchpadTouchEnd;
                             break;
                     }
@@ -132,6 +150,11 @@ namespace VRTK
         protected virtual bool TouchpadTouched()
         {
             return (controllerEvents != null && controllerEvents.IsButtonPressed(coordniateButtonAlias));
+        }
+
+        protected virtual void TouchpadSwiped(object sender, ControllerInteractionEventArgs e)
+        {
+            currentSwipe = e.touchpadSwipeDirection;
         }
 
         protected virtual void TouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
