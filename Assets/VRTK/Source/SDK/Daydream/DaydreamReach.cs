@@ -9,7 +9,7 @@ namespace VRTK
     /// </summary>
     public class DaydreamReach : MonoBehaviour
     {
-        [Tooltip("Controller to track, defaults to ./Controller but probably want a Pointer Joint like GvrControllerPointer/Laser")]
+        [Tooltip("Controller to track, defaults to ./ControllerVisual but probably want a Pointer Joint like GvrControllerPointer/Laser")]
         public Transform controller;
         [Tooltip("Maximum reach distance from controller origin.")]
         public float reachDistance = 0.5f;
@@ -20,7 +20,7 @@ namespace VRTK
         {
             if (controller == null)
             {
-                controller = transform.Find("Controller");
+                controller = transform.Find("ControllerVisual");
             }
             positionOrigin = transform.position;
         }
