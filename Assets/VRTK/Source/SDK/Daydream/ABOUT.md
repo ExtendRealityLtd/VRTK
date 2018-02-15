@@ -22,7 +22,7 @@ For first time users, see the Unity docs [Getting started with Android developme
 
 Instructions for setting up your Unity project for Daydream with VRTK. Uses the integrated support for Google Daydream VR camera object.
 
-* Open a new or existing project in Unity (5.4.2f2-GVR13 or other version with Daydream integration)
+* Open a new or existing project in Unity (5.6 or newer)
 * Import asset package GoogleVRForUnity you downloaded from Google
 * Build Settings: 
 	* Target platform: Android
@@ -45,6 +45,7 @@ Instructions for setting up your Unity project for Daydream with VRTK. Uses the 
 * Add Daydream prefab from Assets/VRTK/Examples/ExampleResources/Prefabs/SDKSetups/ as a child of "SDK_Setups"
 * In Hierarchy, create an Empty named "[VRTK_Scripts]"
 * Add a child Empty named "RightController"
+* Set "RightController" as Right Controller Script Alias in VRTK_SDKManager
 * Note, Daydream supports only one controller, LeftController will not be used. If present, can be disabled or deleted.
 * Daydream (SDK_Setup)
 	* In Inspector, choose Quick Select SDK: Daydream
