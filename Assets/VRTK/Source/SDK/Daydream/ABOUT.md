@@ -65,7 +65,7 @@ Instructions for setting up your Unity project for Daydream with VRTK. Uses the 
 
 * Note, it's a Daydream device setting whether the controller is rendered as held in the player's right or left hand. But normally players will have just one controller.
 
-* I recommend enabling Use Accelerometer in GrvControllerMain for more natural hand tracking.
+* I recommend enabling Use Accelerometer in GvrControllerMain for more natural hand tracking.
 
 * You can change the Controller's GvrArmModelOffsets Joint to Elbow for more exaggerated (amplified) motions
 
