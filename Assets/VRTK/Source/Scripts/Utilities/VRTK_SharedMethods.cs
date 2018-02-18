@@ -634,7 +634,6 @@ namespace VRTK
                 Scene scene = SceneManager.GetSceneAt(sceneIndex);
                 if (scene.isLoaded && (searchAllScenes || scene == SceneManager.GetActiveScene()))
                 {
-                    GameObject[] rootObjects = scene.GetRootGameObjects();
                     foreach (GameObject rootObject in scene.GetRootGameObjects())
                     {
                         if (stopOnMatch)
