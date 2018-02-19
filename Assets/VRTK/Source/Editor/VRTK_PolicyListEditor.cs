@@ -20,7 +20,11 @@
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("operation"));
+ #if UNITY_2017_3_OR_NEWER
+            staticFlagMask.intValue = (int)((VRTK_PolicyList.CheckTypes)EditorGUILayout.EnumFlagsField("Check Types", (VRTK_PolicyList.CheckTypes)staticFlagMask.intValue));
+ #else
             staticFlagMask.intValue = (int)((VRTK_PolicyList.CheckTypes)EditorGUILayout.EnumMaskField("Check Types", (VRTK_PolicyList.CheckTypes)staticFlagMask.intValue));
+ #endif
             ArrayGUI(identifiers);
 
             serializedObject.ApplyModifiedProperties();
