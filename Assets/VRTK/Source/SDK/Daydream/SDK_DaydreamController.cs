@@ -114,7 +114,20 @@ namespace VRTK
         /// <returns></returns>
         public override GameObject GetControllerByIndex(uint index, bool actual = false)
         {
-            return (index == 1 ? controller : null);
+            //return (index == 1 ? controller : null);
+            if (index == 1)
+            {
+                if (actual)
+                {
+                    return GetControllerRightHand(true);
+                }
+                else
+                {
+                    return GetControllerRightHand(false);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
