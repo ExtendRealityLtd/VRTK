@@ -1,10 +1,10 @@
 ## Daydream SDK for VRTK
-_Jonathan Linowes (@linojon)_
+_Jonathan Linowes (@linojon)_, _Prashant Naidu (@prashant-naidu)_
 
 The Daydream SDK for VRTK integrates the Daydream platform with VRTK. It can use Unity's built-in VR supported Camera with Daydream support. 
 
 Daydream controllers are signficantly limited compared with positionally tracked hand controllers like HTC Vive Lighthouse and Oculus Rift Touch.
-The Daydream controller hardware provides 3 DOF (x y z axis rotation) and accellerometer. However, some (limited) 3-space positioning can be simulated. The Google VR (Gvr) SDK provides an Arm Model that simulates transforms for shoulder, elbow, wrist and pointer joints. Your application can still use these with VRTK, just supply an object with the GvrArmModelOffsets component to the VRTK_LinkedObjects, VRTK_SimplerPointer or other appropriate component. 
+The Daydream controller hardware provides 3 DOF (x y z axis rotation) and accellerometer. However, some (limited) 3-space positioning can be simulated. The Google VR (Gvr) SDK provides an Arm Model that simulates transforms for shoulder, elbow, wrist and pointer joints. Your application can still use these with VRTK, just supply an object with the GvrArmModelOffsets component to the VRTK_LinkedObjects, VRTK_SimplerPointer or other appropriate components. 
 
 Further, this VRTK Daydream SDK provides a DaydreamReach component to facilitate reaching out to touch and grab. It uses the touchpad to push the controller position out in front of user along the current orientation plane or pointer axis.
 
@@ -12,7 +12,7 @@ Further, this VRTK Daydream SDK provides a DaydreamReach component to facilitate
 
 For first time users, see the Unity docs [Getting started with Android development](https://docs.unity3d.com/Manual/android-GettingStarted.html) and Google documentation [Get Started Guides for Android Daydream](https://developers.google.com/vr/unity/get-started-controller). In particular, 
 
-* Use a version of Unity that natively support Google VR with Daydream (as of Jan 30, 2017, 5.4.2f2-GVR13 [Daydream technical preview](https://unity3d.com/partners/google/daydream#section-download). Note Unity 5.6.0b4 build is not stable with thie SDK). Install with "Android Build Support"
+* Use a version of Unity that natively support Google VR with Daydream (as of 2018, 5.6 or newer [Daydream technical preview] @ https://unity3d.com/partners/google/daydream#section-download). Install with "Android Build Support"
 *  If this is your first time developing Android applications in Unity, follow Unity's [Android SDK setup](https://docs.unity3d.com/Manual/android-sdksetup.html)
 * Download the [Google VR SDK for Unity](https://developers.google.com/vr/unity/download#google-vr-sdk-for-unity)
 * You'll need [Daydream hardware](https://developers.google.com/vr/daydream/hardware) to run your app, including a Daydream-ready phone and Daydream headset (Note, I use a Nexus 6P running Nougat, although not offically Daydream ready, it does work with some complaining)
@@ -22,7 +22,7 @@ For first time users, see the Unity docs [Getting started with Android developme
 
 Instructions for setting up your Unity project for Daydream with VRTK. Uses the integrated support for Google Daydream VR camera object.
 
-* Open a new or existing project in Unity (5.4.2f2-GVR13 or other version with Daydream integration)
+* Open a new or existing project in Unity (5.6 or newer)
 * Import asset package GoogleVRForUnity you downloaded from Google
 * Build Settings: 
 	* Target platform: Android
@@ -30,43 +30,36 @@ Instructions for setting up your Unity project for Daydream with VRTK. Uses the 
 	* Virtual Reality Supported > Daydream
 	* API Level: Nougat
 	* Bundle Identifier and other settings you'd use to run on Android
-* In Hierarchy, create empty, named "DaydreamCameraRig"
-	* Move or create a Camera as child of DaydreamCameraRig, reset its transform (position 0,0,0)
-	* Add GvrControllerPointer prefab from Assets/GoogleVR/Prefabs/UI
-	* Add GvrControllerMain prefab from Assets/GoogleVR/Prefabs/Controller/
-	* Add GvrViewerMain prefab (enables view in editor play mode)
-* Disable Daydream's native pointer tools
-	* To the Camera object, disable or remove GvrPointerPhysicsRaycaster component, if present
-	* To the GvrControllerPointer/Laser, disable or delete
 
 
 ### Setup VRTK Components
-* In Hierarchy, create an Empty named "[VRTK]"
+* In Hierarchy, create an Empty named "[VRTK_SDK_Manager]"
 * Add component VRTK_SDKManager
+* Add a child Empty named "SDK_Setups"
+* Add Daydream prefab from Assets/VRTK/Examples/ExampleResources/Prefabs/SDKSetups/ as a child of "SDK_Setups"
+* In Hierarchy, create an Empty named "[VRTK_Scripts]"
 * Add a child Empty named "RightController"
+* Set "RightController" as Right Controller Script Alias in VRTK_SDKManager
 * Note, Daydream supports only one controller, LeftController will not be used. If present, can be disabled or deleted.
-* SDK Selection
+* Daydream (SDK_Setup)
 	* In Inspector, choose Quick Select SDK: Daydream
-	* that should populate the four SDKs, 
+	* That should populate the four SDKs, and add the necessary define symbol
 	* In Player Settings, ensure Scripting Define Symbols: VRTK_SDK_DAYDREAM
-* Linked Objects: 
-	* Click "Auto Populate Linked Objects", that should set:
-	* Actual Boundaries: DaydreamCameraRig
-	* Actual Headset: DaydreamCameraRig/Camera
+* Linked Objects:
+	* Actual Boundaries: Daydream
+	* Actual Headset: Camera
 	* Actual Left Controller: empty
-	* Actual Right Controller: DaydreamCameraRig/GvrControllerPointer/Controller
+	* Actual Right Controller: GvrControllerPointer
 * Controler Aliases:
 	* Model Alias Left Controller: empty
-	* Model Alias Right Controller: DaydreamCameraRig/GvrControllerPoints/Controller
-	* Script Alias Left Controller: empty
-	* Script Alias Right Controller: [VRTK]/RightController
+	* Model Alias Right Controller: GvrControllerPointer
 
 
 ## Tips
 
-* Note, we're using the name "RightController" to follow VRTK convention. However, it's a Daydream device setting whether the controller is rendered as held in the player's right or left hand. But normally players will have just one controller.
+* Note, it's a Daydream device setting whether the controller is rendered as held in the player's right or left hand. But normally players will have just one controller.
 
-* I recommend enabling Use Accelerometer in GrvControllerMain for more natural hand tracking.
+* I recommend enabling Use Accelerometer in GvrControllerMain for more natural hand tracking.
 
 * You can change the Controller's GvrArmModelOffsets Joint to Elbow for more exaggerated (amplified) motions
 
@@ -84,7 +77,7 @@ Depending on which components you're using on the [VRTK]/RightController, you mi
 	* Grab Toggle Button: Touchpad_Press
 	* Use Toggle Button: Touchpad_Press
 	* UI Click Button: Touchpad_Press
-	* Menu Toggle Button: Button_One_Press
+	* Menu Toggle Button: Button_Two_Press
 
 * VRTK_SimplePointer: 
 	* PointOriginTransform: drag in the GvrControllerPointer/Laser object, which has the Point joint (instead of Controller which has the Wrist joint) or other object using Pointer joint 
@@ -98,6 +91,7 @@ The following shows the events supported directly by the VRTK Daydream SDK. Othe
 * Touchpad_Touch
 * Touchpad_Press
 * Button_One_Press
+* Button_Two_Press
 
 **Ignored**
 * Trigger_Hairline
@@ -110,7 +104,6 @@ The following shows the events supported directly by the VRTK Daydream SDK. Othe
 * Grip_Click
 * Button_One_Touch
 * Button_Two_Touch
-* Button_One_Press
 * Start_Menu_Press
 
 
@@ -141,6 +134,9 @@ The following shows the API methods supported directly by the VRTK Daydream SDK.
 * IsButtonOnePressedOnIndex
 * IsButtonOnePressedDownOnIndex
 * IsButtonOnePressedUpOnIndex
+* IsButtonTwoPressedOnIndex
+* IsButtonTwoPressedDownOnIndex
+* IsButtonTwoPressedUpOnIndex
 
 
 **Ignored**
@@ -175,9 +171,6 @@ Uses Fallback methods, usually returning false or null.
 * IsButtonOneTouchedOnIndex
 * IsButtonOneTouchedDownOnIndex
 * IsButtonOneTouchedUpOnIndex
-* IsButtonTwoPressedOnIndex
-* IsButtonTwoPressedDownOnIndex
-* IsButtonTwoPressedUpOnIndex
 * IsButtonTwoTouchedOnIndex
 * IsButtonTwoTouchedDownOnIndex
 * IsButtonTwoTouchedUpOnIndex

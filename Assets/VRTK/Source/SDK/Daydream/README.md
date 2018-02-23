@@ -9,13 +9,10 @@
  * In `Edit > Project Settings > Player` set the following:
    * API Level to `Nougat`.
    * Bundle Identifier and other settings for use with Android.
- * In the `Hierarchy` window, create a new empty GameObject named `DaydreamCameraRig`.
- * Add the following as children of `DaydreamCameraRig`:
-   * A new `Camera`.
-   * The `GvrControllerPointer` prefab from `GoogleVR/Prefabs/UI`.
-   * The `GvrControllerMain` prefab from `GoogleVR/Prefabs/Controller`.
-   * The `GvrViewerMain` prefab from `GoogleVR/Prefabs` (enables the view in editor play mode).
- * Disable Daydream's native pointer tools by removing or disabling `DaydreamCameraRig/GvrControllerPointer/Laser`.
- * Follow the initial steps above by adding the `DaydreamCameraRig` object as a child of the SDK Setup GameObject.
+ * In the `Hierarchy` window, create a new empty GameObject named `[VRTK_SDK_Manager]`.
+ * Add Component `VRTK_SDKManager`.
+ * Add `SDKSetups` prefab from Assets/VRTK/Examples/ExampleResources/Prefabs/ as a child of `[VRTK_SDK_Manager]`.
+ * Delete all the SDKs except `Daydream` from children of `SDKSetups`.
+ * Click Auto Populate in the inspector of `[VRTK_SDK_Manager]`.
 
   > Note: Daydream supports only one controller, the left scripting alias controller of VRTK will not be used.
