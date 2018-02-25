@@ -423,7 +423,11 @@ namespace VRTK
         static VRTK_SDKSetup()
         {
             //call AutoPopulateObjectReferences when the currently active scene changes
+#if UNITY_2018_1_OR_NEWER
+            EditorApplication.hierarchyChanged += AutoPopulateObjectReferences;
+#else
             EditorApplication.hierarchyWindowChanged += AutoPopulateObjectReferences;
+#endif
         }
 
         [DidReloadScripts(2)]
