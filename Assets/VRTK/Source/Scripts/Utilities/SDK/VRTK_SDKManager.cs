@@ -563,7 +563,7 @@ namespace VRTK
                 if (vrEnabled)
                 {
                     devices = setupCount > 1
-                                  ? new[] { "None" }.Concat(deviceNames).ToArray()
+                                  ? deviceNames.Concat(new[] { "None" }).ToArray()
                                   : deviceNames;
                 }
                 else
