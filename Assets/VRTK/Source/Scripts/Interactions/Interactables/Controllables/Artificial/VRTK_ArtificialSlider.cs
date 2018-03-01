@@ -196,6 +196,7 @@ namespace VRTK.Controllables.ArtificialBased
             {
                 StopCoroutine(setPositionTargetAtEndOfFrameRoutine);
             }
+            transform.localPosition = Vector3.zero;
         }
 
         protected override void EmitEvents()

@@ -279,7 +279,7 @@ namespace VRTK.GrabAttachMechanics
         {
             if (VRTK_ControllerReference.IsValid(controllerReference))
             {
-                VRTK_SDKTransformModify transformModify = grabbedObject.GetComponentInChildren<VRTK_SDKTransformModify>();
+                VRTK_SDKTransformModify transformModify = (grabbedSnapHandle != null ? grabbedSnapHandle.gameObject : grabbedObject).GetComponentInChildren<VRTK_SDKTransformModify>();
                 if (transformModify != null)
                 {
                     transformModify.UpdateTransform(controllerReference);

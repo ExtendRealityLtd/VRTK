@@ -88,7 +88,7 @@ namespace VRTK
         /// <returns>The ControllerType based on the SDK and headset being used.</returns>
         public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)
         {
-            switch (OVRInput.GetActiveController())
+            switch (OVRInput.GetConnectedControllers())
             {
                 case OVRInput.Controller.LTouch:
                 case OVRInput.Controller.RTouch:
@@ -808,7 +808,7 @@ namespace VRTK
 
         protected virtual OVRInput.Controller GetControllerMask(uint index)
         {
-            OVRInput.Controller activeControllerType = OVRInput.GetActiveController();
+            OVRInput.Controller activeControllerType = OVRInput.GetConnectedControllers();
 
             switch (activeControllerType)
             {

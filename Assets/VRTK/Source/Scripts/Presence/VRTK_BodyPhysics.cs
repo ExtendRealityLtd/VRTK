@@ -435,7 +435,10 @@ namespace VRTK
             footColliderContainerNameCheck = VRTK_SharedMethods.GenerateVRTKObjectName(true, FOOT_COLLIDER_CONTAINER_NAME);
             enableBodyCollisionsStartingValue = enableBodyCollisions;
             EnableDropToFloor();
-            EnableBodyPhysics();
+            if (playArea != null)
+            {
+                EnableBodyPhysics();
+            }
             SetupIgnoredCollisions();
         }
 
@@ -1122,11 +1125,13 @@ namespace VRTK
             if (generateRigidbody && bodyRigidbody != null)
             {
                 Destroy(bodyRigidbody);
+                bodyRigidbody = null;
             }
 
             if (bodyColliderContainer != null)
             {
                 Destroy(bodyColliderContainer);
+                bodyColliderContainer = null;
             }
         }
 
@@ -1343,7 +1348,6 @@ namespace VRTK
                     storedCurrentPhysics = storedRetogglePhysics;
                     retogglePhysicsOnCanFall = false;
                 }
-
                 if (enableBodyCollisions && (teleporter == null || !enableTeleport || hitFloorYDelta > gravityFallYThreshold))
                 {
                     GravityFall(rayCollidedWith);

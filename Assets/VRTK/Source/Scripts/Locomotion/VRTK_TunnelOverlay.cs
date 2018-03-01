@@ -62,6 +62,7 @@ namespace VRTK
         protected float originalFeatherSize;
         protected Texture originalSkyboxTexture;
         protected float maximumEffectCoverage = 1.15f;
+        protected bool createEffectSkybox = false;
 
         protected virtual void Awake()
         {
@@ -76,9 +77,12 @@ namespace VRTK
         protected virtual void OnEnable()
         {
             headset = VRTK_DeviceFinder.HeadsetCamera();
-            headsetCamera = headset.GetComponent<Camera>();
+            if (headset != null)
+            {
+                headsetCamera = headset.GetComponent<Camera>();
+                cameraEffect = headset.GetComponent<VRTK_TunnelEffect>();
+            }
             playarea = VRTK_DeviceFinder.PlayAreaTransform();
-            cameraEffect = headset.GetComponent<VRTK_TunnelEffect>();
             originalAngularVelocity = matCameraEffect.GetFloat(shaderPropertyAV);
             originalFeatherSize = matCameraEffect.GetFloat(shaderPropertyFeather);
             originalColor = matCameraEffect.GetColor(shaderPropertyColor);
@@ -89,7 +93,7 @@ namespace VRTK
                 matCameraEffect.SetTexture("_SecondarySkyBox", effectSkybox);
             }
 
-            if (cameraEffect == null)
+            if (cameraEffect == null && headset != null)
             {
                 cameraEffect = headset.gameObject.AddComponent<VRTK_TunnelEffect>();
                 cameraEffect.SetMaterial(matCameraEffect);
@@ -110,6 +114,12 @@ namespace VRTK
                 SetShaderFeather(originalColor, originalAngularVelocity, originalFeatherSize);
                 matCameraEffect.SetColor(shaderPropertyColor, originalColor);
                 Destroy(cameraEffect);
+            }
+
+            if (createEffectSkybox)
+            {
+                effectSkybox = null;
+                createEffectSkybox = false;
             }
         }
 
@@ -187,6 +197,7 @@ namespace VRTK
                 tempTexture.SetPixel(CubemapFace.PositiveY, 0, 0, Color.white);
                 tempTexture.SetPixel(CubemapFace.PositiveZ, 0, 0, Color.white);
                 effectSkybox = tempTexture;
+                createEffectSkybox = true;
             }
             else if (effectColor.r < 0.15f && effectColor.g < 0.15 && effectColor.b < 0.15)
             {

@@ -268,6 +268,7 @@ namespace VRTK
             {
                 trackedController.ControllerModelAvailable += DoControllerModelAvailable;
             }
+            CreateTouchCollider();
         }
 
         protected virtual void OnDisable()
@@ -485,7 +486,12 @@ namespace VRTK
         protected virtual void CreateTouchCollider()
         {
             SDK_BaseController.ControllerHand controllerHand = VRTK_DeviceFinder.GetControllerHand(gameObject);
-            Object defaultColliderPrefab = Resources.Load(VRTK_SDK_Bridge.GetControllerDefaultColliderPath(controllerHand));
+            string colliderPath = VRTK_SDK_Bridge.GetControllerDefaultColliderPath(controllerHand);
+            if (colliderPath == "")
+            {
+                return;
+            }
+            Object defaultColliderPrefab = Resources.Load(colliderPath);
 
             if (customColliderContainer == null)
             {
@@ -493,6 +499,10 @@ namespace VRTK
                 {
                     VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SDK_OBJECT_NOT_FOUND, "default collider prefab", "Controller SDK"));
                     return;
+                }
+                if (destroyColliderOnDisable)
+                {
+                    Destroy(controllerCollisionDetector);
                 }
                 controllerCollisionDetector = Instantiate(defaultColliderPrefab, transform.position, transform.rotation) as GameObject;
                 controllerCollisionDetector.transform.SetParent(transform);

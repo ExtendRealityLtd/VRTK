@@ -1471,9 +1471,9 @@ MonoBehaviour:
   threeFingerButton: 7
   thumbAxisButton: 7
   indexAxisButton: 5
-  middleAxisButton: 8
-  ringAxisButton: 9
-  pinkyAxisButton: 10
+  middleAxisButton: 9
+  ringAxisButton: 10
+  pinkyAxisButton: 11
   threeFingerAxisButton: 2
   thumbState: 0
   indexState: 0
@@ -1481,6 +1481,19 @@ MonoBehaviour:
   ringState: 0
   pinkyState: 0
   threeFingerState: 0
+  nearTouchOverrides:
+    ignoreAllOverrides: 1
+    stateValue: -1
+    applyThumbOverride: 1
+    thumbOverride: 0
+    applyIndexOverride: 1
+    indexOverride: 0
+    applyMiddleOverride: 1
+    middleOverride: 0
+    applyRingOverride: 1
+    ringOverride: 0
+    applyPinkyOverride: 1
+    pinkyOverride: 0
   touchOverrides:
     ignoreAllOverrides: 1
     stateValue: -1
@@ -1520,7 +1533,9 @@ MonoBehaviour:
     ringOverride: 0
     applyPinkyOverride: 1
     pinkyOverride: 0
+  handModel: {fileID: 0}
   controllerEvents: {fileID: 0}
+  interactNearTouch: {fileID: 0}
   interactTouch: {fileID: 0}
   interactGrab: {fileID: 0}
   interactUse: {fileID: 0}

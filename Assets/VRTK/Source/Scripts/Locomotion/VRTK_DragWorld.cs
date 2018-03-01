@@ -164,6 +164,7 @@ namespace VRTK
             rotationActivated = false;
             scaleActivated = false;
             ManageActivationListeners(true);
+            SetControllerReferences();
         }
 
         protected virtual void OnDisable()
@@ -244,6 +245,11 @@ namespace VRTK
         }
 
         protected virtual void ControllerModelAvailable(object sender, ControllerInteractionEventArgs e)
+        {
+            SetControllerReferences();
+        }
+
+        protected virtual void SetControllerReferences()
         {
             leftControllerReference = VRTK_DeviceFinder.GetControllerReferenceLeftHand();
             rightControllerReference = VRTK_DeviceFinder.GetControllerReferenceRightHand();

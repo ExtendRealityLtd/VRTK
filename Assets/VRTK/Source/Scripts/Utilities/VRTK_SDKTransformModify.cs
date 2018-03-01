@@ -12,9 +12,9 @@ namespace VRTK
         [Header("SDK settings")]
 
         [Tooltip("An optional SDK Setup to use to determine when to modify the transform.")]
-        public VRTK_SDKSetup loadedSDKSetup;
+        public VRTK_SDKSetup loadedSDKSetup = null;
         [Tooltip("An optional SDK controller type to use to determine when to modify the transform.")]
-        public SDK_BaseController.ControllerType controllerType;
+        public SDK_BaseController.ControllerType controllerType = SDK_BaseController.ControllerType.Undefined;
 
         [Header("Transform Override Settings")]
 
@@ -112,7 +112,7 @@ namespace VRTK
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)
             {
-                SDK_BaseController.ControllerType currentControllerType = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
+                SDK_BaseController.ControllerType currentControllerType = (controllerReference.model != null && controllerReference.model.activeInHierarchy ? VRTK_DeviceFinder.GetCurrentControllerType(controllerReference) : SDK_BaseController.ControllerType.Custom);
                 selectedModifier = sdkOverrides.FirstOrDefault(item => item.controllerType == currentControllerType);
             }
             return selectedModifier;

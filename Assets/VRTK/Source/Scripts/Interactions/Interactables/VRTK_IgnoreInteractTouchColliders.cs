@@ -98,21 +98,24 @@ namespace VRTK
 
         protected virtual void ManageTouchCollision(VRTK_InteractTouch touchToIgnore, bool ignore)
         {
-            Collider[] interactTouchColliders = touchToIgnore.ControllerColliders();
-            VRTK_ControllerTrackedCollider trackedColliderValue = VRTK_SharedMethods.GetDictionaryValue(VRTK_ObjectCache.registeredTrackedColliderToInteractTouches, touchToIgnore);
-            if (trackedColliderValue != null)
+            if (touchToIgnore != null)
             {
-                Collider[] trackedColliders = trackedColliderValue.TrackedColliders();
-                interactTouchColliders = interactTouchColliders.Concat(trackedColliders).ToArray();
-            }
-
-            for (int touchCollidersIndex = 0; touchCollidersIndex < interactTouchColliders.Length; touchCollidersIndex++)
-            {
-                for (int localCollidersIndex = 0; localCollidersIndex < localColliders.Length; localCollidersIndex++)
+                Collider[] interactTouchColliders = touchToIgnore.ControllerColliders();
+                VRTK_ControllerTrackedCollider trackedColliderValue = VRTK_SharedMethods.GetDictionaryValue(VRTK_ObjectCache.registeredTrackedColliderToInteractTouches, touchToIgnore);
+                if (trackedColliderValue != null)
                 {
-                    if (localColliders[localCollidersIndex] != null && interactTouchColliders[touchCollidersIndex] != null && !ShouldExclude(localColliders[localCollidersIndex].transform))
+                    Collider[] trackedColliders = trackedColliderValue.TrackedColliders();
+                    interactTouchColliders = interactTouchColliders.Concat(trackedColliders).ToArray();
+                }
+
+                for (int touchCollidersIndex = 0; touchCollidersIndex < interactTouchColliders.Length; touchCollidersIndex++)
+                {
+                    for (int localCollidersIndex = 0; localCollidersIndex < localColliders.Length; localCollidersIndex++)
                     {
-                        Physics.IgnoreCollision(localColliders[localCollidersIndex], interactTouchColliders[touchCollidersIndex], ignore);
+                        if (localColliders[localCollidersIndex] != null && interactTouchColliders[touchCollidersIndex] != null && !ShouldExclude(localColliders[localCollidersIndex].transform))
+                        {
+                            Physics.IgnoreCollision(localColliders[localCollidersIndex], interactTouchColliders[touchCollidersIndex], ignore);
+                        }
                     }
                 }
             }

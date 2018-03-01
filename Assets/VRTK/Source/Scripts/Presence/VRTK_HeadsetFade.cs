@@ -146,10 +146,6 @@ namespace VRTK
             isFaded = false;
 
             VRTK_SharedMethods.AddCameraFade();
-            if (!VRTK_SDK_Bridge.HasHeadsetFade(headset))
-            {
-                VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_HeadsetFade", "compatible fade", "Camera"));
-            }
         }
 
         protected virtual void OnDestroy()
