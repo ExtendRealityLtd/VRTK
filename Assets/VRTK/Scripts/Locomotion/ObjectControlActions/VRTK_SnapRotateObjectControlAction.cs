@@ -33,6 +33,16 @@ namespace VRTK
 
         protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
+            //Since this script rotates the Gameobject "[CameraRig]" and the player's head does not always have the localPosition (0,0,0), the rotation will result in a position offset of player's head. The Camera will moved relativly to compensate that. Therefore it will save the player's head position. Then the Rotation will be executed. Afterwards the player's head position will be corrected.
+            Vector3 PlayerHeadPositionBeforeRotation = new Vector3();
+            //This script can be used to rotate other Objects, therefore it will be checked, whether it is the CameraRig.
+            VRTK_PlayerObject vrtk_PlayerObject = controlledGameObject.GetComponent<VRTK_PlayerObject>();
+            if (vrtk_PlayerObject != null && vrtk_PlayerObject.objectType == VRTK_PlayerObject.ObjectTypes.CameraRig && VRTK_DeviceFinder.HeadsetTransform() != null)
+            {
+                //Save the player's head position.
+                PlayerHeadPositionBeforeRotation = VRTK_DeviceFinder.HeadsetTransform().position;
+            }
+
             if (snapDelayTimer < Time.time && ValidThreshold(axis))
             {
                 float angle = Rotate(axis, modifierActive);
@@ -41,6 +51,14 @@ namespace VRTK
                     Blink(blinkTransitionSpeed);
                     RotateAroundPlayer(controlledGameObject, angle);
                 }
+            }
+
+            //If necessary the player's head position will be corrected by translate the Gameobject [CameraRig] relativly.
+            if (vrtk_PlayerObject != null && vrtk_PlayerObject.objectType == VRTK_PlayerObject.ObjectTypes.CameraRig && VRTK_DeviceFinder.HeadsetTransform() != null)
+            {
+                Vector3 PositionCorrection = PlayerHeadPositionBeforeRotation - VRTK_DeviceFinder.HeadsetTransform().position;
+                //The Gameobject [CameraRig] translate relativly to compensate unintentionally rotation (controlledGameObject.transform == [CameraRig]). 
+                controlledGameObject.transform.position += PositionCorrection;
             }
         }
 
