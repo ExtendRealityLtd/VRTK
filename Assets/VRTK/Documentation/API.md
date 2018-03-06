@@ -9180,44 +9180,45 @@ The IsEditTime method determines if the state of Unity is in the Unity Editor an
 
 The Mod method is used to find the remainder of the sum a/b.
 
-#### FindEvenInactiveGameObject<T>/1
+#### FindEvenInactiveGameObject<T>/2
 
-  > `public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null) where T : Component`
+  > `public static GameObject FindEvenInactiveGameObject<T>(string gameObjectName = null, bool searchAllScenes = false) where T : Component`
 
  * Type Params
    * `T` - The component type that needs to be on an ancestor of the wanted GameObject. Must be a subclass of `Component`.
  * Parameters
    * `string gameObjectName` - The name of the wanted GameObject. If it contains a '/' character, this method traverses the hierarchy like a path name, beginning on the game object that has a component of type `T`.
+   * `bool searchAllScenes` - If this is true, all loaded scenes will be searched. If this is false, only the active scene will be searched.
  * Returns
    * `GameObject` - The GameObject with name `gameObjectName` and an ancestor that has a `T`. If no such GameObject is found then `null` is returned.
 
-Finds the first GameObject with a given name and an ancestor that has a specific component. This method returns active as well as inactive GameObjects in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+Finds the first GameObject with a given name and an ancestor that has a specific component. This method returns active as well as inactive GameObjects in all scenes. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
 
-#### FindEvenInactiveComponents<T>/0
+#### FindEvenInactiveComponents<T>/1
 
-  > `public static T[] FindEvenInactiveComponents<T>() where T : Component`
+  > `public static T[] FindEvenInactiveComponents<T>(bool searchAllScenes = false) where T : Component`
 
  * Type Params
    * `T` - The component type to search for. Must be a subclass of `Component`.
  * Parameters
-   * _none_
+   * `bool searchAllScenes` - If this is true, all loaded scenes will be searched. If this is false, only the active scene will be searched.
  * Returns
    * `T[]` - All the found components. If no component is found an empty array is returned.
 
-Finds all components of a given type. This method returns components from active as well as inactive GameObjects in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+Finds all components of a given type. This method returns components from active as well as inactive GameObjects in all scenes. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
 
-#### FindEvenInactiveComponent<T>/0
+#### FindEvenInactiveComponent<T>/1
 
-  > `public static T FindEvenInactiveComponent<T>() where T : Component`
+  > `public static T FindEvenInactiveComponent<T>(bool searchAllScenes = false) where T : Component`
 
  * Type Params
    * `T` - The component type to search for. Must be a subclass of `Component`.
  * Parameters
-   * _none_
+   * `bool searchAllScenes` - If this is true, all loaded scenes will be searched. If this is false, only the active scene will be searched.
  * Returns
    * `T` - The found component. If no component is found `null` is returned.
 
-Finds the first component of a given type. This method returns components from active as well as inactive GameObjects in the scene. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
+Finds the first component of a given type. This method returns components from active as well as inactive GameObjects in all scenes. It doesn't return assets. For performance reasons it is recommended to not use this function every frame. Cache the result in a member variable at startup instead.
 
 #### GenerateVRTKObjectName/2
 
