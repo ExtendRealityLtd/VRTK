@@ -39,6 +39,10 @@ namespace VRTK
         protected Transform controlledTransform;
         protected Transform playArea;
         protected VRTK_BodyPhysics internalBodyPhysics;
+        
+        protected Vector3 playerHeadPositionBeforeRotation;
+        protected Transform headsetTransform;
+        protected bool validPlayerObject;
 
         protected abstract void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive);
 
@@ -182,6 +186,42 @@ namespace VRTK
             Vector3 proposedDirection = (proposedPosition - currentPosition).normalized;
             float distance = Vector3.Distance(currentPosition, proposedPosition);
             return !givenBodyPhysics.SweepCollision(proposedDirection, distance);
+        }
+        
+        /// <summary>
+        /// Since rotation scripts may rotate the game object '[CameraRig]' in order to rotate the player and the player's head does not always have the local position (0,0,0), the rotation will result in a position offset of player's head. The game object '[CameraRig]' will moved relativly to compensate that. Therefore it will save the player's head position in this method. 
+        /// Call 'CheckForPlayerAfterRotation()' to correct the player's head position offset after rotation.
+        /// </summary>
+        /// <param name="controlledGameObject"></param>
+        protected virtual void CheckForPlayerBeforeRotation(GameObject controlledGameObject)
+        {
+            VRTK_PlayerObject playerObject = controlledGameObject.GetComponent<VRTK_PlayerObject>();
+            if (headsetTransform == null)
+            {
+                headsetTransform = VRTK_DeviceFinder.HeadsetTransform();
+            }
+            validPlayerObject = (playerObject != null && playerObject.objectType == VRTK_PlayerObject.ObjectTypes.CameraRig && headsetTransform != null);
+            if (validPlayerObject)
+            {
+                //Save the player's head position for use in method 'CheckForPlayerAfterRotation'.
+                playerHeadPositionBeforeRotation = headsetTransform.position;
+            }
+        }
+
+        /// <summary>
+        /// Corrects the player's head position offset after rotation. Call 'CheckForPlayerBeforeRotation' before execute rotation.
+        /// </summary>
+        /// <param name="controlledGameObject"></param>
+        protected virtual void CheckForPlayerAfterRotation(GameObject controlledGameObject)
+        {
+            //If necessary the player's head position will be corrected by translate the Gameobject [CameraRig] relativly.
+            if (validPlayerObject)
+            {
+                controlledGameObject.transform.position += playerHeadPositionBeforeRotation - headsetTransform.position;
+
+                //Prevents multiple calls of this method without call of 'CheckForPlayerBeforeRotation'.
+                validPlayerObject = false;
+            }
         }
     }
 }

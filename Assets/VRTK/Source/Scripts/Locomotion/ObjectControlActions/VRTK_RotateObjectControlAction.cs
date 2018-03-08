@@ -32,11 +32,15 @@ namespace VRTK
 
         protected override void Process(GameObject controlledGameObject, Transform directionDevice, Vector3 axisDirection, float axis, float deadzone, bool currentlyFalling, bool modifierActive)
         {
+            CheckForPlayerBeforeRotation(controlledGameObject);
+
             float angle = Rotate(axis, modifierActive);
             if (angle != 0f)
             {
                 RotateAroundPlayer(controlledGameObject, angle);
             }
+
+            CheckForPlayerAfterRotation(controlledGameObject);
         }
 
         protected virtual float Rotate(float axis, bool modifierActive)
