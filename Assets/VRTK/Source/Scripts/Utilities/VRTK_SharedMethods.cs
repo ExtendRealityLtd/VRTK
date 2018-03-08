@@ -562,6 +562,8 @@ namespace VRTK
             {
                 return type;
             }
+
+#if !UNITY_WSA
             Assembly[] foundAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             for (int i = 0; i < foundAssemblies.Length; i++)
             {
@@ -571,6 +573,7 @@ namespace VRTK
                     return type;
                 }
             }
+#endif
             return null;
         }
 

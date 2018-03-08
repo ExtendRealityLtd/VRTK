@@ -10,6 +10,7 @@
 
 namespace VRTK.Supyrb
 {
+#if UNITY_EDITOR
     using System;
     using UnityEngine;
     using UnityEditor;
@@ -183,4 +184,5 @@ namespace VRTK.Supyrb
             return allTypes;
         }
     }
+#endif
 }
