@@ -3174,6 +3174,8 @@ A relationship to a physical VR controller and emits events based on the inputs 
    * `MiddleFingerSense` - The middle finger sense touch is active.
    * `RingFingerSense` - The ring finger sense touch is active.
    * `PinkyFingerSense` - The pinky finger sense touch is active.
+   * `GripSense` - The grip sense axis touch is active.
+   * `GripSensePress` - The grip sense axis is pressed.
  * `public enum Vector2AxisAlias` - Vector2 Axis Types.
    * `Undefined` - No axis specified.
    * `Touchpad` - Touchpad on the controller.
@@ -3206,6 +3208,8 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `public bool middleFingerSenseAxisChanged` - This will be true if the middle finger sense is being touched more or less. Default: `false`
  * `public bool ringFingerSenseAxisChanged` - This will be true if the ring finger sense is being touched more or less. Default: `false`
  * `public bool pinkyFingerSenseAxisChanged` - This will be true if the pinky finger sense is being touched more or less. Default: `false`
+ * `public bool gripSenseAxisChanged` - This will be true if the grip sense is being touched more or less. Default: `false`
+ * `public bool gripSensePressed` - This will be true if grip sense is held down. Default: `false`
  * `public bool controllerVisible` - This will be true if the controller model alias renderers are visible. Default: `true`
 
 ### Class Events
@@ -3251,6 +3255,9 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `MiddleFingerSenseAxisChanged` - Emitted when the amount of touch on the middle finger sense changes.
  * `RingFingerSenseAxisChanged` - Emitted when the amount of touch on the ring finger sense changes.
  * `PinkyFingerSenseAxisChanged` - Emitted when the amount of touch on the pinky finger sense changes.
+ * `GripSenseAxisChanged` - Emitted when the amount of touch on the grip sense changes.
+ * `GripSensePressed` - Emitted when grip sense is pressed.
+ * `GripSenseReleased` - Emitted when grip sense is released.
  * `ControllerEnabled` - Emitted when the controller is enabled.
  * `ControllerDisabled` - Emitted when the controller is disabled.
  * `ControllerIndexChanged` - Emitted when the controller index changed.
@@ -3474,6 +3481,17 @@ The GetRingFingerSenseAxis method returns a float representing how much of the t
    * `float` - A float representing how much the touch sensor is being touched.
 
 The GetPinkyFingerSenseAxis method returns a float representing how much of the touch sensor is being touched.
+
+#### GetGripSenseAxis/0
+
+  > `public virtual float GetGripSenseAxis()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - A float representing how much the touch sensor is being touched.
+
+The GetGripSenseAxis method returns a float representing how much of the touch sensor is being touched.
 
 #### AnyButtonPressed/0
 
