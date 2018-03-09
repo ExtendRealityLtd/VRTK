@@ -13,12 +13,12 @@
 | UnityEngine.VR | _Core Unity3d library_ |
 | VR Simulator | _Included_ |
 | SteamVR | [SteamVR Plugin] |
-| Oculus | [Oculus Utilities] |
+| Oculus | [Oculus Integration] |
 | * Ximmerse | [Ximmerse Unity SDK] |
 | * Daydream | [Google VR SDK for Unity]
 | * HyperealVR | [Hypereal VR Unity Plugin]
 
-_* experimental_
+_* unsupported/experimental_
 
 ## Documentation
 
@@ -111,9 +111,9 @@ Code released under the [MIT License].
 
 Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
 
-[SteamVR Plugin]: https://www.assetstore.unity3d.com/en/#!/content/32647
+[SteamVR Plugin]: https://assetstore.unity.com/packages/templates/systems/steamvr-plugin-32647
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
-[Oculus Utilities]: https://developer.oculus.com/downloads/package/oculus-utilities-for-unity-5/
+[Oculus Integration]: https://assetstore.unity.com/packages/tools/integration/oculus-integration-82022
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [Hypereal VR Unity Plugin]: https://www.hypereal.com/#/developer/resource/download
