@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/VRTK/Examples/VRTK_SDKManager_Constructor.unity
-    guid: 3fb19ae213a4a4d45bb9ecd245a8fadb
-  - enabled: 1
     path: Assets/VRTK/Examples/[001 - Interactions] ControllerEvents.unity
     guid: 7ef04a272395bf04f8fdc6ec410f464e
   - enabled: 1
@@ -29,3 +26,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VRTK/Examples/[007 - Interactions] InteractionHelpers.unity
     guid: ea2236e506afcac41a7b82e176d839d1
+  - enabled: 1
+    path: Assets/VRTK/Examples/VRTK_SDKManager_Constructor.unity
+    guid: 3fb19ae213a4a4d45bb9ecd245a8fadb

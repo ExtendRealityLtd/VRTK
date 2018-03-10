@@ -8,6 +8,9 @@
         public KeyCode backKey = KeyCode.Backspace;
         public KeyCode forwardKey = KeyCode.Space;
 
+        protected int firstSceneIndex = 0;
+        protected int lastSceneIndex;
+
         protected bool pressEnabled;
         protected VRTK_ControllerReference controllerReference;
 
@@ -18,6 +21,7 @@
 
         protected virtual void OnEnable()
         {
+            lastSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
             pressEnabled = false;
             Invoke("EnablePress", 1f);
         }
@@ -33,17 +37,17 @@
             if (ForwardPressed())
             {
                 nextSceneIndex++;
-                if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
+                if (nextSceneIndex >= lastSceneIndex)
                 {
-                    nextSceneIndex = 1;
+                    nextSceneIndex = firstSceneIndex;
                 }
             }
             else if (BackPressed())
             {
                 nextSceneIndex--;
-                if (nextSceneIndex < 1)
+                if (nextSceneIndex < firstSceneIndex)
                 {
-                    nextSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
+                    nextSceneIndex = lastSceneIndex - 1;
                 }
             }
 
