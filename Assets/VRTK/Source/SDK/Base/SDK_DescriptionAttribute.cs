@@ -138,7 +138,7 @@ namespace VRTK
 
         public static SDK_DescriptionAttribute[] GetDescriptions(Type type)
         {
-            return type.GetCustomAttributes(typeof(SDK_DescriptionAttribute), false)
+            return VRTK_SharedMethods.GetTypeCustomAttributes(type, typeof(SDK_DescriptionAttribute), false)
                        .Cast<SDK_DescriptionAttribute>()
                        .OrderBy(attribute => attribute.index)
                        .ToArray();

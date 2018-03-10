@@ -14,6 +14,7 @@
 | VR Simulator | _Included_ |
 | SteamVR | [SteamVR Plugin] |
 | Oculus | [Oculus Integration] |
+| Windows Mixed Reality | [Windows Mixed Reality For Unity] |
 | * Ximmerse | [Ximmerse Unity SDK] |
 | * Daydream | [Google VR SDK for Unity]
 | * HyperealVR | [Hypereal VR Unity Plugin]
@@ -117,6 +118,7 @@ Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
 [Google VR SDK for Unity]: https://developers.google.com/vr/unity/download
 [Hypereal VR Unity Plugin]: https://www.hypereal.com/#/developer/resource/download
+[Windows Mixed Reality For Unity]: https://developer.microsoft.com/en-us/windows/mixed-reality/install_the_tools
 
 [MIT License]: LICENSE.md
 [THIRD_PARTY_NOTICES.md]: THIRD_PARTY_NOTICES.md

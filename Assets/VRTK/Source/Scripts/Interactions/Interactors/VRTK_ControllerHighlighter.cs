@@ -48,6 +48,8 @@ namespace VRTK
         public Color highlightGrip = Color.clear;
         [Tooltip("The colour to set the touchpad highlight colour to.")]
         public Color highlightTouchpad = Color.clear;
+        [Tooltip("The colour to set the touchpad two highlight colour to.")]
+        public Color highlightTouchpadTwo = Color.clear;
         [Tooltip("The colour to set the button one highlight colour to.")]
         public Color highlightButtonOne = Color.clear;
         [Tooltip("The colour to set the button two highlight colour to.")]
@@ -82,6 +84,7 @@ namespace VRTK
         protected Color lastHighlightTrigger;
         protected Color lastHighlightGrip;
         protected Color lastHighlightTouchpad;
+        protected Color lastHighlightTouchpadTwo;
         protected Color lastHighlightButtonOne;
         protected Color lastHighlightButtonTwo;
         protected Color lastHighlightSystemMenu;
@@ -91,6 +94,7 @@ namespace VRTK
         protected SDK_BaseController.ControllerElements[] triggerElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.Trigger };
         protected SDK_BaseController.ControllerElements[] gripElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.GripLeft, SDK_BaseController.ControllerElements.GripRight };
         protected SDK_BaseController.ControllerElements[] touchpadElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.Touchpad };
+        protected SDK_BaseController.ControllerElements[] touchpadTwoElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.TouchpadTwo };
         protected SDK_BaseController.ControllerElements[] buttonOneElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.ButtonOne };
         protected SDK_BaseController.ControllerElements[] buttonTwoElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.ButtonTwo };
         protected SDK_BaseController.ControllerElements[] systemMenuElements = new SDK_BaseController.ControllerElements[] { SDK_BaseController.ControllerElements.SystemMenu };
@@ -112,10 +116,11 @@ namespace VRTK
             modelElementPaths.leftGripModelPath = GetElementPath(modelElementPaths.leftGripModelPath, SDK_BaseController.ControllerElements.GripLeft);
             modelElementPaths.rightGripModelPath = GetElementPath(modelElementPaths.rightGripModelPath, SDK_BaseController.ControllerElements.GripRight);
             modelElementPaths.touchpadModelPath = GetElementPath(modelElementPaths.touchpadModelPath, SDK_BaseController.ControllerElements.Touchpad);
+            modelElementPaths.touchpadTwoModelPath = GetElementPath(modelElementPaths.touchpadTwoModelPath, SDK_BaseController.ControllerElements.TouchpadTwo);
             modelElementPaths.buttonOneModelPath = GetElementPath(modelElementPaths.buttonOneModelPath, SDK_BaseController.ControllerElements.ButtonOne);
             modelElementPaths.buttonTwoModelPath = GetElementPath(modelElementPaths.buttonTwoModelPath, SDK_BaseController.ControllerElements.ButtonTwo);
             modelElementPaths.systemMenuModelPath = GetElementPath(modelElementPaths.systemMenuModelPath, SDK_BaseController.ControllerElements.SystemMenu);
-            modelElementPaths.startMenuModelPath = GetElementPath(modelElementPaths.systemMenuModelPath, SDK_BaseController.ControllerElements.StartMenu);
+            modelElementPaths.startMenuModelPath = GetElementPath(modelElementPaths.startMenuModelPath, SDK_BaseController.ControllerElements.StartMenu);
         }
 
         /// <summary>
@@ -148,6 +153,7 @@ namespace VRTK
                 AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.StartMenu, currentHand)), baseHighlighter, elementHighlighterOverrides.startMenu);
                 AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.SystemMenu, currentHand)), baseHighlighter, elementHighlighterOverrides.systemMenu);
                 AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Touchpad, currentHand)), baseHighlighter, elementHighlighterOverrides.touchpad);
+                AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.TouchpadTwo, currentHand)), baseHighlighter, elementHighlighterOverrides.touchpadTwo);
                 AddHighlighterToElement(GetElementTransform(VRTK_SDK_Bridge.GetControllerElementPath(SDK_BaseController.ControllerElements.Trigger, currentHand)), baseHighlighter, elementHighlighterOverrides.trigger);
             }
         }
@@ -167,6 +173,7 @@ namespace VRTK
             HighlightElement(SDK_BaseController.ControllerElements.StartMenu, color, fadeDuration);
             HighlightElement(SDK_BaseController.ControllerElements.SystemMenu, color, fadeDuration);
             HighlightElement(SDK_BaseController.ControllerElements.Touchpad, color, fadeDuration);
+            HighlightElement(SDK_BaseController.ControllerElements.TouchpadTwo, color, fadeDuration);
             HighlightElement(SDK_BaseController.ControllerElements.Trigger, color, fadeDuration);
 
             controllerHighlighted = true;
@@ -191,6 +198,7 @@ namespace VRTK
             UnhighlightElement(SDK_BaseController.ControllerElements.StartMenu);
             UnhighlightElement(SDK_BaseController.ControllerElements.SystemMenu);
             UnhighlightElement(SDK_BaseController.ControllerElements.Touchpad);
+            UnhighlightElement(SDK_BaseController.ControllerElements.TouchpadTwo);
             UnhighlightElement(SDK_BaseController.ControllerElements.Trigger);
         }
 
@@ -283,6 +291,7 @@ namespace VRTK
             ToggleHighlightState(highlightTrigger, ref lastHighlightTrigger, triggerElements);
             ToggleHighlightState(highlightGrip, ref lastHighlightGrip, gripElements);
             ToggleHighlightState(highlightTouchpad, ref lastHighlightTouchpad, touchpadElements);
+            ToggleHighlightState(highlightTouchpadTwo, ref lastHighlightTouchpadTwo, touchpadTwoElements);
             ToggleHighlightState(highlightButtonOne, ref lastHighlightButtonOne, buttonOneElements);
             ToggleHighlightState(highlightButtonTwo, ref lastHighlightButtonTwo, buttonTwoElements);
             ToggleHighlightState(highlightSystemMenu, ref lastHighlightSystemMenu, systemMenuElements);
@@ -314,6 +323,7 @@ namespace VRTK
             lastHighlightTrigger = Color.clear;
             lastHighlightGrip = Color.clear;
             lastHighlightTouchpad = Color.clear;
+            lastHighlightTouchpadTwo = Color.clear;
             lastHighlightButtonOne = Color.clear;
             lastHighlightButtonTwo = Color.clear;
             lastHighlightSystemMenu = Color.clear;
@@ -342,6 +352,10 @@ namespace VRTK
                 case SDK_BaseController.ControllerElements.Touchpad:
                     highlightTouchpad = color;
                     lastHighlightTouchpad = color;
+                    break;
+                case SDK_BaseController.ControllerElements.TouchpadTwo:
+                    highlightTouchpadTwo = color;
+                    lastHighlightTouchpadTwo = color;
                     break;
                 case SDK_BaseController.ControllerElements.ButtonOne:
                     highlightButtonOne = color;
@@ -375,6 +389,8 @@ namespace VRTK
                     return highlightGrip;
                 case SDK_BaseController.ControllerElements.Touchpad:
                     return highlightTouchpad;
+                case SDK_BaseController.ControllerElements.TouchpadTwo:
+                    return highlightTouchpadTwo;
                 case SDK_BaseController.ControllerElements.ButtonOne:
                     return highlightButtonOne;
                 case SDK_BaseController.ControllerElements.ButtonTwo:
@@ -461,6 +477,8 @@ namespace VRTK
                     return modelElementPaths.rightGripModelPath;
                 case SDK_BaseController.ControllerElements.Touchpad:
                     return modelElementPaths.touchpadModelPath;
+                case SDK_BaseController.ControllerElements.TouchpadTwo:
+                    return modelElementPaths.touchpadTwoModelPath;
                 case SDK_BaseController.ControllerElements.ButtonOne:
                     return modelElementPaths.buttonOneModelPath;
                 case SDK_BaseController.ControllerElements.ButtonTwo:

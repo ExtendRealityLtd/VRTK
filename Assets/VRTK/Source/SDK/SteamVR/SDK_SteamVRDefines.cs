@@ -89,7 +89,7 @@ namespace VRTK
                 return false;
             }
 
-            Type eventClass = utilsClass.GetNestedType("Event");
+            Type eventClass = VRTK_SharedMethods.GetNestedType(utilsClass, "Event");
             if (eventClass == null)
             {
                 return false;

@@ -337,7 +337,7 @@ namespace VRTK
                 ReadOnlyCollection<VRTK_SDKInfo> installedSDKInfos = installedSDKInfosList[index];
                 VRTK_SDKInfo currentSDKInfo = currentSDKInfos[index];
 
-                Type baseType = currentSDKInfo.type.BaseType;
+                Type baseType = VRTK_SharedMethods.GetBaseType(currentSDKInfo.type);
                 if (baseType == null)
                 {
                     continue;
@@ -487,7 +487,7 @@ namespace VRTK
                 return string.Format("The fallback {0} SDK is being used because there is no other {0} SDK set in the SDK Setup.", prettyName);
             }
 
-            if (!baseType.IsAssignableFrom(selectedType) || fallbackType.IsAssignableFrom(selectedType))
+            if (!VRTK_SharedMethods.IsTypeAssignableFrom(baseType, selectedType) || VRTK_SharedMethods.IsTypeAssignableFrom(fallbackType, selectedType))
             {
                 string description = string.Format("The fallback {0} SDK is being used despite being set to '{1}'.", prettyName, selectedType.Name);
 

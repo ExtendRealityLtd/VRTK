@@ -44,6 +44,7 @@ For further information on getting started with the supported SDKs, please refer
  * [Simulator](/Assets/VRTK/Source/SDK/Simulator/README.md)
  * [SteamVR](/Assets/VRTK/Source/SDK/SteamVR/README.md)
  * [Oculus](/Assets/VRTK/Source/SDK/Oculus/README.md)
+ * [Windows Mixed Reality](/Assets/VRTK/Source/SDK/WindowsMR/README.md)
  * [Daydream](/Assets/VRTK/Source/SDK/Daydream/README.md)
  * [HyperealVR](/Assets/VRTK/Source/SDK/HyperealVR/README.md)
  * [Ximmerse](/Assets/VRTK/Source/SDK/Ximmerse/README.md)

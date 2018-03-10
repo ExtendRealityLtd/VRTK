@@ -40,7 +40,7 @@ namespace VRTK
 
         protected virtual string GetVarName<T>(T item) where T : class
         {
-            return typeof(T).GetProperties()[0].Name;
+            return VRTK_SharedMethods.GetPropertyFirstName<T>();
         }
 
         protected virtual void CheckAxisIsValid(string axisName, string varName)
