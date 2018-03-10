@@ -24,6 +24,7 @@ This file describes all of the public methods, variables and events utilised by 
    * [Simulator SDK](#simulator-sdk-vrtksourcesdksimulator)
    * [SteamVR SDK](#steamvr-sdk-vrtksourcesdksteamvr)
    * [Oculus SDK](#oculus-sdk-vrtksourcesdkoculus)
+   * [WindowsMR SDK](#windowsmr-sdk-vrtksourcesdkwindowsmr)
    * [Daydream SDK](#daydream-sdk-vrtksourcesdkdaydream)
    * [Ximmerse SDK](#ximmerse-sdk-vrtksourcesdkximmerse)
    * [HyperealVR SDK](#hyperealvr-sdk-vrtksourcesdkhyperealvr)
@@ -275,6 +276,7 @@ Adds a collection of Object Tooltips to the Controller providing information to 
  * **Trigger Text:** The text to display for the trigger button action.
  * **Grip Text:** The text to display for the grip button action.
  * **Touchpad Text:** The text to display for the touchpad action.
+ * **Touchpad Two Text:** The text to display for the touchpad two action.
  * **Button One Text:** The text to display for button one action.
  * **Button Two Text:** The text to display for button two action.
  * **Start Menu Text:** The text to display for the start menu action.
@@ -284,6 +286,7 @@ Adds a collection of Object Tooltips to the Controller providing information to 
  * **Trigger:** The transform for the position of the trigger button on the controller.
  * **Grip:** The transform for the position of the grip button on the controller.
  * **Touchpad:** The transform for the position of the touchpad button on the controller.
+ * **Touchpad Two:** The transform for the position of the touchpad two button on the controller.
  * **Button One:** The transform for the position of button one on the controller.
  * **Button Two:** The transform for the position of button two on the controller.
  * **Start Menu:** The transform for the position of the start menu on the controller.
@@ -3164,6 +3167,7 @@ A relationship to a physical VR controller and emits events based on the inputs 
    * `TouchpadTouch` - The touchpad is touched (without pressing down to click).
    * `TouchpadPress` - The touchpad is pressed (to the point of hearing a click).
    * `TouchpadTwoTouch` - The touchpad two is touched (without pressing down to click).
+   * `TouchpadTwoPress` - The touchpad two is pressed (to the point of hearing a click).
    * `ButtonOneTouch` - The button one is touched.
    * `ButtonOnePress` - The button one is pressed.
    * `ButtonTwoTouch` - The button two is touched.
@@ -3200,6 +3204,8 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `public bool touchpadAxisChanged` - This will be true if the touchpad position has changed. Default: `false`
  * `public bool touchpadSenseAxisChanged` - This will be true if the touchpad sense is being touched more or less. Default: `false`
  * `public bool touchpadTwoTouched` - This will be true if the touchpad two is being touched. Default: `false`
+ * `public bool touchpadTwoPressed` - This will be true if the touchpad two is held down. Default: `false`
+ * `public bool touchpadTwoAxisChanged` - This will be true if the touchpad two position has changed. Default: `false`
  * `public bool buttonOnePressed` - This will be true if button one is held down. Default: `false`
  * `public bool buttonOneTouched` - This will be true if button one is being touched. Default: `false`
  * `public bool buttonTwoPressed` - This will be true if button two is held down. Default: `false`
@@ -3239,6 +3245,8 @@ A relationship to a physical VR controller and emits events based on the inputs 
  * `TouchpadTouchEnd` - Emitted when the touchpad is no longer being touched.
  * `TouchpadAxisChanged` - Emitted when the touchpad is being touched in a different location.
  * `TouchpadSenseAxisChanged` - Emitted when the amount of touch on the touchpad sense changes.
+ * `TouchpadTwoPressed` - Emitted when the touchpad two is pressed (to the point of hearing a click).
+ * `TouchpadTwoReleased` - Emitted when the touchpad two has been released after a pressed state.
  * `TouchpadTwoTouchStart` - Emitted when the touchpad two is touched (without pressing down to click).
  * `TouchpadTwoTouchEnd` - Emitted when the touchpad two is no longer being touched.
  * `TouchpadTwoAxisChanged` - Emitted when the touchpad two is being touched in a different location.
@@ -4099,6 +4107,7 @@ Enables highlighting of controller elements.
  * **Highlight Trigger:** The colour to set the trigger highlight colour to.
  * **Highlight Grip:** The colour to set the grip highlight colour to.
  * **Highlight Touchpad:** The colour to set the touchpad highlight colour to.
+ * **Highlight Touchpad Two:** The colour to set the touchpad two highlight colour to.
  * **Highlight Button One:** The colour to set the button one highlight colour to.
  * **Highlight Button Two:** The colour to set the button two highlight colour to.
  * **Highlight System Menu:** The colour to set the system menu highlight colour to.
@@ -10494,6 +10503,7 @@ This is an abstract class to implement the interface required by all implemented
    * `SystemMenu` - The system menu button.
    * `Body` - The encompassing mesh of the controller body.
    * `StartMenu` - The start menu button.
+   * `TouchpadTwo` - The touch pad/stick two.
  * `public enum ControllerHand` - Controller hand reference.
    * `None` - No hand is assigned.
    * `Left` - The left hand is assigned.
@@ -13469,7 +13479,7 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
 
 # Oculus SDK (VRTK/Source/SDK/Oculus)
 
-The scripts used to utilise the Oculus Utilities Unity Package SDK.
+The scripts used to utilise the Oculus Integration Unity Package SDK.
 
  * [Oculus Defines](#oculus-defines-sdk_oculusdefines)
  * [Oculus System](#oculus-system-sdk_oculussystem)
@@ -14109,6 +14119,628 @@ The SetDrawAtRuntime method sets whether the given play area drawn border should
    * `OvrAvatar` - The OvrAvatar script for managing the Oculus Avatar.
 
 The GetAvatar method is used to retrieve the Oculus Avatar object if it exists in the scene. This method is only available if the Oculus Avatar package is installed.
+
+---
+
+# WindowsMR SDK (VRTK/Source/SDK/WindowsMR)
+
+The scripts used to utilise Windows Mixed Reality Unity SDK.
+
+ * [WindowsMR Defines](#windowsmr-defines-sdk_windowsmrdefines)
+ * [WindowsMR System](#windowsmr-system-sdk_windowsmr)
+ * [WindowsMR Headset](#windowsmr-headset-sdk_windowsmrheadset)
+ * [WindowsMR Controller](#windowsmr-controller-sdk_windowsmrcontroller)
+ * [WindowsMR Boundaries](#windowsmr-boundaries-sdk_windowsmrboundaries)
+
+---
+
+## WindowsMR Defines (SDK_WindowsMRDefines)
+
+### Overview
+
+Handles all the scripting define symbols for the Windows Immersive Mixed Reality SDK.
+
+### Class Variables
+
+ * `public const string ScriptingDefineSymbol` - The scripting define symbol for the Immersive Mixed Reality SDK. Default: `SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix + "SDK_WINDOWSMR"`
+
+---
+
+## WindowsMR System (SDK_WindowsMR)
+
+### Overview
+
+The Windows Mixed Reality System SDK script provides a bridge to the Windows Mixed Reality Unity SDK.
+
+### Class Methods
+
+#### ForceInterleavedReprojectionOn/1
+
+  > `public override void ForceInterleavedReprojectionOn(bool force)`
+
+ * Parameters
+   * `bool force` - If true then Interleaved Reprojection will be forced on, if false it will not be forced on.
+ * Returns
+   * _none_
+
+The ForceInterleavedReprojectionOn method determines whether Interleaved Reprojection should be forced on or off.
+
+#### IsDisplayOnDesktop/0
+
+  > `public override bool IsDisplayOnDesktop()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns true if the display is extending the desktop
+
+The IsDisplayOnDesktop method returns true if the display is extending the desktop.
+
+#### ShouldAppRenderWithLowResources/0
+
+  > `public override bool ShouldAppRenderWithLowResources()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns true if the Unity app should render with low resources.
+
+The ShouldAppRenderWithLowResources method is used to determine if the Unity app should use low resource mode. Typically true when the dashboard is showing.
+
+---
+
+## WindowsMR Headset (SDK_WindowsMRHeadset)
+
+### Overview
+
+The WindowsMR Headset SDK script provides a bridge to the WindowsMR XR.
+
+### Class Methods
+
+#### ProcessFixedUpdate/1
+
+  > `public override void ProcessFixedUpdate(Dictionary<string, object> options)`
+
+ * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+ * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
+#### ProcessUpdate/1
+
+  > `public override void ProcessUpdate(Dictionary<string, object> options)`
+
+ * Parameters
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+ * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### GetHeadset/0
+
+  > `public override Transform GetHeadset()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Transform` - A transform of the object representing the headset in the scene.
+
+The GetHeadset method returns the Transform of the object that is used to represent the headset in the scene.
+
+#### GetHeadsetAngularVelocity/0
+
+  > `public override Vector3 GetHeadsetAngularVelocity()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the headset.
+
+The GetHeadsetAngularVelocity method is used to determine the current angular velocity of the headset.
+
+#### GetHeadsetCamera/0
+
+  > `public override Transform GetHeadsetCamera()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Transform` - A transform of the object holding the headset camera in the scene.
+
+The GetHeadsetCamera method returns the Transform of the object that is used to hold the headset camera in the scene.
+
+#### GetHeadsetVelocity/0
+
+  > `public override Vector3 GetHeadsetVelocity()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the headset.
+
+The GetHeadsetVelocity method is used to determine the current velocity of the headset.
+
+#### HasHeadsetFade/1
+
+  > `public override bool HasHeadsetFade(Transform obj)`
+
+ * Parameters
+   * `Transform obj` - The Transform to check to see if a camera fade is available on.
+ * Returns
+   * `bool` - Returns true if the headset has fade functionality on it.
+
+The HasHeadsetFade method checks to see if the given game object (usually the camera) has the ability to fade the viewpoint.
+
+#### HeadsetFade/3
+
+  > `public override void HeadsetFade(Color color, float duration, bool fadeOverlay = false)`
+
+ * Parameters
+   * `Color color` - The colour to fade to.
+   * `float duration` - The amount of time the fade should take to reach the given colour.
+   * `bool fadeOverlay` - Determines whether to use an overlay on the fade.
+ * Returns
+   * _none_
+
+The HeadsetFade method is used to apply a fade to the headset camera to progressively change the colour.
+
+#### AddHeadsetFade/1
+
+  > `public override void AddHeadsetFade(Transform camera)`
+
+ * Parameters
+   * `Transform camera` - The Transform to with the camera on to add the fade functionality to.
+ * Returns
+   * _none_
+
+The AddHeadsetFade method attempts to add the fade functionality to the game object with the camera on it.
+
+#### GetHeadsetType/0
+
+  > `public override string GetHeadsetType()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `string` - The string of the headset connected.
+
+The GetHeadsetType method returns a string representing the type of headset connected.
+
+---
+
+## WindowsMR Controller (SDK_WindowsMRController)
+
+### Overview
+
+The WindowsMR Controller SDK script provides a bridge to SDK methods that deal with the input devices.
+
+### Class Methods
+
+#### GetAngularVelocity/1
+
+  > `public override Vector3 GetAngularVelocity(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to check for.
+ * Returns
+   * `Vector3` - A Vector3 containing the current angular velocity of the tracked object.
+
+The GetAngularVelocity method is used to determine the current angular velocity of the tracked object on the given controller reference.
+
+#### GetButtonAxis/2
+
+  > `public override Vector2 GetButtonAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the button axis on.
+ * Returns
+   * `Vector2` - A Vector2 of the X/Y values of the button axis. If no axis values exist for the given button, then a Vector2.Zero is returned.
+
+The GetButtonAxis method retrieves the current X/Y axis values for the given button type on the given controller reference.
+
+#### GetButtonSenseAxis/2
+
+  > `public override float GetButtonSenseAxis(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the sense axis on.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the sense axis on.
+ * Returns
+   * `float` - The current sense axis value.
+
+The GetButtonSenseAxis method retrieves the current sense axis value for the given button type on the given controller reference.
+
+#### GetButtonHairlineDelta/2
+
+  > `public override float GetButtonHairlineDelta(ButtonTypes buttonType, VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `ButtonTypes buttonType` - The type of button to get the hairline delta for.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to get the hairline delta for.
+ * Returns
+   * `float` - The delta between the button presses.
+
+The GetButtonHairlineDelta method is used to get the difference between the current button press and the previous frame button press.
+
+#### GetControllerButtonState/3
+
+  > `public override bool GetControllerButtonState(ButtonTypes buttonType, ButtonPressTypes pressType, VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `ButtonTypes buttonType` - The type of button to check for the state of.
+   * `ButtonPressTypes pressType` - The button state to check for.
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check the button state on.
+ * Returns
+   * `bool` - Returns true if the given button is in the state of the given press type on the given controller reference.
+
+The GetControllerButtonState method is used to determine if the given controller button for the given press type on the given controller reference is currently taking place.
+
+#### GetControllerByIndex/2
+
+  > `public override GameObject GetControllerByIndex(uint index, bool actual = false)`
+
+ * Parameters
+   * `uint index` - The index of the controller to find.
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+ * Returns
+   * `GameObject` - The GameObject of the controller
+
+The GetControllerByIndex method returns the GameObject of a controller with a specific index.
+
+#### GetControllerDefaultColliderPath/1
+
+  > `public override string GetControllerDefaultColliderPath(ControllerHand hand)`
+
+ * Parameters
+   * `ControllerHand hand` - The controller hand to check for
+ * Returns
+   * `string` - A path to the resource that contains the collider GameObject.
+
+The GetControllerDefaultColliderPath returns the path to the prefab that contains the collider objects for the default controller of this SDK.
+
+#### GetControllerElementPath/3
+
+  > `public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)`
+
+ * Parameters
+   * `ControllerElements element` - The controller element to look up.
+   * `ControllerHand hand` - The controller hand to look up.
+   * `bool fullPath` - Whether to get the initial path or the full path to the element.
+ * Returns
+   * `string` - A string containing the path to the game object that the controller element resides in.
+
+The GetControllerElementPath returns the path to the game object that the given controller element for the given hand resides in.
+
+#### GetControllerIndex/1
+
+  > `public override uint GetControllerIndex(GameObject controller)`
+
+ * Parameters
+   * `GameObject controller` - The GameObject containing the controller.
+ * Returns
+   * `uint` - The index of the given controller.
+
+The GetControllerIndex method returns the index of the given controller.
+
+#### GetControllerLeftHand/1
+
+  > `public override GameObject GetControllerLeftHand(bool actual = false)`
+
+ * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+ * Returns
+   * `GameObject` - The GameObject containing the left hand controller.
+
+The GetControllerLeftHand method returns the GameObject containing the representation of the left hand controller.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(GameObject controller)`
+
+ * Parameters
+   * `GameObject controller` - The GameObject to get the model alias for.
+ * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given GameObject.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(ControllerHand hand)`
+
+ * Parameters
+   * `ControllerHand hand` - The hand enum of which controller model to retrieve.
+ * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given controller hand.
+
+#### GetControllerOrigin/1
+
+  > `public override Transform GetControllerOrigin(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to retrieve the origin from.
+ * Returns
+   * `Transform` - A Transform containing the origin of the controller.
+
+The GetControllerOrigin method returns the origin of the given controller.
+
+#### GetControllerRenderModel/1
+
+  > `public override GameObject GetControllerRenderModel(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the controller to check.
+ * Returns
+   * `GameObject` - A GameObject containing the object that has a render model for the controller.
+
+The GetControllerRenderModel method gets the game object that contains the given controller's render model.
+
+#### GetControllerRightHand/1
+
+  > `public override GameObject GetControllerRightHand(bool actual = false)`
+
+ * Parameters
+   * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
+ * Returns
+   * `GameObject` - The GameObject containing the right hand controller.
+
+The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
+
+#### GetCurrentControllerType/1
+
+  > `public override ControllerType GetCurrentControllerType(VRTK_ControllerReference controllerReference = null)`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `ControllerType` - The ControllerType based on the SDK and headset being used.
+
+The GetCurrentControllerType method returns the current used ControllerType based on the SDK and headset being used.
+
+#### GetHapticModifiers/0
+
+  > `public override SDK_ControllerHapticModifiers GetHapticModifiers()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `SDK_ControllerHapticModifiers` - An SDK_ControllerHapticModifiers object with a given `durationModifier` and an `intervalModifier`.
+
+The GetHapticModifiers method is used to return modifiers for the duration and interval if the SDK handles it slightly differently.
+
+#### GetVelocity/1
+
+  > `public override Vector3 GetVelocity(VRTK_ControllerReference controllerReference)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to check for.
+ * Returns
+   * `Vector3` - A Vector3 containing the current velocity of the tracked object.
+
+The GetVelocity method is used to determine the current velocity of the tracked object on the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override void HapticPulse(VRTK_ControllerReference controllerReference, float strength = 0.5F)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `float strength` - The intensity of the rumble of the controller motor. `0` to `1`.
+ * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a simple haptic pulse on the tracked object of the given controller reference.
+
+#### HapticPulse/2
+
+  > `public override bool HapticPulse(VRTK_ControllerReference controllerReference, AudioClip clip)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference to the tracked object to initiate the haptic pulse on.
+   * `AudioClip clip` - The audio clip to use for the haptic pattern.
+ * Returns
+   * _none_
+
+The HapticPulse/2 method is used to initiate a haptic pulse based on an audio clip on the tracked object of the given controller reference.
+
+#### IsControllerLeftHand/1
+
+  > `public override bool IsControllerLeftHand(GameObject controller)`
+
+ * Parameters
+   * `GameObject controller` - The GameObject to check.
+ * Returns
+   * `bool` - Returns true if the given controller is the left hand controller.
+
+The IsControllerLeftHand/1 method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerLeftHand/2
+
+  > `public override bool IsControllerLeftHand(GameObject controller, bool actual)`
+
+ * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+ * Returns
+   * `bool` - Returns true if the given controller is the left hand controller.
+
+The IsControllerLeftHand/2 method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerRightHand/1
+
+  > `public override bool IsControllerRightHand(GameObject controller)`
+
+ * Parameters
+   * `GameObject controller` - The GameObject to check.
+ * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+
+#### IsControllerRightHand/2
+
+  > `public override bool IsControllerRightHand(GameObject controller, bool actual)`
+
+ * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+ * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
+
+#### IsTouchpadStatic/4
+
+  > `public override bool IsTouchpadStatic(bool isTouched, Vector2 currentAxisValues, Vector2 previousAxisValues, int compareFidelity)`
+
+ * Parameters
+   * `Vector2 currentAxisValues` -
+   * `Vector2 previousAxisValues` -
+   * `int compareFidelity` -
+ * Returns
+   * `bool` - Returns true if the touchpad is not currently being touched or moved.
+
+The IsTouchpadStatic method is used to determine if the touchpad is currently not being moved.
+
+#### ProcessFixedUpdate/2
+
+  > `public override void ProcessFixedUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference for the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the fixed update.
+ * Returns
+   * _none_
+
+The ProcessFixedUpdate method enables an SDK to run logic for every Unity FixedUpdate
+
+#### ProcessUpdate/2
+
+  > `public override void ProcessUpdate(VRTK_ControllerReference controllerReference, Dictionary<string, object> options)`
+
+ * Parameters
+   * `VRTK_ControllerReference controllerReference` - The reference for the controller.
+   * `Dictionary<string, object> options` - A dictionary of generic options that can be used to within the update.
+ * Returns
+   * _none_
+
+The ProcessUpdate method enables an SDK to run logic for every Unity Update
+
+#### SetControllerRenderModelWheel/2
+
+  > `public override void SetControllerRenderModelWheel(GameObject renderModel, bool state)`
+
+ * Parameters
+   * `GameObject renderModel` - The GameObject containing the controller render model.
+   * `bool state` - If true and the render model has a scroll wheen then it will be displayed, if false then the scroll wheel will be hidden.
+ * Returns
+   * _none_
+
+The SetControllerRenderModelWheel method sets the state of the scroll wheel on the controller render model.
+
+#### WaitForControllerModel/1
+
+  > `public override bool WaitForControllerModel(ControllerHand hand)`
+
+ * Parameters
+   * `ControllerHand hand` - The hand to determine if the controller model will be ready for.
+ * Returns
+   * `bool` - Returns true if the controller model requires loading in at runtime and therefore needs waiting for. Returns false if the controller model will be available at start.
+
+The WaitForControllerModel method determines whether the controller model for the given hand requires waiting to load in on scene start.
+
+---
+
+## WindowsMR Boundaries (SDK_WindowsMRBoundaries)
+
+### Overview
+
+The WindowsMR Boundaries SDK script provides a bridge to the Windows Mixed Reality SDK play area.
+
+### Class Methods
+
+#### GetDrawAtRuntime/0
+
+  > `public override bool GetDrawAtRuntime()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns true if the drawn border is being displayed.
+
+The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
+
+#### GetPlayArea/0
+
+  > `public override Transform GetPlayArea()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Transform` - A transform of the object representing the play area in the scene.
+
+The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
+
+#### GetPlayAreaBorderThickness/0
+
+  > `public override float GetPlayAreaBorderThickness()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `float` - The thickness of the drawn border.
+
+The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
+
+#### GetPlayAreaVertices/0
+
+  > `public override Vector3[] GetPlayAreaVertices()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `Vector3[]` - A Vector3 array of the points in the scene that represent the play area boundaries.
+
+The GetPlayAreaVertices method returns the points of the play area boundaries.
+
+#### InitBoundaries/0
+
+  > `public override void InitBoundaries()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * _none_
+
+The InitBoundaries method is run on start of scene and can be used to initialse anything on game start.
+
+#### IsPlayAreaSizeCalibrated/0
+
+  > `public override bool IsPlayAreaSizeCalibrated()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `bool` - Returns true if the play area size has been auto calibrated and set by external sensors.
+
+The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+
+#### SetDrawAtRuntime/1
+
+  > `public override void SetDrawAtRuntime(bool value)`
+
+ * Parameters
+   * `bool value` - The state of whether the drawn border should be displayed or not.
+ * Returns
+   * _none_
+
+The SetDrawAtRuntime method sets whether the given play area drawn border should be displayed at runtime.
 
 ---
 

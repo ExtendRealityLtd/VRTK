@@ -17,6 +17,8 @@
         public VRTK_BaseHighlighter gripRight;
         [Tooltip("The highlighter to use on the touchpad.")]
         public VRTK_BaseHighlighter touchpad;
+        [Tooltip("The highlighter to use on the touchpad two.")]
+        public VRTK_BaseHighlighter touchpadTwo;
         [Tooltip("The highlighter to use on button one.")]
         public VRTK_BaseHighlighter buttonOne;
         [Tooltip("The highlighter to use on button two.")]

@@ -25,6 +25,7 @@
         public bool triggerButtonEvents = true;
         public bool gripButtonEvents = true;
         public bool touchpadButtonEvents = true;
+        public bool touchpadTwoButtonEvents = true;
         public bool buttonOneButtonEvents = true;
         public bool buttonTwoButtonEvents = true;
         public bool startMenuButtonEvents = true;
@@ -80,6 +81,10 @@
             controllerEvents.TouchpadTouchStart += DoTouchpadTouchStart;
             controllerEvents.TouchpadTouchEnd += DoTouchpadTouchEnd;
             controllerEvents.TouchpadAxisChanged += DoTouchpadAxisChanged;
+            controllerEvents.TouchpadTwoPressed += DoTouchpadTwoPressed;
+            controllerEvents.TouchpadTwoReleased += DoTouchpadTwoReleased;
+            controllerEvents.TouchpadTwoTouchStart += DoTouchpadTwoTouchStart;
+            controllerEvents.TouchpadTwoTouchEnd += DoTouchpadTwoTouchEnd;
             controllerEvents.TouchpadTwoAxisChanged += DoTouchpadTwoAxisChanged;
             controllerEvents.TouchpadSenseAxisChanged += DoTouchpadSenseAxisChanged;
 
@@ -135,6 +140,10 @@
                 controllerEvents.TouchpadTouchStart -= DoTouchpadTouchStart;
                 controllerEvents.TouchpadTouchEnd -= DoTouchpadTouchEnd;
                 controllerEvents.TouchpadAxisChanged -= DoTouchpadAxisChanged;
+                controllerEvents.TouchpadTwoPressed -= DoTouchpadTwoPressed;
+                controllerEvents.TouchpadTwoReleased -= DoTouchpadTwoReleased;
+                controllerEvents.TouchpadTwoTouchStart -= DoTouchpadTwoTouchStart;
+                controllerEvents.TouchpadTwoTouchEnd -= DoTouchpadTwoTouchEnd;
                 controllerEvents.TouchpadTwoAxisChanged -= DoTouchpadTwoAxisChanged;
                 controllerEvents.TouchpadSenseAxisChanged -= DoTouchpadSenseAxisChanged;
 
@@ -169,6 +178,7 @@
                     triggerButtonEvents = false;
                     gripButtonEvents = false;
                     touchpadButtonEvents = false;
+                    touchpadTwoButtonEvents = false;
                     buttonOneButtonEvents = false;
                     buttonTwoButtonEvents = false;
                     startMenuButtonEvents = false;
@@ -188,6 +198,7 @@
                     triggerButtonEvents = true;
                     gripButtonEvents = true;
                     touchpadButtonEvents = true;
+                    touchpadTwoButtonEvents = true;
                     buttonOneButtonEvents = true;
                     buttonTwoButtonEvents = true;
                     startMenuButtonEvents = true;
@@ -207,6 +218,7 @@
                     triggerButtonEvents = true;
                     gripButtonEvents = true;
                     touchpadButtonEvents = true;
+                    touchpadTwoButtonEvents = true;
                     buttonOneButtonEvents = true;
                     buttonTwoButtonEvents = true;
                     startMenuButtonEvents = true;
@@ -226,6 +238,7 @@
                     triggerButtonEvents = false;
                     gripButtonEvents = false;
                     touchpadButtonEvents = false;
+                    touchpadTwoButtonEvents = false;
                     buttonOneButtonEvents = false;
                     buttonTwoButtonEvents = false;
                     startMenuButtonEvents = false;
@@ -245,6 +258,7 @@
                     triggerButtonEvents = false;
                     gripButtonEvents = false;
                     touchpadButtonEvents = false;
+                    touchpadTwoButtonEvents = false;
                     buttonOneButtonEvents = false;
                     buttonTwoButtonEvents = false;
                     startMenuButtonEvents = false;
@@ -459,6 +473,38 @@
             if (touchpadAxisEvents)
             {
                 DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "axis changed", e);
+            }
+        }
+
+        private void DoTouchpadTwoPressed(object sender, ControllerInteractionEventArgs e)
+        {
+            if (touchpadTwoButtonEvents)
+            {
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPADTWO", "pressed down", e);
+            }
+        }
+
+        private void DoTouchpadTwoReleased(object sender, ControllerInteractionEventArgs e)
+        {
+            if (touchpadTwoButtonEvents)
+            {
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPADTWO", "released", e);
+            }
+        }
+
+        private void DoTouchpadTwoTouchStart(object sender, ControllerInteractionEventArgs e)
+        {
+            if (touchpadTwoButtonEvents)
+            {
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPADTWO", "touched", e);
+            }
+        }
+
+        private void DoTouchpadTwoTouchEnd(object sender, ControllerInteractionEventArgs e)
+        {
+            if (touchpadTwoButtonEvents)
+            {
+                DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPADTWO", "untouched", e);
             }
         }
 

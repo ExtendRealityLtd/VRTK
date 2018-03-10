@@ -72,34 +72,40 @@
             {
                 VRTK_ControllerReference leftController = VRTK_ControllerReference.GetControllerReference(VRTK_DeviceFinder.GetControllerLeftHand(true));
                 VRTK_ControllerReference rightController = VRTK_ControllerReference.GetControllerReference(VRTK_DeviceFinder.GetControllerRightHand(true));
-
                 switch (sdkType.name)
                 {
                     case "SteamVR":
-                        ToggleSteamVRRenderer(leftController.actual);
-                        ToggleSteamVRRenderer(rightController.actual);
+                        ToggleControllerRenderer(leftController.actual, "Model");
+                        ToggleControllerRenderer(rightController.actual, "Model");
                         break;
                     case "Oculus":
-                        ToggleOculusRenderer(leftController.model);
-                        ToggleOculusRenderer(rightController.model);
+                        ToggleControllerRenderer(leftController.model);
+                        ToggleControllerRenderer(rightController.model);
+                        break;
+                    case "WindowsMR":
+                        ToggleControllerRenderer(leftController.model, "glTFController");
+                        ToggleControllerRenderer(rightController.model, "glTFController");
                         break;
                 }
             }
         }
 
-        protected virtual void ToggleSteamVRRenderer(GameObject controller)
+        protected virtual void ToggleControllerRenderer(GameObject controller, string findPath = "")
         {
             if (controller != null)
             {
-                controller.transform.Find("Model").gameObject.SetActive(!state);
-            }
-        }
-
-        protected virtual void ToggleOculusRenderer(GameObject controller)
-        {
-            if (controller != null)
-            {
-                controller.SetActive(!state);
+                if (findPath == "")
+                {
+                    controller.SetActive(!state);
+                }
+                else
+                {
+                    Transform childModel = controller.transform.Find(findPath);
+                    if (childModel != null)
+                    {
+                        childModel.gameObject.SetActive(!state);
+                    }
+                }
             }
         }
 
