@@ -5,8 +5,6 @@
 
     public class VRTKExample_AdditiveSceneLoader : MonoBehaviour
     {
-        [Tooltip("The constructor scene containing the VRTK SDK Manager setup to load into the scene.")]
-        public Object sceneConstructor;
         [Tooltip("The GameObject to inject into the VRTK SDK Manager as the Left Controller Script Alias.")]
         public GameObject leftScriptAlias;
         [Tooltip("The GameObject to inject into the VRTK SDK Manager as the Right Controller Script Alias.")]
@@ -17,12 +15,14 @@
         public bool sdkSwitcher = true;
 
         protected VRTK_SDKSetupSwitcher setupSwitcher;
+        protected int constructorSceneIndex;
 
         protected virtual void Awake()
         {
+            constructorSceneIndex = SceneManager.sceneCountInBuildSettings - 1;
             ToggleScriptAlias(false);
             SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene(sceneConstructor.name, LoadSceneMode.Additive);
+            SceneManager.LoadScene(constructorSceneIndex, LoadSceneMode.Additive);
         }
 
         protected virtual void LateUpdate()
@@ -35,7 +35,7 @@
 
         protected virtual void OnSceneLoaded(Scene loadedScene, LoadSceneMode loadMode)
         {
-            if (loadedScene.name == sceneConstructor.name)
+            if (loadedScene.buildIndex == constructorSceneIndex)
             {
                 VRTK_SDKManager sdkManager = FindObjectOfType<VRTK_SDKManager>();
                 sdkManager.gameObject.SetActive(false);
