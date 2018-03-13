@@ -315,7 +315,9 @@ namespace VRTK
                                                 ? 1000.0f / XRDevice.refreshRate
                                                 : DefaultFrameDurationInMilliseconds;
 
+#if !UNITY_WSA
             HandleCommandLineArguments();
+#endif
 
             if (!Application.isEditor)
             {
@@ -373,7 +375,7 @@ namespace VRTK
             UpdateMSAALevel();
         }
 
-        #endregion
+#endregion
 
         private void HandleCommandLineArguments()
         {
@@ -382,7 +384,11 @@ namespace VRTK
                 return;
             }
 
+#if UNITY_WSA && !UNITY_EDITOR
+            string[] commandLineArguments = new string[0];
+#else
             string[] commandLineArguments = Environment.GetCommandLineArgs();
+#endif
 
             for (int index = 0; index < commandLineArguments.Length; index++)
             {
@@ -453,7 +459,7 @@ namespace VRTK
             }
         }
 
-        #region Render scale methods
+#region Render scale methods
 
         private void UpdateRenderScaleLevels()
         {
@@ -670,9 +676,9 @@ namespace VRTK
             return Mathf.Clamp(renderScaleLevel, 0, allRenderScales.Count - 1);
         }
 
-        #endregion
+#endregion
 
-        #region Debug visualization methods
+#region Debug visualization methods
 
         private void CreateOrDestroyDebugVisualization()
         {
@@ -742,9 +748,9 @@ namespace VRTK
             debugVisualizationQuadMaterial.SetInt(ShaderPropertyIDs.LastFrameIsInBudget, lastFrameIsInBudget);
         }
 
-        #endregion
+#endregion
 
-        #region Private helper classes
+#region Private helper classes
 
         private sealed class AdaptiveSetting<T>
         {
@@ -900,7 +906,7 @@ namespace VRTK
             }
         }
 
-        #endregion
+#endregion
     }
 }
 #endif

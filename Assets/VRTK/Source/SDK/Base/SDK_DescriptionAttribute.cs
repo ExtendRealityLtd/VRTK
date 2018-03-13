@@ -6,6 +6,9 @@ namespace VRTK
 #endif
     using System;
     using System.Linq;
+#if UNITY_WSA && !UNITY_EDITOR
+    using System.Reflection;
+#endif
 
     /// <summary>
     /// Describes a class that represents an SDK. Only allowed on classes that inherit from SDK_Base.
@@ -138,10 +141,17 @@ namespace VRTK
 
         public static SDK_DescriptionAttribute[] GetDescriptions(Type type)
         {
+#if UNITY_WSA && !UNITY_EDITOR
+            return type.GetTypeInfo().GetCustomAttributes(typeof(SDK_DescriptionAttribute), false)
+                       .Cast<SDK_DescriptionAttribute>()
+                       .OrderBy(attribute => attribute.index)
+                       .ToArray();
+#else
             return type.GetCustomAttributes(typeof(SDK_DescriptionAttribute), false)
                        .Cast<SDK_DescriptionAttribute>()
                        .OrderBy(attribute => attribute.index)
                        .ToArray();
+#endif
         }
     }
 }

@@ -8,6 +8,12 @@ namespace VRTK
     using UnityEngine.VR;
     using XRNode = UnityEngine.VR.VRNode;
 #endif
+#if UNITY_WSA && !UNITY_EDITOR
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+#endif
 
     /// <summary>
     /// The Controller Tracker enables the GameObject to track it's position/rotation to the available connected VR Controller via the `UnityEngine.VR` library.
@@ -40,7 +46,11 @@ namespace VRTK
 
         protected virtual string GetVarName<T>(T item) where T : class
         {
+#if UNITY_WSA && !UNITY_EDITOR
+            return typeof(T).GetTypeInfo().DeclaredProperties.First().Name;
+#else
             return typeof(T).GetProperties()[0].Name;
+#endif
         }
 
         protected virtual void CheckAxisIsValid(string axisName, string varName)
