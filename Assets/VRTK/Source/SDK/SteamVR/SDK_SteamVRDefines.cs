@@ -89,7 +89,11 @@ namespace VRTK
                 return false;
             }
 
+#if UNITY_WSA && !UNITY_EDITOR
+            Type eventClass = utilsClass.GetTypeInfo().GetDeclaredNestedType("Event").GetType();
+#else
             Type eventClass = utilsClass.GetNestedType("Event");
+#endif
             if (eventClass == null)
             {
                 return false;
