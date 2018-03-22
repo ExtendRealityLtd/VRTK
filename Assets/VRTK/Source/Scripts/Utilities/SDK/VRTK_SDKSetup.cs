@@ -493,7 +493,7 @@ namespace VRTK
 
                 if (installedInfos.Select(installedInfo => installedInfo.type).Contains(selectedType))
                 {
-                    return description + " Its needed scripting define symbols are not added. You can click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and choose to automatically let the manager handle the scripting define symbols.";
+                    return description + " Its needed scripting define symbols are not added. You can click the GameObject with the `VRTK_SDKManager` script attached to it in Edit Mode and choose to automatically let the manager handle the scripting define symbols." + VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND);
                 }
 
                 return description + " The needed vendor SDK isn't installed.";

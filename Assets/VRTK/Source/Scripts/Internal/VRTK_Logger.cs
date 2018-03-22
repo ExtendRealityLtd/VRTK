@@ -34,7 +34,8 @@
             SDK_NOT_FOUND,
             SDK_MANAGER_ERRORS,
             SCRIPTING_DEFINE_SYMBOLS_ADDED,
-            SCRIPTING_DEFINE_SYMBOLS_REMOVED
+            SCRIPTING_DEFINE_SYMBOLS_REMOVED,
+            SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND
         }
 
         public static VRTK_Logger instance = null;
@@ -51,7 +52,8 @@
             { CommonMessageKeys.SDK_NOT_FOUND, "The SDK '{0}' doesn't exist anymore. The fallback SDK '{1}' will be used instead." },
             { CommonMessageKeys.SDK_MANAGER_ERRORS, "The current SDK Manager setup is causing the following errors:\n\n{0}" },
             { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_ADDED, "Scripting Define Symbols added to [Project Settings->Player] for {0}: {1}" },
-            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_REMOVED, "Scripting Define Symbols removed from [Project Settings->Player] for {0}: {1}" }
+            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_REMOVED, "Scripting Define Symbols removed from [Project Settings->Player] for {0}: {1}" },
+            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND, "If you are attempting to run an example scene and have not opened the `VRTK/Examples/VRTK_SDKManager_Constructor` scene in the Unity Editor then this is most likely why you are receiving this error message, try opening the `VRTK/Examples/VRTK_SDKManager_Constructor` scene and letting it configure the relevant scripting define symbols and then re-open the desired example scene and try again." }
         };
 
         public static Dictionary<CommonMessageKeys, int> commonMessageParts = new Dictionary<CommonMessageKeys, int>();
@@ -124,22 +126,22 @@
             Log(LogLevels.Warn, message);
         }
 
-        public static void Error(string message)
+        public static void Error(string message, bool forcePause = false)
         {
-            Log(LogLevels.Error, message);
+            Log(LogLevels.Error, message, forcePause);
         }
 
-        public static void Fatal(string message)
+        public static void Fatal(string message, bool forcePause = false)
         {
-            Log(LogLevels.Fatal, message);
+            Log(LogLevels.Fatal, message, forcePause);
         }
 
-        public static void Fatal(Exception exception)
+        public static void Fatal(Exception exception, bool forcePause = false)
         {
-            Log(LogLevels.Fatal, exception.Message);
+            Log(LogLevels.Fatal, exception.Message, forcePause);
         }
 
-        public static void Log(LogLevels level, string message)
+        public static void Log(LogLevels level, string message, bool forcePause = false)
         {
 #if VRTK_NO_LOGGING
             return;
@@ -163,6 +165,11 @@
                     break;
                 case LogLevels.Error:
                 case LogLevels.Fatal:
+                    if (forcePause)
+                    {
+                        UnityEngine.Debug.Break();
+                    }
+
                     if (instance.throwExceptions)
                     {
                         throw new Exception(message);
