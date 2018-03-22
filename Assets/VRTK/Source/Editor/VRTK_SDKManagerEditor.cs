@@ -6,7 +6,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
 
     [CustomEditor(typeof(VRTK_SDKManager))]
     public class VRTK_SDKManagerEditor : Editor

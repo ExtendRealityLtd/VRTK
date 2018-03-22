@@ -1,7 +1,7 @@
 ﻿namespace VRTK
 {
-    using UnityEngine;
     using UnityEditor;
+    using System;
 
     [CustomEditor(typeof(VRTK_PolicyList))]
     public class VRTK_PolicyListEditor : Editor
@@ -9,24 +9,32 @@
         SerializedProperty staticFlagMask;
         SerializedProperty identifiers;
 
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("operation"));
+            staticFlagMask.intValue = (int)((VRTK_PolicyList.CheckTypes)EnumField("Check Types", (VRTK_PolicyList.CheckTypes)staticFlagMask.intValue));
+            ArrayGUI(identifiers);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
         private void OnEnable()
         {
             staticFlagMask = serializedObject.FindProperty("checkType");
             identifiers = serializedObject.FindProperty("identifiers");
         }
 
-        public override void OnInspectorGUI()
+        private Enum EnumField(string label, Enum enumValue)
         {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("operation"));
-            staticFlagMask.intValue = (int)((VRTK_PolicyList.CheckTypes)EditorGUILayout.EnumMaskField("Check Types", (VRTK_PolicyList.CheckTypes)staticFlagMask.intValue));
-            ArrayGUI(identifiers);
-
-            serializedObject.ApplyModifiedProperties();
+#if UNITY_2017_3_OR_NEWER
+            return EditorGUILayout.EnumFlagsField(label, enumValue);
+#else
+            return EditorGUILayout.EnumMaskField(label, enumValue);
+#endif
         }
 
-        void ArrayGUI(SerializedProperty property)
+        private void ArrayGUI(SerializedProperty property)
         {
             SerializedProperty arraySizeProp = property.FindPropertyRelative("Array.size");
             EditorGUILayout.PropertyField(arraySizeProp);
