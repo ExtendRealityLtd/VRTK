@@ -644,7 +644,7 @@ namespace VRTK
             else
             {
                 // If '-vrmode none' was used try to load the respective SDK Setup
-                string[] commandLineArgs = Environment.GetCommandLineArgs();
+                string[] commandLineArgs = VRTK_SharedMethods.GetCommandLineArguements();
                 int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
                 if (XRSettings.loadedDeviceName == "None"
                     || (commandLineArgIndex != -1
@@ -1024,7 +1024,7 @@ namespace VRTK
         {
             List<ScriptingDefineSymbolPredicateInfo> predicateInfos = new List<ScriptingDefineSymbolPredicateInfo>();
 
-            foreach (Type type in typeof(VRTK_SDKManager).Assembly.GetTypes())
+            foreach (Type type in VRTK_SharedMethods.GetTypesOfType(typeof(VRTK_SDKManager)))
             {
                 for (int index = 0; index < type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Length; index++)
                 {
@@ -1106,9 +1106,9 @@ namespace VRTK
             Type fallbackType = SDKFallbackTypesByBaseType[baseType];
 
             availableSDKInfos.AddRange(VRTK_SDKInfo.Create<BaseType, FallbackType, FallbackType>());
-            availableSDKInfos.AddRange(baseType.Assembly.GetExportedTypes()
-                                               .Where(type => type.IsSubclassOf(baseType) && type != fallbackType && !type.IsAbstract)
-                                               .SelectMany<Type, VRTK_SDKInfo>(VRTK_SDKInfo.Create<BaseType, FallbackType>));
+            availableSDKInfos.AddRange(VRTK_SharedMethods.GetExportedTypesOfType(baseType)
+                                               .Where(type => VRTK_SharedMethods.IsTypeSubclassOf(type, baseType) && type != fallbackType && !VRTK_SharedMethods.IsTypeAbstract(type))
+                                               .SelectMany(VRTK_SDKInfo.Create<BaseType, FallbackType>));
             availableSDKInfos.Sort((x, y) => x.description.describesFallbackSDK
                                                  ? -1 //the fallback SDK should always be the first SDK in the list
                                                  : string.Compare(x.description.prettyName, y.description.prettyName, StringComparison.Ordinal));

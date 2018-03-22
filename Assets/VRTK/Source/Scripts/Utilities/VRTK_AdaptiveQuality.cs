@@ -382,7 +382,7 @@ namespace VRTK
                 return;
             }
 
-            string[] commandLineArguments = Environment.GetCommandLineArgs();
+            string[] commandLineArguments = VRTK_SharedMethods.GetCommandLineArguements();
 
             for (int index = 0; index < commandLineArguments.Length; index++)
             {

@@ -41,6 +41,7 @@ namespace VRTK
             TriggerTooltip,
             GripTooltip,
             TouchpadTooltip,
+            TouchpadTwoTooltip,
             ButtonOneTooltip,
             ButtonTwoTooltip,
             StartMenuTooltip
@@ -54,6 +55,8 @@ namespace VRTK
         public string gripText;
         [Tooltip("The text to display for the touchpad action.")]
         public string touchpadText;
+        [Tooltip("The text to display for the touchpad two action.")]
+        public string touchpadTwoText;
         [Tooltip("The text to display for button one action.")]
         public string buttonOneText;
         [Tooltip("The text to display for button two action.")]
@@ -78,6 +81,8 @@ namespace VRTK
         public Transform grip;
         [Tooltip("The transform for the position of the touchpad button on the controller.")]
         public Transform touchpad;
+        [Tooltip("The transform for the position of the touchpad two button on the controller.")]
+        public Transform touchpadTwo;
         [Tooltip("The transform for the position of button one on the controller.")]
         public Transform buttonOne;
         [Tooltip("The transform for the position of button two on the controller.")]
@@ -165,6 +170,9 @@ namespace VRTK
                     break;
                 case TooltipButtons.TouchpadTooltip:
                     touchpadText = newText;
+                    break;
+                case TooltipButtons.TouchpadTwoTooltip:
+                    touchpadTwoText = newText;
                     break;
                 case TooltipButtons.TriggerTooltip:
                     triggerText = newText;
@@ -263,6 +271,7 @@ namespace VRTK
                 TooltipButtons.TriggerTooltip,
                 TooltipButtons.GripTooltip,
                 TooltipButtons.TouchpadTooltip,
+                TooltipButtons.TouchpadTwoTooltip,
                 TooltipButtons.ButtonOneTooltip,
                 TooltipButtons.ButtonTwoTooltip,
                 TooltipButtons.StartMenuTooltip
@@ -390,6 +399,10 @@ namespace VRTK
                     case "touchpad":
                         tipText = touchpadText;
                         tipTransform = GetTransform(touchpad, SDK_BaseController.ControllerElements.Touchpad);
+                        break;
+                    case "touchpadTwo":
+                        tipText = touchpadTwoText;
+                        tipTransform = GetTransform(touchpadTwo, SDK_BaseController.ControllerElements.TouchpadTwo);
                         break;
                     case "buttonone":
                         tipText = buttonOneText;

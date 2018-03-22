@@ -658,6 +658,8 @@ namespace VRTK
                     switch (controllerType)
                     {
                         case SDK_BaseController.ControllerType.SteamVR_ViveWand:
+                        case SDK_BaseController.ControllerType.SteamVR_WindowsMRController:
+                        case SDK_BaseController.ControllerType.WindowsMR_MotionController:
                             thumbState = VRTK_ControllerEvents.AxisType.Digital;
                             indexState = VRTK_ControllerEvents.AxisType.Axis;
                             middleState = VRTK_ControllerEvents.AxisType.Digital;

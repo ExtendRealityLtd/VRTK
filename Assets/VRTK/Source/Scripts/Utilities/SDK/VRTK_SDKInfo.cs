@@ -95,13 +95,13 @@ namespace VRTK
         {
             if (baseType == null || fallbackType == null)
                 return;
-            if (!baseType.IsSubclassOf(typeof(SDK_Base)))
+            if (!VRTK_SharedMethods.IsTypeSubclassOf(baseType, typeof(SDK_Base)))
             {
                 VRTK_Logger.Fatal(new ArgumentOutOfRangeException("baseType", baseType, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", baseType.Name, typeof(SDK_Base).Name)));
                 return;
             }
 
-            if (!fallbackType.IsSubclassOf(baseType))
+            if (!VRTK_SharedMethods.IsTypeSubclassOf(fallbackType, baseType))
             {
                 VRTK_Logger.Fatal(new ArgumentOutOfRangeException("fallbackType", fallbackType, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", fallbackType.Name, baseType.Name)));
                 return;
@@ -134,7 +134,7 @@ namespace VRTK
                 return;
             }
 
-            if (!actualType.IsSubclassOf(baseType))
+            if (!VRTK_SharedMethods.IsTypeSubclassOf(actualType, baseType))
             {
                 VRTK_Logger.Fatal(new ArgumentOutOfRangeException("actualTypeName", actualTypeName, string.Format("'{0}' is not a subclass of the SDK base type '{1}'.", actualTypeName, baseType.Name)));
                 return;

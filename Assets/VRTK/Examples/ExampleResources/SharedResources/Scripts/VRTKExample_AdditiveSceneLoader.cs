@@ -92,7 +92,7 @@
 
         protected virtual bool IsConstructorScene(Scene checkScene)
         {
-            return (checkScene != null && ((sceneConstructor != null && checkScene.name == sceneConstructor.name) || (sceneConstructor == null && checkScene.buildIndex == constructorSceneIndex)));
+            return ((sceneConstructor != null && checkScene.name == sceneConstructor.name) || (sceneConstructor == null && checkScene.buildIndex == constructorSceneIndex));
         }
 
         protected virtual void ToggleScriptAlias(bool state)
