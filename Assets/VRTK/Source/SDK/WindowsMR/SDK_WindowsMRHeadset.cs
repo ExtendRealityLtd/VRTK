@@ -9,13 +9,13 @@ namespace VRTK
     /// </summary>
     [SDK_Description(typeof(SDK_WindowsMR))]
     public class SDK_WindowsMRHeadset
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         : SDK_BaseHeadset
 #else
         : SDK_FallbackHeadset
 #endif
     {
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         protected Vector3 currentHeadsetPosition;
         protected Vector3 previousHeadsetPosition;
         protected Vector3 currentHeadsetVelocity;

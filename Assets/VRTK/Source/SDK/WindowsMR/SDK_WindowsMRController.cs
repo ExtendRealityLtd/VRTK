@@ -3,7 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
     using UnityEngine.XR.WSA.Input;
 #endif
 #if VRTK_DEFINE_WINDOWSMR_CONTROLLER_VISUALIZATION
@@ -15,13 +15,13 @@ namespace VRTK
     /// </summary>
     [SDK_Description(typeof(SDK_WindowsMR))]
     public class SDK_WindowsMRController
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         : SDK_BaseController
 #else
         : SDK_FallbackController
 #endif
     {
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         protected WindowsMR_TrackedObject cachedLeftTrackedObject;
         protected WindowsMR_TrackedObject cachedRightTrackedObject;
         protected VRTK_VelocityEstimator cachedLeftVelocityEstimator;

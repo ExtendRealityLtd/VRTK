@@ -3,10 +3,15 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using UnityEngine.Experimental.XR;
+#if UNITY_2017_2_OR_NEWER
     using UnityEngine.XR;
+    using UnityEngine.Experimental.XR;
 #if VRTK_DEFINE_SDK_WINDOWSMR
     using UnityEngine.XR.WSA;
+#endif
+#else
+    using UnityEngine.VR;
+    using XRDevice = UnityEngine.VR.VRDevice;
 #endif
 
     /// <summary>
@@ -14,13 +19,13 @@ namespace VRTK
     /// </summary>
     [SDK_Description(typeof(SDK_WindowsMR))]
     public class SDK_WindowsMRBoundaries
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         : SDK_BaseBoundaries
 #else
         : SDK_FallbackBoundaries
 #endif
     {
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         /// <summary>
         /// The GetDrawAtRuntime method returns whether the given play area drawn border is being displayed.
         /// </summary>
@@ -71,7 +76,7 @@ namespace VRTK
         public override Vector3[] GetPlayAreaVertices()
         {
             List<Vector3> boundaryGeometry = new List<Vector3>(0);
-
+#if UNITY_2017_2_OR_NEWER
             if (Boundary.TryGetGeometry(boundaryGeometry))
             {
                 if (boundaryGeometry.Count > 0)
@@ -86,7 +91,7 @@ namespace VRTK
                     Debug.LogWarning("Boundary has no points");
                 }
             }
-
+#endif
             return null;
         }
 
@@ -95,7 +100,11 @@ namespace VRTK
         /// </summary>
         public override void InitBoundaries()
         {
-            if (HolographicSettings.IsDisplayOpaque)
+            bool isDisplayOpaque = false;
+#if UNITY_2017_2_OR_NEWER
+            isDisplayOpaque = HolographicSettings.IsDisplayOpaque;
+#endif
+            if (isDisplayOpaque)
             {
                 // Defaulting coordinate system to RoomScale in immersive headsets.
                 // This puts the origin 0,0,0 on the floor if a floor has been established during RunSetup via MixedRealityPortal
