@@ -1,8 +1,8 @@
 ﻿namespace VRTK
 {
-    using System.Collections;
     using UnityEngine;
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
+    using System.Collections;
     using UnityEngine.XR.WSA.Input;
     using VRTK.WindowsMixedReality.Utilities;
 #endif
@@ -12,7 +12,7 @@
 
     public class WindowsMR_TrackedObject : MonoBehaviour
     {
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         private struct ButtonState
         {
             //

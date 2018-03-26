@@ -1,7 +1,13 @@
 ﻿namespace VRTK
 {
     using UnityEngine;
+#if UNITY_2017_2_OR_NEWER
     using UnityEngine.XR;
+#else
+    using UnityEngine.VR;
+    using XRSettings = UnityEngine.VR.VRSettings;
+    using XRDevice = UnityEngine.VR.VRDevice;
+#endif
 
     /// <summary>
     /// Camera script for the main camera for Immersive Mixed Reality. 

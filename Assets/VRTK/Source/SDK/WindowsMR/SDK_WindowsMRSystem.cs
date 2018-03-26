@@ -6,13 +6,13 @@ namespace VRTK
     /// </summary>
     [SDK_Description("WindowsMR", SDK_WindowsMRDefines.ScriptingDefineSymbol, "WindowsMR", "WSA")]
     public class SDK_WindowsMR
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         : SDK_BaseSystem
 #else
         : SDK_FallbackSystem
 #endif
     {
-#if VRTK_DEFINE_SDK_WINDOWSMR
+#if VRTK_DEFINE_SDK_WINDOWSMR && UNITY_2017_2_OR_NEWER
         /// <summary>
         /// The ForceInterleavedReprojectionOn method determines whether Interleaved Reprojection should be forced on or off.
         /// </summary>
