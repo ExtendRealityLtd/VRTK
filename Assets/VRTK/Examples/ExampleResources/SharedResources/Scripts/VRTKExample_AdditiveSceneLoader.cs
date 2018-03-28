@@ -2,8 +2,6 @@
 {
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Collections.Generic;
-    using System.Linq;
 #endif
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -28,7 +26,6 @@
 
         protected virtual void Awake()
         {
-            CheckScriptingDefineSymbols();
             if (!Application.isPlaying && Application.isEditor)
             {
                 ManageBuildSettings();
@@ -47,20 +44,6 @@
                     SceneManager.LoadScene(constructorSceneIndex, LoadSceneMode.Additive);
                 }
             }
-        }
-        protected virtual void CheckScriptingDefineSymbols()
-        {
-#if UNITY_EDITOR
-            bool isMissingSDKSymbols = PlayerSettings
-                .GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup)
-                .Split(';')
-                .All(symbol => !symbol.StartsWith(SDK_ScriptingDefineSymbolPredicateAttribute.RemovableSymbolPrefix, System.StringComparison.Ordinal));
-
-            if (isMissingSDKSymbols)
-            {
-                VRTK_Logger.Error("No VRTK scripting define symbols have been found. " + VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND), true);
-            }
-#endif
         }
 
         protected virtual void ManageBuildSettings()
