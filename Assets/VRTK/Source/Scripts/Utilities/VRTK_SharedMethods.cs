@@ -262,11 +262,11 @@ namespace VRTK
         {
             if (string.IsNullOrEmpty(gameObjectName))
             {
-                T foundComponent = FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes, true).FirstOrDefault();
+                T foundComponent = FindEvenInactiveComponentsInValidScenes<T>(searchAllScenes, true).FirstOrDefault();
                 return foundComponent == null ? null : foundComponent.gameObject;
             }
 
-            return FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes)
+            return FindEvenInactiveComponentsInValidScenes<T>(searchAllScenes)
                        .Select(component =>
                        {
                            Transform transform = component.gameObject.transform.Find(gameObjectName);
@@ -287,7 +287,7 @@ namespace VRTK
         /// <returns>All the found components. If no component is found an empty array is returned.</returns>
         public static T[] FindEvenInactiveComponents<T>(bool searchAllScenes = false) where T : Component
         {
-            IEnumerable<T> results = FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes);
+            IEnumerable<T> results = FindEvenInactiveComponentsInValidScenes<T>(searchAllScenes);
             return results.ToArray();
         }
 
@@ -303,7 +303,7 @@ namespace VRTK
         /// <returns>The found component. If no component is found `null` is returned.</returns>
         public static T FindEvenInactiveComponent<T>(bool searchAllScenes = false) where T : Component
         {
-            return FindEvenInactiveComponentsInLoadedScenes<T>(searchAllScenes, true).FirstOrDefault();
+            return FindEvenInactiveComponentsInValidScenes<T>(searchAllScenes, true).FirstOrDefault();
         }
 
         /// <summary>
@@ -781,33 +781,52 @@ namespace VRTK
         /// <param name="searchAllScenes">If true, will search all loaded scenes, otherwise just the active scene.</param>
         /// <param name="stopOnMatch">If true, will stop searching objects as soon as a match is found.</param>
         /// <returns></returns>
-        private static IEnumerable<T> FindEvenInactiveComponentsInLoadedScenes<T>(bool searchAllScenes, bool stopOnMatch = false) where T : Component
+        private static IEnumerable<T> FindEvenInactiveComponentsInValidScenes<T>(bool searchAllScenes, bool stopOnMatch = false) where T : Component
+        {
+            IEnumerable<T> results;
+            if (searchAllScenes)
+            {
+                List<T> allSceneResults = new List<T>();
+                for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+                {
+                    allSceneResults.AddRange(FindEventInactiveComponentsInScene<T>(SceneManager.GetSceneAt(sceneIndex), stopOnMatch));
+                }
+                results = allSceneResults;
+            }
+            else
+            {
+                results = FindEventInactiveComponentsInScene<T>(SceneManager.GetActiveScene(), stopOnMatch);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// The FIndEvenInactiveComponentsInScene method searches the specified scene for components matching the type supplied.
+        /// </summary>
+        /// <param name="scene">The scene to search. This scene must be valid, either loaded or loading.</param>
+        /// <param name="stopOnMatch">If true, will stop searching objects as soon as a match is found.</param>
+        /// <returns></returns>
+        private static IEnumerable<T> FindEventInactiveComponentsInScene<T>(Scene scene, bool stopOnMatch = false)
         {
             List<T> results = new List<T>();
-
-            for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
+            foreach (GameObject rootObject in scene.GetRootGameObjects())
             {
-                Scene scene = SceneManager.GetSceneAt(sceneIndex);
-                if (scene.isLoaded && (searchAllScenes || scene == SceneManager.GetActiveScene()))
+                if (stopOnMatch)
                 {
-                    foreach (GameObject rootObject in scene.GetRootGameObjects())
+                    T foundComponent = rootObject.GetComponentInChildren<T>(true);
+                    if (foundComponent != null)
                     {
-                        if (stopOnMatch)
-                        {
-                            T foundComponent = rootObject.GetComponentInChildren<T>(true);
-                            if (foundComponent != null)
-                            {
-                                results.Add(foundComponent);
-                                return results;
-                            }
-                        }
-                        else
-                        {
-                            results.AddRange(rootObject.GetComponentsInChildren<T>(true));
-                        }
+                        results.Add(foundComponent);
+                        return results;
                     }
                 }
+                else
+                {
+                    results.AddRange(rootObject.GetComponentsInChildren<T>(true));
+                }
             }
+
             return results;
         }
     }
