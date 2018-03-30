@@ -53,7 +53,7 @@
             { CommonMessageKeys.SDK_MANAGER_ERRORS, "The current SDK Manager setup is causing the following errors:\n\n{0}" },
             { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_ADDED, "Scripting Define Symbols added to [Project Settings->Player] for {0}: {1}" },
             { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_REMOVED, "Scripting Define Symbols removed from [Project Settings->Player] for {0}: {1}" },
-            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND, "If you are attempting to run an example scene and have not opened the `VRTK/Examples/VRTK_SDKManager_Constructor` scene in the Unity Editor then this is most likely why you are receiving this error message, try opening the `VRTK/Examples/VRTK_SDKManager_Constructor` scene and letting it configure the relevant scripting define symbols and then re-open the desired example scene and try again." }
+            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND, "Before running any of the included example scenes, you must open `Assets/VRTK/Examples/VRTK_SDKManager_Constructor` scene when adding support for 3rd party SDKs (e.g. SteamVR, Oculus) so the SDK Manager in that scene can set up the required scripting defines." }
         };
 
         public static Dictionary<CommonMessageKeys, int> commonMessageParts = new Dictionary<CommonMessageKeys, int>();
