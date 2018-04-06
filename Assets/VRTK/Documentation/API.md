@@ -9719,13 +9719,32 @@ The Linecast method is used to generate a linecast either from the given CustomR
    * `float radius` - The radius of the capsule.
    * `Vector3 direction` - The direction into which to sweep the capsule.
    * `float maxDistance` - The max length of the sweep.
-   * `out RaycastHit hitData` - The linecast hit data.
-   * `LayerMask ignoreLayers` - A layermask of layers to ignore from the linecast.
+   * `out RaycastHit hitData` - The capsulecast hit data.
+   * `LayerMask ignoreLayers` - A layermask of layers to ignore from the capsulecast.
    * `QueryTriggerInteraction affectTriggers` - Determines the trigger interaction level of the cast.
  * Returns
-   * `bool` - Returns true if the linecast successfully collides with a valid object.
+   * `bool` - Returns true if the capsulecast successfully collides with a valid object.
 
-The CapsuleCast method is used to generate a linecast either from the given CustomRaycast object or a default Physics.Linecast.
+The CapsuleCast method is used to generate a capsulecast either from the given CustomRaycast object or a default Physics.CapsuleCast.
+
+#### BoxCast/9
+
+  > `public static bool BoxCast(VRTK_CustomRaycast customCast, Vector3 center, Vector3 halfExtents, Vector3 direction, Quaternion orientation, float maxDistance, out RaycastHit hitData, LayerMask ignoreLayers, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)`
+
+ * Parameters
+   * `VRTK_CustomRaycast customCast` - The optional object with customised cast parameters.
+   * `Vector3 center` - The center of the box.
+   * `Vector3 halfExtents` - Half the size of the box in each dimension.
+   * `Vector3 direction` - The direction in which to cast the box.
+   * `Quaternion orientation` - The rotation of the box.
+   * `float maxDistance` - The max length of the cast.
+   * `out RaycastHit hitData` - The boxcast hit data.
+   * `LayerMask ignoreLayers` - A layermask of layers to ignore from the boxcast.
+   * `QueryTriggerInteraction affectTriggers` - Determines the trigger interaction level of the cast.
+ * Returns
+   * `bool` - Returns true if the boxcast successfully collides with a valid object.
+
+The BoxCast method is used to generate a boxcast either from the given CustomRaycast object or a default Physics.BoxCast.
 
 #### CustomRaycast/3
 
@@ -9768,6 +9787,22 @@ The CustomLinecast method is used to generate a linecast based on the options de
    * `bool` - Returns true if the capsule successfully collides with a valid object.
 
 The CustomCapsuleCast method is used to generate a capsulecast based on the options defined in the CustomRaycast object.
+
+#### CustomBoxCast/6
+
+  > `public virtual bool CustomBoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction, Quaternion orientation, float maxDistance, out RaycastHit hitData)`
+
+ * Parameters
+   * `Vector3 center` - The center of the box.
+   * `Vector3 halfExtents` - Half the size of the box in each dimension.
+   * `Vector3 direction` - The direction in which to cast the box.
+   * `Quaternion orientation` - The rotation of the box.
+   * `float maxDistance` - The max length of the cast.
+   * `out RaycastHit hitData` - The boxcast hit data.
+ * Returns
+   * `bool` - Returns true if the box successfully collides with a valid object.
+
+The CustomBoxCast method is used to generate a boxcast based on the options defined in the CustomRaycast object.
 
 ---
 

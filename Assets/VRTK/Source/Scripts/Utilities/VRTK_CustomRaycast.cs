@@ -64,7 +64,7 @@ namespace VRTK
         }
 
         /// <summary>
-        /// The CapsuleCast method is used to generate a linecast either from the given CustomRaycast object or a default Physics.Linecast.
+        /// The CapsuleCast method is used to generate a capsulecast either from the given CustomRaycast object or a default Physics.CapsuleCast.
         /// </summary>
         /// <param name="customCast">The optional object with customised cast parameters.</param>
         /// <param name="point1">The center of the sphere at the start of the capsule.</param>
@@ -72,10 +72,10 @@ namespace VRTK
         /// <param name="radius">The radius of the capsule.</param>
         /// <param name="direction">The direction into which to sweep the capsule.</param>
         /// <param name="maxDistance">The max length of the sweep.</param>
-        /// <param name="hitData">The linecast hit data.</param>
-        /// <param name="ignoreLayers">A layermask of layers to ignore from the linecast.</param>
+        /// <param name="hitData">The capsulecast hit data.</param>
+        /// <param name="ignoreLayers">A layermask of layers to ignore from the capsulecast.</param>
         /// <param name="affectTriggers">Determines the trigger interaction level of the cast.</param>
-        /// <returns>Returns true if the linecast successfully collides with a valid object.</returns>
+        /// <returns>Returns true if the capsulecast successfully collides with a valid object.</returns>
         public static bool CapsuleCast(VRTK_CustomRaycast customCast, Vector3 point1, Vector3 point2, float radius, Vector3 direction, float maxDistance, out RaycastHit hitData, LayerMask ignoreLayers, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)
         {
             if (customCast != null)
@@ -85,6 +85,31 @@ namespace VRTK
             else
             {
                 return Physics.CapsuleCast(point1, point2, radius, direction, out hitData, maxDistance, ~ignoreLayers, affectTriggers);
+            }
+        }
+
+        /// <summary>
+        /// The BoxCast method is used to generate a boxcast either from the given CustomRaycast object or a default Physics.BoxCast.
+        /// </summary>
+        /// <param name="customCast">The optional object with customised cast parameters.</param>
+        /// <param name="center">The center of the box.</param>
+        /// <param name="halfExtents">Half the size of the box in each dimension.</param>
+        /// <param name="direction">The direction in which to cast the box.</param>
+        /// <param name="orientation">The rotation of the box.</param>
+        /// <param name="maxDistance">The max length of the cast.</param>
+        /// <param name="hitData">The boxcast hit data.</param>
+        /// <param name="ignoreLayers">A layermask of layers to ignore from the boxcast.</param>
+        /// <param name="affectTriggers">Determines the trigger interaction level of the cast.</param>
+        /// <returns>Returns true if the boxcast successfully collides with a valid object.</returns>
+        public static bool BoxCast(VRTK_CustomRaycast customCast, Vector3 center, Vector3 halfExtents, Vector3 direction, Quaternion orientation, float maxDistance, out RaycastHit hitData, LayerMask ignoreLayers, QueryTriggerInteraction affectTriggers = QueryTriggerInteraction.UseGlobal)
+        {
+            if (customCast != null)
+            {
+                return customCast.CustomBoxCast(center, halfExtents, direction, orientation, maxDistance, out hitData);
+            }
+            else
+            {
+                return Physics.BoxCast(center, halfExtents, direction, out hitData, orientation, maxDistance, ~ignoreLayers, affectTriggers);
             }
         }
 
@@ -125,6 +150,21 @@ namespace VRTK
         public virtual bool CustomCapsuleCast(Vector3 point1, Vector3 point2, float radius, Vector3 direction, float maxDistance, out RaycastHit hitData)
         {
             return Physics.CapsuleCast(point1, point2, radius, direction, out hitData, maxDistance, ~layersToIgnore, triggerInteraction);
+        }
+
+        /// <summary>
+        /// The CustomBoxCast method is used to generate a boxcast based on the options defined in the CustomRaycast object.
+        /// </summary>
+        /// <param name="center">The center of the box.</param>
+        /// <param name="halfExtents">Half the size of the box in each dimension.</param>
+        /// <param name="direction">The direction in which to cast the box.</param>
+        /// <param name="orientation">The rotation of the box.</param>
+        /// <param name="maxDistance">The max length of the cast.</param>
+        /// <param name="hitData">The boxcast hit data.</param>
+        /// <returns>Returns true if the box successfully collides with a valid object.</returns>
+        public virtual bool CustomBoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction, Quaternion orientation, float maxDistance, out RaycastHit hitData)
+        {
+            return Physics.BoxCast(center, halfExtents, direction, out hitData, orientation, maxDistance, ~layersToIgnore, triggerInteraction);
         }
     }
 }
