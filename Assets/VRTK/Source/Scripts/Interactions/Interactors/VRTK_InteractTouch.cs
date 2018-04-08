@@ -3,6 +3,7 @@ namespace VRTK
 {
     using UnityEngine;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Event Payload
@@ -40,6 +41,21 @@ namespace VRTK
     {
         [Tooltip("An optional GameObject that contains the compound colliders to represent the touching object. If this is empty then the collider will be auto generated at runtime to match the SDK default controller.")]
         public GameObject customColliderContainer;
+
+        /// <summary>
+        /// Specify how to which interactable will be grabed, when the controller is over
+        /// multiple objects.
+        /// MostRecent: The most recently touched object will be selected. 
+        /// ClosestOrigin: The object with the closest origin to the controller attach point will be selected.
+        /// </summary>
+        public enum MultiTouchSelectionStyle
+        {
+            MostRecent,
+            ClosestOrigin
+        }
+
+        public MultiTouchSelectionStyle multiTouchSelectionStyle;
+        private HashSet<GameObject> touchedObjects = new HashSet<GameObject>();
 
         /// <summary>
         /// Emitted when the touch of a valid object has started.
@@ -288,67 +304,148 @@ namespace VRTK
 
         protected virtual void OnTriggerEnter(Collider collider)
         {
-            GameObject colliderInteractableObject = TriggerStart(collider);
-            VRTK_InteractableObject touchedObjectScript = (touchedObject != null ? touchedObject.GetComponent<VRTK_InteractableObject>() : null);
-            //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
-            if (touchedObject != null && colliderInteractableObject != null && touchedObject != colliderInteractableObject && touchedObjectScript != null && !touchedObjectScript.IsGrabbed())
+            if (multiTouchSelectionStyle == MultiTouchSelectionStyle.MostRecent)
             {
-                ForceStopTouching();
-                triggerIsColliding = true;
+                GameObject colliderInteractableObject = TriggerStart(collider);
+                VRTK_InteractableObject touchedObjectScript = (touchedObject != null ? touchedObject.GetComponent<VRTK_InteractableObject>() : null);
+                //If the new collider is not part of the existing touched object (and the object isn't being grabbed) then start touching the new object
+                if (touchedObject != null && colliderInteractableObject != null && touchedObject != colliderInteractableObject && touchedObjectScript != null && !touchedObjectScript.IsGrabbed())
+                {
+                    ForceStopTouching();
+                    triggerIsColliding = true;
+                }
+            }
+            else if (multiTouchSelectionStyle == MultiTouchSelectionStyle.ClosestOrigin)
+            {
+                if (IsObjectInteractable(collider.gameObject))
+                {
+                    touchedObjects.Add(collider.gameObject);
+                }
             }
         }
 
         protected virtual void OnTriggerExit(Collider collider)
         {
-            touchedObjectActiveColliders.Remove(collider);
+            if (multiTouchSelectionStyle == MultiTouchSelectionStyle.MostRecent)
+            {
+                touchedObjectActiveColliders.Remove(collider);
+            }
+            else if (multiTouchSelectionStyle == MultiTouchSelectionStyle.ClosestOrigin)
+            {
+                if (touchedObject == collider.gameObject)
+                {
+                    StopTouching(collider.gameObject);
+                }
+                touchedObjects.Remove(collider.gameObject);
+            }
         }
 
         protected virtual void OnTriggerStay(Collider collider)
         {
-            GameObject colliderInteractableObject = TriggerStart(collider);
-
-            if (touchedObject == null || collider.transform.IsChildOf(touchedObject.transform))
+            if (multiTouchSelectionStyle == MultiTouchSelectionStyle.MostRecent)
             {
-                triggerIsColliding = true;
-            }
+                GameObject colliderInteractableObject = TriggerStart(collider);
 
-            if (touchedObject == null && colliderInteractableObject != null && IsObjectInteractable(collider.gameObject))
-            {
-                touchedObject = colliderInteractableObject;
-                VRTK_InteractableObject touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
-
-                //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
-                if (touchedObjectScript != null && !touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
+                if (touchedObject == null || collider.transform.IsChildOf(touchedObject.transform))
                 {
-                    CleanupEndTouch();
-                    return;
+                    triggerIsColliding = true;
                 }
-                OnControllerStartTouchInteractableObject(SetControllerInteractEvent(touchedObject));
-                StoreTouchedObjectColliders(collider);
 
-                ToggleControllerVisibility(false);
-                touchedObjectScript.StartTouching(this);
+                if (touchedObject == null && colliderInteractableObject != null && IsObjectInteractable(collider.gameObject))
+                {
+                    touchedObject = colliderInteractableObject;
+                    VRTK_InteractableObject touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
 
-                OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+                    //If this controller is not allowed to touch this interactable object then clean up touch and return before initiating a touch.
+                    if (touchedObjectScript != null && !touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
+                    {
+                        CleanupEndTouch();
+                        return;
+                    }
+                    OnControllerStartTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+                    StoreTouchedObjectColliders(collider);
+
+                    ToggleControllerVisibility(false);
+                    touchedObjectScript.StartTouching(this);
+
+                    OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+                }
             }
         }
 
         protected virtual void FixedUpdate()
         {
-            if (!triggerIsColliding && !triggerWasColliding)
+            if (multiTouchSelectionStyle == MultiTouchSelectionStyle.MostRecent)
             {
-                CheckStopTouching();
+                if (!triggerIsColliding && !triggerWasColliding)
+                {
+                    CheckStopTouching();
+                }
+                triggerWasColliding = triggerIsColliding;
+                triggerIsColliding = false;
             }
-            triggerWasColliding = triggerIsColliding;
-            triggerIsColliding = false;
         }
 
         protected virtual void LateUpdate()
         {
-            if (touchedObjectActiveColliders.Count == 0)
+            if (multiTouchSelectionStyle == MultiTouchSelectionStyle.MostRecent)
             {
-                CheckStopTouching();
+                if (touchedObjectActiveColliders.Count == 0)
+                {
+                    CheckStopTouching();
+                }
             }
+            else if (multiTouchSelectionStyle == MultiTouchSelectionStyle.ClosestOrigin)
+            {
+                touchedObjects.RemoveWhere(element => element == null);
+                if (touchedObjects.Count > 0)
+                {
+                    VRTK_InteractGrab grabScript = GetComponent<VRTK_InteractGrab>();
+                    Vector3 controllerOrigin = grabScript != null && grabScript.controllerAttachPoint != null ?
+                                            grabScript.controllerAttachPoint.transform.position :
+                                            transform.position;
+                    GameObject closestTouched = touchedObjects.OrderBy(element => Vector3.Distance(controllerOrigin, element.transform.position)).FirstOrDefault();
+                    if (touchedObject != closestTouched)
+                    {
+                        if (touchedObject != null)
+                        {
+                            StopTouching(touchedObject);
+                        }
+                        StartTouching(closestTouched);
+                    }
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// This Controller starts to touch GameObject obj, if obj (or obj parent) is VRTK_InteractableObject
+        /// </summary>
+        private void StartTouching(GameObject obj)
+        {
+            if (obj.GetComponent<VRTK_InteractableObject>())
+            {
+                touchedObject = obj;
+            }
+            else
+            {
+                touchedObject = obj.GetComponentInParent<VRTK_InteractableObject>().gameObject;
+            }
+
+            VRTK_InteractableObject touchedObjectScript = touchedObject.GetComponent<VRTK_InteractableObject>();
+
+            if (touchedObjectScript != null && !touchedObjectScript.IsValidInteractableController(gameObject, touchedObjectScript.allowedTouchControllers))
+            {
+                CleanupEndTouch();
+                return;
+            }
+
+            OnControllerStartTouchInteractableObject(SetControllerInteractEvent(touchedObject));
+
+            ToggleControllerVisibility(false);
+            touchedObjectScript.StartTouching(this);
+
+            OnControllerTouchInteractableObject(SetControllerInteractEvent(touchedObject));
         }
 
         protected virtual void DoControllerModelAvailable(object sender, VRTKTrackedControllerEventArgs e)
