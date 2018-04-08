@@ -1064,7 +1064,7 @@ namespace VRTK
             if (!startDisabled)
             {
                 forceDisabled = true;
-                ForceStopInteracting();
+                ForceStopAllInteractions();
             }
             OnInteractableObjectDisabled(SetInteractableObjectEvent(null));
         }
