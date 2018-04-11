@@ -1976,6 +1976,7 @@ GameObject:
   - component: {fileID: 76304219}
   - component: {fileID: 76304218}
   - component: {fileID: 76304217}
+  - component: {fileID: 76304221}
   m_Layer: 0
   m_Name: PhysicsPusher
   m_TagString: Untagged
@@ -2079,6 +2080,59 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 76304215}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &76304221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 76304215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 1
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &79191994
 GameObject:
   m_ObjectHideFlags: 0
@@ -5572,6 +5626,7 @@ GameObject:
   - component: {fileID: 267037690}
   - component: {fileID: 267037689}
   - component: {fileID: 267037688}
+  - component: {fileID: 267037691}
   m_Layer: 0
   m_Name: LeverControl
   m_TagString: Untagged
@@ -5664,6 +5719,59 @@ MonoBehaviour:
   grabbedFriction: 10
   releasedFriction: 10
   onlyInteractWith: []
+--- !u!114 &267037691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 267037686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.03
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &272835808
 GameObject:
   m_ObjectHideFlags: 0
@@ -6148,6 +6256,7 @@ GameObject:
   - component: {fileID: 295121680}
   - component: {fileID: 295121679}
   - component: {fileID: 295121678}
+  - component: {fileID: 295121684}
   m_Layer: 0
   m_Name: SliderControl
   m_TagString: Untagged
@@ -6285,6 +6394,59 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 295121676}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &295121684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 295121676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!4 &295693563 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4300244963979220, guid: 22be1bc17a2832448b48fe8fcae891a8,
@@ -12564,6 +12726,7 @@ GameObject:
   - component: {fileID: 538934092}
   - component: {fileID: 538934091}
   - component: {fileID: 538934090}
+  - component: {fileID: 538934094}
   m_Layer: 0
   m_Name: PhysicsPusher
   m_TagString: Untagged
@@ -12667,6 +12830,59 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 538934088}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &538934094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 538934088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 1
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &542545307
 GameObject:
   m_ObjectHideFlags: 0
@@ -16811,6 +17027,7 @@ GameObject:
   - component: {fileID: 743734333}
   - component: {fileID: 743734332}
   - component: {fileID: 743734331}
+  - component: {fileID: 743734334}
   m_Layer: 0
   m_Name: LeverControl
   m_TagString: Untagged
@@ -16903,6 +17120,59 @@ MonoBehaviour:
   grabbedFriction: 10
   releasedFriction: 10
   onlyInteractWith: []
+--- !u!114 &743734334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 743734329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.03
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &751698497
 GameObject:
   m_ObjectHideFlags: 0
@@ -17483,6 +17753,7 @@ GameObject:
   - component: {fileID: 798424205}
   - component: {fileID: 798424207}
   - component: {fileID: 798424206}
+  - component: {fileID: 798424208}
   m_Layer: 0
   m_Name: WheelControl
   m_TagString: Untagged
@@ -17558,6 +17829,59 @@ MonoBehaviour:
   grabbedFriction: 1
   releasedFriction: 5
   onlyInteractWith: []
+--- !u!114 &798424208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 798424204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 1
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: -0.001121521
+      value: 0.102142334
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.1
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1001 &799440935
 Prefab:
   m_ObjectHideFlags: 0
@@ -19197,6 +19521,7 @@ GameObject:
   - component: {fileID: 833147785}
   - component: {fileID: 833147787}
   - component: {fileID: 833147786}
+  - component: {fileID: 833147788}
   m_Layer: 0
   m_Name: DrawerControl
   m_TagString: Untagged
@@ -19270,6 +19595,59 @@ MonoBehaviour:
   onlyInteractWith:
   - {fileID: 284740463}
   - {fileID: 875019077}
+--- !u!114 &833147788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 833147784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.20161438
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.20161438
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.0038070679
+      value: 1.0018692
+      inSlope: 0.2855732
+      outSlope: 0.2855732
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9974365
+      value: -0.019340515
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.02
+  slowestPulseInterval: 0.06
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &835167917
 GameObject:
   m_ObjectHideFlags: 0
@@ -19958,6 +20336,7 @@ GameObject:
   - component: {fileID: 855828525}
   - component: {fileID: 855828526}
   - component: {fileID: 855828527}
+  - component: {fileID: 855828528}
   m_Layer: 0
   m_Name: DoorControl
   m_TagString: Untagged
@@ -20039,6 +20418,65 @@ MonoBehaviour:
   displayText: {fileID: 367241240}
   outputOnMax: 
   outputOnMin: Door Closed
+--- !u!114 &855828528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 855828524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.20429993
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.20429993
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.0000076293945
+      value: 1.0190697
+      inSlope: 0.10409419
+      outSlope: 0.10409419
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.61292374
+      value: 0.42206192
+      inSlope: -3.579302
+      outSlope: -3.579302
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9958496
+      value: 0.00017547607
+      inSlope: -0.08753625
+      outSlope: -0.08753625
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.2
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &858694832
 GameObject:
   m_ObjectHideFlags: 0
@@ -23663,6 +24101,7 @@ GameObject:
   - component: {fileID: 1027684392}
   - component: {fileID: 1027684394}
   - component: {fileID: 1027684393}
+  - component: {fileID: 1027684395}
   m_Layer: 0
   m_Name: DoorControl
   m_TagString: Untagged
@@ -23742,6 +24181,65 @@ MonoBehaviour:
   releasedFriction: 1
   onlyInteractWith:
   - {fileID: 1583858264}
+--- !u!114 &1027684395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1027684391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.19623566
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.19623566
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.0000076293945
+      value: 0.13471985
+      inSlope: 0.10409419
+      outSlope: 0.10409419
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.49891007
+      value: 0.991169
+      inSlope: 0.12685561
+      outSlope: 0.12685561
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9958496
+      value: 0.13129425
+      inSlope: -0.08753625
+      outSlope: -0.08753625
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.15
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1034205737
 GameObject:
   m_ObjectHideFlags: 0
@@ -26308,6 +26806,7 @@ GameObject:
   - component: {fileID: 1097068788}
   - component: {fileID: 1097068787}
   - component: {fileID: 1097068785}
+  - component: {fileID: 1097068786}
   m_Layer: 0
   m_Name: SliderControl
   m_TagString: Untagged
@@ -26343,6 +26842,59 @@ MonoBehaviour:
   displayText: {fileID: 1693755925}
   outputOnMax: Slider Maximum Reached
   outputOnMin: Slider Minimum Reached
+--- !u!114 &1097068786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1097068783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!114 &1097068787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31829,6 +32381,7 @@ GameObject:
   - component: {fileID: 1174451457}
   - component: {fileID: 1174451456}
   - component: {fileID: 1174451455}
+  - component: {fileID: 1174451458}
   m_Layer: 0
   m_Name: LeverControl
   m_TagString: Untagged
@@ -31921,6 +32474,59 @@ MonoBehaviour:
   grabbedFriction: 10
   releasedFriction: 10
   onlyInteractWith: []
+--- !u!114 &1174451458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1174451453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.03
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1174545535
 GameObject:
   m_ObjectHideFlags: 0
@@ -36611,6 +37217,7 @@ GameObject:
   - component: {fileID: 1329897716}
   - component: {fileID: 1329897718}
   - component: {fileID: 1329897717}
+  - component: {fileID: 1329897719}
   m_Layer: 0
   m_Name: Lid
   m_TagString: Untagged
@@ -36695,6 +37302,65 @@ MonoBehaviour:
   releasedFriction: 1
   onlyInteractWith:
   - {fileID: 1046369890}
+--- !u!114 &1329897719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1329897715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.19892502
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.19892502
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: -0.0011138916
+      value: 0.9921875
+      inSlope: 0.10409419
+      outSlope: 0.10409419
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.61292374
+      value: 0.37636185
+      inSlope: -3.579302
+      outSlope: -3.579302
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9958496
+      value: -0.045524597
+      inSlope: -0.08753625
+      outSlope: -0.08753625
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.02
+  slowestPulseInterval: 0.1
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1332428709
 GameObject:
   m_ObjectHideFlags: 0
@@ -38685,6 +39351,7 @@ GameObject:
   - component: {fileID: 1385684681}
   - component: {fileID: 1385684682}
   - component: {fileID: 1385684683}
+  - component: {fileID: 1385684684}
   m_Layer: 0
   m_Name: DrawerControl
   m_TagString: Untagged
@@ -38758,6 +39425,59 @@ MonoBehaviour:
   displayText: {fileID: 1058091751}
   outputOnMax: Drawer Open
   outputOnMin: Drawer Closed
+--- !u!114 &1385684684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1385684680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.20161438
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.20161438
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.0038070679
+      value: 1.0018692
+      inSlope: 0.2855732
+      outSlope: 0.2855732
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9974365
+      value: -0.019340515
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.02
+  slowestPulseInterval: 0.06
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1386591094
 GameObject:
   m_ObjectHideFlags: 0
@@ -38906,6 +39626,7 @@ GameObject:
   - component: {fileID: 1392071684}
   - component: {fileID: 1392071686}
   - component: {fileID: 1392071685}
+  - component: {fileID: 1392071687}
   m_Layer: 0
   m_Name: WheelControl
   m_TagString: Untagged
@@ -38961,8 +39682,8 @@ MonoBehaviour:
   equalityFidelity: 0.001
   hingePoint: {fileID: 382612404}
   angleLimits:
-    minimum: -8096
-    maximum: 8096
+    minimum: -720
+    maximum: 720
   minMaxThresholdAngle: 1
   restingAngle: 0
   forceRestingAngleThreshold: 1
@@ -38970,7 +39691,7 @@ MonoBehaviour:
   isLocked: 0
   stepValueRange:
     minimum: 0
-    maximum: 10
+    maximum: 100
   stepSize: 1
   useStepAsValue: 0
   snapToStep: 0
@@ -38981,6 +39702,59 @@ MonoBehaviour:
   grabbedFriction: 1
   releasedFriction: 1
   onlyInteractWith: []
+--- !u!114 &1392071687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1392071683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 1
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.5053749
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.5053749
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1398073008
 GameObject:
   m_ObjectHideFlags: 0
@@ -44285,6 +45059,7 @@ GameObject:
   - component: {fileID: 1569884215}
   - component: {fileID: 1569884213}
   - component: {fileID: 1569884212}
+  - component: {fileID: 1569884214}
   m_Layer: 0
   m_Name: SliderControl
   m_TagString: Untagged
@@ -44343,8 +45118,8 @@ MonoBehaviour:
   restingPosition: 0
   forceRestingPositionThreshold: 0
   stepValueRange:
-    minimum: 0
-    maximum: 10
+    minimum: -5
+    maximum: 5
   stepSize: 0.5
   useStepAsValue: 1
   snapToStep: 0
@@ -44354,6 +45129,59 @@ MonoBehaviour:
   detachDistance: 1
   releaseFriction: 10
   onlyInteractWith: []
+--- !u!114 &1569884214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1569884210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!65 &1569884215
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -44875,6 +45703,7 @@ GameObject:
   - component: {fileID: 1579544102}
   - component: {fileID: 1579544104}
   - component: {fileID: 1579544103}
+  - component: {fileID: 1579544105}
   m_Layer: 0
   m_Name: Lid
   m_TagString: Untagged
@@ -44956,6 +45785,65 @@ MonoBehaviour:
   grabbedFriction: 1
   releasedFriction: 1
   onlyInteractWith: []
+--- !u!114 &1579544105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1579544101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.19892502
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.19892502
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: -0.0011138916
+      value: 0.9921875
+      inSlope: 0.10409419
+      outSlope: 0.10409419
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.61292374
+      value: 0.37636185
+      inSlope: -3.579302
+      outSlope: -3.579302
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9958496
+      value: -0.045524597
+      inSlope: -0.08753625
+      outSlope: -0.08753625
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.02
+  slowestPulseInterval: 0.1
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1582986998
 GameObject:
   m_ObjectHideFlags: 0
@@ -49092,6 +49980,7 @@ GameObject:
   - component: {fileID: 1752762453}
   - component: {fileID: 1752762452}
   - component: {fileID: 1752762451}
+  - component: {fileID: 1752762455}
   m_Layer: 0
   m_Name: PhysicsPusher
   m_TagString: Untagged
@@ -49195,6 +50084,59 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1752762449}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1752762455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1752762449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 1
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1763382474
 GameObject:
   m_ObjectHideFlags: 0
@@ -49464,6 +50406,7 @@ GameObject:
   - component: {fileID: 1787103567}
   - component: {fileID: 1787103569}
   - component: {fileID: 1787103568}
+  - component: {fileID: 1787103570}
   m_Layer: 0
   m_Name: DoorControl
   m_TagString: Untagged
@@ -49543,6 +50486,65 @@ MonoBehaviour:
   releasedFriction: 1
   onlyInteractWith:
   - {fileID: 2135917536}
+--- !u!114 &1787103570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1787103566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.20429993
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.20429993
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.0000076293945
+      value: 1.0190697
+      inSlope: 0.10409419
+      outSlope: 0.10409419
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.61292374
+      value: 0.42206192
+      inSlope: -3.579302
+      outSlope: -3.579302
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9958496
+      value: 0.00017547607
+      inSlope: -0.08753625
+      outSlope: -0.08753625
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.2
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1787304581
 GameObject:
   m_ObjectHideFlags: 0
@@ -51656,6 +52658,7 @@ GameObject:
   - component: {fileID: 1845560886}
   - component: {fileID: 1845560887}
   - component: {fileID: 1845560888}
+  - component: {fileID: 1845560889}
   m_Layer: 0
   m_Name: DoorControl
   m_TagString: Untagged
@@ -51737,6 +52740,65 @@ MonoBehaviour:
   displayText: {fileID: 1191448196}
   outputOnMax: 
   outputOnMin: 
+--- !u!114 &1845560889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1845560885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.19623566
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.19623566
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.0000076293945
+      value: 0.13471985
+      inSlope: 0.10409419
+      outSlope: 0.10409419
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.49891007
+      value: 0.991169
+      inSlope: 0.12685561
+      outSlope: 0.12685561
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9958496
+      value: 0.13129425
+      inSlope: -0.08753625
+      outSlope: -0.08753625
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.15
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1845917744
 GameObject:
   m_ObjectHideFlags: 0
@@ -52706,8 +53768,8 @@ MonoBehaviour:
   angleTarget: 90
   isLocked: 0
   stepValueRange:
-    minimum: 10
-    maximum: 0
+    minimum: 0
+    maximum: 10
   stepSize: 1
   useStepAsValue: 1
   snapToStep: 0
@@ -54531,6 +55593,7 @@ GameObject:
   - component: {fileID: 1943900234}
   - component: {fileID: 1943900235}
   - component: {fileID: 1943900237}
+  - component: {fileID: 1943900238}
   m_Layer: 0
   m_Name: PhysicsPusher
   m_TagString: Untagged
@@ -54634,6 +55697,59 @@ MonoBehaviour:
   displayText: {fileID: 18334365}
   outputOnMax: Button Pressed
   outputOnMin: 
+--- !u!114 &1943900238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1943900232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 1
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.25151825
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1943967722 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1000010066341254, guid: 5d323709f0cbd454196647d9d8f2dd84,
@@ -55812,6 +56928,7 @@ GameObject:
   - component: {fileID: 1979556429}
   - component: {fileID: 1979556428}
   - component: {fileID: 1979556427}
+  - component: {fileID: 1979556433}
   m_Layer: 0
   m_Name: SliderControl
   m_TagString: Untagged
@@ -55949,6 +57066,59 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1979556425}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1979556433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1979556425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.1182785
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.99731064
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.01
+  slowestPulseInterval: 0.01
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &1983649476
 GameObject:
   m_ObjectHideFlags: 0
@@ -57919,6 +59089,7 @@ GameObject:
   - component: {fileID: 2043204371}
   - component: {fileID: 2043204373}
   - component: {fileID: 2043204372}
+  - component: {fileID: 2043204374}
   m_Layer: 0
   m_Name: LeverControl
   m_TagString: Untagged
@@ -57995,6 +59166,59 @@ MonoBehaviour:
   grabbedFriction: 1
   releasedFriction: 1
   onlyInteractWith: []
+--- !u!114 &2043204374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043204370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.03
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &2043899656
 GameObject:
   m_ObjectHideFlags: 0
@@ -58315,6 +59539,7 @@ GameObject:
   - component: {fileID: 2050007235}
   - component: {fileID: 2050007237}
   - component: {fileID: 2050007236}
+  - component: {fileID: 2050007238}
   m_Layer: 0
   m_Name: LeverControl
   m_TagString: Untagged
@@ -58391,6 +59616,59 @@ MonoBehaviour:
   grabbedFriction: 1
   releasedFriction: 1
   onlyInteractWith: []
+--- !u!114 &2050007238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2050007234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.03
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1001 &2050698742
 Prefab:
   m_ObjectHideFlags: 0
@@ -59348,6 +60626,7 @@ GameObject:
   - component: {fileID: 2092914671}
   - component: {fileID: 2092914673}
   - component: {fileID: 2092914672}
+  - component: {fileID: 2092914674}
   m_Layer: 0
   m_Name: LeverControl
   m_TagString: Untagged
@@ -59424,6 +60703,59 @@ MonoBehaviour:
   grabbedFriction: 1
   releasedFriction: 1
   onlyInteractWith: []
+--- !u!114 &2092914674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2092914670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512a87ca2b4916f4f868b15fcbb66744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionType: 0
+  strengthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.21505356
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  pulseIntervalCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  fastestPulseInterval: 0.03
+  slowestPulseInterval: 0.03
+  sensitivityThreshold: 0.01
+  objectToAffect: {fileID: 0}
+  interactableObject: {fileID: 0}
 --- !u!1 &2093210288
 GameObject:
   m_ObjectHideFlags: 0
