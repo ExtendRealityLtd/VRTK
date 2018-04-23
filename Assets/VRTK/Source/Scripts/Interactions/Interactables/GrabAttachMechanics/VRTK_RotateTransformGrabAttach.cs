@@ -278,6 +278,7 @@ namespace VRTK.GrabAttachMechanics
             }
             else
             {
+				CancelUpdateRotation();
                 UpdateRotation(newCurrentRotation, false, false);
                 currentRotation = newCurrentRotation;
             }
