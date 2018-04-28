@@ -63,6 +63,7 @@ A collection of titles that have been made with VRTK.
 | How To Meat People | [Steam Store Page](http://store.steampowered.com/app/735700) |
 | OfficeBots: Reality Bytes | [Steam Store Page](http://store.steampowered.com/app/649730) |
 | Comets Wake | [Steam Store Page](http://store.steampowered.com/app/763650) |
+| Universe Sandbox ² | [Steam Store Page](https://store.steampowered.com/app/230290/) |
 
 ## Oculus Home
 
@@ -73,6 +74,7 @@ A collection of titles that have been made with VRTK.
 | Magic Table Chess | [Oculus Home Store Page](https://www.oculus.com/experiences/rift/804448142992694) |
 | Captain 13 - Beyond the Hero | [Oculus Home Store Page](https://www.oculus.com/experiences/rift/1482797975114864) |
 | Yanone - Letter Splatter | [Oculus Home Store Page](https://www.oculus.com/experiences/rift/1944077818952678/) |
+| Universe Sandbox ² | [Oculus Home Store Page](https://www.oculus.com/experiences/rift/1475034132510246/) |
 
 ## Playstation Store
 
