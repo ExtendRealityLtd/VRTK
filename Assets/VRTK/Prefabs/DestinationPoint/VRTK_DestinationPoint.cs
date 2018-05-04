@@ -453,7 +453,7 @@ namespace VRTK
             }
 
             float offset = (snapToRotation == RotationTypes.RotateWithHeadsetOffset && playArea != null && headset != null ? playArea.eulerAngles.y - headset.eulerAngles.y : 0f);
-            return Quaternion.Euler(0f, destinationLocation.localEulerAngles.y + offset, 0f);
+            return Quaternion.Euler(0f, destinationLocation.eulerAngles.y + offset, 0f);
         }
     }
 }
