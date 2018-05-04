@@ -277,10 +277,10 @@ namespace VRTK.GrabAttachMechanics
                 updateRotationRoutine = StartCoroutine(RotateToAngle(newCurrentRotation, VRTK_SharedMethods.DividerToMultiplier(transitionTime)));
             }
             else
-            {		
+            {
                 UpdateRotation(newCurrentRotation, false, false);
                 currentRotation = newCurrentRotation;
-            }        
+            }
         }
 
         /// <summary>
