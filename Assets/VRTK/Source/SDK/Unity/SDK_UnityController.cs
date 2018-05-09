@@ -71,22 +71,23 @@ namespace VRTK
         */
 
         protected int[] rightControllerTouchCodes = new int[] { 15, 17, 10, 11 };
-        protected int[] rightControllerPressCodes = new int[] { 9, 0, 1, 7 };
+        protected int[] rightControllerPressCodes = new int[] { 9, 1, 0, 7 };
+        protected int[] rightOculusRemotePressCodes = new int[] { 9, 0, 1, 7 };
 
         protected int[] leftControllerTouchCodes = new int[] { 14, 16, 12, 13 };
-        protected int[] leftControllerPressCodes = new int[] { 8, 2, 3, 7 };
+        protected int[] leftControllerPressCodes = new int[] { 8, 3, 2, 7 };
 
         protected ControllerType cachedControllerType = ControllerType.Custom;
 
         protected Dictionary<ButtonTypes, KeyCode?> rightControllerTouchKeyCodes = new Dictionary<ButtonTypes, KeyCode?>()
         {
-            { ButtonTypes.Trigger, KeyCode.Joystick1Button15 },
+            { ButtonTypes.Trigger, KeyCode.JoystickButton15 },
             { ButtonTypes.TriggerHairline, null },
             { ButtonTypes.Grip, null },
             { ButtonTypes.GripHairline, null },
-            { ButtonTypes.Touchpad, KeyCode.Joystick1Button17 },
-            { ButtonTypes.ButtonOne, KeyCode.Joystick1Button10 },
-            { ButtonTypes.ButtonTwo, KeyCode.Joystick1Button11 },
+            { ButtonTypes.Touchpad, KeyCode.JoystickButton17 },
+            { ButtonTypes.ButtonOne, KeyCode.JoystickButton10 },
+            { ButtonTypes.ButtonTwo, KeyCode.JoystickButton11 },
             { ButtonTypes.StartMenu, null }
         };
 
@@ -96,21 +97,21 @@ namespace VRTK
             { ButtonTypes.TriggerHairline, null },
             { ButtonTypes.Grip, null },
             { ButtonTypes.GripHairline, null },
-            { ButtonTypes.Touchpad, KeyCode.Joystick1Button9 },
-            { ButtonTypes.ButtonOne, KeyCode.Joystick1Button0 },
-            { ButtonTypes.ButtonTwo, KeyCode.Joystick1Button1 },
-            { ButtonTypes.StartMenu, KeyCode.Joystick1Button7 }
+            { ButtonTypes.Touchpad, KeyCode.JoystickButton9 },
+            { ButtonTypes.ButtonOne, KeyCode.JoystickButton1 },
+            { ButtonTypes.ButtonTwo, KeyCode.JoystickButton0 },
+            { ButtonTypes.StartMenu, KeyCode.JoystickButton7 }
         };
 
         protected Dictionary<ButtonTypes, KeyCode?> leftControllerTouchKeyCodes = new Dictionary<ButtonTypes, KeyCode?>()
         {
-            { ButtonTypes.Trigger, KeyCode.Joystick1Button14 },
+            { ButtonTypes.Trigger, KeyCode.JoystickButton14 },
             { ButtonTypes.TriggerHairline, null },
             { ButtonTypes.Grip, null },
             { ButtonTypes.GripHairline, null },
-            { ButtonTypes.Touchpad, KeyCode.Joystick1Button16 },
-            { ButtonTypes.ButtonOne, KeyCode.Joystick1Button12 },
-            { ButtonTypes.ButtonTwo, KeyCode.Joystick1Button13 },
+            { ButtonTypes.Touchpad, KeyCode.JoystickButton16 },
+            { ButtonTypes.ButtonOne, KeyCode.JoystickButton12 },
+            { ButtonTypes.ButtonTwo, KeyCode.JoystickButton13 },
             { ButtonTypes.StartMenu, null }
         };
 
@@ -120,10 +121,10 @@ namespace VRTK
             { ButtonTypes.TriggerHairline, null },
             { ButtonTypes.Grip, null },
             { ButtonTypes.GripHairline, null },
-            { ButtonTypes.Touchpad, KeyCode.Joystick1Button8 },
-            { ButtonTypes.ButtonOne, KeyCode.Joystick1Button2 },
-            { ButtonTypes.ButtonTwo, KeyCode.Joystick1Button3 },
-            { ButtonTypes.StartMenu, KeyCode.Joystick1Button7 }
+            { ButtonTypes.Touchpad, KeyCode.JoystickButton8 },
+            { ButtonTypes.ButtonOne, KeyCode.JoystickButton3 },
+            { ButtonTypes.ButtonTwo, KeyCode.JoystickButton2 },
+            { ButtonTypes.StartMenu, KeyCode.JoystickButton7 }
         };
 
         private bool settingCaches = false;
@@ -745,7 +746,8 @@ namespace VRTK
             {
                 if (hand == ControllerHand.Right)
                 {
-                    SetControllerButtonValues(ref rightControllerTouchKeyCodes, ref rightControllerPressKeyCodes, validJoystickIndex, rightControllerTouchCodes, rightControllerPressCodes);
+                    var pressCodes = cachedControllerType == ControllerType.Oculus_OculusRemote ? rightOculusRemotePressCodes : rightControllerPressCodes;
+                    SetControllerButtonValues(ref rightControllerTouchKeyCodes, ref rightControllerPressKeyCodes, validJoystickIndex, rightControllerTouchCodes, pressCodes);
                 }
                 else
                 {
@@ -766,6 +768,9 @@ namespace VRTK
             {
                 case "googledaydream":
                     cachedControllerType = ControllerType.Daydream_Controller;
+                    return;
+                case "oculus remote":
+                    cachedControllerType = ControllerType.Oculus_OculusRemote;
                     return;
             }
 
