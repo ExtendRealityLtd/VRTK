@@ -124,6 +124,8 @@ namespace VRTK
             { ButtonTypes.StartMenu, KeyCode.Joystick1Button7 }
         };
 
+        private bool settingCaches = false;
+
         /// <summary>
         /// The ProcessUpdate method enables an SDK to run logic for every Unity Update
         /// </summary>
@@ -664,6 +666,13 @@ namespace VRTK
 
         protected virtual void SetTrackedControllerCaches(bool forceRefresh = false)
         {
+            if (settingCaches)
+            {
+                return;
+            }
+
+            settingCaches = true;
+
             if (forceRefresh)
             {
                 cachedLeftController = null;
@@ -681,8 +690,8 @@ namespace VRTK
                     {
                         cachedLeftTracker = cachedLeftController.GetComponent<SDK_UnityControllerTracker>();
                         cachedLeftVelocityEstimator = cachedLeftController.GetComponent<VRTK_VelocityEstimator>();
+                        SetControllerButtons(ControllerHand.Left);
                     }
-                    SetControllerButtons(ControllerHand.Left);
                 }
                 if (cachedRightController == null && sdkManager.loadedSetup.actualRightController != null)
                 {
@@ -692,10 +701,12 @@ namespace VRTK
                     {
                         cachedRightTracker = cachedRightController.GetComponent<SDK_UnityControllerTracker>();
                         cachedRightVelocityEstimator = cachedRightController.GetComponent<VRTK_VelocityEstimator>();
+                        SetControllerButtons(ControllerHand.Right);
                     }
-                    SetControllerButtons(ControllerHand.Right);
                 }
             }
+
+            settingCaches = false;
         }
 
         protected virtual void SetControllerButtons(ControllerHand hand)
