@@ -1,0 +1,3 @@
+[submodule "VRTK.Unity.Core"]
+	path = VRTK.Unity.Core
+	url = git@github.com:ExtendRealityLtd/VRTK.Unity.Core.git

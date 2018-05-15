@@ -28,8 +28,7 @@ follow so that we can have a chance of keeping on top things.
 
   * Create a topic branch from where you want to base your work.
    * If you're fixing a bug then target the `master` branch.
-   * If you're creating a new feature then target the next release
-   branch. The current next release branch is `3.3.0-alpha`.
+   * If you're creating a new feature then target a release branch.
    * Name your branch with the type of issue you are fixing;
    `feat`, `chore`, `docs`.
    * Please avoid working directly on your master branch.
@@ -57,9 +56,23 @@ the code is correctly formatted and indented.
 Spaces should be used instead of tabs for better readability across
 a number of devices (e.g. spaces look better on Github source view.)
 
-In regards to naming conventions we also adhere to the standard
-.NET Framework naming convention system which can be
-[viewed online here](https://msdn.microsoft.com/en-gb/library/x2dbyw72(v=vs.71).aspx)
+In regards to naming conventions we also adhere to the
+[standard .NET Framework naming convention system](https://msdn.microsoft.com/en-gb/library/x2dbyw72(v=vs.71).aspx)
+and use American spellings to denote classes, methods, fields, etc.
+
+  > **Incorrect:**
+  ```
+  public Color fontColour;
+  ```
+
+  > **Correct:**
+  ```
+  public Color fontColor;
+  ```
+
+The only deviation from the MSDN conventions are fields should start
+with lowercase -> `public Type myField` as this is inline with Unity's
+naming convention.
 
 Class methods and parameters should always denote their accessibility
 level using the `public` `protected` `private` keywords.
@@ -74,19 +87,38 @@ level using the `public` `protected` `private` keywords.
   private void MyMethod()
   ```
 
-All core classes should be within the `VRTK` namespace and the class
-name should be prefixed with `VRTK_`.
+All core classes should be within the relevant `VRTK` namespace. Any
+required `using` lines should be within the namespace block.
 
-Any example code should be within the`VRTK.Examples` namespace and any
-Unity Event Helpers should be within the `VRTK.UnityEventHelper`
-namespace.
+  > **Incorrect:**
+  ```
+  using System;
+  namespace X.Y.Z
+  {
+    public class MyClass
+	{
+	}
+  }
+  ```
+
+  > **Correct:**
+  ```
+  namespace X.Y.Z
+  {
+    using System;
+    public class MyClass
+	{
+	}
+  }
+  ```
 
 Parameters should be defined at the top of the class before any methods
 are defined.
 
 It is acceptable to have multiple classes defined in the same file as
 long as the subsequent defined classes are only used by the main class
-defined in the same file.
+defined in the same file. However, don't nest types as it makes it
+harder to find and reference them.
 
 Where possible, the structure of the code should also flow with the
 accessibility level of the method or parameters. So all `public`
@@ -123,46 +155,56 @@ All MonoBehaviour inherited classes that implement a MonoBehaviour
 method must at least be `protected virtual` to allow any further
 inherited class to override and extend the methods.
 
+When defining arrays, it is appropriate to instantiate the array with
+the `System.Array.Empty<T>()` notation instead of doing `new Array[0]`.
+
+All events should be UnityEvents and not C# delegates as this will
+automatically provide inspector helpers for hooking up listeners. Any
+custom UnityEvent should be defined as a nested class and the final
+parameter should always be an `object` type so the sender of the event
+can be passed in the payload.
+
+When the actual UnityEvent is defined in code it should also be
+instantiated so it is not null at runtime.
+
+`public MyEventClass MyEventAction = new MyEventClass();`
+
 ## Documentation
 
-All scripts that require documentation need to include a comment marker
-on the first line of the script in this format:
-
-`// <Script Title>|<Section>|<Position>`
-
- * **Script Title:** A user friendly name for the script.
- * **Section:** The section the script will appear in:
-  * `Prefabs` - A script required for configuring an included prefab.
-  * `Abstractions` - An abstract script providing user functionality.
-  * `Scripts` - A script for providing user functionality.
-  * `Controls3D` - A script for providing a 3D control.
- * **Position:** The position the text will appear in the section.
-
-  > **Example**
-  `// UI Pointer|Scripts|0060`
-
 All core scripts, abstractions, controls and prefabs should contain
-inline code documentation adhering to the .NET Framework XML
-documentation comments convention which can be
-[viewed online here](https://msdn.microsoft.com/en-us/library/b2s063f7.aspx)
+inline code documentation adhering to the
+[.NET Framework XML documentation comments convention](https://msdn.microsoft.com/en-us/library/b2s063f7.aspx)
 
-Public classes, methods, delegate events and unity events should be
-documented using the XML comments and contain a 1 line `<summary>`
-with any additional lines included in `<remarks>`.
+All classes, methods and unity events should be documented using
+the XML comments and contain a 1 line `<summary>` with any additional
+lines included in `<remarks>`.
 
-Public parameters that appear in the inspector do not need XML
-comments and just require a `[Tooltip("")]` which is used to generate
-the documentation. However, other public class variables that are
-hidden from the inspector do need XML style comments to document them.
+Public serialized parameters that appear in the inspector also require
+XML comments and an additional `[Tooltip("")]` which is displayed in
+the Unity Editor inspector panel. The order of documentation and
+parameter attributes should be:
 
-C# delegate events also require to reference the event payload `struct`
-which also requires documenting using XML comments.
+  * XML documentation
+  * Optional attributes
+  * Tooltip attribute
 
-Any accompanying example scenes can be documented within the `class`
-comments within the `<example>` tag with multiple lines being used
-for each example rather than using multiple `<example>` tags.
+```
+/// <summary>
+/// Description here.
+/// </summary>
+[Optional-Attributes...]
+[Tooltip("Description here.")]
+public Type myType;
+```
 
-Also, any example scene requires an entry in the `EXAMPLES.md` file.
+Whenever an inherited field, method, etc. is overridden then the
+documentation should avoid repeating itself from the base class and
+instead should use the `/// <inheritdoc />` notation instead. Despite
+not being needed, being explicit about inheriting the documentation
+simplifies checking contributions for proper documentation.
+
+Any references to other classes, methods or parameters should also use
+the `<see>` notation within the documentation.
 
 ## Commit Messages
 
@@ -213,7 +255,7 @@ The subject contains succinct description of the change:
 
 Just as in the subject, use the imperative, present tense: "change"
 not "changed" nor "changes" The body should include the motivation for
-the change and contrast this with previous behavior. References to
+the change and contrast this with previous behaviour. References to
 previous commit hashes is actively encouraged if they are relevant.
 
   > **Incorrect commit summary:**
@@ -236,11 +278,6 @@ previous commit hashes is actively encouraged if they are relevant.
 
 ## Submitting Changes
   * Push your changes to your topic branch in your repository.
-  * Submit a pull request to the repository `thestonefox/VRTK`.
-    * If you're submitting a bug fix pull request then target the
-    repository `master` branch.
-    * If you're submitting a new feature pull request then target
-    the next release branch in the repository. The current next release
-    branch is `3.3.0-alpha`.
+  * Submit a pull request to this repository.
   * The core team will aim to look at the pull request as soon as
   possible and provide feedback where required.
