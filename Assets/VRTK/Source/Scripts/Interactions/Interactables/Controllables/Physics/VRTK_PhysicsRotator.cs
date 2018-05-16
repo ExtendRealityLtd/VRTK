@@ -126,6 +126,11 @@ namespace VRTK.Controllables.PhysicsBased
             return VRTK_SharedMethods.NormalizeValue(GetValue(), angleLimits.minimum, angleLimits.maximum);
         }
 
+        public override void SetValue(float value)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// The GetStepValue method returns the current angle of the rotator based on the step value range.
         /// </summary>
