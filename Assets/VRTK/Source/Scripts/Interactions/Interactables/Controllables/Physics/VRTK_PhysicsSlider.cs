@@ -96,6 +96,11 @@ namespace VRTK.Controllables.PhysicsBased
             return VRTK_SharedMethods.NormalizeValue(GetValue(), originalLocalPosition[(int)operateAxis], MaximumLength()[(int)operateAxis]);
         }
 
+        public override void SetValue(float value)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// The GetStepValue method returns the current position of the slider based on the step value range.
         /// </summary>
