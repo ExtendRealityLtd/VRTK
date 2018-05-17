@@ -126,9 +126,13 @@ namespace VRTK.Controllables.PhysicsBased
             return VRTK_SharedMethods.NormalizeValue(GetValue(), angleLimits.minimum, angleLimits.maximum);
         }
 
+        /// <summary>
+        /// The SetValue method sets the current Angle of the rotator
+        /// </summary>
+        /// <param name="value">The new rotation value</param>
         public override void SetValue(float value)
         {
-            throw new System.NotImplementedException();
+            UpdateToAngle(value);
         }
 
         /// <summary>
@@ -228,11 +232,14 @@ namespace VRTK.Controllables.PhysicsBased
             SetupJoint();
             SetFrictions(releasedFriction);
             CheckLock();
-            UpdateToAngle(angleTarget);
+
+            SetValue(storedValue);
         }
 
         protected override void OnDisable()
         {
+            storedValue = GetValue();
+
             if (createControlJoint)
             {
                 Destroy(controlJoint);
