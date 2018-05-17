@@ -785,10 +785,13 @@ namespace VRTK
                 yield return null;
             }
 
-            //Force all to the last setting in case anything has moved during the transition
-            ioTransform.position = endSettings.transform.position;
-            ioTransform.rotation = endSettings.transform.rotation;
-            ioTransform.localScale = endScale;
+            if (ioTransform != null && endSettings != null)
+            {
+                //Force all to the last setting in case anything has moved during the transition
+                ioTransform.position = endSettings.transform.position;
+                ioTransform.rotation = endSettings.transform.rotation;
+                ioTransform.localScale = endScale;
+            }
 
             ioCheck.isKinematic = storedKinematicState;
             SetDropSnapType(ioCheck);
