@@ -231,10 +231,7 @@ namespace VRTK.Highlighters
             {
                 Renderer copyModelRenderer = objectToAffect.GetComponentInChildren<Renderer>();
                 copyModel = (copyModelRenderer != null ? copyModelRenderer.gameObject : null);
-            }
 
-            if (copyModel == null)
-            {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_OutlineObjectCopyHighlighter", "Renderer", "the same or child", " to add the highlighter to"));
                 return null;
             }
@@ -281,6 +278,7 @@ namespace VRTK.Highlighters
                     highlightMesh.mesh = copyMesh.mesh;
                 }
                 returnHighlightModel.material = stencilOutline;
+                returnHighlightModel.shadowCastingMode = copyModel.transform.GetComponent<Renderer>().shadowCastingMode;
             }
             highlightModel.SetActive(false);
 
