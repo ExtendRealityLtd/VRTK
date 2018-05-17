@@ -96,9 +96,20 @@ namespace VRTK.Controllables.PhysicsBased
             return VRTK_SharedMethods.NormalizeValue(GetValue(), originalLocalPosition[(int)operateAxis], MaximumLength()[(int)operateAxis]);
         }
 
+        /// <summary>
+        /// The SetValue method sets the current position value of the slider
+        /// </summary>
+        /// <param name="value">The new position value</param>
         public override void SetValue(float value)
         {
-            throw new System.NotImplementedException();
+            Vector3 tempPos = new Vector3();
+            tempPos = transform.localPosition;
+            tempPos[(int)operateAxis] = value;
+
+            transform.localPosition = tempPos;
+
+            positionTarget = VRTK_SharedMethods.NormalizeValue(value, originalLocalPosition[(int)operateAxis], MaximumLength()[(int)operateAxis]);
+            SetPositionWithNormalizedValue(positionTarget);
         }
 
         /// <summary>
@@ -187,11 +198,13 @@ namespace VRTK.Controllables.PhysicsBased
             previousLocalPosition = Vector3.one * float.MaxValue;
             previousPositionTarget = float.MaxValue;
             stillResting = false;
-            SetPositionWithNormalizedValue(positionTarget);
+
+            SetValue(storedValue);
         }
 
         protected override void OnDisable()
         {
+            storedValue = GetValue();
             if (createControlInteractableObject)
             {
                 ManageInteractableObjectListeners(false);

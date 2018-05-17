@@ -98,7 +98,7 @@ namespace VRTK.Controllables.ArtificialBased
         /// <summary>
         /// The SetValue method sets the current position value of the slider
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The new position value</param>
         public override void SetValue(float value)
         {
             Vector3 tempPos = new Vector3();
