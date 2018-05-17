@@ -38,12 +38,14 @@ namespace VRTK
         protected List<string> validRightHands = new List<string>()
         {
             "OpenVR Controller - Right",
+            "OpenVR Controller(Vive. Controller MV) - Right",
             "Oculus Touch - Right",
             "Oculus Remote"
         };
         protected List<string> validLeftHands = new List<string>()
         {
             "OpenVR Controller - Left",
+            "OpenVR Controller(Vive. Controller MV) - Left",
             "Oculus Touch - Left"
         };
 
