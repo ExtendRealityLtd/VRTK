@@ -163,7 +163,7 @@ namespace VRTK.Highlighters
         {
             if (customOutlineModelPaths != null && customOutlineModelPaths.Length > 0)
             {
-                highlightModels = new Renderer[customOutlineModels.Length];
+                highlightModels = new Renderer[customOutlineModelPaths.Length];
                 for (int i = 0; i < customOutlineModelPaths.Length; i++)
                 {
                     highlightModels[i] = CreateHighlightModel(null, customOutlineModelPaths[i]);
@@ -231,7 +231,10 @@ namespace VRTK.Highlighters
             {
                 Renderer copyModelRenderer = objectToAffect.GetComponentInChildren<Renderer>();
                 copyModel = (copyModelRenderer != null ? copyModelRenderer.gameObject : null);
+            }
 
+            if (copyModel == null)
+            { 
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_OutlineObjectCopyHighlighter", "Renderer", "the same or child", " to add the highlighter to"));
                 return null;
             }
