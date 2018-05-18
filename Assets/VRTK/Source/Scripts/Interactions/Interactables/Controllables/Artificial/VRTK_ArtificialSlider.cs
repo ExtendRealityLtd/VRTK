@@ -96,6 +96,19 @@ namespace VRTK.Controllables.ArtificialBased
         }
 
         /// <summary>
+        /// The SetValue method sets the current position value of the slider
+        /// </summary>
+        /// <param name="value">The new position value</param>
+        public override void SetValue(float value)
+        {
+            Vector3 tempPos = new Vector3();
+            tempPos = transform.localPosition;
+            tempPos[(int)operateAxis] = value;
+
+            transform.localPosition = tempPos;
+        }
+
+        /// <summary>
         /// The GetStepValue method returns the current position of the slider based on the step value range.
         /// </summary>
         /// <param name="currentValue">The current position value of the slider to get the Step Value for.</param>
@@ -178,6 +191,9 @@ namespace VRTK.Controllables.ArtificialBased
         protected override void OnEnable()
         {
             base.OnEnable();
+
+            SetValue(storedValue);
+
             previousLocalPosition = Vector3.one * float.MaxValue;
             stillResting = false;
             SetupInteractableObject();

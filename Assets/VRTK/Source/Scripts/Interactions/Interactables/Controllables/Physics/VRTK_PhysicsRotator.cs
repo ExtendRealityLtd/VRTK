@@ -127,6 +127,15 @@ namespace VRTK.Controllables.PhysicsBased
         }
 
         /// <summary>
+        /// The SetValue method sets the current Angle of the rotator
+        /// </summary>
+        /// <param name="value">The new rotation value</param>
+        public override void SetValue(float value)
+        {
+            UpdateToAngle(value);
+        }
+
+        /// <summary>
         /// The GetStepValue method returns the current angle of the rotator based on the step value range.
         /// </summary>
         /// <param name="currentValue">The current angle value of the rotator to get the Step Value for.</param>
@@ -223,11 +232,14 @@ namespace VRTK.Controllables.PhysicsBased
             SetupJoint();
             SetFrictions(releasedFriction);
             CheckLock();
-            UpdateToAngle(angleTarget);
+
+            SetValue(storedValue);
         }
 
         protected override void OnDisable()
         {
+            storedValue = GetValue();
+
             if (createControlJoint)
             {
                 Destroy(controlJoint);
