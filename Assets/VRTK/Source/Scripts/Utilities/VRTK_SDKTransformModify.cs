@@ -112,7 +112,7 @@ namespace VRTK
             //If no sdk set up is found or it is null then try and find by the SDK controller
             if (selectedModifier == null)
             {
-                SDK_BaseController.ControllerType currentControllerType = (controllerReference.model != null && controllerReference.model.activeInHierarchy ? VRTK_DeviceFinder.GetCurrentControllerType(controllerReference) : SDK_BaseController.ControllerType.Custom);
+                SDK_BaseController.ControllerType currentControllerType = VRTK_DeviceFinder.GetCurrentControllerType(controllerReference);
                 selectedModifier = sdkOverrides.FirstOrDefault(item => item.controllerType == currentControllerType);
             }
             return selectedModifier;
