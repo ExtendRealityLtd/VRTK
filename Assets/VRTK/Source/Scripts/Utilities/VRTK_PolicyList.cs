@@ -5,10 +5,10 @@ namespace VRTK
     using System.Collections.Generic;
 
     /// <summary>
-    /// The Policy List allows to create a list of either tag names, script names or layer names that can be checked against to see if another operation is permitted.
+    /// The Policy List allows to create a list of either tag names, script names, layer names or string identifier that can be checked against to see if another operation is permitted.
     /// </summary>
     /// <remarks>
-    /// A number of other scripts can use a Policy List to determine if an operation is permitted based on whether a game object has a tag applied, a script component on it or whether it's on a given layer.
+    /// A number of other scripts can use a Policy List to determine if an operation is permitted based on whether a game object has a tag applied, a script component on it, whether it's on a given layer or whether a game object has the VRTK_PolicyListStringIdentifier component on which a given string is specified on it.
     ///
     /// For example, the Teleporter scripts can ignore game object targets as a teleport location if the game object contains a tag that is in the identifiers list and the policy is set to ignore.
     ///
@@ -52,14 +52,18 @@ namespace VRTK
             /// <summary>
             /// A layer applied to the game object.
             /// </summary>
-            Layer = 4
+            Layer = 4,
+            /// <summary>
+            /// A string is specified in the component VRTK_PolicyListStringIdentifier on the game object.
+            /// </summary>
+            StringIdentifier = 8
         }
 
         [Tooltip("The operation to apply on the list of identifiers.")]
         public OperationTypes operation = OperationTypes.Ignore;
         [Tooltip("The element type on the game object to check against.")]
         public CheckTypes checkType = CheckTypes.Tag;
-        [Tooltip("A list of identifiers to check for against the given check type (either tag or script).")]
+        [Tooltip("A list of identifiers to check for against the given check type (either tag, script or string on game object´s VRTK_PolicyListStringIdentifier component).")]
         public List<string> identifiers = new List<string>() { "" };
 
         /// <summary>
@@ -133,6 +137,20 @@ namespace VRTK
             }
         }
 
+        protected virtual bool StringIdentifierCheck(GameObject obj, bool returnState)
+        {
+            VRTK_PolicyListStringIdentifier stringIdentifier = obj.GetComponent<VRTK_PolicyListStringIdentifier>();
+            
+            if (stringIdentifier != null)
+            {
+                if(stringIdentifier.CheckString(this))
+                {
+                    return returnState;
+                }
+            }
+            return !returnState;
+        }
+
         protected virtual bool TypeCheck(GameObject obj, bool returnState)
         {
             int selection = 0;
@@ -148,6 +166,10 @@ namespace VRTK
             if (((int)checkType & (int)CheckTypes.Layer) != 0)
             {
                 selection += 4;
+            }
+            if (((int)checkType & (int)CheckTypes.StringIdentifier) != 0)
+            {
+                selection += 8;
             }
 
             switch (selection)
@@ -198,6 +220,98 @@ namespace VRTK
                         return returnState;
                     }
                     if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 8:
+                    return StringIdentifierCheck(obj, returnState);
+                case 9: 
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 10:
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 11:
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 12:
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 13:
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 14: 
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    break;
+                case 15: 
+                    if ((returnState && TagCheck(obj, returnState)) || (!returnState && !TagCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && ScriptCheck(obj, returnState)) || (!returnState && !ScriptCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && LayerCheck(obj, returnState)) || (!returnState && !LayerCheck(obj, returnState)))
+                    {
+                        return returnState;
+                    }
+                    if ((returnState && StringIdentifierCheck(obj, returnState)) || (!returnState && !StringIdentifierCheck(obj, returnState)))
                     {
                         return returnState;
                     }
