@@ -68,6 +68,11 @@ namespace VRTK.Controllables.PhysicsBased
             return VRTK_SharedMethods.NormalizeValue(GetValue(), originalLocalPosition[(int)operateAxis], PressedPosition()[(int)operateAxis]);
         }
 
+        //Has no implementation as pushers reset automatically anyway.
+        public override void SetValue(float value)
+        {
+        }
+
         /// <summary>
         /// The IsResting method returns whether the pusher is currently at it's resting position.
         /// </summary>
