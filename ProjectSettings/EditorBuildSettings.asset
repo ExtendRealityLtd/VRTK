@@ -26,6 +26,3 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VRTK/Examples/[007 - Interactions] InteractionHelpers.unity
     guid: ea2236e506afcac41a7b82e176d839d1
-  - enabled: 1
-    path: Assets/VRTK/Examples/VRTK_SDKManager_Constructor.unity
-    guid: 3fb19ae213a4a4d45bb9ecd245a8fadb
