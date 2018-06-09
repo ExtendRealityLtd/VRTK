@@ -125,8 +125,8 @@ namespace VRTK
         /// <returns>Returns `true` if the target is a valid location.</returns>
         public virtual bool ValidLocation(Transform target, Vector3 destinationPosition)
         {
-            //If the target is one of the player objects or a UI Canvas then it's never a valid location
-            if (VRTK_PlayerObject.IsPlayerObject(target.gameObject) || target.GetComponent<VRTK_UIGraphicRaycaster>())
+            //If the target is null, one of the player objects, or a UI Canvas then it's never a valid location
+            if (target == null || VRTK_PlayerObject.IsPlayerObject(target.gameObject) || target.GetComponent<VRTK_UIGraphicRaycaster>())
             {
                 return false;
             }
@@ -134,18 +134,15 @@ namespace VRTK
             bool validNavMeshLocation = false;
             if (navMeshData != null)
             {
-                if (target != null)
-                {
-                    NavMeshHit hit;
-                    validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshData.distanceLimit, navMeshData.validAreas);
-                }
+                NavMeshHit hit;
+                validNavMeshLocation = NavMesh.SamplePosition(destinationPosition, out hit, navMeshData.distanceLimit, navMeshData.validAreas);
             }
             else
             {
                 validNavMeshLocation = true;
             }
 
-            return (validNavMeshLocation && target != null && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
+            return (validNavMeshLocation && !(VRTK_PolicyList.Check(target.gameObject, targetListPolicy)));
         }
 
         /// <summary>
