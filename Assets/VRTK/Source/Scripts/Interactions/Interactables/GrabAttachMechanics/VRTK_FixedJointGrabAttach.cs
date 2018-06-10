@@ -25,7 +25,8 @@ namespace VRTK.GrabAttachMechanics
 
         protected override void CreateJoint(GameObject obj)
         {
-            givenJoint = obj.AddComponent<FixedJoint>();
+            var rb = obj.GetComponentInParent<Rigidbody>();
++           givenJoint = rb!=null ? rb.gameObject.AddComponent<FixedJoint>() : obj.AddComponent<FixedJoint>();
             givenJoint.breakForce = (grabbedObjectScript.IsDroppable() ? breakForce : Mathf.Infinity);
             base.CreateJoint(obj);
         }

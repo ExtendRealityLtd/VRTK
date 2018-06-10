@@ -530,7 +530,7 @@ namespace VRTK
 
         protected virtual void CreateTouchRigidBody()
         {
-            touchRigidBody = (GetComponent<Rigidbody>() != null ? GetComponent<Rigidbody>() : gameObject.AddComponent<Rigidbody>());
+            touchRigidBody = GetComponentInParent<Rigidbody>() != null ? GetComponentInParent<Rigidbody>() : gameObject.AddComponent<Rigidbody>();
             touchRigidBody.isKinematic = true;
             touchRigidBody.useGravity = false;
             touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;

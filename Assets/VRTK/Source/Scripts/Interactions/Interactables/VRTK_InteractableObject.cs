@@ -1022,7 +1022,7 @@ namespace VRTK
 
         protected virtual void Awake()
         {
-            interactableRigidbody = GetComponent<Rigidbody>();
+            interactableRigidbody = GetComponentInParent<Rigidbody>();
             if (interactableRigidbody != null)
             {
                 interactableRigidbody.maxAngularVelocity = float.MaxValue;
