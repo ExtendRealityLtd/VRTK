@@ -52,8 +52,7 @@
             { CommonMessageKeys.SDK_NOT_FOUND, "The SDK '{0}' doesn't exist anymore. The fallback SDK '{1}' will be used instead." },
             { CommonMessageKeys.SDK_MANAGER_ERRORS, "The current SDK Manager setup is causing the following errors:\n\n{0}" },
             { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_ADDED, "Scripting Define Symbols added to [Project Settings->Player] for {0}: {1}" },
-            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_REMOVED, "Scripting Define Symbols removed from [Project Settings->Player] for {0}: {1}" },
-            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_NOT_FOUND, "Before running any of the included example scenes, you must open `Assets/VRTK/Examples/VRTK_SDKManager_Constructor` scene when adding support for 3rd party SDKs (e.g. SteamVR, Oculus) so the SDK Manager in that scene can set up the required scripting defines." }
+            { CommonMessageKeys.SCRIPTING_DEFINE_SYMBOLS_REMOVED, "Scripting Define Symbols removed from [Project Settings->Player] for {0}: {1}" }
         };
 
         public static Dictionary<CommonMessageKeys, int> commonMessageParts = new Dictionary<CommonMessageKeys, int>();
