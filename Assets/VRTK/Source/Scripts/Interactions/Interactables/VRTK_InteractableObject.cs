@@ -716,6 +716,32 @@ namespace VRTK
         }
 
         /// <summary>
+        /// Returns the previous state of the Interactable Object
+        /// </summary>
+        /// <param name="previousParent">Out param for the previous parent</param>
+        /// <param name="previousKinematic">Out param for the previous Kinematic state</param>
+        /// <param name="previousGrabbable">Out param for the previous Grabbable State</param>
+        public virtual void GetPreviousState(out Transform previousParent, out bool previousKinematic, out bool previousGrabbable)
+        {
+            previousParent = this.previousParent;
+            previousKinematic = previousKinematicState;
+            previousGrabbable = previousIsGrabbable;
+        }
+
+        /// <summary>
+        /// Overrides the previous state of the Interactable Object
+        /// </summary>
+        /// <param name="previousParent">value of the previous parent</param>
+        /// <param name="previousKinematic">value of the previous Kinematic state</param>
+        /// <param name="previousGrabbable">value of the previous Grabbable State</param>
+        public virtual void OverridePreviousState(Transform previousParent, bool previousKinematic, bool previousGrabbable)
+        {
+            this.previousParent = previousParent;
+            previousKinematicState = previousKinematic;
+            previousIsGrabbable = previousGrabbable;
+        }
+
+        /// <summary>
         /// The GetNearTouchingObjects method is used to return the collecetion of valid GameObjects that are currently nearly touching this Interactable Object.
         /// </summary>
         /// <returns>A list of GameObject of that are currently nearly touching the current Interactable Object.</returns>
