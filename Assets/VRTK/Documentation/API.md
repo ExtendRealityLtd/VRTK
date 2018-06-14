@@ -515,6 +515,28 @@ The GetCurrentSnappedObejct method returns the GameObject that is currently snap
 
 The GetCurrentSnappedInteractableObject method returns the Interactable Object script that is currently snapped in the snap drop zone area.
 
+#### Clone/1
+
+  > `public virtual GameObject Clone(Vector3 position)`
+
+ * Parameters
+   * `Vector3 position` - Position of the cloned GameObject
+ * Returns
+   * `GameObject` - The GameObject of the clone
+
+The Clone method returns the GameObject of the cloned snap drop zone
+
+#### Clone/0
+
+  > `public virtual GameObject Clone()`
+
+ * Parameters
+   * _none_
+ * Returns
+   * `GameObject` - The GameObject of the clone
+
+The Clone method returns the GameObject of the cloned snap drop zone
+
 ### Example
 
 `VRTK/Examples/041_Controller_ObjectSnappingToDropZones` uses the `VRTK_SnapDropZone` prefab to set up pre-determined snap zones for a range of objects and demonstrates how only objects of certain types can be snapped into certain areas.
@@ -4539,6 +4561,32 @@ The ZeroVelocity method resets the velocity and angular velocity to zero on the 
 
 The SaveCurrentState method stores the existing Interactable Object parent and the Rigidbody kinematic setting.
 
+#### GetPreviousState/3
+
+  > `public virtual void GetPreviousState(out Transform previousParent, out bool previousKinematic, out bool previousGrabbable)`
+
+ * Parameters
+   * `out Transform previousParent` - Out param for the previous parent
+   * `out bool previousKinematic` - Out param for the previous Kinematic state
+   * `out bool previousGrabbable` - Out param for the previous Grabbable State
+ * Returns
+   * _none_
+
+Returns the previous state of the Interactable Object
+
+#### OverridePreviousState/3
+
+  > `public virtual void OverridePreviousState(Transform previousParent, bool previousKinematic, bool previousGrabbable)`
+
+ * Parameters
+   * `Transform previousParent` - value of the previous parent
+   * `bool previousKinematic` - value of the previous Kinematic state
+   * `bool previousGrabbable` - value of the previous Grabbable State
+ * Returns
+   * _none_
+
+Overrides the previous state of the Interactable Object
+
 #### GetNearTouchingObjects/0
 
   > `public virtual List<GameObject> GetNearTouchingObjects()`
@@ -6652,6 +6700,17 @@ The GetValue method returns the current position value of the pusher.
 
 The GetNormalizedValue method returns the current position value of the pusher normalized between `0f` and `1f`.
 
+#### SetValue/1
+
+  > `public override void SetValue(float value)`
+
+ * Parameters
+   * `float value` - Not used.
+ * Returns
+   * _none_
+
+The SetValue method is not implemented as the pusher resets automatically.
+
 #### IsResting/0
 
   > `public override bool IsResting()`
@@ -6749,6 +6808,17 @@ The GetValue method returns the current rotation value of the rotator.
    * `float` - The normalized rotation of the rotator.
 
 The GetNormalizedValue method returns the current rotation value of the rotator normalized between `0f` and `1f`.
+
+#### SetValue/1
+
+  > `public override void SetValue(float value)`
+
+ * Parameters
+   * `float value` - The new rotation value
+ * Returns
+   * _none_
+
+The SetValue method sets the current Angle of the rotator
 
 #### GetStepValue/1
 
@@ -6890,6 +6960,17 @@ The GetValue method returns the current position value of the slider.
 
 The GetNormalizedValue method returns the current position value of the slider normalized between `0f` and `1f`.
 
+#### SetValue/1
+
+  > `public override void SetValue(float value)`
+
+ * Parameters
+   * `float value` - The new position value
+ * Returns
+   * _none_
+
+The SetValue method sets the current position value of the slider
+
 #### GetStepValue/1
 
   > `public virtual float GetStepValue(float currentValue)`
@@ -7025,6 +7106,17 @@ The GetValue method returns the current position value of the pusher.
 
 The GetNormalizedValue method returns the current position value of the pusher normalized between `0f` and `1f`.
 
+#### SetValue/1
+
+  > `public override void SetValue(float value)`
+
+ * Parameters
+   * `float value` - Not used.
+ * Returns
+   * _none_
+
+The SetValue method is not implemented as the pusher resets automatically.
+
 #### IsResting/0
 
   > `public override bool IsResting()`
@@ -7122,6 +7214,17 @@ The GetValue method returns the current rotation value of the rotator.
    * `float` - The normalized rotation of the rotator.
 
 The GetNormalizedValue method returns the current rotation value of the rotator normalized between `0f` and `1f`.
+
+#### SetValue/1
+
+  > `public override void SetValue(float value)`
+
+ * Parameters
+   * `float value` - The new rotation value
+ * Returns
+   * _none_
+
+The SetValue method sets the current Angle of the rotator
 
 #### GetContainer/0
 
@@ -7269,6 +7372,17 @@ The GetValue method returns the current position value of the slider.
    * `float` - The normalized position of the button.
 
 The GetNormalizedValue method returns the current position value of the slider normalized between `0f` and `1f`.
+
+#### SetValue/1
+
+  > `public override void SetValue(float value)`
+
+ * Parameters
+   * `float value` - The new position value
+ * Returns
+   * _none_
+
+The SetValue method sets the current position value of the slider
 
 #### GetStepValue/1
 
