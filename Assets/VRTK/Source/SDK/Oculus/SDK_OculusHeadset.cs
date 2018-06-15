@@ -79,6 +79,9 @@ namespace VRTK
                 case OVRPlugin.SystemHeadset.GearVR_R321:
                 case OVRPlugin.SystemHeadset.GearVR_R322:
                 case OVRPlugin.SystemHeadset.GearVR_R323:
+                case OVRPlugin.SystemHeadset.GearVR_R324:
+                case OVRPlugin.SystemHeadset.GearVR_R325:
+                case OVRPlugin.SystemHeadset.Oculus_Go:
                     return CleanPropertyString("oculusgearvr");
                 case OVRPlugin.SystemHeadset.Rift_DK1:
                     return CleanPropertyString("oculusriftdk1");
