@@ -56,7 +56,7 @@ namespace VRTK
                 SetListeners(true);
             }
         }
-        protected override void ControlFixedUpdate()
+        protected override void ControlUpdate()
         {
             float xAxis = (leftPressed ? -1f : (rightPressed ? 1f : 0f));
             float yAxis = (forwardPressed ? 1f : (backwardPressed ? -1f : 0f));

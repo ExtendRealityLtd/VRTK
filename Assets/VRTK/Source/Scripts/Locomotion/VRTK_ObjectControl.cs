@@ -120,7 +120,7 @@ namespace VRTK
             }
         }
 
-        protected abstract void ControlFixedUpdate();
+        protected abstract void ControlUpdate();
         protected abstract VRTK_ObjectControl GetOtherControl();
         protected abstract bool IsInAction();
         protected abstract void SetListeners(bool state);
@@ -164,13 +164,10 @@ namespace VRTK
             {
                 SetControlledObject();
             }
-        }
 
-        protected virtual void FixedUpdate()
-        {
             CheckDirectionDevice();
             CheckFalling();
-            ControlFixedUpdate();
+            ControlUpdate();
         }
 
         protected virtual ObjectControlEventArgs SetEventArguements(Vector3 axisDirection, float axis, float axisDeadzone)

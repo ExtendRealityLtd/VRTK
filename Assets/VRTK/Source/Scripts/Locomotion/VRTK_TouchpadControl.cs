@@ -50,7 +50,7 @@ namespace VRTK
             coordniateButtonAlias = (coordinateAxis == VRTK_ControllerEvents.Vector2AxisAlias.Touchpad ? VRTK_ControllerEvents.ButtonAlias.TouchpadTouch : VRTK_ControllerEvents.ButtonAlias.TouchpadTwoTouch);
         }
 
-        protected override void ControlFixedUpdate()
+        protected override void ControlUpdate()
         {
             ModifierButtonActive();
             if (OutsideDeadzone(currentAxis.x, axisDeadzone.x) || currentAxis.x == 0f)
