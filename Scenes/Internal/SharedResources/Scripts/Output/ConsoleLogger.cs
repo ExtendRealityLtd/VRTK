@@ -10,7 +10,7 @@
             Debug.Log(value);
         }
 
-        public virtual void Log(PointerData data, object initiatior = null)
+        public virtual void Log(ObjectPointer.EventData data)
         {
             if (data != null && data.CollisionData.transform != null)
             {
