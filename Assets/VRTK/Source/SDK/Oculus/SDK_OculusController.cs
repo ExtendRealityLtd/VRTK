@@ -729,7 +729,7 @@ namespace VRTK
             VRTK_SDKManager sdkManager = VRTK_SDKManager.instance;
             if (sdkManager != null)
             {
-                if (cachedLeftController == null && sdkManager.loadedSetup.actualLeftController)
+                if ((cachedLeftController == null || cachedLeftController.index == uint.MaxValue) && sdkManager.loadedSetup.actualLeftController)
                 {
                     cachedLeftController = sdkManager.loadedSetup.actualLeftController.GetComponent<VRTK_TrackedController>();
                     if (cachedLeftController != null)
@@ -738,7 +738,7 @@ namespace VRTK
                         cachedLeftVelocityEstimator = (cachedLeftController.GetComponent<VRTK_VelocityEstimator>() != null ? cachedLeftController.GetComponent<VRTK_VelocityEstimator>() : cachedLeftController.gameObject.AddComponent<VRTK_VelocityEstimator>());
                     }
                 }
-                if (cachedRightController == null && sdkManager.loadedSetup.actualRightController)
+                if ((cachedRightController == null || cachedRightController.index == uint.MaxValue) && sdkManager.loadedSetup.actualRightController)
                 {
                     cachedRightController = sdkManager.loadedSetup.actualRightController.GetComponent<VRTK_TrackedController>();
                     if (cachedRightController != null)
