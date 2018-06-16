@@ -19,29 +19,29 @@ beginners and seasoned developers alike.
 ### Setting up the project
 
   * Create a new project in Unity3d 2018.1 or above using 3D Template
+  * Ensure `Virtual Reality Supported` is checked
+    * Click in Unity3d main menu `Edit -> Project Settings -> Player`
+    * In the `PlayerSettings` inspector panel, expand `XR Settings`
+    * Check the `Virtual Reality Supported` option
   * Update the project to the supported `Scripting Runtime Version`
     * Click in Unity3d main menu `Edit -> Project Settings -> Player`
-	* In the `PlayerSettings` inspector panel, expand `Other Settings`
-	* Change `Scripting Runtime Version` to `.NET 4.x Equivalent`
-	* Unity will now restart in the supported scripting runtime
-  * Ensure `Virtual Reality Supported` is checked
-   * In the `PlayerSettings` inspector panel, expand `XR Settings`
-   * Ensure `Virtual Reality Supported` option is checked
-	
+    * In the `PlayerSettings` inspector panel, expand `Other Settings`
+    * Change `Scripting Runtime Version` to `.NET 4.x Equivalent`
+    * Unity will now restart in the supported scripting runtime
+
 ### Cloning the repo
-	
+
   * Navigate to the project `Assets/` directory
   * Git clone with required submodules into the `Assets/` directory:
     * `git clone --recurse-submodules https://github.com/thestonefox/VRTK.git`
-	* `git submodule init && git submodule update`
+    * `git submodule init && git submodule update`
 
 ### Running the tests
-	
-  * To test installation has worked:
-    * Open the `VRTK/Scenes/Internal/TestRunner` scene
-	* Click in the Unity3d main menu `Window -> Test Runner`
-	* On the `EditMode` tab click `Run All`
-	* If all the tests pass then installation was successful.
+
+  * Open the `VRTK/Scenes/Internal/TestRunner` scene
+  * Click in the Unity3d main menu `Window -> Test Runner`
+  * On the `EditMode` tab click `Run All`
+  * If all the tests pass then installation was successful.
 
 ## Made With VRTK
 
