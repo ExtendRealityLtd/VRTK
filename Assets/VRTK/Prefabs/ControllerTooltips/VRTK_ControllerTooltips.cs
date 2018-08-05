@@ -400,7 +400,7 @@ namespace VRTK
                         tipText = touchpadText;
                         tipTransform = GetTransform(touchpad, SDK_BaseController.ControllerElements.Touchpad);
                         break;
-                    case "touchpadTwo":
+                    case "touchpadtwo":
                         tipText = touchpadTwoText;
                         tipTransform = GetTransform(touchpadTwo, SDK_BaseController.ControllerElements.TouchpadTwo);
                         break;
