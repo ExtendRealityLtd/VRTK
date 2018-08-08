@@ -79,7 +79,7 @@ namespace VRTK
                 case ControllerElements.Body:
                     return "Base/SM_Prop_HyFeel" + (hand == ControllerHand.Left ? "L" : "R") + "_02";
             }
-            return null;
+            return "";
         }
 
         /// <summary>
