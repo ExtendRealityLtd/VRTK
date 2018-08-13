@@ -164,7 +164,7 @@ namespace VRTK
                 case ControllerElements.Body:
                     return "body";
             }
-            return null;
+            return "";
         }
 
         /// <summary>
