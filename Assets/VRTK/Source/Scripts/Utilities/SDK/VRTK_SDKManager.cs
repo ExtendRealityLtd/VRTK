@@ -645,7 +645,9 @@ namespace VRTK
             {
                 // If '-vrmode none' was used try to load the respective SDK Setup
                 string[] commandLineArgs = VRTK_SharedMethods.GetCommandLineArguements();
-                int commandLineArgIndex = Array.IndexOf(commandLineArgs, "-vrmode", 1);
+				//error cases handling
+				if(commandLineArgs == null) { commandLineArgs = new string[0]; }
+                int commandLineArgIndex = commandLineArgs.Length > 0 ? Array.IndexOf(commandLineArgs, "-vrmode", 1) : -1;
                 if (XRSettings.loadedDeviceName == "None"
                     || (commandLineArgIndex != -1
                         && commandLineArgIndex + 1 < commandLineArgs.Length
