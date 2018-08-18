@@ -43,6 +43,8 @@ namespace VRTK
         public Transform drawLineFrom;
         [Tooltip("A transform of another object in the scene that a line will be drawn from the tooltip to, this helps denote what the tooltip is in relation to. If no transform is provided and the tooltip is a child of another object, then the parent object's transform will be used as this destination position.")]
         public Transform drawLineTo;
+        [Tooltip("This is the Vector 3 local offset from the drawLineTo. For example, it allows you to place the marker a little above the touch pad.")]
+        public Vector3 drawLineOffset;
         [Tooltip("The width of the line drawn between the tooltip and the destination transform.")]
         public float lineWidth = 0.001f;
         [Tooltip("The colour to use for the text on the tooltip.")]
@@ -182,8 +184,11 @@ namespace VRTK
         {
             if (drawLineTo != null)
             {
-                line.SetPosition(0, drawLineFrom.position);
-                line.SetPosition(1, drawLineTo.position);
+                Transform lineTransform = line.transform;
+                line.useWorldSpace = false;
+                line.SetPosition(0, lineTransform.InverseTransformPoint(drawLineFrom.position));
+                drawLineTo.localPosition += drawLineOffset;
+                line.SetPosition(1, lineTransform.InverseTransformPoint(drawLineTo.position));
             }
         }
     }
