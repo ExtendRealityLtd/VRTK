@@ -153,7 +153,7 @@ namespace VRTK
                 switch (element)
                 {
                     case ControllerElements.AttachPoint:
-                        return null;
+                        return "";
                     case ControllerElements.Trigger:
                         return path + "trigger" + suffix;
                     case ControllerElements.GripLeft:
@@ -174,7 +174,7 @@ namespace VRTK
                         return parent;
                 }
             }
-            return null;
+            return "";
         }
 
         /// <summary>

@@ -234,7 +234,7 @@ namespace VRTK
 
             return MotionControllerVisualizer.Instance.GetPathToButton(element, handedness);
 #else
-            return null;
+            return "";
 #endif
         }
 

@@ -125,7 +125,7 @@ namespace VRTK
                 case ControllerElements.Body:
                     return path + "/object_1";
             }
-            return null;
+            return "";
         }
 
         /// <summary>
