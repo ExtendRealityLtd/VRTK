@@ -472,7 +472,7 @@ namespace VRTK
         /// <returns>Returns true if the touchpad is not currently being touched or moved.</returns>
         public override bool IsTouchpadStatic(bool isTouched, Vector2 currentAxisValues, Vector2 previousAxisValues, int compareFidelity)
         {
-            return (!isTouched || VRTK_SharedMethods.Vector2ShallowCompare(currentAxisValues, previousAxisValues, compareFidelity));
+            return ((!isTouched && GetCurrentControllerType() != ControllerType.SteamVR_OculusTouch) || VRTK_SharedMethods.Vector2ShallowCompare(currentAxisValues, previousAxisValues, compareFidelity));
         }
 
         /// <summary>
