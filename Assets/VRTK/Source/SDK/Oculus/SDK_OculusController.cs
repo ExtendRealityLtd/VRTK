@@ -822,6 +822,7 @@ namespace VRTK
 
             switch (activeControllerType)
             {
+                case OVRInput.Controller.Gamepad | OVRInput.Controller.RTouch | OVRInput.Controller.LTouch:
                 case OVRInput.Controller.Touch:
                     return (index == 0 ? OVRInput.Controller.LTouch : (index == 1 ? OVRInput.Controller.RTouch : OVRInput.Controller.None));
                 case OVRInput.Controller.LTouch:
