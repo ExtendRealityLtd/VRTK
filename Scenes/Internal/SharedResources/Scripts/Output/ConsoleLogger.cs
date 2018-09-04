@@ -10,6 +10,16 @@
             Debug.Log(value);
         }
 
+        public virtual void Log(float value)
+        {
+            Log("Float Value: " + value);
+        }
+
+        public virtual void Log(Vector2 value)
+        {
+            Log("Vector2 Value: " + value);
+        }
+
         public virtual void Log(ObjectPointer.EventData data)
         {
             if (data != null && data.CollisionData.transform != null)
