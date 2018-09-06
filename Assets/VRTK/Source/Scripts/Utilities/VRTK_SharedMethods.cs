@@ -789,13 +789,13 @@ namespace VRTK
                 List<T> allSceneResults = new List<T>();
                 for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; sceneIndex++)
                 {
-                    allSceneResults.AddRange(FindEventInactiveComponentsInScene<T>(SceneManager.GetSceneAt(sceneIndex), stopOnMatch));
+                    allSceneResults.AddRange(FindEvenInactiveComponentsInScene<T>(SceneManager.GetSceneAt(sceneIndex), stopOnMatch));
                 }
                 results = allSceneResults;
             }
             else
             {
-                results = FindEventInactiveComponentsInScene<T>(SceneManager.GetActiveScene(), stopOnMatch);
+                results = FindEvenInactiveComponentsInScene<T>(SceneManager.GetActiveScene(), stopOnMatch);
             }
 
             return results;
@@ -807,9 +807,14 @@ namespace VRTK
         /// <param name="scene">The scene to search. This scene must be valid, either loaded or loading.</param>
         /// <param name="stopOnMatch">If true, will stop searching objects as soon as a match is found.</param>
         /// <returns></returns>
-        private static IEnumerable<T> FindEventInactiveComponentsInScene<T>(Scene scene, bool stopOnMatch = false)
+        private static IEnumerable<T> FindEvenInactiveComponentsInScene<T>(Scene scene, bool stopOnMatch = false)
         {
             List<T> results = new List<T>();
+            if(!scene.isLoaded)
+            {
+                return results;
+            }
+
             foreach (GameObject rootObject in scene.GetRootGameObjects())
             {
                 if (stopOnMatch)
