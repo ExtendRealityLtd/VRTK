@@ -64,6 +64,7 @@ A collection of titles that have been made with VRTK.
 | OfficeBots: Reality Bytes | [Steam Store Page](http://store.steampowered.com/app/649730) |
 | Comets Wake | [Steam Store Page](http://store.steampowered.com/app/763650) |
 | Universe Sandbox ² | [Steam Store Page](https://store.steampowered.com/app/230290/) |
+| Puppy Chef Academy | [Steam Store Page](https://store.steampowered.com/app/921520/)|
 
 ## Oculus Home
 
@@ -89,9 +90,10 @@ A collection of titles that have been made with VRTK.
 | Coinvault | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-coinvault-for-the-vive) |
 | VR Explosive Kitten Toss | [Itch.io Store Page](https://ldvr.itch.io/ldvrs-kitten-toss) |
 | Zika VR | [Itch.io Store Page](https://ldvr.itch.io/ldvr-presents-zika-vr) |
-| Ocarina of Vive | [Itch.io Store Page](https://tomcat94.itch.io/ocarina-of-vive-shooting-gallery) |
-| Danc<R | [Itch.io Store Page](https://tomcat94.itch.io/dancr-alpha) |
+| Ocarina of Vive | [Itch.io Store Page](https://ctneptune.itch.io/ocarina-of-vive-shooting-gallery) |
+| Danc<R | [Itch.io Store Page](https://ctneptune.itch.io/dancr-alpha) |
 | Plutonic Penguins | [Itch.io Store Page](https://plutonicpenguins.itch.io/plutonic-penguins) |
+| Puppy Chef Academy | [Itch.io Store Page](https://ctneptune.itch.io/puppy-chef-academy) |
 
 ## Steam Greenlight
 
