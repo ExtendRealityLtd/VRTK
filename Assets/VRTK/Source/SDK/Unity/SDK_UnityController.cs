@@ -39,6 +39,7 @@ namespace VRTK
         {
             "OpenVR Controller - Right",
             "OpenVR Controller(Vive. Controller MV) - Right",
+            "OpenVR Controller(VIVE Controller Pro MV) - Right",
             "Oculus Touch - Right",
             "Oculus Remote"
         };
@@ -46,6 +47,7 @@ namespace VRTK
         {
             "OpenVR Controller - Left",
             "OpenVR Controller(Vive. Controller MV) - Left",
+            "OpenVR Controller(VIVE Controller Pro MV) - Left",
             "Oculus Touch - Left"
         };
 
