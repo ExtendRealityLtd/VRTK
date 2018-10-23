@@ -74,6 +74,12 @@ namespace VRTK
         /// </summary>
         public event ObjectInteractEventHandler ControllerUngrabInteractableObject;
 
+        /// <summary>
+        /// Whether the attach point has been set externally, e.g. by the pointer renderer when the pointer grabs to its tip.
+        /// </summary>
+        [HideInInspector]
+        public bool controllerAttachPointExternallySet = false;
+
         protected VRTK_ControllerEvents.ButtonAlias subscribedGrabButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected VRTK_ControllerEvents.ButtonAlias savedGrabButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
         protected bool grabPressed;
@@ -184,6 +190,7 @@ namespace VRTK
         {
             originalControllerAttachPoint = forcedAttachPoint;
             controllerAttachPoint = forcedAttachPoint;
+            controllerAttachPointExternallySet = true;
         }
 
         protected virtual void Awake()
@@ -340,7 +347,7 @@ namespace VRTK
         protected virtual void SetControllerAttachPoint()
         {
             //If no attach point has been specified then just use the tip of the controller
-            if (controllerReference.model != null && originalControllerAttachPoint == null)
+            if (controllerReference.model != null && originalControllerAttachPoint == null && !controllerAttachPointExternallySet)
             {
                 //attempt to find the attach point on the controller
                 SDK_BaseController.ControllerHand handType = VRTK_DeviceFinder.GetControllerHand(interactTouch.gameObject);

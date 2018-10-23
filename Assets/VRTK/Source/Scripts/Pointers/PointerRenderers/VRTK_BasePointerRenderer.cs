@@ -332,6 +332,7 @@ namespace VRTK
                 {
                     savedAttachPoint = controllerGrabScript.controllerAttachPoint;
                     controllerGrabScript.controllerAttachPoint = objectInteractorAttachPoint.GetComponent<Rigidbody>();
+                    controllerGrabScript.controllerAttachPointExternallySet = true;
                     attachedToInteractorAttachPoint = true;
                 }
 
@@ -345,6 +346,7 @@ namespace VRTK
                     if (savedAttachPoint != null)
                     {
                         controllerGrabScript.controllerAttachPoint = savedAttachPoint;
+                        controllerGrabScript.controllerAttachPointExternallySet = true;
                         savedAttachPoint = null;
                     }
                     attachedToInteractorAttachPoint = false;
