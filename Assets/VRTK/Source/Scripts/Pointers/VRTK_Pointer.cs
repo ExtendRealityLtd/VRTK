@@ -376,7 +376,7 @@ namespace VRTK
                 if (!IsPointerActive())
                 {
                     bool currentPointerVisibility = pointerRenderer.IsVisible();
-                    pointerRenderer.ToggleInteraction(currentPointerVisibility);
+                    pointerRenderer.ToggleInteraction(currentPointerVisibility, currentPointerVisibility);
                 }
                 CheckHoverSelect();
             }

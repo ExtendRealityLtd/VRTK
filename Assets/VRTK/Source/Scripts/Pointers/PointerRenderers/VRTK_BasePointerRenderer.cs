@@ -176,7 +176,7 @@ namespace VRTK
                 PointerExit(destinationHit);
             }
 
-            ToggleInteraction(pointerState);
+            ToggleInteraction(pointerState, actualState);
             ToggleRenderer(pointerState, actualState);
         }
 
@@ -184,9 +184,10 @@ namespace VRTK
         /// The ToggleInteraction method is used to enable or disable the controller extension interactions.
         /// </summary>
         /// <param name="state">If true then the object interactor will be enabled.</param>
-        public virtual void ToggleInteraction(bool state)
+        /// <param name="actualState">The actual state of the activation button press.</param>
+        public virtual void ToggleInteraction(bool state, bool actualState)
         {
-            ToggleObjectInteraction(state);
+            ToggleObjectInteraction(state, actualState);
         }
 
         /// <summary>
@@ -324,11 +325,12 @@ namespace VRTK
             }
         }
 
-        protected virtual void ToggleObjectInteraction(bool state)
+        protected virtual void ToggleObjectInteraction(bool state, bool actualState)
         {
             if (controllingPointer != null && controllingPointer.interactWithObjects)
             {
-                if (state && controllingPointer.grabToPointerTip && controllerGrabScript != null && objectInteractorAttachPoint != null)
+                // only activate if the button is actually pressed to avoid setting the savedAttachPoint twice
+                if (actualState && state && controllingPointer.grabToPointerTip && controllerGrabScript != null && objectInteractorAttachPoint != null)
                 {
                     savedAttachPoint = controllerGrabScript.controllerAttachPoint;
                     controllerGrabScript.controllerAttachPoint = objectInteractorAttachPoint.GetComponent<Rigidbody>();
