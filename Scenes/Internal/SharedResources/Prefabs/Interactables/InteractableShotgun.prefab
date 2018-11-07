@@ -181,22 +181,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1145681009976912
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4895565627996538}
-  - component: {fileID: 114643198249551040}
-  m_Layer: 0
-  m_Name: NotifyFirstTouch
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1148247333501128
 GameObject:
   m_ObjectHideFlags: 1
@@ -387,22 +371,6 @@ GameObject:
   - component: {fileID: 114345332967368424}
   m_Layer: 0
   m_Name: StartGrabbing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1243836500748138
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4731114679664868}
-  - component: {fileID: 114823312659269338}
-  m_Layer: 0
-  m_Name: NotifyLastUntouch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2037,10 +2005,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4895565627996538}
   - {fileID: 4563194396940912}
   - {fileID: 4639517847495874}
-  - {fileID: 4731114679664868}
   m_Father: {fileID: 4883698872361234}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2441,7 +2407,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4305472983435906}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4576952288494154
 Transform:
@@ -2507,7 +2473,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4305472983435906}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4641121275689582
 Transform:
@@ -2605,19 +2571,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4269442121249632}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4731114679664868
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1243836500748138}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4305472983435906}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4735707469010938
 Transform:
@@ -2885,19 +2838,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4827622110975784}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4895565627996538
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1145681009976912}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4305472983435906}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4895976102222422
 Transform:
@@ -3376,7 +3316,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114085205329687102
 MonoBehaviour:
@@ -3407,6 +3347,7 @@ MonoBehaviour:
   lookAt: {fileID: 0}
   pivot: {fileID: 0}
   resetOrientationSpeed: 0.1
+  preventLookAtZRotation: 1
   OrientationReset:
     m_PersistentCalls:
       m_Calls:
@@ -3466,7 +3407,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114101978874954214
 MonoBehaviour:
@@ -3493,8 +3434,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114107703045760882
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3681,17 +3622,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114555856920690830}
-        m_MethodName: NotifyLastUngrab
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_TypeName: VRTK.Core.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
@@ -3736,17 +3666,6 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114555856920690830}
-        m_MethodName: NotifyFirstGrab
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 114555856920690830}
         m_MethodName: NotifyGrab
         m_Mode: 0
@@ -4188,7 +4107,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114288682709067812
 MonoBehaviour:
@@ -4246,7 +4165,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114304844180762082
 MonoBehaviour:
@@ -4373,8 +4292,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114326508003981150
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5302,6 +5221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facade: {fileID: 114473774954704310}
   gameObjectEventStack: {fileID: 114353001030993634}
+  gameObjectSet: {fileID: 0}
   precisionGrabLogic: {fileID: 1293721627275382}
   snapHandleLogic: {fileID: 1920440228193960}
   attachmentLogic: {fileID: 114271245105884010}
@@ -5383,35 +5303,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trigger: {fileID: 1289618881223982}
   multiplier: 15
---- !u!114 &114643198249551040
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1145681009976912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83b0262053634c7419fe6bb7a304c7b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114592186329603626}
-        m_MethodName: NotifyFirstTouch
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: VRTK.Core.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  receiveValidity:
-    field: {fileID: 0}
 --- !u!114 &114646319228483754
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5474,7 +5365,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114654257741768596
 MonoBehaviour:
@@ -5540,8 +5431,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114671274732565594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5594,8 +5485,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114742706676560818
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5784,8 +5675,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114799231282679500
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5813,7 +5704,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114804713865309808
 MonoBehaviour:
@@ -5870,35 +5761,6 @@ MonoBehaviour:
   processes:
   - {fileID: 114339328008041204}
   - {fileID: 114786967377056142}
---- !u!114 &114823312659269338
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1243836500748138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83b0262053634c7419fe6bb7a304c7b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Emitted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114592186329603626}
-        m_MethodName: NotifyLastUntouch
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: VRTK.Core.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  receiveValidity:
-    field: {fileID: 0}
 --- !u!114 &114833105518284120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5948,7 +5810,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114843471560310066
 MonoBehaviour:
@@ -6064,8 +5926,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114863770168562384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6188,7 +6050,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: VRTK.Core.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  publisherValidity:
+  receiveValidity:
     field: {fileID: 0}
 --- !u!114 &114884164510393702
 MonoBehaviour:
@@ -6275,17 +6137,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114587771790018448}
-        m_MethodName: Receive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 114643198249551040}
         m_MethodName: Receive
         m_Mode: 0
         m_Arguments:
@@ -6388,17 +6239,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114823312659269338}
-        m_MethodName: Receive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1843353836969196}
         m_MethodName: SetActive
         m_Mode: 6
@@ -6442,8 +6282,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114912255127883356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6469,8 +6309,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.PublisherContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114967921113669794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6496,8 +6336,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Collision.Active.Operation.NotifierContainerExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114968265866838466
 MonoBehaviour:
   m_ObjectHideFlags: 1
