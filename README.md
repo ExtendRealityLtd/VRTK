@@ -12,7 +12,7 @@
 |---------------|---------------|
 | UnityEngine.VR | _Core Unity3d library_ |
 | VR Simulator | _Included_ |
-| SteamVR | [SteamVR Plugin] |
+| SteamVR 1.2.3 | [SteamVR Plugin] |
 | Oculus | [Oculus Integration] |
 | Windows Mixed Reality | [Windows Mixed Reality For Unity] |
 | * Ximmerse | [Ximmerse Unity SDK] |
@@ -20,6 +20,8 @@
 | * HyperealVR | [Hypereal VR Unity Plugin]
 
 _* unsupported/experimental_
+
+> *NOTE:* SteamVR 2 is not supported.
 
 ## Documentation
 
@@ -112,7 +114,7 @@ Code released under the [MIT License].
 
 Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
 
-[SteamVR Plugin]: https://assetstore.unity.com/packages/templates/systems/steamvr-plugin-32647
+[SteamVR Plugin]: https://github.com/ValveSoftware/steamvr_unity_plugin/releases/download/1.2.3/SteamVR.Plugin.unitypackage
 [SteamVR Plugin for Unity3d Github Repo]: https://github.com/ValveSoftware/openvr/tree/master/unity_package/Assets/SteamVR
 [Oculus Integration]: https://assetstore.unity.com/packages/tools/integration/oculus-integration-82022
 [Ximmerse Unity SDK]: https://github.com/Ximmerse/SDK/tree/master/Unity
