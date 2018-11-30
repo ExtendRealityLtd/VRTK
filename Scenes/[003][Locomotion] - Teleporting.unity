@@ -2103,6 +2103,16 @@ Prefab:
       propertyPath: sceneCameras
       value: 
       objectReference: {fileID: 1602573535}
+    - target: {fileID: 114698125830759554, guid: b22c6258b71d44d48b18a4da1ec78e74,
+        type: 2}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1252004997}
+    - target: {fileID: 114698125830759554, guid: b22c6258b71d44d48b18a4da1ec78e74,
+        type: 2}
+      propertyPath: offset
+      value: 
+      objectReference: {fileID: 719187142}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b22c6258b71d44d48b18a4da1ec78e74, type: 2}
   m_IsPrefabParent: 0
@@ -5729,6 +5739,16 @@ Prefab:
       propertyPath: sceneCameras
       value: 
       objectReference: {fileID: 1602573535}
+    - target: {fileID: 114979836843907558, guid: b13d6ce26de66294287b25d6ce9721d5,
+        type: 2}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1252004997}
+    - target: {fileID: 114979836843907558, guid: b13d6ce26de66294287b25d6ce9721d5,
+        type: 2}
+      propertyPath: offset
+      value: 
+      objectReference: {fileID: 719187142}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b13d6ce26de66294287b25d6ce9721d5, type: 2}
   m_IsPrefabParent: 0
