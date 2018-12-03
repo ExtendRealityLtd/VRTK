@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1961731611356302}
   m_IsPrefabParent: 1
+--- !u!1 &1030841481028638
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4879972256973906}
+  - component: {fileID: 114172169547309656}
+  m_Layer: 0
+  m_Name: AddActiveInteractor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1054741636678088
 GameObject:
   m_ObjectHideFlags: 1
@@ -37,6 +53,22 @@ GameObject:
   - component: {fileID: 4051191917447742}
   m_Layer: 0
   m_Name: StateGrab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1072529205791432
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4444848406753448}
+  - component: {fileID: 114165436779890586}
+  m_Layer: 0
+  m_Name: RemoveActiveInteractor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,7 +503,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4886064374374778}
-  - component: {fileID: 114392653040368292}
   - component: {fileID: 114387997898586588}
   - component: {fileID: 114610620814817760}
   - component: {fileID: 114846776238262260}
@@ -541,6 +572,22 @@ GameObject:
   - component: {fileID: 114861323320332334}
   m_Layer: 0
   m_Name: DeactivateReceived
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1652562729370646
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4070270269317476}
+  - component: {fileID: 114740868600810038}
+  m_Layer: 0
+  m_Name: ActiveInteractors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -671,6 +718,21 @@ GameObject:
   - component: {fileID: 114438496205194698}
   m_Layer: 0
   m_Name: StopClimbing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1852790341712356
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4790485440536184}
+  m_Layer: 0
+  m_Name: InteractorStates
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -829,6 +891,21 @@ Transform:
   - {fileID: 4747107345158398}
   m_Father: {fileID: 4574878747351070}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4070270269317476
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1652562729370646}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4879972256973906}
+  - {fileID: 4444848406753448}
+  m_Father: {fileID: 4790485440536184}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4074030117539520
 Transform:
@@ -1043,18 +1120,31 @@ Transform:
   m_Father: {fileID: 4083073180163950}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4444848406753448
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1072529205791432}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4070270269317476}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4457940945680488
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902541407004002}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4586217510120086}
-  m_RootOrder: 1
+  m_Father: {fileID: 4790485440536184}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4458991469805882
 Transform:
@@ -1113,7 +1203,7 @@ Transform:
   - {fileID: 4765165066680870}
   - {fileID: 4074030117539520}
   m_Father: {fileID: 4586217510120086}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4523714127050580
 Transform:
@@ -1167,8 +1257,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4200374256987966}
-  - {fileID: 4457940945680488}
   - {fileID: 4502159397850356}
+  - {fileID: 4790485440536184}
   m_Father: {fileID: 4294513274061274}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1298,6 +1388,21 @@ Transform:
   m_Father: {fileID: 4675197203710588}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4790485440536184
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1852790341712356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4457940945680488}
+  - {fileID: 4070270269317476}
+  m_Father: {fileID: 4586217510120086}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4831398498253932
 Transform:
   m_ObjectHideFlags: 1
@@ -1349,6 +1454,19 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4074030117539520}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4879972256973906
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030841481028638}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4070270269317476}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4886064374374778
@@ -1582,7 +1700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   climbFacade: {fileID: 0}
-  releaseMultiplier: {x: -10, y: -10, z: -10}
+  releaseMultiplier: {x: -1.5, y: -1.5, z: -1.5}
   internalSetup: {fileID: 114195587365772214}
 --- !u!114 &114084304161047960
 MonoBehaviour:
@@ -1702,6 +1820,33 @@ MonoBehaviour:
   componentTypes:
   - assemblyQualifiedTypeName: VRTK.Core.Prefabs.Interactions.Interactors.ComponentTags.StartGrabbingTag,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &114165436779890586
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1072529205791432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18402e6d0a88df479eb7fe789b6f57e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Extracted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114740868600810038}
+        m_MethodName: DecreaseCount
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114171444609175354
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1714,6 +1859,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objects: []
+--- !u!114 &114172169547309656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030841481028638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18402e6d0a88df479eb7fe789b6f57e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Extracted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114740868600810038}
+        m_MethodName: IncreaseCount
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114177849756100374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1783,8 +1955,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114241511740232804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1839,8 +2011,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114266626402697812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1964,7 +2136,7 @@ MonoBehaviour:
   ElementFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ElementNotFound:
     m_PersistentCalls:
@@ -2024,12 +2196,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecameEmpty:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecamePopulated:
     m_PersistentCalls:
@@ -2056,7 +2228,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114284735123611562
 MonoBehaviour:
@@ -2072,12 +2244,12 @@ MonoBehaviour:
   ElementFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ElementNotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecameEmpty:
     m_PersistentCalls:
@@ -2093,7 +2265,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecamePopulated:
     m_PersistentCalls:
@@ -2109,7 +2281,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114289297364693558
 MonoBehaviour:
@@ -2240,6 +2412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 527a09295f3fc774ea0a2cf043470f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionValidity:
+    field: {fileID: 0}
   FirstStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -2347,8 +2521,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114387997898586588
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2374,35 +2548,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
---- !u!114 &114392653040368292
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1626652783730314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18402e6d0a88df479eb7fe789b6f57e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Extracted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114610620814817760}
-        m_MethodName: Receive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114392960802983634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2497,8 +2644,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114438496205194698
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2553,8 +2700,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114479427254961168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2806,6 +2953,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114172169547309656}
+        m_MethodName: DoExtract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: VRTK.Core.Tracking.Collision.CollisionNotifier+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   CollisionChanged:
@@ -2838,7 +2996,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114392653040368292}
+      - m_Target: {fileID: 114165436779890586}
         m_MethodName: DoExtract
         m_Mode: 0
         m_Arguments:
@@ -2887,7 +3045,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ElementNotFound:
     m_PersistentCalls:
@@ -2914,18 +3072,50 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecameEmpty:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecamePopulated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &114740868600810038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1652562729370646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20c42f708832631478a8ed2de243a6b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ElementAdded:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableCounter+UnityEvent,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ElementRemoved:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114610620814817760}
+        m_MethodName: Receive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableCounter+UnityEvent,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114754866245452232
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2951,8 +3141,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114757008487451068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3007,8 +3197,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114808810667128196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3034,8 +3224,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Event.BaseGameObjectEmitter+UnityEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: VRTK.Core.Event.GameObjectEmitter+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114838304303570114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3123,12 +3313,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ElementNotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecameEmpty:
     m_PersistentCalls:
@@ -3155,12 +3345,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   BecamePopulated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Data.Collection.GameObjectSet+UnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Core.Data.Collection.GameObjectObservableSet+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114852135278270358
 MonoBehaviour:
