@@ -1,4 +1,5 @@
-﻿// Rotate Transform Grab Attach|GrabAttachMechanics|50120
+﻿
+// Rotate Transform Grab Attach|GrabAttachMechanics|50120
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;
@@ -201,7 +202,7 @@ namespace VRTK.GrabAttachMechanics
             CancelUpdateRotation();
             CancelDecelerateRotation();
             bool grabResult = base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint);
-            previousAttachPointPosition = controllerAttachPoint.transform.position;
+            previousAttachPointPosition = transform.InverseTransformPoint(controllerAttachPoint.transform.position);
             grabbedObjectBounds = VRTK_SharedMethods.GetBounds(givenGrabbedObject.transform);
             limitsReached = new bool[2];
             CheckAngleLimits();
@@ -238,9 +239,9 @@ namespace VRTK.GrabAttachMechanics
                 if (StillTouching() && distance >= originDeadzone)
                 {
                     Vector3 newRotation = GetNewRotation();
-                    previousAttachPointPosition = controllerAttachPoint.transform.position;
                     currentRotationSpeed = newRotation;
                     UpdateRotation(newRotation, true, true);
+
                 }
                 else if (grabbedObjectScript.IsDroppable())
                 {
@@ -366,7 +367,7 @@ namespace VRTK.GrabAttachMechanics
             switch (rotationAction)
             {
                 case RotationType.FollowAttachPoint:
-                    return CalculateAngle(transform.position, previousAttachPointPosition, controllerAttachPoint.transform.position);
+                    return CalculateAngleLocal(previousAttachPointPosition, transform.InverseTransformPoint(controllerAttachPoint.transform.position));
                 case RotationType.FollowLongitudinalAxis:
                     return BuildFollowAxisVector(grabbingObjectAngularVelocity.x);
                 case RotationType.FollowPerpendicularAxis:
@@ -385,6 +386,16 @@ namespace VRTK.GrabAttachMechanics
             float zAngle = (rotateAround == RotationAxis.zAxis ? givenAngle : 0f);
 
             return new Vector3(xAngle, yAngle, zAngle);
+        }
+
+        protected virtual Vector3 CalculateAngleLocal(Vector3 originalGrabPoint, Vector3 currentGrabPoint)
+        {
+            float xRotated = (rotateAround == RotationAxis.xAxis ? CalculateAngle(Vector3.zero, originalGrabPoint, currentGrabPoint, Vector3.right) : 0f);
+            float yRotated = (rotateAround == RotationAxis.yAxis ? CalculateAngle(Vector3.zero, originalGrabPoint, currentGrabPoint, Vector3.up) : 0f);
+            float zRotated = (rotateAround == RotationAxis.zAxis ? CalculateAngle(Vector3.zero, originalGrabPoint, currentGrabPoint, Vector3.forward) : 0f);
+
+            float frictionMultiplier = VRTK_SharedMethods.DividerToMultiplier(rotationFriction);
+            return new Vector3(xRotated * frictionMultiplier, yRotated * frictionMultiplier, zRotated * frictionMultiplier);
         }
 
         protected virtual Vector3 CalculateAngle(Vector3 originPoint, Vector3 originalGrabPoint, Vector3 currentGrabPoint)
