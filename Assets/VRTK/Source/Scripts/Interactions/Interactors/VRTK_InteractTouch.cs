@@ -534,7 +534,7 @@ namespace VRTK
             touchRigidBody.isKinematic = true;
             touchRigidBody.useGravity = false;
             touchRigidBody.constraints = RigidbodyConstraints.FreezeAll;
-            touchRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            touchRigidBody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
 
         protected virtual void EmitControllerRigidbodyEvent(bool state)
