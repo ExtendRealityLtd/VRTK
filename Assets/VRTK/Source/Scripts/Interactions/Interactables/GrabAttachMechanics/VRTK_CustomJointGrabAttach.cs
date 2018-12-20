@@ -50,7 +50,7 @@ namespace VRTK.GrabAttachMechanics
 
         protected override void DestroyJoint(bool withDestroyImmediate, bool applyGrabbingObjectVelocity)
         {
-            base.DestroyJoint(true, true);
+            base.DestroyJoint(withDestroyImmediate, true);
         }
 
         protected virtual void CopyCustomJoint()
