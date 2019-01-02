@@ -162,7 +162,7 @@ namespace VRTK
         public static HashSet<Behaviour> delayedToggleBehaviours = new HashSet<Behaviour>();
 
         /// <summary>
-        /// The ValidInstance method returns whether the SDK Manager isntance is valid (i.e. it's not null).
+        /// The ValidInstance method returns whether the SDK Manager instance is valid (i.e. it's not null).
         /// </summary>
         /// <returns>Returns `true` if the SDK Manager instance is valid or returns `false` if it is null.</returns>
         public static bool ValidInstance()
