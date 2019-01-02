@@ -2,10 +2,10 @@
 > ### VRTK - Virtual Reality Toolkit
 > A productive VR Toolkit for rapidly building VR solutions in Unity3d.
 
-[![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
+[![Slack](https://img.shields.io/badge/slack-chat-E24663.svg)](http://invite.vrtk.io)
 [![Documentation](https://img.shields.io/badge/readme-docs-3484C6.svg)](http://docs.vrtk.io)
-[![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
 [![YouTube](https://img.shields.io/badge/youtube-channel-e52d27.svg)](http://videos.vrtk.io)
+[![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
 [![Waffle](https://img.shields.io/badge/project-backlog-78bdf2.svg)](http://tracker.vrtk.io)
 
 | Supported SDK | Download Link |
