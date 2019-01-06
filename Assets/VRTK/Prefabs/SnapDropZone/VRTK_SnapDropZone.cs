@@ -460,7 +460,18 @@ namespace VRTK
 
         protected virtual void OnTriggerExit(Collider collider)
         {
-            CheckCanUnsnap(collider.GetComponentInParent<VRTK_InteractableObject>());
+            bool isKinematic = collider.attachedRigidbody != null && collider.attachedRigidbody.isKinematic;
+            var interactable = collider.GetComponentInParent<VRTK_InteractableObject>();
+
+            // Kinematic objects should only leave their drop zone if they are grabbed and pulled out. 
+            // What can happen otherwise is that a kinematic rb may not follow its parent non kinematic
+            // object in time and thus generate a OnTriggerExit
+            if (isKinematic && interactable != null)
+            {
+                if (!interactable.IsGrabbed())
+                    return;
+            }
+            CheckCanUnsnap(interactable);
         }
 
         protected virtual void CheckCanSnap(VRTK_InteractableObject interactableObjectCheck)
