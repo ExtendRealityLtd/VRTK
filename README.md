@@ -1,33 +1,35 @@
-![vrtk logo](https://user-images.githubusercontent.com/1029673/40060519-bb122e8c-584e-11e8-8402-ca168b327671.png)
+[![VRTK logo][VRTK-Image]](#)
 
 > ### VRTK - Virtual Reality Toolkit
-> A productive VR Toolkit for rapidly building VR solutions in Unity3d 2018.1 or above.
+> A productive toolkit for rapidly building spatial computing solutions in the Unity software.
 
-[![Slack](http://sysdia2.co.uk/badge.svg)](http://invite.vrtk.io)
-[![Documentation](https://img.shields.io/badge/readme-docs-3484C6.svg)](http://docs.vrtk.io)
-[![Twitter Follow](https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter)](https://twitter.com/VR_Toolkit)
-[![YouTube](https://img.shields.io/badge/youtube-channel-e52d27.svg)](http://videos.vrtk.io)
-[![Waffle](https://img.shields.io/badge/project-backlog-78bdf2.svg)](http://tracker.vrtk.io)
+[![Slack][Slack-Badge]][Slack]
+[![Documentation][Docs-Badge]][Docs]
+[![Videos][Videos-Badge]][Videos]
+[![Twitter][Twitter-Badge]][Twitter]
+[![Waffle][Waffle-Badge]][Waffle]
 
 ## Introduction
 
-VRTK aims to make building VR solutions in Unity3d fast and easy for
-beginners and seasoned developers alike.
+VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
+
+  > **Requires** the Unity software version 2018.3 (or above).
 
 ## Getting Started
 
 ### Setting up the project
 
-  * Create a new project in Unity3d 2018.1 or above using 3D Template
-  * Ensure `Virtual Reality Supported` is checked
-    * Click in Unity3d main menu `Edit -> Project Settings -> Player`
-    * In the `PlayerSettings` inspector panel, expand `XR Settings`
-    * Check the `Virtual Reality Supported` option
-  * Update the project to the supported `Scripting Runtime Version`
-    * Click in Unity3d main menu `Edit -> Project Settings -> Player`
-    * In the `PlayerSettings` inspector panel, expand `Other Settings`
-    * Change `Scripting Runtime Version` to `.NET 4.x Equivalent`
-    * Unity will now restart in the supported scripting runtime
+* Create a new project in the Unity software version 2018.3 (or above) using 3D Template or open an existing project.
+* Ensure `Virtual Reality Supported` is checked
+  * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` window.
+  * Select `Player` from the left hand menu in the `Project Settings` window.
+  * In the `Player` settings panel expand `XR Settings`.
+  * In `XR Settings` ensure the `Virtual Reality Supported` option is checked.
+* Ensure the project `Scripting Runtime Version` is set to `.NET 4.x Equivalent`.
+  * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` inspector.
+  * Select `Player` from the left hand menu in the `Project Settings` window.
+  * In the `Player` settings panel expand `Other Settings`.
+  * Ensure the `Scripting Runtime Version` is set to `.NET 4.x Equivalent`.
 
 ### Cloning the repo
 
@@ -39,9 +41,9 @@ beginners and seasoned developers alike.
 ### Running the tests
 
   * Open the `VRTK/Scenes/Internal/TestRunner` scene
-  * Click in the Unity3d main menu `Window -> Test Runner`
-  * On the `EditMode` tab click `Run All`
-  * If all the tests pass then installation was successful.
+  * In the Unity3 software select `Main Menu -> Window -> Test Runner`
+  * Within the Test Runner window click on the `EditMode` tab and the click `Run All` button
+  * If all the tests pass then installation was successful
 
 ## Made With VRTK
 
@@ -49,21 +51,33 @@ beginners and seasoned developers alike.
 
 Many games and experiences have already been made with VRTK.
 
-Check out the [MADE_WITH_VRTK.md] document to see the full list.
+Check out the [Made With VRTK] website to see the full list.
 
 ## Contributing
 
-We're not currently in a place where accepting contributions would
-be helpful. But as soon as we're ready we'll let you know!
+We're not currently in a place where accepting contributions would be helpful. But as soon as we're ready we'll let you know!
 
 ## License
 
 Code released under the [MIT License].
 
+## Disclaimer
+
+These materials are not sponsored by or affiliated with Unity Technologies or its affiliates. "Unity" is a trademark or registered trademark of Unity Technologies or its affiliates in the U.S. and elsewhere.
+
+[VRTK-Image]: https://user-images.githubusercontent.com/1029673/40060519-bb122e8c-584e-11e8-8402-ca168b327671.png
+[Unity]: https://unity3d.com/
+[Made With VRTK]: https://www.vrtk.io/madewith.html
 [MIT License]: LICENSE.md
 
-Any Third Party Licenses can be viewed in [THIRD_PARTY_NOTICES.md].
+[Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
+[Docs-Badge]: https://img.shields.io/badge/readme-docs-3484C6.svg
+[Videos-Badge]: https://img.shields.io/badge/youtube-channel-e52d27.svg
+[Twitter-Badge]: https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter
+[Waffle-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
 
-[MIT License]: LICENSE.md
-[THIRD_PARTY_NOTICES.md]: THIRD_PARTY_NOTICES.md
-[MADE_WITH_VRTK.md]: Documentation/MADE_WITH_VRTK.md
+[Slack]: http://invite.vrtk.io
+[Docs]: http://docs.vrtk.io
+[Videos]: http://videos.vrtk.io
+[Twitter]: https://twitter.com/VR_Toolkit
+[Waffle]: http://tracker.vrtk.io
