@@ -594,7 +594,11 @@ namespace VRTK
                 Rigidbody objectInteratorRigidBody = objectInteractorAttachPoint.AddComponent<Rigidbody>();
                 objectInteratorRigidBody.isKinematic = true;
                 objectInteratorRigidBody.freezeRotation = true;
+#if UNITY_2018_3_OR_NEWER
+                objectInteratorRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+#else
                 objectInteratorRigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+#endif
                 VRTK_PlayerObject.SetPlayerObject(objectInteractorAttachPoint, VRTK_PlayerObject.ObjectTypes.Pointer);
             }
 

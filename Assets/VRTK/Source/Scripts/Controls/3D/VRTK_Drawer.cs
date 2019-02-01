@@ -202,7 +202,11 @@ namespace VRTK
             if (drawerRigidbody == null)
             {
                 drawerRigidbody = gameObject.AddComponent<Rigidbody>();
+#if UNITY_2018_3_OR_NEWER
+                drawerRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+#else
                 drawerRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+#endif
             }
             drawerRigidbody.isKinematic = false;
 
