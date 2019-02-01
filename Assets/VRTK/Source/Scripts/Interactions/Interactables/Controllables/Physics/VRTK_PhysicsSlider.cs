@@ -234,7 +234,11 @@ namespace VRTK.Controllables.PhysicsBased
         protected override void ConfigueRigidbody()
         {
             SetRigidbodyGravity(false);
+#if UNITY_2018_3_OR_NEWER
+            controlRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+#else
             controlRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+#endif
             controlRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
 

@@ -126,7 +126,11 @@ namespace VRTK
             if (leverRigidbody == null)
             {
                 leverRigidbody = gameObject.AddComponent<Rigidbody>();
+#if UNITY_2018_3_OR_NEWER
+                leverRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+#else
                 leverRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+#endif
                 leverRigidbody.angularDrag = releasedFriction; // otherwise lever will continue to move too far on its own
             }
             leverRigidbody.isKinematic = false;
