@@ -46,11 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b64be7011dbb64db38b1b10ab3057b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followSource: {fileID: 0}
-  activationAction: {fileID: 0}
-  selectionAction: {fileID: 0}
-  selectionType: 0
-  targetValidity:
+  _followSource: {fileID: 0}
+  _activationAction: {fileID: 0}
+  _selectionAction: {fileID: 0}
+  _selectionMethod: 0
+  _targetValidity:
     field: {fileID: 0}
   internalSetup: {fileID: 4618530942263582071}
 --- !u!114 &3484162189158370699
@@ -81,32 +81,32 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Entered:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Exited:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Hovering:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Selected:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Appeared:
     m_PersistentCalls:
@@ -122,7 +122,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Disappeared:
     m_PersistentCalls:
@@ -138,7 +138,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   RenderDataChanged:
     m_PersistentCalls:
@@ -154,7 +154,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Pointer.ObjectPointer+PointsRendererUnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Pointer.ObjectPointer+PointsRendererUnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &6464095183246509301
 GameObject:
@@ -218,7 +218,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Cast.PointsCast+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Cast.PointsCast+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   maximumLength: 100
 --- !u!114 &2560080792642705176
@@ -244,11 +244,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3718142488040735482}
     m_Modifications:
-    - target: {fileID: 8955150999620452189, guid: b5bcf67f1f80d1a4f800327247af655a,
-        type: 3}
-      propertyPath: m_Name
-      value: ObjectPointer.Internal
-      objectReference: {fileID: 0}
     - target: {fileID: 333590899294449391, guid: b5bcf67f1f80d1a4f800327247af655a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -303,6 +298,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955150999620452189, guid: b5bcf67f1f80d1a4f800327247af655a,
+        type: 3}
+      propertyPath: m_Name
+      value: ObjectPointer.Internal
       objectReference: {fileID: 0}
     - target: {fileID: 7046662317805364560, guid: b5bcf67f1f80d1a4f800327247af655a,
         type: 3}

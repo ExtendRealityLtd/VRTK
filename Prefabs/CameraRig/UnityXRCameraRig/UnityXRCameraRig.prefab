@@ -202,7 +202,7 @@ MonoBehaviour:
   leftController: {fileID: 1056323152614116}
   leftControllerVelocityTracker: {fileID: 114583763361574438}
   rightController: {fileID: 1085192622640384}
-  rightControllerVelocityTracker:< {fileID: 114080674084496316}
+  rightControllerVelocityTracker: {fileID: 114080674084496316}
 --- !u!1 &1907295252762062
 GameObject:
   m_ObjectHideFlags: 0

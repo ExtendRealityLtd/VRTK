@@ -56,12 +56,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Zinnia.Tracking.Modification.TransformPropertyApplier+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Teleported:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Zinnia.Tracking.Modification.TransformPropertyApplier+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   internalSetup: {fileID: 831700923211128871}
 --- !u!1 &6091841197206593970
 GameObject:
@@ -208,7 +208,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Tracking.SurfaceLocator+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Tracking.SurfaceLocator+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &103839708580330939
 MonoBehaviour:
@@ -236,6 +236,7 @@ MonoBehaviour:
     zState: 0
   applyTransformations: 3
   transitionDuration: 0
+  transitionDestinationThreshold: 0.01
   BeforeTransformUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -273,7 +274,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Tracking.Modification.TransformPropertyApplier+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   AfterTransformUpdated:
     m_PersistentCalls:
       m_Calls:
@@ -311,7 +312,7 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
     m_TypeName: Zinnia.Tracking.Modification.TransformPropertyApplier+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1001 &7611529125206978052
 PrefabInstance:
   m_ObjectHideFlags: 0
