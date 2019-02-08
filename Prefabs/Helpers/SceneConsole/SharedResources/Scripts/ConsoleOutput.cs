@@ -81,7 +81,7 @@
         /// <summary>
         /// Determnines whether to collapse same messages into one message in the log.
         /// </summary>
-        protected bool collapseLog = false;
+        protected bool collapseLog;
 
         /// <summary>
         /// Determines whether the console will collapse same message output into the same line. A state of <see langword="true"/> will collapse messages and <see langword="false"/> will print the same message for each line.

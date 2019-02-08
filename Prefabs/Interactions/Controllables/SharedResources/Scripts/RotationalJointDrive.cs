@@ -30,7 +30,7 @@
         /// <summary>
         /// The motor data to set on the joint.
         /// </summary>
-        protected JointMotor jointMotor = new JointMotor();
+        protected JointMotor jointMotor;
 
         /// <inheritdoc />        
         public override void Process()

@@ -19,7 +19,7 @@
         [Tooltip("The named y axis of the mouse.")]
         public string yAxisName = "Mouse Y";
         [Tooltip("Determines whether to lock the cursor in the game window."), SerializeField]
-        private bool _lockCursor = false;
+        private bool _lockCursor;
         /// <summary>
         /// Determines whether to lock the cursor in the game window.
         /// </summary>

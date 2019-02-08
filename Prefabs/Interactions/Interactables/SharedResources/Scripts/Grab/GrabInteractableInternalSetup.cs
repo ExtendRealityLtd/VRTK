@@ -24,7 +24,7 @@
 
         #region Action Settings
         [Header("Action Settings"), Tooltip("The action to perform when grabbing the interactable for the first time."), SerializeField]
-        private GrabInteractableAction _primaryAction = null;
+        private GrabInteractableAction _primaryAction;
         /// <summary>
         /// The action to perform when grabbing the interactable for the first time.
         /// </summary>
@@ -43,7 +43,7 @@
         protected GrabInteractableAction cachedPrimaryAction;
 
         [Tooltip("The action to perform when grabbing the interactable for the second time."), SerializeField]
-        private GrabInteractableAction _secondaryAction = null;
+        private GrabInteractableAction _secondaryAction;
         /// <summary>
         /// The action to perform when grabbing the interactable for the second time.
         /// </summary>
