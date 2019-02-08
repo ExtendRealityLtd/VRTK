@@ -79,7 +79,7 @@
         /// </summary>
         public virtual void ApplyVelocity()
         {
-            if (!isActiveAndEnabled || interactors.Elements.Any() || velocityProxy.proxySource == null)
+            if (!isActiveAndEnabled || interactors.Elements.Any() || velocityProxy.ProxySource == null)
             {
                 return;
             }
@@ -95,7 +95,7 @@
         /// </summary>
         public virtual void ConfigureTargetPositionProperty()
         {
-            targetPositionProperty.target = facade.BodyRepresentationFacade.Offset == null ? facade.BodyRepresentationFacade.Source : facade.BodyRepresentationFacade.Offset;
+            targetPositionProperty.Target = facade.BodyRepresentationFacade.Offset == null ? facade.BodyRepresentationFacade.Source : facade.BodyRepresentationFacade.Offset;
         }
 
         protected virtual void OnEnable()
@@ -115,7 +115,7 @@
 
         protected virtual void OnDisable()
         {
-            targetPositionProperty.target = null;
+            targetPositionProperty.Target = null;
 
             offsetDistanceComparator.enabled = false;
             sourceDistanceComparator.enabled = false;
@@ -159,8 +159,8 @@
         /// <param name="interactor">The added interactor.</param>
         protected virtual void OnInteractorAdded(GameObject interactor)
         {
-            sourceDistanceComparator.source = interactor;
-            sourceDistanceComparator.target = interactor;
+            sourceDistanceComparator.Source = interactor;
+            sourceDistanceComparator.Target = interactor;
             sourceDistanceComparator.enabled = interactor != null;
             sourceDistanceComparator.SavePosition();
 
@@ -185,8 +185,8 @@
         /// <param name="interactable">The added interactable.</param>
         protected virtual void OnInteractableAdded(GameObject interactable)
         {
-            offsetDistanceComparator.source = interactable;
-            offsetDistanceComparator.target = interactable;
+            offsetDistanceComparator.Source = interactable;
+            offsetDistanceComparator.Target = interactable;
             offsetDistanceComparator.enabled = interactable != null;
             offsetDistanceComparator.SavePosition();
 

@@ -63,7 +63,7 @@
         public virtual void ConfigureRadiusOriginMover()
         {
             radiusOriginMover.transform.parent.position = facade.Source.transform.position;
-            radiusOriginMover.SetTarget(facade.Source);
+            radiusOriginMover.Target = facade.Source;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@
         /// </summary>
         public virtual void ConfigureDistanceChecker()
         {
-            distanceChecker.SetSource(facade.Source);
+            distanceChecker.Source = facade.Source;
             distanceChecker.distanceThreshold = facade.IgnoredRadius;
         }
 
@@ -80,7 +80,7 @@
         /// </summary>
         public virtual void ConfigureObjectMover()
         {
-            objectMover.SetSource(facade.Source);
+            objectMover.Source = facade.Source;
         }
 
         /// <summary>
@@ -104,7 +104,7 @@
         /// </summary>
         public virtual void ConfigureTargetPositionMutator()
         {
-            targetPositionMutator.SetTarget(facade.Target);
+            targetPositionMutator.Target = facade.Target;
         }
 
         protected virtual void OnEnable()

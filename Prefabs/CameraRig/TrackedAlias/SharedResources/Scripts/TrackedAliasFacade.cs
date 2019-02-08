@@ -19,7 +19,7 @@
         /// The associated CameraRigs to track.
         /// </summary>
         [Header("Tracked Alias Settings"), Tooltip("The associated CameraRigs to track.")]
-        public List<AliasAssociationCollection> cameraRigs = new List<AliasAssociationCollection>();
+        public List<LinkedAliasAssociationCollection> cameraRigs = new List<LinkedAliasAssociationCollection>();
         #endregion
 
         #region Tracking Begun Events
@@ -82,35 +82,35 @@
         /// <summary>
         /// Retreives all of the linked CameraRig PlayAreas.
         /// </summary>
-        public List<GameObject> PlayAreas => cameraRigs.Select(rig => rig.PlayArea).Where(value => value != null).ToList();
+        public List<GameObject> PlayAreas => cameraRigs.Select(rig => rig.playArea).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Headsets.
         /// </summary>
-        public List<GameObject> Headsets => cameraRigs.Select(rig => rig.Headset).Where(value => value != null).ToList();
+        public List<GameObject> Headsets => cameraRigs.Select(rig => rig.headset).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Headset Cameras.
         /// </summary>
-        public List<Camera> HeadsetCameras => cameraRigs.Select(rig => rig.HeadsetCamera).Where(value => value != null).ToList();
+        public List<Camera> HeadsetCameras => cameraRigs.Select(rig => rig.headsetCamera).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Headset Velocity Trackers.
         /// </summary>
-        public List<VelocityTracker> HeadsetVelocityTrackers => cameraRigs.Select(rig => rig.HeadsetVelocity).Where(value => value != null).ToList();
+        public List<VelocityTracker> HeadsetVelocityTrackers => cameraRigs.Select(rig => rig.headsetVelocityTracker).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Left Controllers.
         /// </summary>
-        public List<GameObject> LeftControllers => cameraRigs.Select(rig => rig.LeftController).Where(value => value != null).ToList();
+        public List<GameObject> LeftControllers => cameraRigs.Select(rig => rig.leftController).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Right Controllers.
         /// </summary>
-        public List<GameObject> RightControllers => cameraRigs.Select(rig => rig.RightController).Where(value => value != null).ToList();
+        public List<GameObject> RightControllers => cameraRigs.Select(rig => rig.rightController).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Left Controller Velocity Trackers.
         /// </summary>
-        public List<VelocityTracker> LeftControllerVelocityTrackers => cameraRigs.Select(rig => rig.LeftControllerVelocity).Where(value => value != null).ToList();
+        public List<VelocityTracker> LeftControllerVelocityTrackers => cameraRigs.Select(rig => rig.leftControllerVelocityTracker).Where(value => value != null).ToList();
         /// <summary>
         /// Retreives all of the linked CameraRig Right Controller Velocity Trackers.
         /// </summary>
-        public List<VelocityTracker> RightControllerVelocityTrackers => cameraRigs.Select(rig => rig.RightControllerVelocity).Where(value => value != null).ToList();
+        public List<VelocityTracker> RightControllerVelocityTrackers => cameraRigs.Select(rig => rig.rightControllerVelocityTracker).Where(value => value != null).ToList();
         /// <summary>
         /// The alias follower for the PlayArea.
         /// </summary>

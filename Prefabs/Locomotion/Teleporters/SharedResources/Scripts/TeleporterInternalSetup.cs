@@ -76,7 +76,7 @@
 
             if (modifyTeleporter != null)
             {
-                modifyTeleporter.SetSource(destination);
+                modifyTeleporter.Source = destination;
                 modifyTeleporter.Apply();
             }
         }
@@ -106,7 +106,7 @@
         {
             foreach (SurfaceLocator currentLocator in surfaceLocatorAliases.EmptyIfNull())
             {
-                currentLocator.searchOrigin = facade.Offset;
+                currentLocator.SearchOrigin = facade.Offset;
             }
         }
 
@@ -128,11 +128,11 @@
         {
             foreach (TransformPropertyApplier currentApplier in transformPropertyApplierAliases.EmptyIfNull())
             {
-                currentApplier.target = facade.Target;
-                currentApplier.offset = null;
+                currentApplier.Target = facade.Target;
+                currentApplier.Offset = null;
                 if (!facade.OnlyOffsetFloorSnap || !transformPropertyApplierIgnoreOffsetAliases.Contains(currentApplier))
                 {
-                    currentApplier.offset = facade.Offset;
+                    currentApplier.Offset = facade.Offset;
                 }
             }
         }

@@ -21,7 +21,7 @@
         public override void SetUp(GrabInteractableInternalSetup grabSetup)
         {
             base.SetUp(grabSetup);
-            pinchScaler.SetTarget(grabSetup.Facade.ConsumerContainer);
+            pinchScaler.Target = grabSetup.Facade.ConsumerContainer;
         }
     }
 }

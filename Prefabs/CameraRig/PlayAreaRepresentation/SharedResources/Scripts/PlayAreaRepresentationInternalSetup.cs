@@ -51,8 +51,8 @@
         /// </summary>
         public virtual void ConfigureTarget()
         {
-            objectScaler.target = facade.Target;
-            objectPositioner.target = facade.Target;
+            objectScaler.Target = facade.Target;
+            objectPositioner.Target = facade.Target;
         }
 
         /// <summary>

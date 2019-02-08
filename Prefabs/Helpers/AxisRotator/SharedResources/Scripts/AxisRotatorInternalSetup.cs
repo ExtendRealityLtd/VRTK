@@ -71,7 +71,7 @@
         /// </summary>
         public virtual void SetMutator()
         {
-            rotationMutator.target = facade.Target;
+            rotationMutator.Target = facade.Target;
         }
 
         /// <summary>
