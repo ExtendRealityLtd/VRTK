@@ -11,7 +11,6 @@
     using Zinnia.Tracking.Collision;
     using Zinnia.Tracking.Collision.Active;
     using VRTK.Prefabs.Interactions.Interactables;
-    using VRTK.Prefabs.Interactions.Interactables.Grab.Receiver;
 
     /// <summary>
     /// Sets up the Interactor Prefab grab settings based on the provided user settings.

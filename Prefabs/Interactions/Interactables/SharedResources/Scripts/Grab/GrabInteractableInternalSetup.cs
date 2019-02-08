@@ -3,7 +3,6 @@
     using UnityEngine;
     using System.Collections.Generic;
     using Zinnia.Extension;
-    using Zinnia.Data.Attribute;
     using VRTK.Prefabs.Interactions.Interactors;
     using VRTK.Prefabs.Interactions.Interactables.Grab.Action;
     using VRTK.Prefabs.Interactions.Interactables.Grab.Receiver;
