@@ -1,0 +1,16 @@
+{
+    "name": "VRTK.Samples.Farm.Editor",
+    "references": [
+        "VRTK.Samples.Farm.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
