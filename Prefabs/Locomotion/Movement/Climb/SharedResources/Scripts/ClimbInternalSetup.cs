@@ -144,7 +144,7 @@
         /// <summary>
         /// Emits a climb stopped event when the list becomes empty.
         /// </summary>
-        /// <param name="addedElement">The element removed.</param>
+        /// <param name="removedElement">The element removed.</param>
         protected virtual void OnListBecameEmpty(GameObject removedElement)
         {
             if (!interactors.Elements.Any() && !interactables.Elements.Any())

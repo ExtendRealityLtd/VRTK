@@ -27,7 +27,7 @@
             }
         }
         /// <summary>
-        /// The thickness of <see cref="source"/> to be used when resolving body collisions.
+        /// The thickness of <see cref="Source"/> to be used when resolving body collisions.
         /// </summary>
         [Tooltip("The thickness of source to be used when resolving body collisions.")]
         public float sourceThickness = 0.05f;
@@ -35,7 +35,7 @@
         [Tooltip("An optional offset for the source to use."), SerializeField]
         private GameObject _offset;
         /// <summary>
-        /// An optional offset for the <see cref="source"/> to use.
+        /// An optional offset for the <see cref="Source"/> to use.
         /// </summary>
         public GameObject Offset
         {

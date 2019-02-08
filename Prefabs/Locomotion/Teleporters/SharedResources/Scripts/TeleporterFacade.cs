@@ -46,7 +46,7 @@
         [Tooltip("Determines if only the floor snap should only be compensated by the offset or whether the teleported target position should also be compensated by the offset."), SerializeField]
         private bool _onlyOffsetFloorSnap;
         /// <summary>
-        /// Determines if only the floor snap should only be compensated by the <see cref="offset"/> or whether the teleported target position should also be compensated by the <see cref="offset"/>.
+        /// Determines if only the floor snap should only be compensated by the <see cref="Offset"/> or whether the teleported target position should also be compensated by the <see cref="Offset"/>.
         /// </summary>
         public bool OnlyOffsetFloorSnap
         {
@@ -110,7 +110,7 @@
         #endregion
 
         /// <summary>
-        /// Attempts to teleport the <see cref="playAreaAlias"/>.
+        /// Attempts to teleport the <see cref="Target"/>.
         /// </summary>
         /// <param name="destination">The location to attempt to teleport to.</param>
         public virtual void Teleport(TransformData destination)

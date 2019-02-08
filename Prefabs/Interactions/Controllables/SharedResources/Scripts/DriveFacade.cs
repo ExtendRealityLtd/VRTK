@@ -31,10 +31,10 @@
         #endregion
 
         #region Events
-        [Header("Events")]
         /// <summary>
         /// Emitted when the raw value changes with the raw value data.
         /// </summary>
+        [Header("Events")]
         public DriveUnityEvent ValueChanged = new DriveUnityEvent();
         /// <summary>
         /// Emitted when the step value changes with the step value data.
@@ -155,7 +155,7 @@
         }
 
         /// <summary>
-        /// Calculates the axis to use for the given <see cref="DriveAxis.Axis"/>.
+        /// Calculates the axis to use for the given <see cref="Controllables.DriveAxis.Axis"/>.
         /// </summary>
         /// <param name="driveAxis">The new value.</param>
         protected virtual void CalculateDriveAxis(DriveAxis.Axis driveAxis)

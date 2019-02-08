@@ -29,7 +29,7 @@
         /// <summary>
         /// Gets the axis direction for the given <see cref="DriveAxis"/>.
         /// </summary>
-        /// <param name="driveAxis">The desired world axis.</param>
+        /// <param name="axis">The desired world axis.</param>
         /// <param name="negativeDirection">Whether to get the negative axis direction.</param>
         /// <returns>The direction of the drive axis.</returns>
         public static Vector3 GetAxisDirection(this Axis axis, bool negativeDirection = false)

@@ -124,7 +124,7 @@
         /// </summary>
         protected HashSet<Collider> RestoreColliders = new HashSet<Collider>();
         /// <summary>
-        /// The previous position of <see cref="rigidbody"/>.
+        /// The previous position of <see cref="PhysicsBody"/>.
         /// </summary>
         protected Vector3 previousRigidbodyPosition;
         /// <summary>
@@ -140,11 +140,11 @@
         /// </summary>
         protected Coroutine ignoreInteractorCollisions;
         /// <summary>
-        /// An optional follower of <see cref="offset"/>.
+        /// An optional follower of <see cref="BodyRepresentationFacade.Offset"/>.
         /// </summary>
         protected ObjectFollower offsetObjectFollower;
         /// <summary>
-        /// An optional follower of <see cref="source"/>.
+        /// An optional follower of <see cref="BodyRepresentationFacade.Source"/>.
         /// </summary>
         protected ObjectFollower sourceObjectFollower;
 
@@ -220,7 +220,7 @@
         }
 
         /// <summary>
-        /// Positions, sizes and controls all variables necessary to make a body representation follow the given <see cref="BodyRepresentationFacade.source"/>.
+        /// Positions, sizes and controls all variables necessary to make a body representation follow the given <see cref="BodyRepresentationFacade.Source"/>.
         /// </summary>
         public virtual void Process()
         {
@@ -427,7 +427,7 @@
         }
 
         /// <summary>
-        /// Changes the height and position of <see cref="characterController"/> to match <see cref="BodyRepresentationFacade.source"/>.
+        /// Changes the height and position of <see cref="characterController"/> to match <see cref="BodyRepresentationFacade.Source"/>.
         /// </summary>
         /// <param name="setPositionDirectly">Whether to set the position directly or tell <see cref="characterController"/> to move to it.</param>
         protected virtual void MatchCharacterControllerWithSource(bool setPositionDirectly)
@@ -472,7 +472,7 @@
         }
 
         /// <summary>
-        /// Changes <see cref="rigidbodyCollider"/> to match the collider settings of <see cref="characterController"/> and moves <see cref="rigidbody"/> to match <see cref="characterController"/>.
+        /// Changes <see cref="rigidbodyCollider"/> to match the collider settings of <see cref="characterController"/> and moves <see cref="PhysicsBody"/> to match <see cref="characterController"/>.
         /// </summary>
         protected virtual void MatchRigidbodyAndColliderWithCharacterController()
         {
