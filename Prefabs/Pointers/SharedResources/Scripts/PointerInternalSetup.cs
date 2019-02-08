@@ -39,7 +39,7 @@
         /// <summary>
         /// The <see cref="BooleanAction"/> that will activate/deactivate the pointer.
         /// </summary>
-        [Header("Action Settions"), Tooltip("The BooleanAction that will activate/deactivate the pointer."), InternalSetting, SerializeField]
+        [Header("Action Settings"), Tooltip("The BooleanAction that will activate/deactivate the pointer."), InternalSetting, SerializeField]
         protected BooleanAction activationAction;
         /// <summary>
         /// The <see cref="BooleanAction"/> that initiates the pointer selection when the action is activated.

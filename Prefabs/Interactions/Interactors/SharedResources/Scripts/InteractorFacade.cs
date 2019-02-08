@@ -141,7 +141,7 @@
         }
 
         /// <summary>
-        /// Attempt to grab an Interactable to the current Interactor utilising custom collision data.
+        /// Attempt to grab an Interactable to the current Interactor utilizing custom collision data.
         /// </summary>
         /// <param name="interactable">The Interactable to attempt to grab.</param>
         /// <param name="collision">Custom collision data.</param>

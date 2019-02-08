@@ -568,8 +568,8 @@ MonoBehaviour:
   _trackedAlias: {fileID: 0}
   _disableXRSettings: 1
   _simulatedFrameRate: 90
-  playareaPosition: {fileID: 114447943956170304}
-  playareaResetter: {fileID: 114041395006009992}
+  playAreaPosition: {fileID: 114447943956170304}
+  playAreaResetter: {fileID: 114041395006009992}
 --- !u!114 &114471210263486974
 MonoBehaviour:
   m_ObjectHideFlags: 0

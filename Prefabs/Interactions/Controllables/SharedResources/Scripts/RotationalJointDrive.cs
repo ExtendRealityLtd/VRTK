@@ -171,7 +171,7 @@
         }
 
         /// <summary>
-        /// Calculates a multiplier based on the direction the rotation is travelling.
+        /// Calculates a multiplier based on the direction the rotation is traveling.
         /// </summary>
         /// <returns>The multiplier that represents the direction.</returns>
         protected virtual float CalculateDirectionMultiplier()

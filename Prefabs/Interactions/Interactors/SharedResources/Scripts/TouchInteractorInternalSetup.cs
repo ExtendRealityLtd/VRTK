@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// Retreives a collection of currently touched GameObjects.
+        /// Retrieves a collection of currently touched GameObjects.
         /// </summary>
         /// <returns>The currently touched GameObjects.</returns>
         protected virtual List<GameObject> GetTouchedObjects()
@@ -102,7 +102,7 @@
         }
 
         /// <summary>
-        /// Retreives the currently active touched GameObject.
+        /// Retrieves the currently active touched GameObject.
         /// </summary>
         /// <returns>The currently active touched GameObject.</returns>
         protected virtual GameObject GetActiveTouchedObject()
