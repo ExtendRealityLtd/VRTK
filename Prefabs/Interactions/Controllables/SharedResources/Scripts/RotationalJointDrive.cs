@@ -32,7 +32,7 @@
         /// </summary>
         protected JointMotor jointMotor;
 
-        /// <inheritdoc />        
+        /// <inheritdoc />
         public override void Process()
         {
             if (!isActiveAndEnabled)
