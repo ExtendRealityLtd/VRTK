@@ -585,11 +585,11 @@ MonoBehaviour:
   playArea: {fileID: 1121419207030402}
   headset: {fileID: 1496419616007624}
   headsetCamera: {fileID: 20582437744326220}
-  headsetVelocity: {fileID: 114257163652208666}
+  headsetVelocityTracker: {fileID: 114257163652208666}
   leftController: {fileID: 1643489474284420}
-  leftControllerVelocity: {fileID: 114703741797203964}
+  leftControllerVelocityTracker: {fileID: 114703741797203964}
   rightController: {fileID: 1581495199198194}
-  rightControllerVelocity: {fileID: 114212350423920112}
+  rightControllerVelocityTracker: {fileID: 114212350423920112}
 --- !u!1 &1143215074586592
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +784,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114642243732939800}
-        m_MethodName: SetY
+        m_MethodName: set_CurrentY
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1759,7 +1759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 1496419616007624}
   relativeTo: {fileID: 1121419207030402}
-  autoStartSampling: 1
+  isEstimating: 1
   velocityAverageFrames: 5
   angularVelocityAverageFrames: 10
 --- !u!1 &1501095121347998
@@ -2591,7 +2591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 1581495199198194}
   relativeTo: {fileID: 1121419207030402}
-  autoStartSampling: 1
+  isEstimating: 1
   velocityAverageFrames: 5
   angularVelocityAverageFrames: 10
 --- !u!1 &1620331194756680
@@ -2756,7 +2756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 1643489474284420}
   relativeTo: {fileID: 1121419207030402}
-  autoStartSampling: 1
+  isEstimating: 1
   velocityAverageFrames: 5
   angularVelocityAverageFrames: 10
 --- !u!1 &1649192301139388
@@ -3560,7 +3560,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114642243732939800}
-        m_MethodName: SetX
+        m_MethodName: set_CurrentX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

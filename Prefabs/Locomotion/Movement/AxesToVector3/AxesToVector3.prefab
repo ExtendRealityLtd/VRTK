@@ -713,7 +713,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114295819027641566}
-        m_MethodName: SetY
+        m_MethodName: set_CurrentY
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -815,7 +815,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114295819027641566}
-        m_MethodName: SetX
+        m_MethodName: set_CurrentX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

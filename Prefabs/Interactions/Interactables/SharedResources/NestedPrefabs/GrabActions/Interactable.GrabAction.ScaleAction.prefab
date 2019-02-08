@@ -108,7 +108,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3493408933433076119}
-        m_MethodName: SetSecondaryPoint
+        m_MethodName: set_SecondaryPoint
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -169,7 +169,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3493408933433076119}
-        m_MethodName: SetPrimaryPoint
+        m_MethodName: set_PrimaryPoint
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -577,7 +577,7 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8719881838550528094}
         m_MethodName: NotifyGrab
         m_Mode: 0
         m_Arguments:
@@ -1168,7 +1168,7 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8719881838550528094}
         m_MethodName: NotifyUngrab
         m_Mode: 0
         m_Arguments:

@@ -176,7 +176,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 103839708580330939}
-        m_MethodName: SetSource
+        m_MethodName: set_Source
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

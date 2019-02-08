@@ -377,7 +377,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114973398678699410}
-        m_MethodName: SetSource
+        m_MethodName: set_Source
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -417,7 +417,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114619447772125684}
-        m_MethodName: SetTarget
+        m_MethodName: set_Target
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

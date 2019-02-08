@@ -779,7 +779,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3677352096674154965}
-        m_MethodName: SetPivot
+        m_MethodName: set_Pivot
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -960,7 +960,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3677352096674154965}
-        m_MethodName: SetLookAt
+        m_MethodName: set_LookAt
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

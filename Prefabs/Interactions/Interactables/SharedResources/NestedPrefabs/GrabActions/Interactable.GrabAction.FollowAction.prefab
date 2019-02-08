@@ -1774,7 +1774,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 3527365182890565175}
-        m_MethodName: SetAttachmentPoint
+        m_MethodName: set_AttachmentPoint
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2612,7 +2612,7 @@ MonoBehaviour:
   relations:
   - key: {fileID: 0}
     value: {fileID: 6056333363797953553}
-  ValueRetreieved:
+  ValueRetrieved:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1803858868811045269}

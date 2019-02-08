@@ -166,7 +166,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Data.Operation.TransformVector3PropertyExtractor+UnityEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _direction: 2
+  direction: 2
 --- !u!114 &3272964448479878073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,7 +316,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3272964449029822949}
-        m_MethodName: SetY
+        m_MethodName: set_CurrentY
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -490,7 +490,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3272964449029822949}
-        m_MethodName: SetX
+        m_MethodName: set_CurrentX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -614,7 +614,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3272964449512663007}
-        m_MethodName: SetY
+        m_MethodName: set_CurrentY
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -638,7 +638,7 @@ MonoBehaviour:
     m_TypeName: Zinnia.Data.Type.Transformation.Vector2ToAngle+UnityEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   unit: 0
-  _origin: {x: 0, y: 1}
+  origin: {x: 0, y: 1}
 --- !u!114 &3272964449512663007
 MonoBehaviour:
   m_ObjectHideFlags: 0
