@@ -148,24 +148,20 @@ namespace VRTK.Controllables.ArtificialBased
                 atMaxLimit = true;
                 OnMaxLimitReached(payload);
             }
-            else if (currentPosition <= minThreshold && !AtMinLimit())
+            else if (currentPosition < maxThreshold && AtMaxLimit())
+            {
+                atMaxLimit = false;
+                OnMaxLimitExited(payload);
+            }
+            if (currentPosition <= minThreshold && !AtMinLimit())
             {
                 atMinLimit = true;
                 OnMinLimitReached(payload);
             }
-            else if (currentPosition > minThreshold && currentPosition < maxThreshold)
+            else if (currentPosition > minThreshold && AtMinLimit())
             {
-                if (AtMinLimit())
-                {
-                    OnMinLimitExited(payload);
-                }
-                if (AtMaxLimit())
-                {
-                    OnMaxLimitExited(payload);
-                }
-
                 atMinLimit = false;
-                atMaxLimit = false;
+                OnMinLimitExited(payload);
             }
 
             if (IsResting())
