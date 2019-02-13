@@ -1,0 +1,39 @@
+* text=auto
+
+# Unity
+*.cs diff=csharp text
+*.cginc text
+*.shader text
+
+# Unity YAML
+*.meta eol=lf merge=unityyamlmerge diff
+*.unity eol=lf merge=unityyamlmerge diff
+*.asset eol=lf merge=unityyamlmerge diff
+## Terrains are saved as binary
+*[Tt]errain*.asset -text merge=unityyamlmerge
+*.prefab eol=lf merge=unityyamlmerge diff
+*.mat eol=lf merge=unityyamlmerge diff
+*.anim eol=lf merge=unityyamlmerge diff
+*.controller eol=lf merge=unityyamlmerge diff
+*.overrideController eol=lf merge=unityyamlmerge diff
+*.physicMaterial eol=lf merge=unityyamlmerge diff
+*.physicsMaterial2D eol=lf merge=unityyamlmerge diff
+*.playable eol=lf merge=unityyamlmerge diff
+*.mask eol=lf merge=unityyamlmerge diff
+*.brush eol=lf merge=unityyamlmerge diff
+*.flare eol=lf merge=unityyamlmerge diff
+*.fontsettings eol=lf merge=unityyamlmerge diff
+*.guiskin eol=lf merge=unityyamlmerge diff
+*.giparams eol=lf merge=unityyamlmerge diff
+*.renderTexture eol=lf merge=unityyamlmerge diff
+*.spriteatlas eol=lf merge=unityyamlmerge diff
+*.terrainlayer eol=lf merge=unityyamlmerge diff
+*.mixer eol=lf merge=unityyamlmerge diff
+*.shadervariants eol=lf merge=unityyamlmerge diff
+
+# Collapse Unity-generated files on GitHub
+*.asset linguist-generated
+*.mat linguist-generated
+*.meta linguist-generated
+*.prefab linguist-generated
+*.unity linguist-generated
