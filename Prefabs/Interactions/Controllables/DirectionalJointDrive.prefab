@@ -128,17 +128,17 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
 --- !u!1 &1395012396568826
@@ -231,7 +231,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatToBoolean+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatToBoolean+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   positiveBounds:
     minimum: 0.49
@@ -293,7 +293,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatToBoolean+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatToBoolean+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   positiveBounds:
     minimum: 0
@@ -347,12 +347,12 @@ MonoBehaviour:
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   StepValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   NormalizedValueChanged:
     m_PersistentCalls:
@@ -390,12 +390,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   TargetValueReached:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, Assembly-CSharp,
+    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _driveAxis: 0
   _moveToTargetValue: 1
@@ -454,17 +454,17 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
 --- !u!1 &1794330124314692
@@ -668,7 +668,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatToBoolean+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatToBoolean+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   positiveBounds:
     minimum: 0.99
@@ -753,17 +753,17 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
 --- !u!1 &1973074529896400

@@ -27,7 +27,7 @@
         public override void SetUp(GrabInteractableInternalSetup grabSetup)
         {
             base.SetUp(grabSetup);
-            directionModifier.SetTarget(grabSetup.Facade.ConsumerContainer);
+            directionModifier.Target = grabSetup.Facade.ConsumerContainer;
         }
 
         /// <summary>

@@ -80,17 +80,17 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
 --- !u!1 &1111057230057527468
@@ -170,17 +170,17 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
 --- !u!1 &2024445825049221693
@@ -276,17 +276,17 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Action.BooleanAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
 --- !u!1 &5029966864976377525
@@ -475,11 +475,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2602499800182351229}
     m_Modifications:
-    - target: {fileID: 238488845808054240, guid: 9f90ad3184b26c345a474156e0a11f99,
-        type: 3}
-      propertyPath: m_Name
-      value: PointsHandler
-      objectReference: {fileID: 0}
     - target: {fileID: 5062213534656051039, guid: 9f90ad3184b26c345a474156e0a11f99,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -534,6 +529,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 238488845808054240, guid: 9f90ad3184b26c345a474156e0a11f99,
+        type: 3}
+      propertyPath: m_Name
+      value: PointsHandler
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f90ad3184b26c345a474156e0a11f99, type: 3}
@@ -574,11 +574,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1255470011682875458}
     m_Modifications:
-    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
-        type: 3}
-      propertyPath: m_Name
-      value: Elements.Cube
-      objectReference: {fileID: 0}
     - target: {fileID: 7227980817941095506, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -633,6 +628,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
+        type: 3}
+      propertyPath: m_Name
+      value: Elements.Cube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c8a9312eead39c408e711dc1ae5a4f0, type: 3}
@@ -649,11 +649,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5288304000302675054}
     m_Modifications:
-    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
-        type: 3}
-      propertyPath: m_Name
-      value: Elements.Cube
-      objectReference: {fileID: 0}
     - target: {fileID: 7227980817941095506, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -708,6 +703,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
+        type: 3}
+      propertyPath: m_Name
+      value: Elements.Cube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c8a9312eead39c408e711dc1ae5a4f0, type: 3}

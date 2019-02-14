@@ -1,0 +1,15 @@
+{
+    "name": "VRTK.Samples.Farm.Runtime",
+    "references": [
+        "Zinnia.Runtime",
+        "VRTK.Prefabs.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

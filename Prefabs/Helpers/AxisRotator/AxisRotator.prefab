@@ -165,8 +165,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Data.Operation.TransformVector3PropertyExtractor+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _direction: 2
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  direction: 2
 --- !u!114 &3272964448479878073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.Vector3ToVector2+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector3ToVector2+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   coordinateMap: 4
 --- !u!114 &3272964448479878075
@@ -222,7 +222,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.Vector2Multiplier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector2Multiplier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   collection:
   - {x: 0, y: 0}
@@ -275,7 +275,7 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
@@ -291,12 +291,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
   equalityTolerance: 1e-45
@@ -316,7 +316,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3272964449029822949}
-        m_MethodName: SetY
+        m_MethodName: set_CurrentY
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -337,7 +337,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatMultiplier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatMultiplier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   collection:
   - 0
@@ -399,7 +399,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatToVector2+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatToVector2+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &3272964449206891280
 GameObject:
@@ -449,7 +449,7 @@ MonoBehaviour:
   Activated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ValueChanged:
     m_PersistentCalls:
@@ -465,12 +465,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   Deactivated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   sources: []
   equalityTolerance: 1e-45
@@ -490,7 +490,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3272964449029822949}
-        m_MethodName: SetX
+        m_MethodName: set_CurrentX
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -511,7 +511,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatMultiplier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatMultiplier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   collection:
   - 0
@@ -614,7 +614,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3272964449512663007}
-        m_MethodName: SetY
+        m_MethodName: set_CurrentY
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -635,10 +635,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.Vector2ToAngle+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector2ToAngle+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   unit: 0
-  _origin: {x: 0, y: 1}
+  origin: {x: 0, y: 1}
 --- !u!114 &3272964449512663007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,7 +665,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.FloatToVector2+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatToVector2+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &3272964449512663006
 MonoBehaviour:
@@ -704,7 +704,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Type.Transformation.Vector2ToVector3+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector2ToVector3+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   coordinateMap: 0
   unusedCoordinateValue: 0

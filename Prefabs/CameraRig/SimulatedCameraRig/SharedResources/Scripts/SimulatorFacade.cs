@@ -122,7 +122,7 @@
         {
             if (TrackedAlias != null)
             {
-                playareaPosition.target = playareaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
+                playareaPosition.Target = playareaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
                 playareaResetter.source = playareaResetter != null ? TrackedAlias.PlayAreaAlias.transform : null;
             }
         }

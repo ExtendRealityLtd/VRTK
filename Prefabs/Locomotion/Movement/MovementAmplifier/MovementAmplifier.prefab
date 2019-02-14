@@ -68,7 +68,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Type.Transformation.Vector3Multiplier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector3Multiplier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   collection:
   - {x: 0, y: 0, z: 0}
@@ -202,12 +202,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ThresholdResumed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114105985074516834
 MonoBehaviour:
@@ -235,13 +235,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+Vector3UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+Vector3UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   DistanceExtracted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+FloatUnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+FloatUnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114875471641467916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,12 +534,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ThresholdResumed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114297957598228628
 MonoBehaviour:
@@ -556,8 +556,8 @@ MonoBehaviour:
   DifferenceExtracted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+Vector3UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+Vector3UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   DistanceExtracted:
     m_PersistentCalls:
       m_Calls:
@@ -572,8 +572,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+FloatUnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+FloatUnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1485024953633994
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +651,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   ThresholdResumed:
     m_PersistentCalls:
@@ -667,7 +667,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparator+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1544671449446328
 GameObject:
@@ -731,13 +731,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+Vector3UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+Vector3UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   DistanceExtracted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: VRTK.Core.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+FloatUnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Tracking.Follow.ObjectDistanceComparatorEventDataExtractor+FloatUnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114745694446295306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,7 +764,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Type.Transformation.Vector3Multiplier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector3Multiplier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   collection:
   - {x: 0, y: 0, z: 0}
@@ -806,8 +806,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Type.Transformation.Vector3MagnitudeSetter+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_TypeName: Zinnia.Data.Type.Transformation.Vector3MagnitudeSetter+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   magnitude: 0
 --- !u!1 &1560522712979762
 GameObject:
@@ -938,7 +938,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114559784510935700}
-        m_MethodName: SetMagnitude
+        m_MethodName: set_Magnitude
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -948,7 +948,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: VRTK.Core.Data.Type.Transformation.FloatAdder+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Type.Transformation.FloatAdder+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   collection:
   - 0

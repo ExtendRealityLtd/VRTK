@@ -1261,22 +1261,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2518704924595545309}
     m_Modifications:
-    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_Name
-      value: tree
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1332,6 +1316,22 @@ PrefabInstance:
     - target: {fileID: 400000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_Name
+      value: tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
       propertyPath: m_LocalScale.x

@@ -47,12 +47,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &172059083441672809
 GameObject:
@@ -107,12 +107,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &8432516453448636151
 MonoBehaviour:
@@ -186,7 +186,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -436,12 +436,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   velocityLimit: Infinity
   maxDistanceDelta: 10
@@ -492,12 +492,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1252738298515468630
 GameObject:
@@ -546,12 +546,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   angularVelocityLimit: Infinity
   maxDistanceDelta: 10
@@ -672,12 +672,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &7844480214140473484
 MonoBehaviour:
@@ -741,12 +741,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   velocityLimit: Infinity
   maxDistanceDelta: 10
@@ -829,7 +829,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -919,12 +919,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &5432371504749380793
 MonoBehaviour:
@@ -988,12 +988,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &3724673846510280993
 GameObject:
@@ -1064,7 +1064,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
 --- !u!1 &4417309083369010097
@@ -1149,7 +1149,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -1224,7 +1224,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
 --- !u!1 &4534647758027394604
@@ -1274,12 +1274,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &4534934962641631106
 GameObject:
@@ -1328,12 +1328,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &4575258454444623006
 GameObject:
@@ -1392,7 +1392,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -1475,7 +1475,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -1632,7 +1632,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Event.ActiveCollisionConsumerEventProxyEmitter+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
 --- !u!1 &5967679938758173567
@@ -1681,7 +1681,7 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -1774,7 +1774,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 3527365182890565175}
-        m_MethodName: SetAttachmentPoint
+        m_MethodName: set_AttachmentPoint
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1785,7 +1785,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Tracking.Collision.Active.CollisionPointContainer+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Destroyed:
     m_PersistentCalls:
       m_Calls:
@@ -1812,7 +1812,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Zinnia.Tracking.Collision.Active.CollisionPointContainer+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &6453161300202616542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,12 +1860,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   attachmentPoint: {fileID: 0}
 --- !u!1 &7007780839671147685
@@ -2044,7 +2044,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -2256,7 +2256,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -2328,7 +2328,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -2526,7 +2526,7 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
@@ -2612,7 +2612,7 @@ MonoBehaviour:
   relations:
   - key: {fileID: 0}
     value: {fileID: 6056333363797953553}
-  ValueRetreieved:
+  ValueRetrieved:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1803858868811045269}
@@ -2626,5 +2626,5 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectRelations+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Data.Collection.GameObjectRelations+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

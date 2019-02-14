@@ -381,42 +381,42 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Touched:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Untouched:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   LastUntouched:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   FirstGrabbed:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Grabbed:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Ungrabbed:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   LastUngrabbed:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Interactables.InteractableFacade+UnityEvent,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   disallowedTouchInteractors: []
   disallowedGrabInteractors: []
   _consumerContainer: {fileID: 7915416951780248044}
@@ -458,17 +458,17 @@ MonoBehaviour:
   CollisionStarted:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   CollisionChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   CollisionStopped:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Assembly-CSharp,
+    m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1001 &77174375491768531
 PrefabInstance:
