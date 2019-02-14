@@ -11,7 +11,6 @@
     using Zinnia.Tracking.Collision;
     using Zinnia.Tracking.Collision.Active;
     using VRTK.Prefabs.Interactions.Interactables;
-    using VRTK.Prefabs.Interactions.Interactables.Grab.Receiver;
 
     /// <summary>
     /// Sets up the Interactor Prefab grab settings based on the provided user settings.
@@ -160,7 +159,7 @@
         }
 
         /// <summary>
-        /// Attempt to grab an Interactable to the current Interactor utilising custom collision data.
+        /// Attempt to grab an Interactable to the current Interactor utilizing custom collision data.
         /// </summary>
         /// <param name="interactable">The Interactable to attempt to grab.</param>
         /// <param name="collision">Custom collision data.</param>
@@ -233,7 +232,7 @@
         }
 
         /// <summary>
-        /// Retreives a collection of currently grabbed GameObjects.
+        /// Retrieves a collection of currently grabbed GameObjects.
         /// </summary>
         /// <returns>The currently grabbed GameObjects.</returns>
         protected virtual List<GameObject> GetGrabbedObjects()

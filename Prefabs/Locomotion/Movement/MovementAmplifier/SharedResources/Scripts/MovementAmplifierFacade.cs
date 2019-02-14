@@ -46,7 +46,7 @@
         [Header("Movement Settings"), Tooltip("The radius in which source movement is ignored. Too small values can result in movement amplification happening during crouching which is often unexpected."), SerializeField]
         private float _ignoredRadius = 0.25f;
         /// <summary>
-        /// The radius in which <see cref="source"/> movement is ignored. Too small values can result in movement amplification happening during crouching which is often unexpected.
+        /// The radius in which <see cref="Source"/> movement is ignored. Too small values can result in movement amplification happening during crouching which is often unexpected.
         /// </summary>
         public float IgnoredRadius
         {
@@ -62,7 +62,7 @@
         [Tooltip("How much to amplify movement of source to apply to target."), SerializeField]
         private float _multiplier = 2f;
         /// <summary>
-        /// How much to amplify movement of <see cref="source"/> to apply to <see cref="target"/>.
+        /// How much to amplify movement of <see cref="Source"/> to apply to <see cref="Target"/>.
         /// </summary>
         public float Multiplier
         {

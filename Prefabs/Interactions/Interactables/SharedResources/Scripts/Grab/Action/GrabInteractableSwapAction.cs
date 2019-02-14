@@ -52,7 +52,7 @@
         /// <returns>The casted provider.</returns>
         protected virtual GrabInteractableStackInteractorProvider ToStackInteractorProvider(GrabInteractableInteractorProvider provider)
         {
-            return provider as GrabInteractableStackInteractorProvider;
+            return (GrabInteractableStackInteractorProvider)provider;
         }
     }
 }

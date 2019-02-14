@@ -1,6 +1,5 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
-    using UnityEngine;
     using Zinnia.Data.Type;
 
     /// <summary>

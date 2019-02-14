@@ -44,7 +44,7 @@
 
         #region Internal Settings
         /// <summary>
-        /// The <see cref="Action"/> that will be linked to the <see cref="sourceAction"/>.
+        /// The <see cref="Action"/> that will be linked to the <see cref="SourceAction"/>.
         /// </summary>
         [Header("Internal Settings"), Tooltip("The Action that will be linked to the sourceAction."), InternalSetting, SerializeField]
         protected Action targetAction;

@@ -30,9 +30,9 @@
         /// <summary>
         /// The motor data to set on the joint.
         /// </summary>
-        protected JointMotor jointMotor = new JointMotor();
+        protected JointMotor jointMotor;
 
-        /// <inheritdoc />        
+        /// <inheritdoc />
         public override void Process()
         {
             if (!isActiveAndEnabled)
@@ -171,7 +171,7 @@
         }
 
         /// <summary>
-        /// Calculates a multiplier based on the direction the rotation is travelling.
+        /// Calculates a multiplier based on the direction the rotation is traveling.
         /// </summary>
         /// <returns>The multiplier that represents the direction.</returns>
         protected virtual float CalculateDirectionMultiplier()

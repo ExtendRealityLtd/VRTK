@@ -57,7 +57,7 @@
         [Tooltip("The time between initiating the grabAction and touching an Interactable to be considered a valid grab."), SerializeField]
         private float _grabPrecognition = 0.1f;
         /// <summary>
-        /// The time between initiating the <see cref="grabAction"/> and touching an Interactable to be considered a valid grab.
+        /// The time between initiating the <see cref="GrabAction"/> and touching an Interactable to be considered a valid grab.
         /// </summary>
         public float GrabPrecognition
         {
@@ -125,7 +125,7 @@
         /// <summary>
         /// Attempt to grab a <see cref="GameObject"/> that contains an Interactable to the current Interactor.
         /// </summary>
-        /// <param name="interactor">The GameObject that the Interactor is on.</param>
+        /// <param name="interactable">The GameObject that the Interactable is on.</param>
         public virtual void Grab(GameObject interactable)
         {
             Grab(interactable.TryGetComponent<InteractableFacade>(true, true));
@@ -141,7 +141,7 @@
         }
 
         /// <summary>
-        /// Attempt to grab an Interactable to the current Interactor utilising custom collision data.
+        /// Attempt to grab an Interactable to the current Interactor utilizing custom collision data.
         /// </summary>
         /// <param name="interactable">The Interactable to attempt to grab.</param>
         /// <param name="collision">Custom collision data.</param>

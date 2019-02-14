@@ -69,12 +69,12 @@
         /// The linked TransformPositionMutator.
         /// </summary>
         [Header("Internal Settings"), Tooltip("The linked TransformPositionMutator."), InternalSetting, SerializeField]
-        protected TransformPositionMutator playareaPosition;
+        protected TransformPositionMutator playAreaPosition;
         /// <summary>
         /// The linked TransformPropertyResetter.
         /// </summary>
         [Tooltip("The linked TransformPropertyResetter."), InternalSetting, SerializeField]
-        protected TransformPropertyResetter playareaResetter;
+        protected TransformPropertyResetter playAreaResetter;
         #endregion
 
         /// <summary>
@@ -122,8 +122,8 @@
         {
             if (TrackedAlias != null)
             {
-                playareaPosition.Target = playareaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
-                playareaResetter.source = playareaResetter != null ? TrackedAlias.PlayAreaAlias.transform : null;
+                playAreaPosition.Target = playAreaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
+                playAreaResetter.source = playAreaResetter != null ? TrackedAlias.PlayAreaAlias.transform : null;
             }
         }
 

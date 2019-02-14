@@ -73,6 +73,7 @@
 
         /// <summary>
         /// Recalculates the PlayArea dimensions.
+        /// </summary>
         public virtual void RecalculateDimensions()
         {
             dimensionExtractor.DoExtract();

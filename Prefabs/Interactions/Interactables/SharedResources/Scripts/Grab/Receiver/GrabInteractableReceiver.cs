@@ -152,7 +152,6 @@
         /// <summary>
         /// Configures the Grab Type to be used.
         /// </summary>
-        /// <param name="grabType">The grab type to toggle.</param>
         public virtual void ConfigureGrabType()
         {
             switch (GrabType)

@@ -12,7 +12,7 @@
     {
         [Tooltip("The Text component to apply the instructions text to."), InternalSetting, SerializeField]
         protected Text keyBindingText;
-        [Tooltip("The action for handling foward."), InternalSetting, SerializeField]
+        [Tooltip("The action for handling forward."), InternalSetting, SerializeField]
         protected UnityButtonAction forward;
         [Tooltip("The action for handling backward."), InternalSetting, SerializeField]
         protected UnityButtonAction backward;

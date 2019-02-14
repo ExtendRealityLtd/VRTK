@@ -10,7 +10,7 @@
     /// The basis for a mechanism to drive motion on a control.
     /// </summary>
     /// <typeparam name="TFacade">The <see cref="DriveFacade{TDrive, TSelf}"/> to be used with the drive.</typeparam>
-    /// <typeparam name="TSelf">The actual concrete impemetation of the drive being used.</typeparam>
+    /// <typeparam name="TSelf">The actual concrete implementation of the drive being used.</typeparam>
     public abstract class Drive<TFacade, TSelf> : MonoBehaviour, IProcessable
          where TFacade : DriveFacade<TSelf, TFacade> where TSelf : Drive<TFacade, TSelf>
     {

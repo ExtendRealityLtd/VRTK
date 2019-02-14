@@ -5,7 +5,7 @@
     using Zinnia.Event;
 
     /// <summary>
-    /// Emits a UnityEvent with an <see cref="InteractorFacade"/> payload whenever <see cref="Receive"/> is called.
+    /// Emits a UnityEvent with an <see cref="InteractorFacade"/> payload whenever <see cref="SingleEventProxyEmitter{TValue,TEvent}.Receive"/> is called.
     /// </summary>
     public class InteractorFacadeEventProxyEmitter : RestrictableSingleEventProxyEmitter<InteractorFacade, InteractorFacadeEventProxyEmitter.UnityEvent>
     {

@@ -64,7 +64,7 @@
         #endregion
 
         /// <summary>
-        /// Attempts to teleport the <see cref="playAreaAlias"/>.
+        /// Attempts to teleport the <see cref="TeleporterFacade.Target"/>.
         /// </summary>
         /// <param name="destination">The location to attempt to teleport to.</param>
         public virtual void Teleport(TransformData destination)

@@ -130,7 +130,7 @@
         }
 
         /// <summary>
-        /// Retreives a collection of Interactors that are touching the Interactable.
+        /// Retrieves a collection of Interactors that are touching the Interactable.
         /// </summary>
         /// <returns>The touching Interactors.</returns>
         protected virtual List<InteractorFacade> GetTouchingInteractors()

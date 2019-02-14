@@ -26,7 +26,7 @@
         [Header("Reference Settings"), Tooltip("Moves the radius origin."), InternalSetting, SerializeField]
         protected ObjectDistanceComparator radiusOriginMover;
         /// <summary>
-        /// Determines whether <see cref="MovementAmplifierFacade.source"/> is inside the radius.
+        /// Determines whether <see cref="MovementAmplifierFacade.Source"/> is inside the radius.
         /// </summary>
         [Tooltip("Determines whether MovementAmplifierFacade.source is inside the radius."), InternalSetting, SerializeField]
         protected ObjectDistanceComparator distanceChecker;
@@ -41,7 +41,7 @@
         [Tooltip("Subtracts the radius."), InternalSetting, SerializeField]
         protected FloatAdder radiusSubtractor;
         /// <summary>
-        /// Stabilizes the radius by ensuring <see cref="MovementAmplifierFacade.target"/> moves back into the radius.
+        /// Stabilizes the radius by ensuring <see cref="MovementAmplifierFacade.Target"/> moves back into the radius.
         /// </summary>
         [Tooltip("Stabilizes the radius by ensuring MovementAmplifierFacade.target moves back into the radius."), InternalSetting, SerializeField]
         protected float radiusStabilizer = 0.001f;

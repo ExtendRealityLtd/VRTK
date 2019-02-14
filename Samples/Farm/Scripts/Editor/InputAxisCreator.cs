@@ -27,8 +27,8 @@
             public float dead;
             public float sensitivity;
 
-            public bool snap = false;
-            public bool invert = false;
+            public bool snap;
+            public bool invert;
 
             public AxisType type;
 

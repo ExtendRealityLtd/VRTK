@@ -80,35 +80,35 @@
         public VelocityTracker ActiveRightControllerVelocity => RightControllerVelocityTrackers.Select(element => element).FirstOrDefault(velocityTracker => velocityTracker.gameObject.activeInHierarchy);
 
         /// <summary>
-        /// Retreives all of the linked CameraRig PlayAreas.
+        /// Retrieves all of the linked CameraRig PlayAreas.
         /// </summary>
         public List<GameObject> PlayAreas => cameraRigs.Select(rig => rig.playArea).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Headsets.
+        /// Retrieves all of the linked CameraRig Headsets.
         /// </summary>
         public List<GameObject> Headsets => cameraRigs.Select(rig => rig.headset).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Headset Cameras.
+        /// Retrieves all of the linked CameraRig Headset Cameras.
         /// </summary>
         public List<Camera> HeadsetCameras => cameraRigs.Select(rig => rig.headsetCamera).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Headset Velocity Trackers.
+        /// Retrieves all of the linked CameraRig Headset Velocity Trackers.
         /// </summary>
         public List<VelocityTracker> HeadsetVelocityTrackers => cameraRigs.Select(rig => rig.headsetVelocityTracker).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Left Controllers.
+        /// Retrieves all of the linked CameraRig Left Controllers.
         /// </summary>
         public List<GameObject> LeftControllers => cameraRigs.Select(rig => rig.leftController).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Right Controllers.
+        /// Retrieves all of the linked CameraRig Right Controllers.
         /// </summary>
         public List<GameObject> RightControllers => cameraRigs.Select(rig => rig.rightController).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Left Controller Velocity Trackers.
+        /// Retrieves all of the linked CameraRig Left Controller Velocity Trackers.
         /// </summary>
         public List<VelocityTracker> LeftControllerVelocityTrackers => cameraRigs.Select(rig => rig.leftControllerVelocityTracker).Where(value => value != null).ToList();
         /// <summary>
-        /// Retreives all of the linked CameraRig Right Controller Velocity Trackers.
+        /// Retrieves all of the linked CameraRig Right Controller Velocity Trackers.
         /// </summary>
         public List<VelocityTracker> RightControllerVelocityTrackers => cameraRigs.Select(rig => rig.rightControllerVelocityTracker).Where(value => value != null).ToList();
         /// <summary>
