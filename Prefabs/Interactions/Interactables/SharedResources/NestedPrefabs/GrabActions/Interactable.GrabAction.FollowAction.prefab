@@ -269,6 +269,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3393304086735995364}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &517120883928539912
@@ -389,6 +400,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 2919631799667094827}
   target: {fileID: 0}
+--- !u!1 &931807802819633928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2273818195888267919}
+  - component: {fileID: 9191214863009323714}
+  - component: {fileID: 3393304086735995364}
+  m_Layer: 0
+  m_Name: FollowTransformRotateOnPositionDifference
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2273818195888267919
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931807802819633928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2414623591581571082}
+  - {fileID: 5097280285141756110}
+  - {fileID: 8281717829177002263}
+  m_Father: {fileID: 6265600541595827926}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9191214863009323714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931807802819633928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a2edf60179e704a9fe544850cfaa52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleModifier: {fileID: 5696253004306208668}
+  rotationModifier: {fileID: 7813340367162748559}
+  positionModifier: {fileID: 8266782252941976397}
+  Premodified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Modified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &3393304086735995364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931807802819633928}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c0eab237e25807459af1c5caf4d3d33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  momentToProcess: 5
+  processes:
+  - {fileID: 6326138546683961839}
 --- !u!1 &1067444733457789979
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +641,60 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   angularVelocityLimit: Infinity
   maxDistanceDelta: 10
+--- !u!1 &1611629413006276135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8281717829177002263}
+  - component: {fileID: 5696253004306208668}
+  m_Layer: 0
+  m_Name: Scale
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8281717829177002263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611629413006276135}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2273818195888267919}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5696253004306208668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611629413006276135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e1be200ae387d4c95c60842582358d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applyOffset: 1
+  Premodified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Modified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &1655946957269092895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1396,6 +1536,60 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
+--- !u!1 &4787740753278822093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2414623591581571082}
+  - component: {fileID: 8266782252941976397}
+  m_Layer: 0
+  m_Name: Position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2414623591581571082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4787740753278822093}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2273818195888267919}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8266782252941976397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4787740753278822093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b421ec2455cf9c479d63ce5c4fbe83c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applyOffset: 1
+  Premodified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Modified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &5098870614394569358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1466,6 +1660,17 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1803858868811045269}
         m_MethodName: ClearTargetOffsets
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7813340367162748559}
+        m_MethodName: ResetPreviousState
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1569,6 +1774,7 @@ MonoBehaviour:
   followTransform: {fileID: 2304878481562678152}
   followRigidbody: {fileID: 3324176677558867994}
   followRigidbodyForceRotate: {fileID: 6730074303143903034}
+  followTransformRotateOnPositionDifference: {fileID: 9191214863009323714}
   velocityApplier: {fileID: 5458790361451553341}
   precisionLogicContainer: {fileID: 6356031491017706456}
   precisionCreateContainer: {fileID: 5901610279563605414}
@@ -1715,6 +1921,65 @@ Transform:
   m_Father: {fileID: 1320821347721610622}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6213258246450103873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5097280285141756110}
+  - component: {fileID: 7813340367162748559}
+  m_Layer: 0
+  m_Name: Rotation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5097280285141756110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6213258246450103873}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2273818195888267919}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7813340367162748559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6213258246450103873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ed154ebd688ecb47a6b727f72b24d8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applyOffset: 0
+  Premodified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Modified:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  angularDrag: 1
+  followOnAxis:
+    xState: 1
+    yState: 1
+    zState: 1
 --- !u!1 &6356031491017706456
 GameObject:
   m_ObjectHideFlags: 0
@@ -2127,6 +2392,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 3393304086735995364}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &7131332960759724238
@@ -2424,6 +2700,7 @@ Transform:
   - {fileID: 7556836732984953135}
   - {fileID: 8109289381563529949}
   - {fileID: 4980966912544043764}
+  - {fileID: 2273818195888267919}
   m_Father: {fileID: 4269985348101087443}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
