@@ -561,6 +561,16 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  StartedMoving:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  StoppedMoving:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   _driveAxis: 0
   _moveToTargetValue: 1
   _targetValue: 0.5
@@ -896,6 +906,16 @@ PrefabInstance:
       propertyPath: LastUngrabbed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4941212907334667383, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: container
+      value: 
+      objectReference: {fileID: 1223850442626386}
+    - target: {fileID: 5731325862107937875, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: container
+      value: 
+      objectReference: {fileID: 1223850442626386}
     - target: {fileID: 7899214951717282139, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: _followTracking
@@ -906,27 +926,17 @@ PrefabInstance:
       propertyPath: _grabOffset
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 5731325862107937875, guid: 240fdd985e025cb459f73d2b1bb7b341,
-        type: 3}
-      propertyPath: container
-      value: 
-      objectReference: {fileID: 1223850442626386}
-    - target: {fileID: 4941212907334667383, guid: 240fdd985e025cb459f73d2b1bb7b341,
-        type: 3}
-      propertyPath: container
-      value: 
-      objectReference: {fileID: 1223850442626386}
-    - target: {fileID: 8102208612897351471, guid: 240fdd985e025cb459f73d2b1bb7b341,
-        type: 3}
-      propertyPath: container
-      value: 
-      objectReference: {fileID: 1223850442626386}
     - target: {fileID: 3577498077120533315, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: container
       value: 
       objectReference: {fileID: 1223850442626386}
     - target: {fileID: 2533074695385362052, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2578786294060922994, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -946,17 +956,12 @@ PrefabInstance:
       propertyPath: followModifier
       value: 
       objectReference: {fileID: 1414928532346634193}
-    - target: {fileID: 1464207274796344164, guid: 240fdd985e025cb459f73d2b1bb7b341,
+    - target: {fileID: 8102208612897351471, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
-      propertyPath: target
+      propertyPath: container
       value: 
-      objectReference: {fileID: 54290088492459356}
+      objectReference: {fileID: 1223850442626386}
     - target: {fileID: 7791472590518542456, guid: 240fdd985e025cb459f73d2b1bb7b341,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2578786294060922994, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -970,6 +975,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 114941128369672600}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ApplyExistingAngularVelocity
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220630817120124067, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_FloatArgument
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8265383420104874212, guid: 240fdd985e025cb459f73d2b1bb7b341, type: 3}

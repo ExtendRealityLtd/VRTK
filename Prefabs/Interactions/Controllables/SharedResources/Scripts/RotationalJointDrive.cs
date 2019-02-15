@@ -67,6 +67,12 @@
         }
 
         /// <inheritdoc />
+        public override void ApplyExistingAngularVelocity(float multiplier = 1f)
+        {
+            jointRigidbody.angularVelocity = AxisDirection * pseudoAngularVelocity * multiplier;
+        }
+
+        /// <inheritdoc />
         protected override void SetUpInternals()
         {
             jointMotor.force = joint.motor.force;

@@ -37,9 +37,17 @@
         protected static readonly FloatRange circleUpperLeftQuadrant = new FloatRange(270f, 360f);
 
         /// <summary>
-        /// The representation of the rotation in meaningful values and not limited to 0f to 360f.
+        /// The representation of the previous frame rotation in meaningful values and not limited to 0f to 360f.
         /// </summary>
-        protected float pseudoRotation;
+        protected float previousPseudoRotation;
+        /// <summary>
+        /// The representation of the current frame rotation in meaningful values and not limited to 0f to 360f.
+        /// </summary>
+        protected float currentPseudoRotation;
+        /// <summary>
+        /// The representation of the rotational velocity.
+        /// </summary>
+        protected float pseudoAngularVelocity;
         /// <summary>
         /// The multiplier used to determine how many complete revolutions the drive has performed.
         /// </summary>
@@ -52,12 +60,21 @@
         /// The current actual rotational value of the drive.
         /// </summary>
         protected Vector3 currentActualRotation;
+        /// <summary>
+        /// The current direction the rotation is moving in.
+        /// </summary>
+        protected float currentRotationDirection;
 
         /// <summary>
         /// Calculates the location of the rotational hinge for the drive.
         /// </summary>
         /// <param name="newHingeLocation">The new local space for the hinge point.</param>
         public abstract void CalculateHingeLocation(Vector3 newHingeLocation);
+        /// <summary>
+        /// Attempts to apply the existing angular velocity back on to the rotation of the drive.
+        /// </summary>
+        /// <param name="multiplier">The amount to multiply the angular velocity to be applied by.</param>
+        public abstract void ApplyExistingAngularVelocity(float multiplier = 1f);
 
         /// <inheritdoc />
         public override void Process()
@@ -75,7 +92,10 @@
             CalculateRotationMultiplier();
             AttemptApplyLimits();
 
-            pseudoRotation = CurrentActualAngle + (circleDegrees * rotationMultiplier);
+            currentPseudoRotation = CurrentActualAngle + (circleDegrees * rotationMultiplier);
+            currentRotationDirection = previousPseudoRotation < currentPseudoRotation ? 1f : -1f;
+            pseudoAngularVelocity = !currentPseudoRotation.ApproxEquals(previousPseudoRotation) ? previousPseudoRotation - currentPseudoRotation : pseudoAngularVelocity;
+            previousPseudoRotation = currentPseudoRotation;
 
             float autoDriveTargetVelocity = CalculateAutoDriveVelocity();
             ProcessAutoDrive(autoDriveTargetVelocity);
@@ -109,7 +129,7 @@
                 return 0f;
             }
 
-            return Mathf.Clamp(pseudoRotation, limits.minimum, limits.maximum);
+            return Mathf.Clamp(currentPseudoRotation, limits.minimum, limits.maximum);
         }
 
         /// <summary>
@@ -133,12 +153,12 @@
         protected virtual float CalculateDirectionMultiplier()
         {
             float actualAngle = ActualTargetAngle;
-            if (actualAngle.ApproxEquals(pseudoRotation, targetValueReachedThreshold))
+            if (actualAngle.ApproxEquals(currentPseudoRotation, targetValueReachedThreshold))
             {
                 return 0f;
             }
 
-            return actualAngle > pseudoRotation ? 1f : -1f;
+            return actualAngle > currentPseudoRotation ? 1f : -1f;
         }
 
         /// <summary>
@@ -155,12 +175,12 @@
         /// <returns>Whether the limits have been applied.</returns>
         protected virtual bool ApplyLimits()
         {
-            if (pseudoRotation < DriveLimits.minimum)
+            if (currentPseudoRotation < DriveLimits.minimum)
             {
                 GetDriveTransform().localRotation = Quaternion.Euler(-AxisDirection * DriveLimits.minimum);
                 return true;
             }
-            else if (pseudoRotation > DriveLimits.maximum)
+            else if (currentPseudoRotation > DriveLimits.maximum)
             {
                 GetDriveTransform().localRotation = Quaternion.Euler(-AxisDirection * DriveLimits.maximum);
                 return true;
@@ -174,7 +194,7 @@
         /// <returns>The velocity to drive the control automatically with.</returns>
         protected virtual float CalculateAutoDriveVelocity()
         {
-            return (facade.MoveToTargetValue && !pseudoRotation.ApproxEquals(ActualTargetAngle, targetValueReachedThreshold) ? facade.DriveSpeed : 0f) * CalculateDirectionMultiplier();
+            return (facade.MoveToTargetValue && !currentPseudoRotation.ApproxEquals(ActualTargetAngle, targetValueReachedThreshold) ? facade.DriveSpeed : 0f) * CalculateDirectionMultiplier();
         }
 
         /// <summary>
