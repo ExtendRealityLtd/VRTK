@@ -1,9 +1,9 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
     using UnityEngine;
-    using Zinnia.Data.Type;
     using Zinnia.Process;
     using Zinnia.Extension;
+    using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -77,18 +77,10 @@
         /// The previous state of whether the target value has been reached.
         /// </summary>
         protected bool previousTargetValueReached;
-
         /// <summary>
-        /// Sets the target value of the drive to the given normalized value.
+        /// Whether the control is moving or not.
         /// </summary>
-        /// <param name="newValue">The normalized value to set the Target Value to.</param>
-        public abstract void SetTargetValue(float newValue);
-        /// <summary>
-        /// Processes the speed in which the drive can affect the control.
-        /// </summary>
-        /// <param name="driveSpeed">The speed to drive the control at.</param>
-        /// <param name="moveToTargetValue">Whether to allow the drive to automatically move the control to the desired target value.</param>
-        public abstract void ProcessDriveSpeed(float driveSpeed, bool moveToTargetValue);
+        protected bool isMoving;
 
         /// <summary>
         /// Sets up the drive mechanism.
@@ -96,8 +88,8 @@
         public virtual void SetUp()
         {
             SetUpInternals();
-            AxisDirection = CalculateDriveAxis(facade.DriveAxis);
             DriveLimits = CalculateDriveLimits(facade);
+            AxisDirection = CalculateDriveAxis(facade.DriveAxis);
             ProcessDriveSpeed(facade.DriveSpeed, facade.MoveToTargetValue);
             SetTargetValue(facade.TargetValue);
         }
@@ -114,9 +106,22 @@
 
             if (!Value.ApproxEquals(previousValue))
             {
+                if (!isMoving && previousValue < float.MaxValue)
+                {
+                    EmitStartedMoving();
+                    isMoving = true;
+                }
                 previousValue = Value;
                 EmitValueChanged();
                 EmitNormalizedValueChanged();
+            }
+            else
+            {
+                if (isMoving)
+                {
+                    EmitStoppedMoving();
+                    isMoving = false;
+                }
             }
 
             if (!StepValue.ApproxEquals(previousStepValue))
@@ -137,6 +142,29 @@
         }
 
         /// <summary>
+        /// Processes the speed in which the drive can affect the control.
+        /// </summary>
+        /// <param name="driveSpeed">The speed to drive the control at.</param>
+        /// <param name="moveToTargetValue">Whether to allow the drive to automatically move the control to the desired target value.</param>
+        public virtual void ProcessDriveSpeed(float driveSpeed, bool moveToTargetValue)
+        {
+        }
+
+        /// <summary>
+        /// Sets the target value of the drive to the given normalized value.
+        /// </summary>
+        /// <param name="normalizedValue">The normalized value to set the Target Value to.</param>
+        public virtual void SetTargetValue(float normalizedValue)
+        {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+
+            SetDriveTargetValue(AxisDirection * Mathf.Lerp(DriveLimits.minimum, DriveLimits.maximum, Mathf.Clamp01(normalizedValue)));
+        }
+
+        /// <summary>
         /// Calculates the axis to drive the control on.
         /// </summary>
         /// <param name="driveAxis">The desired world axis.</param>
@@ -147,17 +175,13 @@
         }
 
         /// <summary>
-        /// Processes the drive's ability to automatically drive the control.
+        /// Configures the ability to automatically drive the control.
         /// </summary>
         /// <param name="autoDrive">Whether the drive can automatically drive the control.</param>
-        public virtual void ProcessAutoDrive(bool autoDrive)
+        public virtual void ConfigureAutoDrive(bool autoDrive)
         {
         }
 
-        /// <summary>
-        /// Performs any required internal setup.
-        /// </summary>
-        protected abstract void SetUpInternals();
         /// <summary>
         /// Calculates the current value of the control.
         /// </summary>
@@ -171,10 +195,22 @@
         /// <param name="facade">The facade containing the data for the calculation.</param>
         /// <returns>The minimum and maximum local space limit the drive can reach.</returns>
         protected abstract FloatRange CalculateDriveLimits(TFacade facade);
+        /// <summary>
+        /// Gets the <see cref="Transform"/> that the drive is operating on.
+        /// </summary>
+        /// <returns>The drive <see cref="Transform"/>.</returns>
+        protected abstract Transform GetDriveTransform();
 
         protected virtual void OnEnable()
         {
             SetUp();
+        }
+
+        /// <summary>
+        /// Performs any required internal setup.
+        /// </summary>
+        protected virtual void SetUpInternals()
+        {
         }
 
         /// <summary>
@@ -184,6 +220,14 @@
         protected virtual float GetTargetValue()
         {
             return facade.TargetValue;
+        }
+
+        /// <summary>
+        /// Sets the target value of the drive.
+        /// </summary>
+        /// <param name="targetValue">The value to set the drive target to.</param>
+        protected virtual void SetDriveTargetValue(Vector3 targetValue)
+        {
         }
 
         /// <summary>
@@ -235,6 +279,22 @@
         protected virtual void EmitTargetValueReached()
         {
             facade.TargetValueReached?.Invoke(NormalizedValue);
+        }
+
+        /// <summary>
+        /// Emits the StartedMoving event.
+        /// </summary>
+        protected virtual void EmitStartedMoving()
+        {
+            facade.StartedMoving?.Invoke(0f);
+        }
+
+        /// <summary>
+        /// Emits the StoppedMoving event.
+        /// </summary>
+        protected virtual void EmitStoppedMoving()
+        {
+            facade.StoppedMoving?.Invoke(0f);
         }
     }
 }

@@ -38,13 +38,13 @@
             switch (axis)
             {
                 case Axis.XAxis:
-                    axisDirection = (negativeDirection ? Vector3.left : Vector3.right);
+                    axisDirection = negativeDirection ? Vector3.left : Vector3.right;
                     break;
                 case Axis.YAxis:
-                    axisDirection = (negativeDirection ? Vector3.down : Vector3.up);
+                    axisDirection = negativeDirection ? Vector3.down : Vector3.up;
                     break;
                 case Axis.ZAxis:
-                    axisDirection = (negativeDirection ? Vector3.back : Vector3.forward);
+                    axisDirection = negativeDirection ? Vector3.back : Vector3.forward;
                     break;
             }
             return axisDirection;

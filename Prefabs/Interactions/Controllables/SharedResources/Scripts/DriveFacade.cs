@@ -48,6 +48,14 @@
         /// Emitted when <see cref="TargetValue"/> has been reached by the control.
         /// </summary>
         public DriveUnityEvent TargetValueReached = new DriveUnityEvent();
+        /// <summary>
+        /// Emitted when the drive starts moving the control.
+        /// </summary>
+        public DriveUnityEvent StartedMoving = new DriveUnityEvent();
+        /// <summary>
+        /// Emitted when the drive is no longer moving the control and it is stationary.
+        /// </summary>
+        public DriveUnityEvent StoppedMoving = new DriveUnityEvent();
         #endregion
 
         #region Drive Settings
@@ -155,7 +163,7 @@
         }
 
         /// <summary>
-        /// Calculates the axis to use for the given <see cref="Controllables.DriveAxis.Axis"/>.
+        /// Calculates the axis to use for the given <see cref="DriveAxis.Axis"/>.
         /// </summary>
         /// <param name="driveAxis">The new value.</param>
         protected virtual void CalculateDriveAxis(DriveAxis.Axis driveAxis)
@@ -169,7 +177,7 @@
         /// <param name="autoDrive">Whether the drive can automatically drive the control.</param>
         protected virtual void ProcessAutoDrive(bool autoDrive)
         {
-            drive.ProcessAutoDrive(autoDrive);
+            drive.ConfigureAutoDrive(autoDrive);
         }
 
         /// <summary>
