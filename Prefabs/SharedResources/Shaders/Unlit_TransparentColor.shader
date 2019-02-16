@@ -1,4 +1,5 @@
-﻿Shader "VRTK/Unlit/TransparentColor"
+﻿// UNITY_SHADER_NO_UPGRADE
+Shader "VRTK/Unlit/TransparentColor"
 {
 	Properties
 	{
@@ -18,10 +19,10 @@
 		{
 			Pass
 			{
-			SetTexture[_MainTex]
+				SetTexture[_MainTex]
 				{
-				ConstantColor[_Color]
-				Combine Texture * constant
+					ConstantColor[_Color]
+					Combine Texture * constant
 				}
 			}
 		}

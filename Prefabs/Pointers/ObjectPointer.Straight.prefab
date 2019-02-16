@@ -244,6 +244,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3718142488040735482}
     m_Modifications:
+    - target: {fileID: 8955150999620452189, guid: b5bcf67f1f80d1a4f800327247af655a,
+        type: 3}
+      propertyPath: m_Name
+      value: ObjectPointer.Internal
+      objectReference: {fileID: 0}
     - target: {fileID: 333590899294449391, guid: b5bcf67f1f80d1a4f800327247af655a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -299,21 +304,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8955150999620452189, guid: b5bcf67f1f80d1a4f800327247af655a,
-        type: 3}
-      propertyPath: m_Name
-      value: ObjectPointer.Internal
-      objectReference: {fileID: 0}
-    - target: {fileID: 7046662317805364560, guid: b5bcf67f1f80d1a4f800327247af655a,
-        type: 3}
-      propertyPath: processes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7046662317805364560, guid: b5bcf67f1f80d1a4f800327247af655a,
-        type: 3}
-      propertyPath: processes.Array.data[1]
-      value: 
-      objectReference: {fileID: 2560080792642705176}
     - target: {fileID: 6670911739145006535, guid: b5bcf67f1f80d1a4f800327247af655a,
         type: 3}
       propertyPath: caster
@@ -444,6 +434,16 @@ PrefabInstance:
       propertyPath: Deactivated.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 7046662317805364560, guid: b5bcf67f1f80d1a4f800327247af655a,
+        type: 3}
+      propertyPath: processes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046662317805364560, guid: b5bcf67f1f80d1a4f800327247af655a,
+        type: 3}
+      propertyPath: processes.Array.data[1]
+      value: 
+      objectReference: {fileID: 2560080792642705176}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5bcf67f1f80d1a4f800327247af655a, type: 3}
 --- !u!4 &1741380858788601439 stripped
