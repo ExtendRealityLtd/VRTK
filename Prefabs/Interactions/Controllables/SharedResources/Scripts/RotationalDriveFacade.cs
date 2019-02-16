@@ -21,7 +21,6 @@
             set
             {
                 _driveLimit = value;
-                drive.CalculateDriveLimits(_driveLimit);
             }
         }
         #endregion

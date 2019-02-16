@@ -25,9 +25,9 @@
                 return Vector3.zero;
             }
 
-            joint.xMotion = (driveAxis == DriveAxis.Axis.XAxis ? ConfigurableJointMotion.Limited : ConfigurableJointMotion.Locked);
-            joint.yMotion = (driveAxis == DriveAxis.Axis.YAxis ? ConfigurableJointMotion.Limited : ConfigurableJointMotion.Locked);
-            joint.zMotion = (driveAxis == DriveAxis.Axis.ZAxis ? ConfigurableJointMotion.Limited : ConfigurableJointMotion.Locked);
+            joint.xMotion = driveAxis == DriveAxis.Axis.XAxis ? ConfigurableJointMotion.Limited : ConfigurableJointMotion.Locked;
+            joint.yMotion = driveAxis == DriveAxis.Axis.YAxis ? ConfigurableJointMotion.Limited : ConfigurableJointMotion.Locked;
+            joint.zMotion = driveAxis == DriveAxis.Axis.ZAxis ? ConfigurableJointMotion.Limited : ConfigurableJointMotion.Locked;
             joint.angularXMotion = ConfigurableJointMotion.Locked;
             joint.angularYMotion = ConfigurableJointMotion.Locked;
             joint.angularZMotion = ConfigurableJointMotion.Locked;
@@ -42,11 +42,11 @@
                 return new FloatRange();
             }
 
+            FloatRange jointLimit = base.CalculateDriveLimits(newLimit);
             SoftJointLimit softJointLimit = new SoftJointLimit();
-            float motionLimit = Mathf.Abs(newLimit * 0.5f);
-            softJointLimit.limit = motionLimit;
+            softJointLimit.limit = jointLimit.maximum;
             joint.linearLimit = softJointLimit;
-            return new FloatRange(-motionLimit, motionLimit);
+            return jointLimit;
         }
 
         /// <inheritdoc />
@@ -60,7 +60,7 @@
             JointDrive snapDriver = new JointDrive();
             snapDriver.positionSpring = driveSpeed;
             snapDriver.positionDamper = 1f;
-            snapDriver.maximumForce = (moveToTargetValue ? 1f : 0f);
+            snapDriver.maximumForce = moveToTargetValue ? 1f : 0f;
 
             joint.xDrive = snapDriver;
             joint.yDrive = snapDriver;
@@ -68,54 +68,15 @@
         }
 
         /// <inheritdoc />
-        public override void SetTargetValue(float normalizedValue)
+        protected override Transform GetDriveTransform()
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
-            joint.targetPosition = AxisDirection * Mathf.Lerp(DriveLimits.minimum, DriveLimits.maximum, Mathf.Clamp01(normalizedValue));
+            return joint.transform;
         }
 
         /// <inheritdoc />
-        public override void ProcessAutoDrive(bool autoDrive)
+        protected override void SetDriveTargetValue(Vector3 targetValue)
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
-            ProcessDriveSpeed(facade.DriveSpeed, facade.MoveToTargetValue);
-        }
-
-        /// <inheritdoc />
-        protected override void SetUpInternals()
-        {
-        }
-
-        /// <inheritdoc />
-        protected override float CalculateValue(DriveAxis.Axis axis, FloatRange limits)
-        {
-            if (!isActiveAndEnabled)
-            {
-                return 0f;
-            }
-
-            float result = 0f;
-            switch (axis)
-            {
-                case DriveAxis.Axis.XAxis:
-                    result = joint.transform.localPosition.x;
-                    break;
-                case DriveAxis.Axis.YAxis:
-                    result = joint.transform.localPosition.y;
-                    break;
-                case DriveAxis.Axis.ZAxis:
-                    result = joint.transform.localPosition.z;
-                    break;
-            }
-            return Mathf.Clamp(result, limits.minimum, limits.maximum);
+            joint.targetPosition = targetValue;
         }
     }
 }

@@ -28,7 +28,11 @@
             /// <summary>
             /// Updates the rigidbody rotation by using a force at position.
             /// </summary>
-            FollowRigidbodyForceRotate
+            FollowRigidbodyForceRotate,
+            /// <summary>
+            /// Updates the transform rotation based on the position difference of the source.
+            /// </summary>
+            FollowTransformPositionDifferenceRotate
         }
 
         /// <summary>
@@ -107,6 +111,11 @@
         /// </summary>
         [Tooltip("The FollowModifier to rotate by applying a force to the rigidbody."), InternalSetting, SerializeField]
         protected FollowModifier followRigidbodyForceRotate;
+        /// <summary>
+        /// The <see cref="FollowModifier"/> to rotate by the angle difference between the source positions.
+        /// </summary>
+        [Tooltip("The FollowModifier to rotate by the angle difference between the source positions."), InternalSetting, SerializeField]
+        protected FollowModifier followTransformRotateOnPositionDifference;
         /// <summary>
         /// The <see cref="VelocityApplier"/> to apply velocity on ungrab.
         /// </summary>
@@ -190,19 +199,29 @@
                     followTransform.gameObject.SetActive(true);
                     followRigidbody.gameObject.SetActive(false);
                     followRigidbodyForceRotate.gameObject.SetActive(false);
+                    followTransformRotateOnPositionDifference.gameObject.SetActive(false);
                     objectFollower.followModifier = followTransform;
                     break;
                 case TrackingType.FollowRigidbody:
                     followTransform.gameObject.SetActive(false);
                     followRigidbody.gameObject.SetActive(true);
                     followRigidbodyForceRotate.gameObject.SetActive(false);
+                    followTransformRotateOnPositionDifference.gameObject.SetActive(false);
                     objectFollower.followModifier = followRigidbody;
                     break;
                 case TrackingType.FollowRigidbodyForceRotate:
                     followTransform.gameObject.SetActive(false);
                     followRigidbody.gameObject.SetActive(false);
                     followRigidbodyForceRotate.gameObject.SetActive(true);
+                    followTransformRotateOnPositionDifference.gameObject.SetActive(false);
                     objectFollower.followModifier = followRigidbodyForceRotate;
+                    break;
+                case TrackingType.FollowTransformPositionDifferenceRotate:
+                    followTransform.gameObject.SetActive(false);
+                    followRigidbody.gameObject.SetActive(false);
+                    followRigidbodyForceRotate.gameObject.SetActive(false);
+                    followTransformRotateOnPositionDifference.gameObject.SetActive(true);
+                    objectFollower.followModifier = followTransformRotateOnPositionDifference;
                     break;
             }
         }
