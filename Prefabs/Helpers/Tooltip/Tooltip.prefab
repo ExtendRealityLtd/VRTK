@@ -374,7 +374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3533978982645287858}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.015, z: -0.001}
+  m_LocalPosition: {x: 0, y: -0.015, z: -0.005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3533978983818389508}
@@ -427,8 +427,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   facade: {fileID: 3533978983818389509}
-  displayText: {fileID: 3533978981862730549}
-  backgroundImage: {fileID: 3533978983789137180}
   lineRenderer: {fileID: 3533978982063755348}
   lineOrigin: {fileID: 3533978982645287858}
 --- !u!1 &3533978983789137182
@@ -550,12 +548,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c59e7b0b2fcfd48bf69bb979d1867e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayText: Tooltip Text
-  textSize: 14
-  textColor: {r: 0, g: 0, b: 0, a: 1}
-  containerSize: {x: 100, y: 30}
-  containerColor: {r: 1, g: 1, b: 1, a: 1}
-  facingTarget: {fileID: 0}
+  facingSource: {fileID: 0}
   lineTarget: {fileID: 0}
-  lineWidth: 0.001
   internalSetup: {fileID: 3533978982776128787}
