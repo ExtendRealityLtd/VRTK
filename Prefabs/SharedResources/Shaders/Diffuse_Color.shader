@@ -1,4 +1,5 @@
-﻿Shader "VRTK/Diffuse_Color"
+﻿// UNITY_SHADER_NO_UPGRADE
+Shader "VRTK/Diffuse_Color"
 {
 	Properties
 	{
