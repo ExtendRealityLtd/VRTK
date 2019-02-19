@@ -49,11 +49,11 @@ namespace VRTK
                 {
                     cachedPlayArea = headsetCamera.transform;
                 }
-            }
 
-            if (cachedPlayArea != null && cachedPlayArea.parent != null)
-            {
-                cachedPlayArea = cachedPlayArea.parent;
+                if (cachedPlayArea != null && cachedPlayArea.parent != null)
+                {
+                    cachedPlayArea = cachedPlayArea.parent;
+                }
             }
 
             return cachedPlayArea;
@@ -121,6 +121,11 @@ namespace VRTK
             if (headsetCamera != null)
             {
                 cachedPlayArea = headsetCamera.transform;
+
+                if (cachedPlayArea != null && cachedPlayArea.parent != null)
+                {
+                    cachedPlayArea = cachedPlayArea.parent;
+                }
             }
         }
 
