@@ -1,27 +1,289 @@
 # Changelog
 
+# 3.3.0
+
+## Bug Fixes
+
+ * **Pointer**
+   * update pointer position in fixed update (65f600e2513dedfb5a82d3f30e08c5032259940e)
+   * ensure direction indicator is only set on touch (42c09f9e99aaa6524b85847f054749a1bf526494)
+   * child straight pointer renderer to smoothing object (a0e10d8ba7cc42ba9da7f4042c7efe30ad788f00)
+   * ignore trigger colliders with play area cursor (80e0d3823f40536571ad093474217f27b3b866a5)
+   * set object interactor scale correctly on renderer (07a59e4ac803d6ff081ff165dac403e5ac3506ee)
+ * **RadialMenu**
+   * ensure button placement is calculated correctly (b0305b02ad8ded8c23972573a8375e2ccdbfe0ca)
+   * buttons have colored background (65eaad5e1bfb70aad0049724a4c256ebb29f9044)
+   * remove unused image (92303e139f804e368307d56a33d81d290b0dc6a2)
+   * disable mouse interactions (921ed42080967acda26fafc0a697daeaed2a5a2b)
+ * **UpdatePrompt**
+   * unnecessary pagination (5113b1982f3d0a6058caf82b4aa013f2992956b5)
+ * **Internal**
+   * ensure controller ready registration is always done (49cb91bdfb80559377cb6957179ba75dbcb8994f)
+   * add editor datatypes and attributes to VRTK namespace (fc797d0990175eb0e524b99e1252f25fd8f05c23)
+   * move property extensions script to editor directory (1e457bd2e896461415e0cbb308bdee5681054580)
+ * **Examples**
+   * rebuild oculus camera rig without a prefab (80db756d9f0a653236e3ff6f0ce4516ea1581111)
+   * automatically repair broken Oculus prefab instances (c6062d3984b10e3767747721aa47e72b2136ae29)
+   * remove script define symbol check and provide popup (32f94d288a5b984b79e03a65584d04ee34b8d477)
+   * display error if script define symbols have not been set (b2a56f07bd6a0144cf4faa3a4cc75bbf8440bddc)
+   * ensure constructor scene is available in build settings (7975664bc6f22d36715443ab3083898a5ee3f574)
+   * use final scene index for constructor scene (71e25ece1ac884729daedc35f3b99d220f53f6ac)
+   * auto populate simulator objects in basic grabbing scene (9e46e63341ae36f66bb5203147921fe920b77628)
+   * prevent crash on scene change with active arrow (9ef2795281c9bd1470778e2e7ec3f63a63367b20)
+   * remove unused variable to resolve warning (c801dc0e4a205f794db6a95a9ebb62c202c4a0b7)
+ * **SharedMethods**
+   * don't search in unloaded scenes (2a212384b19e48d87ea92f1dfee80ec8de7c894a)
+   * find components in loading scenes (59951a2fd536b2cc3840a4828e6e0955ba511eca)
+   * change FindEvenInactive to search all loaded scenes (0918143202a35696ae9d54d62048cc7a77e178c3)
+ * **DeviceFinder**
+   * add oculus headset type for rare es07 (71ecaa534fb9d42dc695686a6a77ba2695c3c697)
+ * **Presence**
+   * provide custom boxcast to ensure correct settings used (ae58f80d288cd59ba1c9918499a0c72537654b6a)
+   * add null checks on colliders before ignoring collisions (bfd1fb9a3f3676f25328ac058149c2245ac5f577)
+   * account for play area rotation in collision sweep (36113d41a00c05d02d4e8da63dee76f72f7f1005)
+ * **controllables**
+   * no longer resets value on re-enable (aa44b02fab3658b32dc829e2d0c79d85951ca949)
+ * **Pointers**
+   * handle destroyed origin transform follow (009d747d37a400839946dcea7fbb186913b5c9e6)
+   * stop direction indicator working when script disabled (67766239010d190d461415b1b2c88db3ddcd2a07)
+   * clear cached attach point on sdk change (5d9dcb333ad3a8146ceaa5c5bf69334474168b9d)
+   * ensure pointer id exists when checking ui pointer length (3de1e482660acff457a4de1405b76362f7dca3eb)
+   * ensure controller reference set when controller found (d0ab75b3a2f4944651e79bf1649f6764d9de7748)
+   * use appropriate tip for determining pointer origin (51fdf4ebec4763a1c5b6118ce9493aa33fe7c6ae)
+   * ensure visible renderers list is cleared correctly (2ede03ff0afdc296787b3ac2c56426c8c82a5a60)
+   * turn off renderer when either script is disabled (d7c37bfbd6ace942cd511dbaad2551c16248c7f4)
+ * **SDKManager**
+   * fall back to Simulator SDK Setup (9c9aec7d630547450562ca0bf31851ca03b4331b)
+   * ensure SDK Setup callbacks are called (eb472121717b49260d537fce84fde0cb69e6104a)
+ * **physics**
+   * change collision detection mode for 2018.3 (17995f90356b8301cb8d06a907e2b0e98111a10b)
+ * **Controls**
+   * ensure drawer snap force handles rotation correctly (a493d9b13084ec60321c11db5032bee5a8de93ed)
+   * prevent button anchor changing on enable (915fa2fb4dfdfc54d6fb8daaec010c3887adfb0a)
+ * **UI**
+   * check for error with null event camera (63a1581e122d1c5d8d379e8f1de71e7f771085fa)
+   * prevent crash when no pointer is attached to UI Pointer (f70d9a250524fc0d0a389659774a85d4e02486ef)
+ * **Highlighter**
+   * copy shadow casting mode from object renderer (0d3203d7c9c315b47ac47cbe3a1e364db6fdf65a)
+   * MBP highlighter not restoring material properties (077d8e7f9c2f9b8ca984fe3a3bc7894e961972b4)
+ * **UnityXR**
+   * add vive pro controller names (5924d8154faac31df22c964a273de487ad92f3c3)
+   * fix UnityXR stack overflow (3ba8299e503b72d5805ec13c62b45a7cf226b2ef)
+   * add more joystick names (61fc2f7592f7a5083ebd8aeec7a3f66ecd43e41d)
+ * **Highlighters**
+   * use whiteTexture in place of new Texture (93592181d01c280fd5a86c089393bf89f4985def)
+ * **Location**
+   * make GetRotation in DestinationPoint to use eulerAngles (92ae954f9cdea93fb3687be8a3f9f23336f94784)
+ * **Tooltips**
+   * Spelling mistake in touchpadtwo (ccfb78a1aa95a6fc783d9a9f69629841be107599)
+ * **Utilities**
+   * update VR namespace to be XR (55a9cd69c7b7472030f139725795bed38ac309b3)
+   * ensure controller ready event happens on sdk switch (60111b7a113c0c97270718e7c9f371b6d3fc29ab)
+   * use local space for velocity estimation samples (3e05056af78f8c0b575d951c151bf0a71b9513c8)
+   * prevent crash when switching sdk setup (adb5b25f367e2dda42220646fb1062606183029e)
+ * **Locomotion**
+   * prevent null reference in teleporter (cca532f77f12516965673ae952043811532bc66c)
+   * offset player position after rotation in object control (eeac01e1fabb2f34266e1109b8274230823e127c)
+   * continuous rotation in DragWorld (0070959fd647972e6b31d7ece95c832c7053d72f)
+   * correctly set other touchpad control enable state (3812bf6af3d3baa80395bf12ce88e4159b0b71c5)
+   * ensure correct rotation with dash teleport (41cb92c0744b2d2ef36e36f2af145e3063ba8e8f)
+   * correctly check controller state in move in place (3389032b0850e75665867f759f64652409dfa82d)
+   * apply headset compensation to force teleport (6c206d4fc5d13476be64ff2c7e54af68d3df71aa)
+   * set rotation before teleport (e2ae7a769cdeaf854deb64bb96a77d56d0a22001)
+   * get correct body physics collider in object control (d4ac47293dd4ac0da832a76c524cc38e39b4d71f)
+   * correct teleport to destination point with dash (5f4e36007bfe2837969037776d976ada61c03990)
+ * **SnapDropZone**
+   * Highlight Null Check (2a4061311ec1d34c7022c41c0f885ae8f49d6fb1)
+   * ensure valid object check is done at correct point (7550c10f0fc9e360ba256d02ab33962968f2cb93)
+   * prioritise joint removal on highlight object (99f19cddaee1e20ff32586abe9611d67cc418c12)
+   * remove shadows from highlight object (e75f59af2d5abb64be3c2d62563c144d50ecc6d7)
+   * allow grab remove from unsnappable joints (5f668899b4c667d72a69ee1edd41ba8c9aea1002)
+   * prevent unwanted unsnap on leaving trigger collider (9624e4e7aa967c32f8c2e52c066964d7ff1fe8c0)
+   * ensure highlight always active option is honoured (9e707645440de2034f2305f72c228d7ad497bbd8)
+   * ensure force snap object state is saved correctly (28e929646ff9cc869c91a3eb28e8bbd477761471)
+ * **TransformModify**
+   * SteamVR Dashboard reset (e9831b26d1b16b44b17a78ce94fc38d61b7405e1)
+ * **highlighter**
+   * index out of range (ccc7ac1332c854e2b8ea2b444a0b88827fb7ed4f)
+ * **Input**
+   * ensure modifiers are not null and wait for controller ready (87af9706c70aba1b16865d087f7bec7a72e12a16)
+ * **CustomRaycast**
+   * set default raycast layer mask to correct setting (d33adc3eb0744004963dc76e49541e5791b78398)
+ * **Simulator**
+   * ensure mouse lock behaviour works correctly (81274d6fa8335a17c23d229aaa03c2c6b2b5fa68)
+ * **Avatar**
+   * reset correct animation coroutine on disable (ac89d7ea9e39d4031e2ba995f42f869d8a83e22f)
+ * **SDK**
+   * handle touch and classic controller plugged in - fixes #1866 (aa10e660d013480859bf15e3f0a1885e27572291)
+   * use any joystick with button mappings (110d22c6610496db94a1b8402524fd6a9a997031)
+   * use new hierarcyChanged event introduced in 2018.1 (19ef457ed97fa8af667cf398c8ce79c856f9b7a9)
+   * tag the CameraRig camera as MainCamera (649a42aefe74c6d04bb12db74697c6cab7888295)
+   * handle multiple Oculus devices (14e8dc04ccbacf0df83674bb4d99a8c55b04974e)
+   * update Google SDK vrDeviceName (1a63a57bf6d786ab8144636330ff21f868c5f6e9)
+   * exclude WindowsMR from unsupported versions of Unity (6d18b3bee60bb6da50c1eb1ef0752e7f4c16fd98)
+   * exclude BuildTargetGroup outside Unity Editor (1854d9b9bbc02bc8d11785941cd171cff546c29b)
+   * let SDKManager work with Unity versions prior to 2017.1 (72cc3aaf6f2c1051ee882bebe25537e4c3b9ddb6)
+   * ensure deprecated event is only used in old unity version (c41db4b95294175b404c6e70363ce31acb8d1d4c)
+   * prevent crash in daydream sdk if camera not found (95e078ec345bae97302e2acad650c109ec9af1ae)
+   * ensure oculus touch uses correct controller for button press (d5adf01cae75955eb08595bbdc15c119518e7b49)
+   * prevent null exception if no controller model found (10ad77636fee591e8d7aff3e524dfd91e8812353)
+   * stop adding the VRTK version symbol unnecessarily (f6c5c5d9818b21c81514e1f833f5486d0204b43f)
+   * ensure simulator position is correct (a42c6418f27b6e9f3cf3b0870f1052d1c8963d5e)
+ * **Interaction**
+   * allow controllables to be moved without breaking (bfdf00cd3139b4d21d331465ab3bdc078a8030e2)
+   * ensure the collision detector is set on custom models (0f709d763e20d8bae1770efe803da1007ce19c06)
+   * ensure interactable helpers get reference to object (a34deea0f2b114522cca867a0709d53a2717fa8e)
+   * do not look for grab attach/action in children (ddc5a04990e98e56bd645500489b1fc3c532e8f2)
+   * prevent object highlighter always being created (0d6124d5bc2160d1dd60c23fe290575ba4fba1df)
+   * ensure override buttons are reset correctly (5c21268ef4e31c132a51f0e03f02e8389dd66fe3)
+   * ensure valid grab attempt is called (604097237b5748b4039d4243e438221c5d621ac0)
+   * ensure controller highlighter uses correct aliases (cd8f2d13f35ce35333e4ac231c9cee325853c9c3)
+   * defer unregister of tracked controller events (04d22359849dbb855c936b1dd6d44168dba2e9a8)
+   * ensure haptics are reset on interaction type change (b903a5988e1fff5de572439ca2d0298a1c1b6504)
+   * set transform of near touch custom collider container (41211b44d80a6eec3ca5ed7960df10cfff521110)
+   * unhighlight when highlight color is clear (e99b7ec53e2f41d8c45e22f89911cac550923963)
+   * prevent null exception when getting touch colliders (cdd96ad976a5b20f662f6971c52d422bb4ba9bb7)
+   * change event name to prevent overriding base method (b6330af7f059037167f1cacf8a1e56513796de16)
+   * ensure controllers preserve the correct visibility (2fe201d9a7c5c3002ff321c6b7f683142dc9eab9)
+   * remove valid controller check from secondary action (d8f4b0f2c23ac0f92e8a321f2ae8ff200404d099)
+   * determine grab rotation based on quaternion not eular (1fc162155494045cdc46b53c61216431b7c6b97d)
+   * prevent coroutine running if game object is disabled (db143c3d0d842c6813a9521be64fde0095f96f3f)
+   * prevent double unuse event (188a8833ae8a12279cb279a47d15a8b3f1946577)
+ * **Structure**
+   * clone HashSet when iterating to prevent change errors (2cb5fa94979234c84c81767d2b825bedd1fa437c)
+   * ensure script references are correctly set (07e6cc5de32acc032bc1e8ba6affb825d912f7d6)
+ * **Controller**
+   * work around crash in Unity 2018.2 #1852 (54cb97fab953e601c5bfa6c93a5820f851993a4a)
+ * **GraphicRaycaster**
+   * transfer BlockingMask across (f2990b397c45d7a287ab8a772f69e27544163643)
+ * **UIPointer**
+   * repetitive enter events (bc02cfae0218aa93a9fc740d36aece1cdcdd164f)
+   * exit events per element (35b6e7d464aba77fa0d21773e0e1da11503a9629)
+
+## Features
+
+ * **Avatar**
+   * allow custom model to be provided (53850d0c35be20d0a4477ce1195b88b46922e621)
+   * add near touch overrides to avatar hand (8b8b53f9b538ee3031cba1491389e82f0b7ffa27)
+   * add basic avatar hand prefab with controller script (315911df42c1c128027efd6bcbc9e8c809209acf)
+ * **DesktopCamera**
+   * render desktop-only camera while in VR (58f2d5780b138aaca2fd8b16d351f85480dc613a)
+ * **Examples**
+   * consolidate example scenes and provide descriptions (63339816f4f0018980d5c1a40fb0c5d9c2e5dbe2)
+   * add nock and arrow fire sound to bow and arrow scripts (f429777dcaae9ba2abbbcd47a4fc6cb78c771e3f)
+ * **Input**
+   * ability to switch script input button based on sdk type (77afbe48de930a870a6daa03e2880d83f44d115a)
+ * **Interaction**
+   * grip sense axis acts as button press (fce1315c9a57311591b4fd06da6f27a31771437d)
+   * remove highlighting duty from interactable obejct (81cff04d05b24bba65394c44cce35eef42ed8075)
+   * expose max distance delta parameter on track grab (f1ecedec86a5fdab6b856fe800e191b025c86aba)
+   * add tracked controller colliders (dc68df32ffa1442df50824fa7f4be1415894ce6b)
+   * support legacy animation in animation grab mechanic (0db2ffbf7749ff9e6c86f244e3921b92dfa76981)
+   * add artificial slider controllable (feb920d15c0f75c36c5897d1c67201b9c9af097d)
+   * add physics slider controllable (d04727cedf4bdced3c004fbac15772968b69b377)
+   * add artificial rotator controllable (c7323a3fc8111834925f61279a4e6ae3aca6c064)
+   * add physics rotator controllable (6f8af9862c7054cd6fe8991cba84bb3e35949c1c)
+   * add artificial pusher controllable (bba545002ab66a992cbd550f562c263626b0b984)
+   * add physics pusher controllable (c86351e2a8d3c9cf4eadcb03a30a1f47aefd159d)
+   * add rotation set for rotate transform grab mechanic (4ab59a7719418d8a5a1942b58fb6444157d8fedb)
+   * allow different rotation actions for rotate grab (438af0e4b875a320ce6af711f026ce88be556518)
+   * rotate transform grab mechanic (a24ae46b301fae29477079fc7b2f22d6062d6a5a)
+   * move transform grab mechanic (d4901ba60795d7b2ac1eb1a0cfa6eff123359e52)
+   * control animation grab mechanic (0a5a7290970726492cc2d891798bae6d3d4ef819)
+   * provide custom highlighter to controller highlighter (93fd9a53d941b8401ad5dec67988f3f4f59075b3)
+   * provide custom highlighter to interactable object (40812fc6bf4faed447cd6879830c1f5163658922)
+   * add near touch to interact object appearance (57ea62d19412cc1f6ce46ed32c50ac7f06b81310)
+   * ability to cancel haptics on interaction end (a2e7a7a5408ee974c2bbd5e5b5bd3f0d8de2d220)
+   * add near touch to interact haptics (48ed9056bfc426da402291fbdda3579a39ce90e2)
+   * extract interactable object highlight to new script (c24633e72aa85ea877482a69eac583e180e2a046)
+   * add near touch interactions (2fd29a8d8ece216208a9ef19d18cd1a08ab49eb7)
+   * add interact object appearance script (8ca62334c0d2c771a5a5f6a26a09298734daf12d)
+   * emit event when controller model is available (dc8a6cf9eb06097ac0e8c5416d310508a42002b2)
+   * determine if object is hovered over snap drop zone (ff5abbe566cc2b4d52f194f5eb7a1da33dbb7149)
+ * **Interactions**
+   * option to automatically secondary grab object (da9f5f8e81e569dcd1b7d5889fe4faa9d8ce1790)
+ * **Locomotion**
+   * allow alternative axis for touchpad control (c4bf5d8afb5e17ac69f858c508240365e4e09ed7)
+   * option to add skybox texture to tunnel overlay cage (f1e9901ced7d09496a78f90b6f54afd47bf59140)
+   * ability to move, rotate, scale play area by dragging (17e39d292d268a6c187ceb1840c80f3884cd6e93)
+   * apply play area parent position to teleporter (4e9c6050e84f763f0efb9436694cc3444ecd75f4)
+   * add tunnel overlay camera effect for comfort options (3027e7f7457b6106b9981665169a3197bcfbd2ed)
+   * add unity event helper for slingshot jump (822e4f30d8f4c85e6351a723efe9f81365cd132c)
+   * add step multiplier locomotion method (1ac9bcc4836ed1e7c5ae94dc6b9952e128ca60f0)
+   * jumping mechanic using controller slingshot (adcfe3c5be283d55c069287daaae98b6b07a31ba)
+   * allow finer customisation of nav mesh limits (261da50809ee6903182282bac6a386327f74818b)
+ * **Pointer**
+   * add direction indicator touchpad deadzone (5ed3ccf661a819d3816d08b5e7fcfc8167335aeb)
+   * allow direction indicator to be visible with cursor (fd3ad03eb17bd82e3fda777c601404f3e8a234c2)
+ * **Pointers**
+   * allow different axis to control direction indicator (649c5bd06924854fa0f85f4385096b6ff5e6a0fa)
+   * add max length option to ui pointer (545b39d69645c6bb9f4a0550788d9994c8992430)
+   * auto create pointer renderer if not set (a22b4565e2ff40cc630055e2207e0b287950a342)
+   * match play area cursor rotation to direction indicator (c648dad74ffd9115139e7bdfae1f14066e72c1be)
+ * **Presence**
+   * add policy list to headset collision fade (3c2b5cc4735ea10108d5d6f7cf364340b533906d)
+   * add always restrict falling option for body physics (35952630bc206909cc3ebe6ea912f1728b3d9f6e)
+   * allow to add custom rigidbody for body physics (5fe228141054aa5ca6f665692a635bb67aee9a02)
+ * **RadialMenu**
+   * add dead zone to radial menu (a01a51a2f15dac2dfe26d5bd7da79e0a613b6acd)
+ * **SDK**
+   * add native Unity Windows Mixed Reality support (94c6cb5b54b1ed77482886c7468154ea68932a0c)
+   * add touchpad two touch state (8e10a588849f29524ae8dcfa0198bd746962b259)
+   * add WindowsMR support for SteamVR (1c040205617fe47e8bace8c55a7904bd5363f621)
+   * utilise underlying sdk to retrieve headset type (8f61ffb664ed0e8773f8d4b4279b1ebc853e03a8)
+   * add option to exclude target build platforms (7910cbe23de059e6722ce1b9b70636ab8f6404f8)
+   * allow custom colour for simulator hands (5f57109574676ec9768e12025a0e39d81227ef6c)
+   * add hand axis guides to simulator (c52dc182abc6832f9a7bc9a47a359e5e4dff5f72)
+   * add new headset types and move to base headset sdk (d26535d6a67c973430297a76252fd3c1fc2d1154)
+   * ability to synchronise the play area transform on sdk switch (aea4afd6ec20f97223f0c1ed91e140b39f0e12e2)
+   * add actual controller ready events (6dfbff1636f9c9a4fe945d2d4a399dea991dd1fb)
+   * support mouse button in Unity SDK (5d21083277b7a2ca04bf1b67031eeeb2aa8ca4c3)
+   * add Google Cardboard support to Unity SDK (e07829c3ae6c3f0624a613d7b336201cf8e9b848)
+   * implement internal Unity VR support (7b6f341e92441cc6bb8e0759b1aaf5b43494cd7c)
+   * add HyperealVR SDK support (abc1dd3b953e6476946d0d6243728045a4ea33f4)
+   * support GearVR input (da0bcf4d5e096a168eb2e4240af57f438350f275)
+   * allow Android support for Oculus SDK (eb01c511b2dd0a2b008838bd2a6d1ba9c9cd0fa8)
+   * add sense axis for capacitive touch buttons (0ac6b148c23e9d3b61711e270ca57d93fbfbe68b)
+ * **SDKManager**
+   * allow delayed assignment of behaviour toggles (5634f84624b8ab8f9bf0de5f9b6f3b7726178de6)
+   * simplify single SDK Setup configurations (8fdf63ce4251318cad5c0c1acadef05801a07666)
+ * **Simulator**
+   * add toggle hotkey for mouse lock (22d8b655cfa83cdefdeaef63e7510ebe091138aa)
+   * deprecate VRTK Simulator (91dbc1c187d048f1f419c75edfc8283353827451)
+ * **SnapDropZone**
+   * cloning snap drop zones (4766da071fbf9ebbd9764b05637aafaa731645e2)
+   * add valid highlight color option (0fbef0789e6aaf6b28474f47c00ef22889bbe2af)
+   * use interaction events for snapping (d02fcbd4acd7c6c28900461184a01c019813410c)
+ * **Structure**
+   * add ObsoleteInspector attribute (6f296ed062c18f2223ac7a32852b124f1fa0e782)
+   * provide custom data types to convey better meaning (ef35e1913b031a9929307f32d631a875255e2be9)
+   * remove deprecated classes and methods (508f2b2eef613153ff58d1a52313bca94db4c74e)
+ * **Utilities**
+   * add track object option to rigidbody follow (a911bfe38cdf42d233661ff716b71aac8ddcca6e)
+   * ability to change object state based on loaded sdk (b352322c8601d0a698d1d3b7ca9547116dcdca6a)
+
 # 3.2.1
 
 ## Bug Fixes
 
- *  **ControllerTooptips**
-    * enable tips if no HeadsetAware script is found (eebe8ea66ebb2f88d37008c14393db4e325eebd3)
- *  **Interaction**
-    * correctly set attach point when switching sdk (877c3286fd042ed2be3910d92d0d73ae6af76f82)
- *  **Internal**
-    * emit tracked controller index change events (a740146297b948a25cbc5f50f29f110729117df2)
- *  **Presence**
-    * calculate collider height based on global positions (5497c6cc2f42abb1305bff2ff9b68cd08d89ff95)
- *  **SDK**
-    * SteamVR SDK Setup unusable in build (5f24681f4c4bea15c1eae34743cb9d89e3057c25)
-    * support SteamVR plugin 1.2.2 (bbdd9f92460111278a05267cb2b049ef76e89e8e)
- *  **SDKManager**
-    * deprecate persist on load setting (63adb7ed32367bfaa3a68b34b22cec0e8eb1e8da)
-    * handle null Behaviour (d8ead58936179595005613da8267faf1c62eb2bf)
- *  **SDKSetupSwitcher**
-    * recognize SDKSetup camera (21ae3d3dcd2f6aa576df428efa8e6bc30cb1d243)
- *  **UpdatePrompt**
-    * long changelog error (dbb3f7a599c2ec28fb00aba0ba1a12dbc9e13480)
+ * **ControllerTooptips**
+   * enable tips if no HeadsetAware script is found (eebe8ea66ebb2f88d37008c14393db4e325eebd3)
+ * **Interaction**
+   * correctly set attach point when switching sdk (877c3286fd042ed2be3910d92d0d73ae6af76f82)
+ * **Internal**
+   * emit tracked controller index change events (a740146297b948a25cbc5f50f29f110729117df2)
+ * **Presence**
+   * calculate collider height based on global positions (5497c6cc2f42abb1305bff2ff9b68cd08d89ff95)
+ * **SDK**
+   * SteamVR SDK Setup unusable in build (5f24681f4c4bea15c1eae34743cb9d89e3057c25)
+   * support SteamVR plugin 1.2.2 (bbdd9f92460111278a05267cb2b049ef76e89e8e)
+ * **SDKManager**
+   * deprecate persist on load setting (63adb7ed32367bfaa3a68b34b22cec0e8eb1e8da)
+   * handle null Behaviour (d8ead58936179595005613da8267faf1c62eb2bf)
+ * **SDKSetupSwitcher**
+   * recognize SDKSetup camera (21ae3d3dcd2f6aa576df428efa8e6bc30cb1d243)
+ * **UpdatePrompt**
+   * long changelog error (dbb3f7a599c2ec28fb00aba0ba1a12dbc9e13480)
 
 # 3.2.0
 
