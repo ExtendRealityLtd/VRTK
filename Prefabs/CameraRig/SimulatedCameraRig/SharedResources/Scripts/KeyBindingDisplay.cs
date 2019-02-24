@@ -44,7 +44,7 @@
         /// <summary>
         /// The instructions text.
         /// </summary>
-        protected string instructions = @"<b>Simulator Key Bindings</b>
+        protected const string Instructions = @"<b>Simulator Key Bindings</b>
 
 <b>Movement:</b>
 Forward: {0}
@@ -71,7 +71,7 @@ Lock Mouse Cursor: {13}";
         protected virtual void OnEnable()
         {
             keyBindingText.text = string.Format(
-                instructions,
+                Instructions,
                 forward.keyCode,
                 backward.keyCode,
                 strafeLeft.keyCode,

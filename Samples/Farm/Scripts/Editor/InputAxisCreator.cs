@@ -61,8 +61,8 @@
                 scrollPosition = scrollViewScope.scrollPosition;
 
                 bool mappingsExist = AxisDefined(rightHorizontal.name);
-                string mappingsNotFound = "The required Input Mappings have not been found, click the 'Add Input Mappings' button below to automatically created the required Input Mappings.";
-                string mappingsFound = "The required Input Mappings have already been created. If you would like to delete these Input Mappings then manually remove the Input axes from the Unity Input Manager found in the Unity Project Settings.";
+                const string mappingsNotFound = "The required Input Mappings have not been found, click the 'Add Input Mappings' button below to automatically created the required Input Mappings.";
+                const string mappingsFound = "The required Input Mappings have already been created. If you would like to delete these Input Mappings then manually remove the Input axes from the Unity Input Manager found in the Unity Project Settings.";
                 string mappingText = mappingsExist ? mappingsFound : mappingsNotFound;
                 MessageType messageType = mappingsExist ? MessageType.Info : MessageType.Warning;
 
