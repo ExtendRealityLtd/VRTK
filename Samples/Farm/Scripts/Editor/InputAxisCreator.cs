@@ -42,12 +42,12 @@
         private static bool isManualCheck;
         private static Vector2 scrollPosition;
 
-        private static InputAxis rightHorizontal = new InputAxis() { name = "VRTK_Axis4_RightHorizontal", dead = 0.001f, sensitivity = 3f, snap = true, type = AxisType.JoystickAxis, axis = 4, joyNum = 0 };
-        private static InputAxis rightVertical = new InputAxis() { name = "VRTK_Axis5_RightVertical", dead = 0.001f, sensitivity = 3f, snap = true, type = AxisType.JoystickAxis, axis = 5, joyNum = 0 };
-        private static InputAxis rightTrigger = new InputAxis() { name = "VRTK_Axis10_RightTrigger", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 10, joyNum = 0 };
-        private static InputAxis rightGrip = new InputAxis() { name = "VRTK_Axis12_RightGrip", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 12, joyNum = 0 };
-        private static InputAxis leftTrigger = new InputAxis() { name = "VRTK_Axis9_LeftTrigger", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 9, joyNum = 0 };
-        private static InputAxis leftGrip = new InputAxis() { name = "VRTK_Axis11_LeftGrip", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 11, joyNum = 0 };
+        private static readonly InputAxis rightHorizontal = new InputAxis() { name = "VRTK_Axis4_RightHorizontal", dead = 0.001f, sensitivity = 3f, snap = true, type = AxisType.JoystickAxis, axis = 4, joyNum = 0 };
+        private static readonly InputAxis rightVertical = new InputAxis() { name = "VRTK_Axis5_RightVertical", dead = 0.001f, sensitivity = 3f, snap = true, type = AxisType.JoystickAxis, axis = 5, joyNum = 0 };
+        private static readonly InputAxis rightTrigger = new InputAxis() { name = "VRTK_Axis10_RightTrigger", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 10, joyNum = 0 };
+        private static readonly InputAxis rightGrip = new InputAxis() { name = "VRTK_Axis12_RightGrip", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 12, joyNum = 0 };
+        private static readonly InputAxis leftTrigger = new InputAxis() { name = "VRTK_Axis9_LeftTrigger", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 9, joyNum = 0 };
+        private static readonly InputAxis leftGrip = new InputAxis() { name = "VRTK_Axis11_LeftGrip", dead = 0.001f, sensitivity = 1f, type = AxisType.JoystickAxis, axis = 11, joyNum = 0 };
 
         static InputAxisCreator()
         {

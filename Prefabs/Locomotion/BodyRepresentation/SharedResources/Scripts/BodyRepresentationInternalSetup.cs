@@ -116,11 +116,11 @@
         /// <summary>
         /// The colliders to ignore body collisions with.
         /// </summary>
-        protected HashSet<Collider> ignoredColliders = new HashSet<Collider>();
+        protected readonly HashSet<Collider> ignoredColliders = new HashSet<Collider>();
         /// <summary>
         /// The colliders to restore after an ungrab.
         /// </summary>
-        protected HashSet<Collider> RestoreColliders = new HashSet<Collider>();
+        protected readonly HashSet<Collider> restoreColliders = new HashSet<Collider>();
         /// <summary>
         /// The previous position of <see cref="PhysicsBody"/>.
         /// </summary>
@@ -409,7 +409,7 @@
             {
                 if (!ignoredColliders.Contains(toRestore))
                 {
-                    RestoreColliders.Add(toRestore);
+                    restoreColliders.Add(toRestore);
                 }
             }
             IgnoreCollisionsWith(interactable.ConsumerRigidbody.gameObject);
@@ -424,13 +424,13 @@
             Collider[] interactableColliders = interactable.ConsumerRigidbody.GetComponentsInChildren<Collider>(true);
             foreach (Collider resumeCollider in interactableColliders)
             {
-                if (!RestoreColliders.Contains(resumeCollider))
+                if (!restoreColliders.Contains(resumeCollider))
                 {
                     continue;
                 }
 
                 ResumeCollisionsWith(resumeCollider);
-                RestoreColliders.Remove(resumeCollider);
+                restoreColliders.Remove(resumeCollider);
             }
         }
 
