@@ -1,7 +1,6 @@
 ﻿namespace VRTK.Prefabs.Helpers.Tooltip
 {
     using UnityEngine;
-    using UnityEngine.UI;
     using Zinnia.Process;
     using Zinnia.Data.Attribute;
 
