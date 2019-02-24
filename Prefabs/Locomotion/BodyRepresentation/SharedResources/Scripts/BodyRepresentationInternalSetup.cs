@@ -229,12 +229,13 @@
 
             if (Interest != MovementInterest.CharacterController && facade.Offset != null)
             {
-                Vector3 position = facade.Offset.transform.position;
-                position.y = physicsBody.position.y - characterController.skinWidth;
+                Vector3 offsetPosition = facade.Offset.transform.position;
+                Vector3 previousPosition = offsetPosition;
 
-                Vector3 previousPosition = facade.Offset.transform.position;
-                facade.Offset.transform.position = position;
-                facade.Source.transform.position += facade.Offset.transform.position - previousPosition;
+                offsetPosition.y = physicsBody.position.y - characterController.skinWidth;
+
+                facade.Offset.transform.position = offsetPosition;
+                facade.Source.transform.position += offsetPosition - previousPosition;
             }
 
             Vector3 previousCharacterControllerPosition;
@@ -255,9 +256,10 @@
             }
 
             // Position the CharacterController and handle moving the source relative to the offset.
-            previousCharacterControllerPosition = characterController.transform.position;
+            Vector3 characterControllerPosition = characterController.transform.position;
+            previousCharacterControllerPosition = characterControllerPosition;
             MatchCharacterControllerWithSource(false);
-            Vector3 characterControllerSourceMovement = characterController.transform.position - previousCharacterControllerPosition;
+            Vector3 characterControllerSourceMovement = characterControllerPosition - previousCharacterControllerPosition;
 
             bool isGrounded = CheckIfCharacterControllerIsGrounded();
 
@@ -438,15 +440,16 @@
         /// <param name="setPositionDirectly">Whether to set the position directly or tell <see cref="characterController"/> to move to it.</param>
         protected virtual void MatchCharacterControllerWithSource(bool setPositionDirectly)
         {
+            Vector3 sourcePosition = facade.Source.transform.position;
             float height = facade.Offset == null
-                ? facade.Source.transform.position.y
-                : facade.Offset.transform.InverseTransformPoint(facade.Source.transform.position).y;
+                ? sourcePosition.y
+                : facade.Offset.transform.InverseTransformPoint(sourcePosition).y;
             height -= characterController.skinWidth;
 
             // CharacterController enforces a minimum height of twice its radius, so let's match that here.
             height = Mathf.Max(height, 2f * characterController.radius);
 
-            Vector3 position = facade.Source.transform.position;
+            Vector3 position = sourcePosition;
             position.y -= height;
 
             if (facade.Offset != null)
