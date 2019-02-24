@@ -1,10 +1,8 @@
 ﻿namespace VRTK.Prefabs.Helpers.SceneConsole
 {
+    using System;
     using UnityEngine;
     using UnityEngine.UI;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-    using System.Linq;
 
     /// <summary>
     /// Relays console information to a decorated world space UI canvas.
@@ -63,13 +61,9 @@
         /// </summary>
         protected const string newline = "\n";
         /// <summary>
-        /// A collection of colors for each log type.
-        /// </summary>
-        protected Dictionary<LogType, Color> logTypeColors;
-        /// <summary>
         /// The specified line buffer.
         /// </summary>
-        protected int lineBuffer = 50;
+        protected const int lineBuffer = 50;
         /// <summary>
         /// The current line buffer in use.
         /// </summary>
@@ -120,26 +114,6 @@
         }
 
         /// <summary>
-        /// Applies the specified styling to the console elements.
-        /// </summary>
-        protected virtual void Decorate()
-        {
-            logTypeColors = new Dictionary<LogType, Color>()
-            {
-                { LogType.Assert, assertMessage },
-                { LogType.Error, errorMessage },
-                { LogType.Exception, exceptionMessage },
-                { LogType.Log, infoMessage },
-                { LogType.Warning, warningMessage }
-            };
-
-            if (consoleOutput != null)
-            {
-                consoleOutput.fontSize = fontSize;
-            }
-        }
-
-        /// <summary>
         /// Gets a rich text styled message for the given <see cref="LogType"/>.
         /// </summary>
         /// <param name="message">The message to style.</param>
@@ -147,8 +121,30 @@
         /// <returns>A rich text styled message.</returns>
         protected virtual string GetMessage(string message, LogType type)
         {
-            string color = ColorUtility.ToHtmlStringRGBA(logTypeColors[type]);
-            return "<color=#" + color + ">" + message + "</color>" + newline;
+            Color color;
+            switch (type)
+            {
+                case LogType.Error:
+                    color = errorMessage;
+                    break;
+                case LogType.Assert:
+                    color = assertMessage;
+                    break;
+                case LogType.Warning:
+                    color = warningMessage;
+                    break;
+                case LogType.Log:
+                    color = infoMessage;
+                    break;
+                case LogType.Exception:
+                    color = exceptionMessage;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+
+            string hexadecimalColorString = ColorUtility.ToHtmlStringRGBA(color);
+            return $"<color=#{hexadecimalColorString}>{message}</color>{newline}";
         }
 
         /// <summary>
@@ -164,24 +160,46 @@
                 return;
             }
 
-            Decorate();
             string logOutput = GetMessage(message, type);
+            string consoleOutputText = consoleOutput.text;
+
+            if (currentBuffer >= lineBuffer)
+            {
+                const int halfLineBuffer = lineBuffer / 2;
+                int lookupIndex = 0;
+                int skippedLineCount = 0;
+
+                while (skippedLineCount < halfLineBuffer && lookupIndex < consoleOutputText.Length)
+                {
+                    int newlineIndex = consoleOutputText.IndexOf(newline, lookupIndex, StringComparison.Ordinal);
+                    if (newlineIndex == -1)
+                    {
+                        break;
+                    }
+
+                    lookupIndex = newlineIndex + 1;
+                    skippedLineCount++;
+                }
+
+                if (lookupIndex < consoleOutputText.Length)
+                {
+                    consoleOutputText = consoleOutputText.Substring(lookupIndex);
+                }
+
+                currentBuffer = halfLineBuffer;
+            }
 
             if (!collapseLog || lastMessage != logOutput)
             {
-                consoleOutput.text += logOutput;
+                consoleOutputText += logOutput;
                 lastMessage = logOutput;
             }
 
+            consoleOutput.text = consoleOutputText;
+            consoleOutput.fontSize = fontSize;
             consoleRect.sizeDelta = new Vector2(consoleOutput.preferredWidth, consoleOutput.preferredHeight);
             scrollWindow.verticalNormalizedPosition = 0;
             currentBuffer++;
-            if (currentBuffer >= lineBuffer)
-            {
-                IEnumerable<string> lines = Regex.Split(consoleOutput.text, newline).Skip(lineBuffer / 2);
-                consoleOutput.text = string.Join(newline, lines.ToArray());
-                currentBuffer = lineBuffer / 2;
-            }
         }
     }
 }
