@@ -2,7 +2,6 @@
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using Zinnia.Extension;
     using Zinnia.Data.Collection;
     using Zinnia.Data.Attribute;
     using VRTK.Prefabs.Interactions.Interactors;
@@ -24,7 +23,7 @@
         /// <inheritdoc />
         public override List<InteractorFacade> GetGrabbingInteractors()
         {
-            return GetGrabbingInteractors(EventStack.Stack.EmptyIfNull());
+            return GetGrabbingInteractors(EventStack.Stack);
         }
     }
 }

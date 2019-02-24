@@ -2,7 +2,6 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
-    using System.Linq;
     using System.Collections.Generic;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Follow;
@@ -49,68 +48,284 @@
         /// <summary>
         /// Retrieves the active PlayArea that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActivePlayArea => PlayAreas.Select(element => element.gameObject).FirstOrDefault(gameObject => gameObject.activeInHierarchy);
+        public GameObject ActivePlayArea
+        {
+            get
+            {
+                foreach (GameObject playArea in PlayAreas)
+                {
+                    if (playArea.gameObject.activeInHierarchy)
+                    {
+                        return playArea;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Headset that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActiveHeadset => Headsets.Select(element => element.gameObject).FirstOrDefault(gameObject => gameObject.activeInHierarchy);
+        public GameObject ActiveHeadset
+        {
+            get
+            {
+                foreach (GameObject headset in Headsets)
+                {
+                    if (headset.gameObject.activeInHierarchy)
+                    {
+                        return headset;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Headset Camera that the TrackedAlias is using.
         /// </summary>
-        public Camera ActiveHeadsetCamera => HeadsetCameras.Select(element => element).FirstOrDefault(camera => camera.gameObject.activeInHierarchy);
+        public Camera ActiveHeadsetCamera
+        {
+            get
+            {
+                foreach (Camera headsetCamera in HeadsetCameras)
+                {
+                    if (headsetCamera.gameObject.activeInHierarchy)
+                    {
+                        return headsetCamera;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Headset Velocity Tracker that the TrackedAlias is using.
         /// </summary>
-        public VelocityTracker ActiveHeadsetVelocity => HeadsetVelocityTrackers.Select(element => element).FirstOrDefault(velocityTracker => velocityTracker.gameObject.activeInHierarchy);
+        public VelocityTracker ActiveHeadsetVelocity
+        {
+            get
+            {
+                foreach (VelocityTracker headsetVelocityTracker in HeadsetVelocityTrackers)
+                {
+                    if (headsetVelocityTracker.gameObject.activeInHierarchy)
+                    {
+                        return headsetVelocityTracker;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Left Controller that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActiveLeftController => LeftControllers.Select(element => element.gameObject).FirstOrDefault(gameObject => gameObject.activeInHierarchy);
+        public GameObject ActiveLeftController
+        {
+            get
+            {
+                foreach (GameObject leftController in LeftControllers)
+                {
+                    if (leftController.gameObject.activeInHierarchy)
+                    {
+                        return leftController;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Left Controller Velocity Tracker that the TrackedAlias is using.
         /// </summary>
-        public VelocityTracker ActiveLeftControllerVelocity => LeftControllerVelocityTrackers.Select(element => element).FirstOrDefault(velocityTracker => velocityTracker.gameObject.activeInHierarchy);
+        public VelocityTracker ActiveLeftControllerVelocity
+        {
+            get
+            {
+                foreach (VelocityTracker leftControllerVelocityTracker in LeftControllerVelocityTrackers)
+                {
+                    if (leftControllerVelocityTracker.gameObject.activeInHierarchy)
+                    {
+                        return leftControllerVelocityTracker;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Right Controller that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActiveRightController => RightControllers.Select(element => element.gameObject).FirstOrDefault(gameObject => gameObject.activeInHierarchy);
+        public GameObject ActiveRightController
+        {
+            get
+            {
+                foreach (GameObject rightController in RightControllers)
+                {
+                    if (rightController.gameObject.activeInHierarchy)
+                    {
+                        return rightController;
+                    }
+                }
+
+                return null;
+            }
+        }
         /// <summary>
         /// Retrieves the active Right Controller Velocity Tracker that the TrackedAlias is using.
         /// </summary>
-        public VelocityTracker ActiveRightControllerVelocity => RightControllerVelocityTrackers.Select(element => element).FirstOrDefault(velocityTracker => velocityTracker.gameObject.activeInHierarchy);
+        public VelocityTracker ActiveRightControllerVelocity
+        {
+            get
+            {
+                foreach (VelocityTracker rightControllerVelocityTracker in RightControllerVelocityTrackers)
+                {
+                    if (rightControllerVelocityTracker.gameObject.activeInHierarchy)
+                    {
+                        return rightControllerVelocityTracker;
+                    }
+                }
+
+                return null;
+            }
+        }
 
         /// <summary>
         /// Retrieves all of the linked CameraRig PlayAreas.
         /// </summary>
-        public List<GameObject> PlayAreas => cameraRigs.Select(rig => rig.playArea).Where(value => value != null).ToList();
+        public IEnumerable<GameObject> PlayAreas
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    GameObject playArea = cameraRig.playArea;
+                    if (playArea != null)
+                    {
+                        yield return playArea;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Headsets.
         /// </summary>
-        public List<GameObject> Headsets => cameraRigs.Select(rig => rig.headset).Where(value => value != null).ToList();
+        public IEnumerable<GameObject> Headsets
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    GameObject headset = cameraRig.headset;
+                    if (headset != null)
+                    {
+                        yield return headset;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Headset Cameras.
         /// </summary>
-        public List<Camera> HeadsetCameras => cameraRigs.Select(rig => rig.headsetCamera).Where(value => value != null).ToList();
+        public IEnumerable<Camera> HeadsetCameras
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    Camera headsetCamera = cameraRig.headsetCamera;
+                    if (headsetCamera != null)
+                    {
+                        yield return headsetCamera;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Headset Velocity Trackers.
         /// </summary>
-        public List<VelocityTracker> HeadsetVelocityTrackers => cameraRigs.Select(rig => rig.headsetVelocityTracker).Where(value => value != null).ToList();
+        public IEnumerable<VelocityTracker> HeadsetVelocityTrackers
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    VelocityTracker headsetVelocityTracker = cameraRig.headsetVelocityTracker;
+                    if (headsetVelocityTracker != null)
+                    {
+                        yield return headsetVelocityTracker;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Left Controllers.
         /// </summary>
-        public List<GameObject> LeftControllers => cameraRigs.Select(rig => rig.leftController).Where(value => value != null).ToList();
+        public IEnumerable<GameObject> LeftControllers
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    GameObject leftController = cameraRig.leftController;
+                    if (leftController != null)
+                    {
+                        yield return leftController;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Right Controllers.
         /// </summary>
-        public List<GameObject> RightControllers => cameraRigs.Select(rig => rig.rightController).Where(value => value != null).ToList();
+        public IEnumerable<GameObject> RightControllers
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    GameObject rightController = cameraRig.rightController;
+                    if (rightController != null)
+                    {
+                        yield return rightController;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Left Controller Velocity Trackers.
         /// </summary>
-        public List<VelocityTracker> LeftControllerVelocityTrackers => cameraRigs.Select(rig => rig.leftControllerVelocityTracker).Where(value => value != null).ToList();
+        public IEnumerable<VelocityTracker> LeftControllerVelocityTrackers
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    VelocityTracker leftControllerVelocityTracker = cameraRig.leftControllerVelocityTracker;
+                    if (leftControllerVelocityTracker != null)
+                    {
+                        yield return leftControllerVelocityTracker;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Retrieves all of the linked CameraRig Right Controller Velocity Trackers.
         /// </summary>
-        public List<VelocityTracker> RightControllerVelocityTrackers => cameraRigs.Select(rig => rig.rightControllerVelocityTracker).Where(value => value != null).ToList();
+        public IEnumerable<VelocityTracker> RightControllerVelocityTrackers
+        {
+            get
+            {
+                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                {
+                    VelocityTracker rightControllerVelocityTracker = cameraRig.rightControllerVelocityTracker;
+                    if (rightControllerVelocityTracker != null)
+                    {
+                        yield return rightControllerVelocityTracker;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// The alias follower for the PlayArea.
         /// </summary>

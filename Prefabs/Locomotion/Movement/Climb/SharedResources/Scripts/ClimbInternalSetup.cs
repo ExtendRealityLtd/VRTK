@@ -1,7 +1,7 @@
 ﻿namespace VRTK.Prefabs.Locomotion.Movement.Climb
 {
+    using System.Collections.Generic;
     using UnityEngine;
-    using System.Linq;
     using Zinnia.Data.Attribute;
     using Zinnia.Data.Collection;
     using Zinnia.Data.Operation;
@@ -79,7 +79,7 @@
         /// </summary>
         public virtual void ApplyVelocity()
         {
-            if (!isActiveAndEnabled || interactors.Elements.Any() || velocityProxy.ProxySource == null)
+            if (!isActiveAndEnabled || interactors.Elements.Count > 0 || velocityProxy.ProxySource == null)
             {
                 return;
             }
@@ -135,7 +135,7 @@
         /// <param name="addedElement">The element added.</param>
         protected virtual void OnListBecamePopulated(GameObject addedElement)
         {
-            if (interactors.Elements.Any() || interactables.Elements.Any())
+            if (interactors.Elements.Count > 0 || interactables.Elements.Count > 0)
             {
                 facade.ClimbStarted?.Invoke();
             }
@@ -147,7 +147,7 @@
         /// <param name="removedElement">The element removed.</param>
         protected virtual void OnListBecameEmpty(GameObject removedElement)
         {
-            if (!interactors.Elements.Any() && !interactables.Elements.Any())
+            if (interactors.Elements.Count == 0 && interactables.Elements.Count == 0)
             {
                 facade.ClimbStopped?.Invoke();
             }
@@ -176,7 +176,8 @@
         /// <param name="interactor">The removed interactor.</param>
         protected virtual void OnInteractorRemoved(GameObject interactor)
         {
-            OnInteractorAdded(interactors.Elements.LastOrDefault());
+            IReadOnlyList<GameObject> elements = interactors.Elements;
+            OnInteractorAdded(elements.Count == 0 ? null : elements[elements.Count - 1]);
         }
 
         /// <summary>
@@ -202,7 +203,8 @@
         /// <param name="interactable">The removed interactable.</param>
         protected virtual void OnInteractableRemoved(GameObject interactable)
         {
-            OnInteractableAdded(interactables.Elements.LastOrDefault());
+            IReadOnlyList<GameObject> elements = interactables.Elements;
+            OnInteractableAdded(elements.Count == 0 ? null : elements[elements.Count - 1]);
         }
     }
 }

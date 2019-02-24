@@ -2,10 +2,8 @@
 {
     using UnityEngine;
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using Zinnia.Process;
-    using Zinnia.Extension;
     using Zinnia.Data.Attribute;
     using Zinnia.Data.Collection;
     using Zinnia.Tracking.Follow;
@@ -405,9 +403,12 @@
         protected virtual void IgnoreInteractorGrabbedCollision(InteractableFacade interactable)
         {
             Collider[] interactableColliders = interactable.ConsumerRigidbody.GetComponentsInChildren<Collider>(true);
-            foreach (Collider toRestore in interactableColliders.Except(ignoredColliders))
+            foreach (Collider toRestore in interactableColliders)
             {
-                RestoreColliders.Add(toRestore);
+                if (!ignoredColliders.Contains(toRestore))
+                {
+                    RestoreColliders.Add(toRestore);
+                }
             }
             IgnoreCollisionsWith(interactable.ConsumerRigidbody.gameObject);
         }
@@ -419,8 +420,13 @@
         protected virtual void ResumeInteractorUngrabbedCollision(InteractableFacade interactable)
         {
             Collider[] interactableColliders = interactable.ConsumerRigidbody.GetComponentsInChildren<Collider>(true);
-            foreach (Collider resumeCollider in interactableColliders.Intersect(RestoreColliders))
+            foreach (Collider resumeCollider in interactableColliders)
             {
+                if (!RestoreColliders.Contains(resumeCollider))
+                {
+                    continue;
+                }
+
                 ResumeCollisionsWith(resumeCollider);
                 RestoreColliders.Remove(resumeCollider);
             }
@@ -500,24 +506,26 @@
                 return true;
             }
 
-            return Physics
-                .OverlapSphere(
-                    characterController.transform.position + (Vector3.up * (characterController.radius - characterController.skinWidth - 0.001f)),
-                    characterController.radius,
-                    1 << characterController.gameObject.layer
-                    )
-                .Except(ignoredColliders.EmptyIfNull())
-                .Except(
-                    new Collider[]
-                    {
-                        characterController, rigidbodyCollider
-                    })
-                .Any(
-                    collider =>
-                        !Physics.GetIgnoreLayerCollision(
-                            collider.gameObject.layer,
-                            characterController.gameObject.layer)
-                        && !Physics.GetIgnoreLayerCollision(collider.gameObject.layer, physicsBody.gameObject.layer));
+            Collider[] hitColliders = Physics.OverlapSphere(
+                characterController.transform.position
+                + (Vector3.up * (characterController.radius - characterController.skinWidth - 0.001f)),
+                characterController.radius,
+                1 << characterController.gameObject.layer);
+            foreach (Collider hitCollider in hitColliders)
+            {
+                if (hitCollider != characterController
+                    && hitCollider != rigidbodyCollider
+                    && !ignoredColliders.Contains(hitCollider)
+                    && !Physics.GetIgnoreLayerCollision(
+                        hitCollider.gameObject.layer,
+                        characterController.gameObject.layer)
+                    && !Physics.GetIgnoreLayerCollision(hitCollider.gameObject.layer, physicsBody.gameObject.layer))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

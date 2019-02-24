@@ -140,7 +140,7 @@
         public virtual void ConfigureGrabValidity(List<InteractorFacade> interactors)
         {
             grabValidity.objects.Clear();
-            foreach (InteractorFacade interactor in interactors.EmptyIfNull())
+            foreach (InteractorFacade interactor in interactors)
             {
                 if (interactor.GrabInteractorSetup.AttachPoint != null)
                 {

@@ -114,7 +114,7 @@
         public virtual void ConfigureTouchValidity(List<InteractorFacade> interactors)
         {
             touchValidity.objects.Clear();
-            foreach (InteractorFacade interactor in interactors.EmptyIfNull())
+            foreach (InteractorFacade interactor in interactors)
             {
                 touchValidity.objects.Add(interactor.gameObject);
             }
