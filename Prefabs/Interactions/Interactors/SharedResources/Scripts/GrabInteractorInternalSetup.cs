@@ -8,7 +8,6 @@
     using Zinnia.Data.Attribute;
     using Zinnia.Data.Collection;
     using Zinnia.Tracking.Velocity;
-    using Zinnia.Tracking.Collision;
     using Zinnia.Tracking.Collision.Active;
     using VRTK.Prefabs.Interactions.Interactables;
 
@@ -103,7 +102,16 @@
         /// <summary>
         /// A collection of currently grabbed GameObjects.
         /// </summary>
-        public List<GameObject> GrabbedObjects => GetGrabbedObjects();
+        public IReadOnlyList<GameObject> GrabbedObjects => GetGrabbedObjects();
+
+        /// <summary>
+        /// A reusable collection to hold the returned grabbed objects.
+        /// </summary>
+        protected readonly List<GameObject> grabbedObjects = new List<GameObject>();
+        /// <summary>
+        /// A reusable instance of event data.
+        /// </summary>
+        protected readonly ActiveCollisionsContainer.EventData activeCollisionsEventData = new ActiveCollisionsContainer.EventData();
 
         /// <summary>
         /// Configures the action used to control grabbing.
@@ -235,29 +243,24 @@
         /// Retrieves a collection of currently grabbed GameObjects.
         /// </summary>
         /// <returns>The currently grabbed GameObjects.</returns>
-        protected virtual List<GameObject> GetGrabbedObjects()
+        protected virtual IReadOnlyList<GameObject> GetGrabbedObjects()
         {
-            List<GameObject> returnList = new List<GameObject>();
+            grabbedObjects.Clear();
 
             if (grabbedObjectsCollection == null)
             {
-                return returnList;
+                return grabbedObjects;
             }
 
-            returnList.AddRange(grabbedObjectsCollection.Elements);
-            return returnList;
+            grabbedObjects.AddRange(grabbedObjectsCollection.Elements);
+            return grabbedObjects;
         }
 
         protected virtual ActiveCollisionsContainer.EventData CreateActiveCollisionsEventData(GameObject forwardSource, Collision collision = null, Collider collider = null)
         {
-            collider = (collider == null ? forwardSource.GetComponentInChildren<Collider>() : collider);
-            CollisionNotifier.EventData collisionPayload = new CollisionNotifier.EventData();
-            collisionPayload.Set(forwardSource.TryGetComponent<Component>(), collider.isTrigger, collision, collider);
-            ActiveCollisionsContainer.EventData activeCollisionPayload = new ActiveCollisionsContainer.EventData();
-            List<CollisionNotifier.EventData> collisionList = new List<CollisionNotifier.EventData>();
-            collisionList.Add(collisionPayload);
-            activeCollisionPayload.Set(collisionList);
-            return activeCollisionPayload;
+            collider = collider == null ? forwardSource.GetComponentInChildren<Collider>() : collider;
+            activeCollisionsEventData.activeCollisions[0].Set(forwardSource.TryGetComponent<Component>(), collider.isTrigger, collision, collider);
+            return activeCollisionsEventData;
         }
     }
 }

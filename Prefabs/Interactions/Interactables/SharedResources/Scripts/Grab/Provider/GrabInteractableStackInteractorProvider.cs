@@ -21,7 +21,7 @@
         #endregion
 
         /// <inheritdoc />
-        public override List<InteractorFacade> GetGrabbingInteractors()
+        public override IReadOnlyList<InteractorFacade> GetGrabbingInteractors()
         {
             return GetGrabbingInteractors(EventStack.Stack);
         }

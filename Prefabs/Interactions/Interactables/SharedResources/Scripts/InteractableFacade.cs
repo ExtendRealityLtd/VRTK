@@ -131,11 +131,11 @@
         /// <summary>
         /// A collection of Interactors that are currently touching the Interactable.
         /// </summary>
-        public List<InteractorFacade> TouchingInteractors => touchInteractableSetup.TouchingInteractors;
+        public IReadOnlyList<InteractorFacade> TouchingInteractors => touchInteractableSetup.TouchingInteractors;
         /// <summary>
         /// A collection of Interactors that are currently grabbing the Interactable.
         /// </summary>
-        public List<InteractorFacade> GrabbingInteractors => grabInteractableSetup.GrabbingInteractors;
+        public IReadOnlyList<InteractorFacade> GrabbingInteractors => grabInteractableSetup.GrabbingInteractors;
 
         /// <summary>
         /// Attempt to grab the Interactable to the given <see cref="GameObject"/> that contains an Interactor.

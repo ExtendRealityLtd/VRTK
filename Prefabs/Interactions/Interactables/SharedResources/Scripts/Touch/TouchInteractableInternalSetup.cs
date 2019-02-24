@@ -69,7 +69,12 @@
         /// <summary>
         /// A collection of Interactors that are currently touching the Interactable.
         /// </summary>
-        public List<InteractorFacade> TouchingInteractors => GetTouchingInteractors();
+        public IReadOnlyList<InteractorFacade> TouchingInteractors => GetTouchingInteractors();
+
+        /// <summary>
+        /// A reusable collection to hold the returned touching interactors.
+        /// </summary>
+        protected readonly List<InteractorFacade> touchingInteractors = new List<InteractorFacade>();
 
         /// <summary>
         /// Notifies that the Interactable is being touched.
@@ -133,24 +138,25 @@
         /// Retrieves a collection of Interactors that are touching the Interactable.
         /// </summary>
         /// <returns>The touching Interactors.</returns>
-        protected virtual List<InteractorFacade> GetTouchingInteractors()
+        protected virtual IReadOnlyList<InteractorFacade> GetTouchingInteractors()
         {
-            List<InteractorFacade> returnList = new List<InteractorFacade>();
+            touchingInteractors.Clear();
+
             if (currentTouchingObjects == null)
             {
-                return returnList;
+                return touchingInteractors;
             }
 
-            foreach (GameObject element in currentTouchingObjects.Elements.EmptyIfNull())
+            foreach (GameObject element in currentTouchingObjects.Elements)
             {
                 InteractorFacade interactor = element.TryGetComponent<InteractorFacade>(true, true);
                 if (interactor != null)
                 {
-                    returnList.Add(interactor);
+                    touchingInteractors.Add(interactor);
                 }
             }
 
-            return returnList;
+            return touchingInteractors;
         }
 
         protected virtual void OnEnable()

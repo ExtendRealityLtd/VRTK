@@ -1182,7 +1182,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 215859439917971656}
-        m_MethodName: Destroy
+        m_MethodName: Unset
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1193,7 +1193,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 215859439917971656}
-        m_MethodName: Create
+        m_MethodName: Set
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1637,7 +1637,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 215859439917971656}
-        m_MethodName: Destroy
+        m_MethodName: Unset
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1827,7 +1827,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 215859439917971656}
-        m_MethodName: Create
+        m_MethodName: Set
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2024,7 +2024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentIsCollisionNotifier: 0
-  Created:
+  PointSet:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1803858868811045269}
@@ -2051,7 +2051,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Tracking.Collision.Active.CollisionPointContainer+UnityEvent,
       Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  Destroyed:
+  PointUnset:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1803858868811045269}

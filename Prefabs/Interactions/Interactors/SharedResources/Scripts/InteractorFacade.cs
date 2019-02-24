@@ -112,7 +112,7 @@
         /// <summary>
         /// A collection of currently touched GameObjects.
         /// </summary>
-        public List<GameObject> TouchedObjects => touchInteractorSetup.TouchedObjects;
+        public IReadOnlyList<GameObject> TouchedObjects => touchInteractorSetup.TouchedObjects;
         /// <summary>
         /// The currently active touched GameObject.
         /// </summary>
@@ -120,7 +120,7 @@
         /// <summary>
         /// A collection of currently grabbed GameObjects.
         /// </summary>
-        public List<GameObject> GrabbedObjects => grabInteractorSetup.GrabbedObjects;
+        public IReadOnlyList<GameObject> GrabbedObjects => grabInteractorSetup.GrabbedObjects;
 
         /// <summary>
         /// Attempt to grab a <see cref="GameObject"/> that contains an Interactable to the current Interactor.

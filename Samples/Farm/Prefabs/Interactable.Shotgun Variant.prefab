@@ -7104,22 +7104,22 @@ PrefabInstance:
       objectReference: {fileID: 1067660165258003997}
     - target: {fileID: 8777096557091302359, guid: bdc24a54bab4ef248980171acee49e8e,
         type: 3}
-      propertyPath: Created.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: PointSet.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7441298388946655788}
     - target: {fileID: 8777096557091302359, guid: bdc24a54bab4ef248980171acee49e8e,
         type: 3}
-      propertyPath: Created.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: PointSet.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 5674503168310140302}
     - target: {fileID: 8777096557091302359, guid: bdc24a54bab4ef248980171acee49e8e,
         type: 3}
-      propertyPath: Destroyed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: PointUnset.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7441298388946655788}
     - target: {fileID: 8777096557091302359, guid: bdc24a54bab4ef248980171acee49e8e,
         type: 3}
-      propertyPath: Destroyed.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: PointUnset.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 5674503168310140302}
     - target: {fileID: 3478348896990457592, guid: bdc24a54bab4ef248980171acee49e8e,
@@ -10397,22 +10397,22 @@ PrefabInstance:
       objectReference: {fileID: 1536668974080731312}
     - target: {fileID: 3302759383082633379, guid: 85b301ec581dd494d938383693b8ebea,
         type: 3}
-      propertyPath: Created.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: PointSet.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3701833058291306133}
     - target: {fileID: 3302759383082633379, guid: 85b301ec581dd494d938383693b8ebea,
         type: 3}
-      propertyPath: Created.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: PointSet.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1919837914002229559}
     - target: {fileID: 3302759383082633379, guid: 85b301ec581dd494d938383693b8ebea,
         type: 3}
-      propertyPath: Destroyed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: PointUnset.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3701833058291306133}
     - target: {fileID: 3302759383082633379, guid: 85b301ec581dd494d938383693b8ebea,
         type: 3}
-      propertyPath: Destroyed.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: PointUnset.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1919837914002229559}
     - target: {fileID: 7226175370545444050, guid: 85b301ec581dd494d938383693b8ebea,
