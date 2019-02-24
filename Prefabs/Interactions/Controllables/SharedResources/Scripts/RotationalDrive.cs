@@ -60,10 +60,6 @@
         /// The current actual rotational value of the drive.
         /// </summary>
         protected Vector3 currentActualRotation;
-        /// <summary>
-        /// The current direction the rotation is moving in.
-        /// </summary>
-        protected float currentRotationDirection;
 
         /// <summary>
         /// Calculates the location of the rotational hinge for the drive.
@@ -93,7 +89,6 @@
             AttemptApplyLimits();
 
             currentPseudoRotation = CurrentActualAngle + (circleDegrees * rotationMultiplier);
-            currentRotationDirection = previousPseudoRotation < currentPseudoRotation ? 1f : -1f;
             pseudoAngularVelocity = !currentPseudoRotation.ApproxEquals(previousPseudoRotation) ? previousPseudoRotation - currentPseudoRotation : pseudoAngularVelocity;
             previousPseudoRotation = currentPseudoRotation;
 
