@@ -78,7 +78,9 @@
         /// </summary>
         protected virtual void UpdateFixedDeltaTime()
         {
-            if (LockPhysicsUpdateRateToRenderFrequency && Time.timeScale > 0.0f)
+            if (LockPhysicsUpdateRateToRenderFrequency
+                && Time.timeScale > 0.0f
+                && !string.IsNullOrEmpty(XRSettings.loadedDeviceName))
             {
                 Time.fixedDeltaTime = Time.timeScale / XRDevice.refreshRate;
             }
