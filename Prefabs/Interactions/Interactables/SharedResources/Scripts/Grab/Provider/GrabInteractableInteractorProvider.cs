@@ -75,28 +75,40 @@
         #endregion
 
         /// <summary>
+        /// A reusable collection to hold the returned grabbing interactors.
+        /// </summary>
+        protected readonly List<InteractorFacade> grabbingInteractors = new List<InteractorFacade>();
+
+        /// <summary>
         /// Gets the available grabbing Interactors from the provider.
         /// </summary>
         /// <returns>A collection of Interactors that are currently grabbing the Interactable.</returns>
-        public abstract List<InteractorFacade> GetGrabbingInteractors();
+        public abstract IReadOnlyList<InteractorFacade> GetGrabbingInteractors();
 
         /// <summary>
         /// Gets the Grabbing Interactors stored in the given collection.
         /// </summary>
         /// <param name="elements">The collection to retrieve the Grabbing Interactors from.</param>
         /// <returns>A collection of Grabbing Interactors.</returns>
-        protected virtual List<InteractorFacade> GetGrabbingInteractors(IEnumerable<GameObject> elements)
+        protected virtual IReadOnlyList<InteractorFacade> GetGrabbingInteractors(IEnumerable<GameObject> elements)
         {
-            List<InteractorFacade> returnList = new List<InteractorFacade>();
+            grabbingInteractors.Clear();
+
+            if (elements == null)
+            {
+                return grabbingInteractors;
+            }
+
             foreach (GameObject element in elements)
             {
                 InteractorFacade interactor = element.TryGetComponent<InteractorFacade>(true, true);
                 if (interactor != null)
                 {
-                    returnList.Add(interactor);
+                    grabbingInteractors.Add(interactor);
                 }
             }
-            return returnList;
+
+            return grabbingInteractors;
         }
     }
 }

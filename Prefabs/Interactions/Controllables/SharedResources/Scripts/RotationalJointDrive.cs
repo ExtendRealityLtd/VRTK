@@ -1,5 +1,6 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using Zinnia.Data.Attribute;
 
@@ -28,7 +29,11 @@
         /// <summary>
         /// The motor data to set on the joint.
         /// </summary>
-        protected JointMotor jointMotor = new JointMotor();
+        protected JointMotor jointMotor;
+        /// <summary>
+        /// A reusable collection to hold the active state of children of the <see cref="Rigidbody"/>s that are adjusted.
+        /// </summary>
+        protected readonly List<bool> rigidbodyChildrenActiveStates = new List<bool>();
 
         /// <inheritdoc />
         public override Vector3 CalculateDriveAxis(DriveAxis.Axis driveAxis)
@@ -111,15 +116,16 @@
         {
             // Disable any child rigidbody GameObjects of the joint to prevent the anchor position updating their position.
             Rigidbody[] rigidbodyChildren = joint.GetComponentsInChildren<Rigidbody>();
-            bool[] childrenStates = new bool[rigidbodyChildren.Length];
+            rigidbodyChildrenActiveStates.Clear();
             for (int index = 0; index < rigidbodyChildren.Length; index++)
             {
                 if (rigidbodyChildren[index].gameObject == jointContainer || rigidbodyChildren[index] == jointRigidbody)
                 {
+                    rigidbodyChildrenActiveStates.Add(false);
                     continue;
                 }
 
-                childrenStates[index] = rigidbodyChildren[index].gameObject.activeSelf;
+                rigidbodyChildrenActiveStates.Add(rigidbodyChildren[index].gameObject.activeSelf);
                 rigidbodyChildren[index].gameObject.SetActive(false);
             }
 
@@ -135,7 +141,7 @@
                     continue;
                 }
 
-                rigidbodyChildren[index].gameObject.SetActive(childrenStates[index]);
+                rigidbodyChildren[index].gameObject.SetActive(rigidbodyChildrenActiveStates[index]);
             }
         }
     }

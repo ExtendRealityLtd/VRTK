@@ -37,7 +37,7 @@
         /// <summary>
         /// The position to automatically move the drive to.
         /// </summary>
-        private TransformData autoDrivePosition = new TransformData();
+        private readonly TransformData autoDrivePosition = new TransformData();
 
         /// <inheritdoc />
         public override void Process()

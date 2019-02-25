@@ -47,11 +47,16 @@
         /// <summary>
         /// A collection of currently touched GameObjects.
         /// </summary>
-        public List<GameObject> TouchedObjects => GetTouchedObjects();
+        public IReadOnlyList<GameObject> TouchedObjects => GetTouchedObjects();
         /// <summary>
         /// The currently active touched GameObject.
         /// </summary>
         public GameObject ActiveTouchedObject => GetActiveTouchedObject();
+
+        /// <summary>
+        /// A reusable collection to hold the returned touched objects.
+        /// </summary>
+        protected readonly List<GameObject> touchedObjects = new List<GameObject>();
 
         /// <summary>
         /// Configures the <see cref="ActiveCollisionPublisher"/> components for touching and untouching.
@@ -84,21 +89,21 @@
         /// Retrieves a collection of currently touched GameObjects.
         /// </summary>
         /// <returns>The currently touched GameObjects.</returns>
-        protected virtual List<GameObject> GetTouchedObjects()
+        protected virtual IReadOnlyList<GameObject> GetTouchedObjects()
         {
-            List<GameObject> returnList = new List<GameObject>();
+            touchedObjects.Clear();
 
             if (activeCollisionsContainer == null)
             {
-                return returnList;
+                return touchedObjects;
             }
 
             foreach (CollisionNotifier.EventData element in activeCollisionsContainer.Elements)
             {
-                returnList.Add(element.collider.GetContainingTransform().gameObject);
+                touchedObjects.Add(element.collider.GetContainingTransform().gameObject);
             }
 
-            return returnList;
+            return touchedObjects;
         }
 
         /// <summary>

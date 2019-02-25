@@ -2,7 +2,6 @@
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using Zinnia.Extension;
     using Zinnia.Data.Attribute;
     using Zinnia.Data.Collection;
     using VRTK.Prefabs.Interactions.Interactors;
@@ -22,9 +21,9 @@
         #endregion
 
         /// <inheritdoc />
-        public override List<InteractorFacade> GetGrabbingInteractors()
+        public override IReadOnlyList<InteractorFacade> GetGrabbingInteractors()
         {
-            return GetGrabbingInteractors(EventSet.Elements.EmptyIfNull());
+            return GetGrabbingInteractors(EventSet.Elements);
         }
     }
 }

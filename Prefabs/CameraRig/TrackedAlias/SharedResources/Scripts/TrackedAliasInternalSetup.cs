@@ -1,7 +1,6 @@
 ﻿namespace VRTK.Prefabs.CameraRig.TrackedAlias
 {
     using UnityEngine;
-    using Zinnia.Extension;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Follow;
@@ -82,28 +81,28 @@
         public virtual void SetUpCameraRigsConfiguration()
         {
             PlayArea.ClearTargets();
-            PlayArea.targets.AddRange(facade.PlayAreas.EmptyIfNull());
+            PlayArea.targets.AddRange(facade.PlayAreas);
 
             Headset.ClearSources();
-            Headset.sources.AddRange(facade.Headsets.EmptyIfNull());
+            Headset.sources.AddRange(facade.Headsets);
 
             sceneCameras.cameras.Clear();
-            sceneCameras.cameras.AddRange(facade.HeadsetCameras.EmptyIfNull());
+            sceneCameras.cameras.AddRange(facade.HeadsetCameras);
 
             headsetVelocityTrackers.velocityTrackers.Clear();
-            headsetVelocityTrackers.velocityTrackers.AddRange(facade.HeadsetVelocityTrackers.EmptyIfNull());
+            headsetVelocityTrackers.velocityTrackers.AddRange(facade.HeadsetVelocityTrackers);
 
             LeftController.ClearSources();
-            LeftController.sources.AddRange(facade.LeftControllers.EmptyIfNull());
+            LeftController.sources.AddRange(facade.LeftControllers);
 
             RightController.ClearSources();
-            RightController.sources.AddRange(facade.RightControllers.EmptyIfNull());
+            RightController.sources.AddRange(facade.RightControllers);
 
             leftControllerVelocityTrackers.velocityTrackers.Clear();
-            leftControllerVelocityTrackers.velocityTrackers.AddRange(facade.LeftControllerVelocityTrackers.EmptyIfNull());
+            leftControllerVelocityTrackers.velocityTrackers.AddRange(facade.LeftControllerVelocityTrackers);
 
             rightControllerVelocityTrackers.velocityTrackers.Clear();
-            rightControllerVelocityTrackers.velocityTrackers.AddRange(facade.RightControllerVelocityTrackers.EmptyIfNull());
+            rightControllerVelocityTrackers.velocityTrackers.AddRange(facade.RightControllerVelocityTrackers);
         }
 
         /// <summary>

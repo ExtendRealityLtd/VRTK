@@ -838,22 +838,22 @@ PrefabInstance:
       objectReference: {fileID: 4930573972038726652}
     - target: {fileID: 2252198485105414240, guid: 3f5dc5860f9599c4e8a0ae09a8bbed3c,
         type: 3}
-      propertyPath: Created.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: PointSet.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3487888190221445197}
     - target: {fileID: 2252198485105414240, guid: 3f5dc5860f9599c4e8a0ae09a8bbed3c,
         type: 3}
-      propertyPath: Created.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: PointSet.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1845446913739173871}
     - target: {fileID: 2252198485105414240, guid: 3f5dc5860f9599c4e8a0ae09a8bbed3c,
         type: 3}
-      propertyPath: Destroyed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: PointUnset.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3487888190221445197}
     - target: {fileID: 2252198485105414240, guid: 3f5dc5860f9599c4e8a0ae09a8bbed3c,
         type: 3}
-      propertyPath: Destroyed.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      propertyPath: PointUnset.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1845446913739173871}
     - target: {fileID: 3540510674561502107, guid: 3f5dc5860f9599c4e8a0ae09a8bbed3c,

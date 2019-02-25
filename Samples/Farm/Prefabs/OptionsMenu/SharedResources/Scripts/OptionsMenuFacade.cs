@@ -62,12 +62,15 @@
                 return;
             }
 
-            transform.position = new Vector3(locationDirection.transform.position.x, locationTarget.transform.position.y, locationDirection.transform.position.z);
+            Vector3 locationDirectionPosition = locationDirection.transform.position;
+            Vector3 locationTargetPosition = locationTarget.transform.position;
+
+            transform.position = new Vector3(locationDirectionPosition.x, locationTargetPosition.y, locationDirectionPosition.z);
             controlStation.transform.localPosition = locationDirection.transform.forward * locationOffset;
 
             Vector3.Scale(controlStation.transform.localPosition, Vector3.right + Vector3.forward);
-            Vector3 targetPosition = locationDirection.transform.position;
-            targetPosition.y = locationTarget.transform.position.y;
+            Vector3 targetPosition = locationDirectionPosition;
+            targetPosition.y = locationTargetPosition.y;
             controlStation.transform.LookAt(targetPosition);
             controlStation.transform.localEulerAngles = Vector3.up * (controlStation.transform.localEulerAngles.y + 180f);
         }

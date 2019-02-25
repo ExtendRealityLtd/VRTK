@@ -3,7 +3,6 @@
     using UnityEngine;
     using System.Collections.Generic;
     using Zinnia.Visual;
-    using Zinnia.Extension;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking;
@@ -104,7 +103,7 @@
         /// </summary>
         public virtual void ConfigureSurfaceLocatorAliases()
         {
-            foreach (SurfaceLocator currentLocator in surfaceLocatorAliases.EmptyIfNull())
+            foreach (SurfaceLocator currentLocator in surfaceLocatorAliases)
             {
                 currentLocator.SearchOrigin = facade.Offset;
             }
@@ -115,7 +114,7 @@
         /// </summary>
         public virtual void ConfigureSurfaceLocatorRules()
         {
-            foreach (SurfaceLocator currentLocator in surfaceLocatorRules.EmptyIfNull())
+            foreach (SurfaceLocator currentLocator in surfaceLocatorRules)
             {
                 currentLocator.targetValidity = facade.TargetValidity;
             }
@@ -126,7 +125,7 @@
         /// </summary>
         public virtual void ConfigureTransformPropertyAppliers()
         {
-            foreach (TransformPropertyApplier currentApplier in transformPropertyApplierAliases.EmptyIfNull())
+            foreach (TransformPropertyApplier currentApplier in transformPropertyApplierAliases)
             {
                 currentApplier.Target = facade.Target;
                 currentApplier.Offset = null;
@@ -142,7 +141,7 @@
         /// </summary>
         public virtual void ConfigureCameraColorOverlays()
         {
-            foreach (CameraColorOverlay currentOverlay in cameraColorOverlays.EmptyIfNull())
+            foreach (CameraColorOverlay currentOverlay in cameraColorOverlays)
             {
                 currentOverlay.validCameras = facade.SceneCameras;
             }

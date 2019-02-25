@@ -81,7 +81,7 @@
         /// <summary>
         /// A collection of Interactors that are currently grabbing the Interactable.
         /// </summary>
-        public List<InteractorFacade> GrabbingInteractors => GrabProvider.GetGrabbingInteractors();
+        public IReadOnlyList<InteractorFacade> GrabbingInteractors => GrabProvider.GetGrabbingInteractors();
 
         /// <summary>
         /// Attempt to grab the Interactable to the given Interactor.

@@ -2,8 +2,8 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
     using Zinnia.Data.Attribute;
     using VRTK.Prefabs.Locomotion.BodyRepresentation;
 
@@ -53,15 +53,15 @@
         /// <summary>
         /// The current source of the movement. The body will be moved in reverse direction in case this object moves.
         /// </summary>
-        public GameObject CurrentInteractor => Interactors.LastOrDefault();
+        public GameObject CurrentInteractor => Interactors.Count == 0 ? null : Interactors[Interactors.Count - 1];
         /// <summary>
         /// The current optional offset of the movement. The body will be moved in case this object moves.
         /// </summary>
-        public GameObject CurrentInteractable => Interactables.LastOrDefault();
+        public GameObject CurrentInteractable => Interactables.Count == 0 ? null : Interactables[Interactors.Count - 1];
         /// <summary>
         /// Whether a climb is happening right now.
         /// </summary>
-        public bool IsClimbing => Interactors.Any() || Interactables.Any();
+        public bool IsClimbing => Interactors.Count > 0 || Interactables.Count > 0;
 
         /// <summary>
         /// The objects that define the source of movement in order they should be used. The last object defines <see cref="CurrentInteractor"/>.
