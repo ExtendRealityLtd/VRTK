@@ -31,10 +31,6 @@
         #endregion
 
         /// <summary>
-        /// A float range of 0f, 0f.
-        /// </summary>
-        private static readonly FloatRange nilLimit = FloatRange.Zero;
-        /// <summary>
         /// The position to automatically move the drive to.
         /// </summary>
         private readonly TransformData autoDrivePosition = new TransformData();
@@ -54,9 +50,9 @@
                 return Vector3.zero;
             }
 
-            positionClamper.xBounds = driveAxis == DriveAxis.Axis.XAxis ? DriveLimits : nilLimit;
-            positionClamper.yBounds = driveAxis == DriveAxis.Axis.YAxis ? DriveLimits : nilLimit;
-            positionClamper.zBounds = driveAxis == DriveAxis.Axis.ZAxis ? DriveLimits : nilLimit;
+            positionClamper.xBounds = driveAxis == DriveAxis.Axis.XAxis ? DriveLimits : default;
+            positionClamper.yBounds = driveAxis == DriveAxis.Axis.YAxis ? DriveLimits : default;
+            positionClamper.zBounds = driveAxis == DriveAxis.Axis.ZAxis ? DriveLimits : default;
 
             return -base.CalculateDriveAxis(driveAxis);
         }
