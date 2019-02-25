@@ -91,6 +91,7 @@
             originalXRSettings = XRSettings.enabled;
             originalFixedDeltaTime = Time.fixedDeltaTime;
             ConfigureTrackedAlias();
+            ConfigureXRSettings(DisableXRSettings);
         }
 
         protected virtual void OnDisable()
