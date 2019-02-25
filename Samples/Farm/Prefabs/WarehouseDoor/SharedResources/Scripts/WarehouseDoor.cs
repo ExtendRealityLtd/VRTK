@@ -18,7 +18,7 @@
         /// The minimum and maximum height of the door.
         /// </summary>
         [Tooltip("The minimum and maximum height of the door.")]
-        public FloatRange heightLimits = FloatRange.Zero;
+        public FloatRange heightLimits;
 
         /// <summary>
         /// The step to increase or decrease the height of the door by.

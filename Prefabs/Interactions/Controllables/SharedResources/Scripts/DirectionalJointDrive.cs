@@ -39,7 +39,7 @@
         {
             if (!isActiveAndEnabled)
             {
-                return new FloatRange();
+                return FloatRange.MinMax;
             }
 
             FloatRange jointLimit = base.CalculateDriveLimits(newLimit);

@@ -17,7 +17,7 @@
         {
             if (!isActiveAndEnabled)
             {
-                return new FloatRange();
+                return FloatRange.MinMax;
             }
 
             float motionLimit = Mathf.Abs(newLimit * 0.5f);
