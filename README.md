@@ -13,19 +13,19 @@
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
 
-  > **Requires** the Unity software version 2018.3 (or above).
+> **Requires** the Unity software version 2018.3 (or above).
 
 ## Getting Started
 
 ### Setting up the project
 
 * Create a new project in the Unity software version 2018.3 (or above) using 3D Template or open an existing project.
-* Ensure `Virtual Reality Supported` is checked
+* Ensure `Virtual Reality Supported` is checked:
   * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` window.
   * Select `Player` from the left hand menu in the `Project Settings` window.
   * In the `Player` settings panel expand `XR Settings`.
   * In `XR Settings` ensure the `Virtual Reality Supported` option is checked.
-* Ensure the project `Scripting Runtime Version` is set to `.NET 4.x Equivalent`.
+* Ensure the project `Scripting Runtime Version` is set to `.NET 4.x Equivalent`:
   * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` inspector.
   * Select `Player` from the left hand menu in the `Project Settings` window.
   * In the `Player` settings panel expand `Other Settings`.
@@ -33,17 +33,25 @@ VRTK aims to make building spatial computing solutions in the [Unity] software f
 
 ### Cloning the repo
 
-  * Navigate to the project `Assets/` directory
-  * Git clone with required submodules into the `Assets/` directory:
-    * `git clone --recurse-submodules https://github.com/thestonefox/VRTK.git`
-    * `git submodule init && git submodule update`
+* Navigate to the project `Assets/` directory.
+* Git clone with required submodules into the `Assets/` directory:
+  * `git clone --recurse-submodules https://github.com/thestonefox/VRTK.git`.
+  * `git submodule init && git submodule update`.
 
 ### Running the tests
 
-  * Open the `VRTK/Scenes/Internal/TestRunner` scene
-  * In the Unity3 software select `Main Menu -> Window -> Test Runner`
-  * Within the Test Runner window click on the `EditMode` tab and the click `Run All` button
-  * If all the tests pass then installation was successful
+* Open the `VRTK/Samples/TestHelper/Scenes/TestRunner` scene.
+* In the Unity3 software select `Main Menu -> Window -> Test Runner`.
+* Within the Test Runner window click on the `EditMode` tab and the click `Run All` button.
+* If all the tests pass then installation was successful.
+
+### Running the example scene
+
+* Open the `VRTK/Samples/Farm/Scenes/ExampleScene` scene.
+* Enable `Maximize On Play` in the Unity Game view control bar to ensure no performance issues are caused by the Unity Editor overhead.
+* Play the scene in the Unity Editor (`CTRL` + `P`).
+* The scene should automatically play within any Unity supported XR hardware.
+* Explore the farm yard and enjoy!
 
 ## Made With VRTK
 
