@@ -1,4 +1,6 @@
-﻿namespace VRTK
+﻿using UnityEngine.SceneManagement;
+
+namespace VRTK
 {
     using UnityEngine;
     using UnityEngine.UI;
@@ -193,25 +195,29 @@
             leftController.selected = false;
             destroyed = false;
 
-            SDK_SimController controllerSDK = VRTK_SDK_Bridge.GetControllerSDK() as SDK_SimController;
-            if (controllerSDK != null)
+            if (SceneManager.GetActiveScene().isLoaded)
             {
-                Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
+                SDK_SimController controllerSDK = VRTK_SDK_Bridge.GetControllerSDK() as SDK_SimController;
+                if (controllerSDK != null)
                 {
-                    {"Trigger", triggerAlias },
-                    {"Grip", gripAlias },
-                    {"TouchpadPress", touchpadAlias },
-                    {"ButtonOne", buttonOneAlias },
-                    {"ButtonTwo", buttonTwoAlias },
-                    {"StartMenu", startMenuAlias },
-                    {"TouchModifier", touchModifier },
-                    {"HairTouchModifier", hairTouchModifier }
-                };
-                controllerSDK.SetKeyMappings(keyMappings);
+                    Dictionary<string, KeyCode> keyMappings = new Dictionary<string, KeyCode>()
+                    {
+                        {"Trigger", triggerAlias},
+                        {"Grip", gripAlias},
+                        {"TouchpadPress", touchpadAlias},
+                        {"ButtonOne", buttonOneAlias},
+                        {"ButtonTwo", buttonTwoAlias},
+                        {"StartMenu", startMenuAlias},
+                        {"TouchModifier", touchModifier},
+                        {"HairTouchModifier", hairTouchModifier}
+                    };
+                    controllerSDK.SetKeyMappings(keyMappings);
+                }
+
+                rightHand.gameObject.SetActive(true);
+                leftHand.gameObject.SetActive(true);
+                crossHairPanel.SetActive(false);
             }
-            rightHand.gameObject.SetActive(true);
-            leftHand.gameObject.SetActive(true);
-            crossHairPanel.SetActive(false);
         }
 
         protected virtual void OnDestroy()

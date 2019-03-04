@@ -1,4 +1,7 @@
 ﻿// SDK Setup|Utilities|90030
+
+using UnityEngine.SceneManagement;
+
 namespace VRTK
 {
     using UnityEngine;
@@ -415,7 +418,10 @@ namespace VRTK
             if (VRTK_SDKManager.ValidInstance() && !VRTK_SDKManager.instance.persistOnLoad)
 #pragma warning restore 618
             {
-                PopulateObjectReferences(false);
+                if (SceneManager.GetActiveScene().isLoaded)
+                {
+                    PopulateObjectReferences(false);
+                }
             }
         }
 
