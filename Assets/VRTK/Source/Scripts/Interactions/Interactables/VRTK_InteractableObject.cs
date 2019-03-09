@@ -1443,11 +1443,7 @@ namespace VRTK
                     LoadPreviousState();
                     break;
                 case VRTK_SnapDropZone.SnapTypes.UseJoint:
-                    Joint snapDropZoneJoint = storedSnapDropZone.GetComponent<Joint>();
-                    if (snapDropZoneJoint)
-                    {
-                        snapDropZoneJoint.connectedBody = null;
-                    }
+                    storedSnapDropZone.UnSnapJoint();
                     break;
             }
 

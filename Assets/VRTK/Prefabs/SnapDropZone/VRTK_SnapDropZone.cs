@@ -5,6 +5,7 @@ namespace VRTK
     using System.Collections;
     using System.Collections.Generic;
     using Highlighters;
+    using System;
 
     /// <summary>
     /// Event Payload
@@ -81,6 +82,9 @@ namespace VRTK
 
         [Tooltip("The Interactable Object to snap into the dropzone when the drop zone is enabled. The Interactable Object must be valid in any given policy list to snap.")]
         public VRTK_InteractableObject defaultSnappedInteractableObject;
+        [Tooltip("Optional - Set this if you intend to use SnapType.Joint. You can attach the joint directly to the rigidbody this object belongs to (which could be a parent). " +
+            "Since joint components require to be attached to the exact level in the hierarchy that the rigidbody exists in it might simplify things for you.")]
+        public Joint joint;
 
         [Header("Obsolete Settings")]
 
@@ -127,7 +131,7 @@ namespace VRTK
         protected bool originalJointCollisionState = false;
 
         protected Coroutine overridePreviousStateAtEndOfFrameRoutine;
-
+        private Rigidbody jointConnectedBodyPlaceholder;
         protected const string HIGHLIGHT_CONTAINER_NAME = "HighlightContainer";
         protected const string HIGHLIGHT_OBJECT_NAME = "HighlightObject";
         protected const string HIGHLIGHT_EDITOR_OBJECT_NAME = "EditorHighlightObject";
@@ -522,7 +526,7 @@ namespace VRTK
 
         protected virtual bool ValidUnsnap(VRTK_InteractableObject interactableObjectCheck)
         {
-            return (interactableObjectCheck.IsGrabbed() || ((snapType != SnapTypes.UseJoint || !float.IsInfinity(GetComponent<Joint>().breakForce)) && interactableObjectCheck.validDrop == VRTK_InteractableObject.ValidDropTypes.DropAnywhere));
+            return (interactableObjectCheck.IsGrabbed() || ((snapType != SnapTypes.UseJoint || !float.IsInfinity(joint.breakForce)) && interactableObjectCheck.validDrop == VRTK_InteractableObject.ValidDropTypes.DropAnywhere));
         }
 
         protected virtual void SnapObjectToZone(VRTK_InteractableObject objectToSnap)
@@ -598,7 +602,7 @@ namespace VRTK
             {
                 GenerateHighlightObject();
 
-                if (snapType == SnapTypes.UseJoint && GetComponent<Joint>() == null)
+                if (snapType == SnapTypes.UseJoint && joint == null)
                 {
                     VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "SnapDropZone:" + name, "Joint", "the same", " because the `Snap Type` is set to `Use Joint`"));
                 }
@@ -894,8 +898,7 @@ namespace VRTK
 
         protected virtual void SetSnapDropZoneJoint(Rigidbody snapTo)
         {
-            Joint snapDropZoneJoint = GetComponent<Joint>();
-            if (snapDropZoneJoint == null)
+            if (joint == null)
             {
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "SnapDropZone:" + name, "Joint", "the same", " because the `Snap Type` is set to `Use Joint`"));
                 return;
@@ -905,16 +908,16 @@ namespace VRTK
                 VRTK_Logger.Error(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_SnapDropZone", "Rigidbody", "the `VRTK_InteractableObject`"));
                 return;
             }
-
-            snapDropZoneJoint.connectedBody = snapTo;
-            originalJointCollisionState = snapDropZoneJoint.enableCollision;
+            jointConnectedBodyPlaceholder = joint.connectedBody;
+            joint.connectedBody = snapTo;
+            originalJointCollisionState = joint.enableCollision;
             //need to set this to true otherwise highlighting doesn't work again on grab
-            snapDropZoneJoint.enableCollision = true;
+            joint.enableCollision = true;
         }
 
         protected virtual void ResetSnapDropZoneJoint()
         {
-            Joint snapDropZoneJoint = GetComponent<Joint>();
+            Joint snapDropZoneJoint = joint;
             if (snapDropZoneJoint != null)
             {
                 snapDropZoneJoint.enableCollision = originalJointCollisionState;
@@ -1201,6 +1204,11 @@ namespace VRTK
         {
             yield return new WaitForEndOfFrame();
             io.OverridePreviousState(parent, kinematic, grabbable);
+        }
+
+        public void UnSnapJoint()
+        {
+            joint.connectedBody = jointConnectedBodyPlaceholder;
         }
     }
 }
