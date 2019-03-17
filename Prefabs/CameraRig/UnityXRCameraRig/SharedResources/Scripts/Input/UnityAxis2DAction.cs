@@ -1,6 +1,8 @@
 ﻿namespace VRTK.Prefabs.CameraRig.UnityXRCameraRig.Input
 {
     using UnityEngine;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Action;
 
     /// <summary>
@@ -11,17 +13,19 @@
         /// <summary>
         /// The named x axis to listen for state changes on.
         /// </summary>
-        [Tooltip("The named x axis to listen for state changes on.")]
-        public string xAxisName;
+        [Serialized]
+        [field: DocumentedByXml]
+        public string XAxisName { get; set; }
         /// <summary>
         /// The named y axis to listen for state changes on.
         /// </summary>
-        [Tooltip("The named y axis to listen for state changes on.")]
-        public string yAxisName;
+        [Serialized]
+        [field: DocumentedByXml]
+        public string YAxisName { get; set; }
 
         protected virtual void Update()
         {
-            Receive(new Vector2(Input.GetAxis(xAxisName), Input.GetAxis(yAxisName)));
+            Receive(new Vector2(Input.GetAxis(XAxisName), Input.GetAxis(YAxisName)));
         }
     }
 }

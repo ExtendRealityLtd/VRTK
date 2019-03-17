@@ -2,6 +2,8 @@
 {
     using UnityEngine;
     using System.Collections.Generic;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Data.Collection;
     using Zinnia.Data.Attribute;
     using VRTK.Prefabs.Interactions.Interactors;
@@ -12,18 +14,15 @@
     public class GrabInteractableStackInteractorProvider : GrabInteractableInteractorProvider
     {
         #region Stack Settings
-        [Header("Stack Settings"), Tooltip("The stack to get the current interactors from."), InternalSetting, SerializeField]
-        private GameObjectObservableStack _eventStack = null;
         /// <summary>
         /// The stack to get the current interactors from.
         /// </summary>
-        public GameObjectObservableStack EventStack => _eventStack;
+        [Serialized]
+        [field: Header("Stack Settings"), DocumentedByXml, Restricted]
+        public GameObjectObservableStack EventStack { get; protected set; }
         #endregion
 
         /// <inheritdoc />
-        public override IReadOnlyList<InteractorFacade> GetGrabbingInteractors()
-        {
-            return GetGrabbingInteractors(EventStack.Stack);
-        }
+        public override IReadOnlyList<InteractorFacade> GrabbingInteractors => GetGrabbingInteractors(EventStack.Stack);
     }
 }

@@ -1,6 +1,9 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
     using UnityEngine;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Modification;
@@ -16,18 +19,21 @@
         /// <summary>
         /// The <see cref="InteractableFacade"/> that controls the movement of the drive.
         /// </summary>
-        [Tooltip("The InteractableFacade that controls the movement of the drive."), InternalSetting, SerializeField]
-        protected InteractableFacade interactable;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public InteractableFacade Interactable { get; protected set; }
         /// <summary>
         /// The <see cref="Vector3Restrictor"/> to clamp the position of the drive within the drive limits.
         /// </summary>
-        [Tooltip("The Vector3Restrictor to clamp the position of the drive within the drive limits."), InternalSetting, SerializeField]
-        protected Vector3Restrictor positionClamper;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public Vector3Restrictor PositionClamper { get; protected set; }
         /// <summary>
         /// The <see cref="TransformPropertyApplier"/> to automatically move the drive to a specific location.
         /// </summary>
-        [Header("Reference Settings"), Tooltip("The TransformPropertyApplier to automatically move the drive to a specific location."), InternalSetting, SerializeField]
-        protected TransformPropertyApplier propertyApplier;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public TransformPropertyApplier PropertyApplier { get; protected set; }
         #endregion
 
         /// <summary>
@@ -38,21 +44,17 @@
         /// <inheritdoc />
         public override void Process()
         {
-            ConfigureAutoDrive(facade.MoveToTargetValue);
+            ConfigureAutoDrive(Facade.MoveToTargetValue);
             base.Process();
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override Vector3 CalculateDriveAxis(DriveAxis.Axis driveAxis)
         {
-            if (!isActiveAndEnabled)
-            {
-                return Vector3.zero;
-            }
-
-            positionClamper.xBounds = driveAxis == DriveAxis.Axis.XAxis ? DriveLimits : default;
-            positionClamper.yBounds = driveAxis == DriveAxis.Axis.YAxis ? DriveLimits : default;
-            positionClamper.zBounds = driveAxis == DriveAxis.Axis.ZAxis ? DriveLimits : default;
+            PositionClamper.XBounds = driveAxis == DriveAxis.Axis.XAxis ? DriveLimits : default;
+            PositionClamper.YBounds = driveAxis == DriveAxis.Axis.YAxis ? DriveLimits : default;
+            PositionClamper.ZBounds = driveAxis == DriveAxis.Axis.ZAxis ? DriveLimits : default;
 
             return -base.CalculateDriveAxis(driveAxis);
         }
@@ -60,28 +62,28 @@
         /// <inheritdoc />
         public override void ProcessDriveSpeed(float driveSpeed, bool moveToTargetValue)
         {
-            propertyApplier.transitionDuration = 1f / driveSpeed;
-            propertyApplier.enabled = moveToTargetValue;
-            if (propertyApplier.enabled)
+            PropertyApplier.TransitionDuration = 1f / driveSpeed;
+            PropertyApplier.enabled = moveToTargetValue;
+            if (PropertyApplier.enabled)
             {
-                interactable.ConsumerRigidbody.velocity = Vector3.zero;
-                propertyApplier.Apply();
+                Interactable.ConsumerRigidbody.velocity = Vector3.zero;
+                PropertyApplier.Apply();
             }
         }
 
         /// <inheritdoc />
         protected override Transform GetDriveTransform()
         {
-            return interactable.transform;
+            return Interactable.transform;
         }
 
         /// <inheritdoc />
         protected override void SetDriveTargetValue(Vector3 targetValue)
         {
-            autoDrivePosition.transform = GetDriveTransform();
-            autoDrivePosition.positionOverride = autoDrivePosition.transform.TransformPoint(targetValue - autoDrivePosition.transform.localPosition);
-            propertyApplier.Source = autoDrivePosition;
-            propertyApplier.Apply();
+            autoDrivePosition.Transform = GetDriveTransform();
+            autoDrivePosition.PositionOverride = autoDrivePosition.Transform.TransformPoint(targetValue - autoDrivePosition.Transform.localPosition);
+            PropertyApplier.Source = autoDrivePosition;
+            PropertyApplier.Apply();
         }
     }
 }

@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 3493408933433076119}
   - component: {fileID: 5700859620580086139}
   - component: {fileID: 4557593568618757525}
+  - component: {fileID: 4934260323824881412}
   m_Layer: 0
   m_Name: PinchScaler
   m_TagString: Untagged
@@ -460,10 +461,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11862926720f544fb5d904995c2b57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  process:
+  source:
     field: {fileID: 3493408933433076119}
   onlyProcessOnActiveAndEnabled: 1
-  utilization: 1
+  interval: 0
 --- !u!114 &4557593568618757525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,8 +477,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0eab237e25807459af1c5caf4d3d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  momentToProcess: 5
-  processes:
+  processMoment: 5
+  processes: {fileID: 4934260323824881412}
+--- !u!114 &4934260323824881412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3324818284766711986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a9c53f0e146454cb669c38817bd5b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - {fileID: 5700859620580086139}
 --- !u!1 &3947244001677853409
 GameObject:
@@ -525,11 +570,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f43145cf4bcc19442b2f19cb257813ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputActiveCollisionConsumer: {fileID: 5163448019286892863}
-  _inputGrabReceived: {fileID: 3093617389160002264}
-  _inputUngrabReceived: {fileID: 8125942206688449857}
-  _inputGrabSetup: {fileID: 191534252298318352}
-  _inputUngrabReset: {fileID: 3497207078304838348}
+  inputActiveCollisionConsumer: {fileID: 5163448019286892863}
+  inputGrabReceived: {fileID: 3093617389160002264}
+  inputUngrabReceived: {fileID: 8125942206688449857}
+  inputGrabSetup: {fileID: 191534252298318352}
+  inputUngrabReset: {fileID: 3497207078304838348}
   pinchScaler: {fileID: 3493408933433076119}
 --- !u!1 &4867702823244129238
 GameObject:

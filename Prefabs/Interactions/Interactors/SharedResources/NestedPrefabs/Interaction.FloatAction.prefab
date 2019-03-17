@@ -107,8 +107,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627c1741c8b3dca40b1a406e26074e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceAction: {fileID: 0}
-  _sourceContainer: {fileID: 0}
+  sourceAction: {fileID: 0}
+  sourceContainer: {fileID: 0}
   targetAction: {fileID: 9168498638057316639}
   startActionPublisher: {fileID: 7409689792824993626}
   stopActionPublisher: {fileID: 5755447133346676037}
@@ -187,7 +187,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f782494a9252d49a470301a5b749ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls:
@@ -225,7 +231,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Action.FloatAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
   equalityTolerance: 1e-45
 --- !u!1 &6697182822275438058
 GameObject:

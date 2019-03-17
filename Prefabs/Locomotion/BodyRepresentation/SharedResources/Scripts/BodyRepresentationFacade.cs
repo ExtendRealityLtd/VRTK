@@ -2,9 +2,13 @@
 {
     using UnityEngine;
     using UnityEngine.Events;
-    using System.Collections.Generic;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
     using VRTK.Prefabs.Interactions.Interactors;
+    using VRTK.Prefabs.Interactions.Interactors.Collection;
 
     /// <summary>
     /// The public interface for the BodyRepresentation prefab.
@@ -12,95 +16,75 @@
     public class BodyRepresentationFacade : MonoBehaviour
     {
         #region Source Settings
-        [Header("Source Settings"), Tooltip("The object to follow."), SerializeField]
-        private GameObject _source;
         /// <summary>
         /// The object to follow.
         /// </summary>
-        public GameObject Source
-        {
-            get { return _source; }
-            set
-            {
-                _source = value;
-                internalSetup.ConfigureSourceObjectFollower();
-            }
-        }
+        [Serialized, Cleared]
+        [field: Header("Source Settings"), DocumentedByXml]
+        public GameObject Source { get; set; }
         /// <summary>
         /// The thickness of <see cref="Source"/> to be used when resolving body collisions.
         /// </summary>
-        [Tooltip("The thickness of source to be used when resolving body collisions.")]
-        public float sourceThickness = 0.05f;
-
-        [Tooltip("An optional offset for the source to use."), SerializeField]
-        private GameObject _offset;
+        [Serialized]
+        [field: DocumentedByXml]
+        public float SourceThickness { get; set; } = 0.05f;
         /// <summary>
         /// An optional offset for the <see cref="Source"/> to use.
         /// </summary>
-        public GameObject Offset
-        {
-            get { return _offset; }
-            set
-            {
-                _offset = value;
-                internalSetup.ConfigureOffsetObjectFollower();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject Offset { get; set; }
         #endregion
 
         #region Interaction Settings
         /// <summary>
         /// A collection of interactors to exclude from physics collision checks.
         /// </summary>
-        [Header("Interaction Settings"), Tooltip("A collection of interactors to exclude from physics collision checks.")]
-        public List<InteractorFacade> ignoredInteractors = new List<InteractorFacade>();
+        [Serialized]
+        [field: Header("Interaction Settings"), DocumentedByXml]
+        public InteractorFacadeObservableList IgnoredInteractors { get; set; }
         #endregion
 
         #region Events
         /// <summary>
         /// Emitted when the body starts touching ground.
         /// </summary>
-        [Header("Events"), Tooltip("Emitted when the body starts touching ground.")]
+        [Header("Events"), DocumentedByXml]
         public UnityEvent BecameGrounded = new UnityEvent();
         /// <summary>
         /// Emitted when the body stops touching ground.
         /// </summary>
-        [Tooltip("Emitted when the body stops touching ground.")]
+        [DocumentedByXml]
         public UnityEvent BecameAirborne = new UnityEvent();
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected BodyRepresentationInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public BodyRepresentationProcessor Processor { get; protected set; }
         #endregion
 
         /// <summary>
         /// The object that defines the main source of truth for movement.
         /// </summary>
-        public BodyRepresentationInternalSetup.MovementInterest Interest
+        public BodyRepresentationProcessor.MovementInterest Interest
         {
-            get
-            {
-                return internalSetup.Interest;
-            }
-            set
-            {
-                internalSetup.Interest = value;
-            }
+            get { return Processor.Interest; }
+            set { Processor.Interest = value; }
         }
 
         /// <summary>
         /// Whether the body touches ground.
         /// </summary>
-        public bool IsCharacterControllerGrounded => internalSetup.IsCharacterControllerGrounded;
+        public bool IsCharacterControllerGrounded => Processor.IsCharacterControllerGrounded;
 
         /// <summary>
         /// The <see cref="Rigidbody"/> that acts as the physical representation of the body.
         /// </summary>
-        public Rigidbody PhysicsBody => internalSetup.PhysicsBody;
+        public Rigidbody PhysicsBody => Processor.PhysicsBody;
 
         /// <summary>
         /// Sets the source of truth for movement to come from <see cref="BodyRepresentationInternalSetup.rigidbody"/> until <see cref="BodyRepresentationInternalSetup.characterController"/> hits the ground, then <see cref="BodyRepresentationInternalSetup.characterController"/> is the new source of truth.
@@ -110,7 +94,7 @@
         /// </remarks>
         public virtual void ListenToRigidbodyMovement()
         {
-            Interest = BodyRepresentationInternalSetup.MovementInterest.RigidbodyUntilGrounded;
+            Interest = BodyRepresentationProcessor.MovementInterest.RigidbodyUntilGrounded;
         }
 
         /// <summary>
@@ -121,27 +105,75 @@
         /// </remarks>
         public virtual void SolveBodyCollisions()
         {
-            internalSetup.SolveBodyCollisions();
+            Processor.SolveBodyCollisions();
+        }
+
+        protected virtual void OnEnable()
+        {
+            IgnoredInteractors.Added.AddListener(OnIgnoredInteractorAdded);
+            IgnoredInteractors.Removed.AddListener(OnIgnoredInteractorRemoved);
+        }
+
+        protected virtual void OnDisable()
+        {
+            IgnoredInteractors.Added.RemoveListener(OnIgnoredInteractorAdded);
+            IgnoredInteractors.Removed.RemoveListener(OnIgnoredInteractorRemoved);
         }
 
         /// <summary>
-        /// Refreshes the ignored interactors.
+        /// Processes when a new <see cref="InteractorFacade"/> is added to the ignored collection.
         /// </summary>
-        public virtual void RefreshIgnoredInteractors()
+        /// <param name="interactor">The interactor to ignore collisions from.</param>
+        protected virtual void OnIgnoredInteractorAdded(InteractorFacade interactor)
         {
-            internalSetup.ConfigureIgnoreInteractorsCollisions();
+            Processor.IgnoreInteractorsCollisions(interactor);
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Processes when a new <see cref="InteractorFacade"/> is removed from the ignored collection.
+        /// </summary>
+        /// <param name="interactor">The interactor to resume collisions with.</param>
+        protected virtual void OnIgnoredInteractorRemoved(InteractorFacade interactor)
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            Processor.ResumeInteractorsCollisions(interactor);
+        }
 
-            internalSetup.ConfigureSourceObjectFollower();
-            internalSetup.ConfigureOffsetObjectFollower();
-            RefreshIgnoredInteractors();
+        /// <summary>
+        /// Called after <see cref="Source"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Source))]
+        protected virtual void OnAfterSourceChange()
+        {
+            Processor.ConfigureSourceObjectFollower();
+        }
+
+        /// <summary>
+        /// Called after <see cref="Offset"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Offset))]
+        protected virtual void OnAfterOffsetChange()
+        {
+            Processor.ConfigureOffsetObjectFollower();
+        }
+
+        /// <summary>
+        /// Called after <see cref="IgnoredInteractors"/> has been changed.
+        /// </summary>
+        [CalledBeforeChangeOf(nameof(IgnoredInteractors))]
+        protected virtual void OnBeforeIgnoredInteractorsChange()
+        {
+            IgnoredInteractors.Added.RemoveListener(OnIgnoredInteractorAdded);
+            IgnoredInteractors.Removed.RemoveListener(OnIgnoredInteractorRemoved);
+        }
+
+        /// <summary>
+        /// Called after <see cref="IgnoredInteractors"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(IgnoredInteractors))]
+        protected virtual void OnAfterIgnoredInteractorsChange()
+        {
+            IgnoredInteractors.Added.AddListener(OnIgnoredInteractorAdded);
+            IgnoredInteractors.Removed.AddListener(OnIgnoredInteractorRemoved);
         }
     }
 }

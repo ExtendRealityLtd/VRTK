@@ -43,7 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -59,7 +65,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!1 &589572685476994951
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,6 +139,7 @@ GameObject:
   - component: {fileID: 25409046748164689}
   - component: {fileID: 6538196316021409675}
   - component: {fileID: 5375680083651960949}
+  - component: {fileID: 4233234889962908673}
   m_Layer: 0
   m_Name: Internal
   m_TagString: Untagged
@@ -187,10 +193,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11862926720f544fb5d904995c2b57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  process:
+  source:
     field: {fileID: 25409046748164689}
   onlyProcessOnActiveAndEnabled: 1
-  utilization: 1
+  interval: 0
 --- !u!114 &5375680083651960949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,8 +209,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0eab237e25807459af1c5caf4d3d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  momentToProcess: 5
-  processes:
+  processMoment: 5
+  processes: {fileID: 4233234889962908673}
+--- !u!114 &4233234889962908673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662433974318358887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a9c53f0e146454cb669c38817bd5b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - {fileID: 6538196316021409675}
 --- !u!1 &680201593210926691
 GameObject:
@@ -249,7 +299,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -265,7 +321,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!114 &2800649503920474184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +416,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -377,7 +438,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!1 &4157250432537793089
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,18 +735,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: VRTK.Prefabs.Interactions.Controllables.DriveUnityEvent, VRTK.Prefabs.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  _driveAxis: 0
-  _moveToTargetValue: 1
-  _targetValue: 0.5
-  _driveSpeed: 10
+  driveAxis: 0
+  moveToTargetValue: 0
+  targetValue: 0.5
+  driveSpeed: 50
   stepRange:
     minimum: 0
     maximum: 10
   stepIncrement: 1
-  _driveLimit:
+  driveLimit:
     minimum: -180
     maximum: 180
-  _hingeLocation: {x: 0, y: 0, z: 0}
+  hingeLocation: {x: 0, y: 0, z: 0}
   gizmoLineDistance: 0.2
   gizmoSphereRadius: 0.015
 --- !u!1001 &5003584047476363182
@@ -756,6 +816,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8265383420104874212, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8265383420104874212, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7899214951717282139, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: _followTracking
@@ -764,6 +834,16 @@ PrefabInstance:
     - target: {fileID: 7899214951717282139, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: _grabOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7899214951717282139, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: followTracking
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7899214951717282139, guid: 240fdd985e025cb459f73d2b1bb7b341,
+        type: 3}
+      propertyPath: grabOffset
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3746682085685243862, guid: 240fdd985e025cb459f73d2b1bb7b341,
@@ -819,7 +899,7 @@ PrefabInstance:
     - target: {fileID: 6034905340660101784, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
       propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
-      value: ResetAngularVelocity
+      value: ClearAngularVelocity
       objectReference: {fileID: 0}
     - target: {fileID: 6034905340660101784, guid: 240fdd985e025cb459f73d2b1bb7b341,
         type: 3}
@@ -866,24 +946,8 @@ PrefabInstance:
       propertyPath: Emitted.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_FloatArgument
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8265383420104874212, guid: 240fdd985e025cb459f73d2b1bb7b341,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8265383420104874212, guid: 240fdd985e025cb459f73d2b1bb7b341,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 240fdd985e025cb459f73d2b1bb7b341, type: 3}
---- !u!1 &4745675730552011303 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 336727363156800905, guid: 240fdd985e025cb459f73d2b1bb7b341,
-    type: 3}
-  m_PrefabInstance: {fileID: 5003584047476363182}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6015908964397489168 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1588786030056821694, guid: 240fdd985e025cb459f73d2b1bb7b341,
@@ -923,6 +987,12 @@ MonoBehaviour:
 --- !u!1 &1328072596425526923 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6277472330192781605, guid: 240fdd985e025cb459f73d2b1bb7b341,
+    type: 3}
+  m_PrefabInstance: {fileID: 5003584047476363182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4745675730552011303 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 336727363156800905, guid: 240fdd985e025cb459f73d2b1bb7b341,
     type: 3}
   m_PrefabInstance: {fileID: 5003584047476363182}
   m_PrefabAsset: {fileID: 0}

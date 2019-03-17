@@ -1,6 +1,9 @@
 ﻿namespace VRTK.Prefabs.Interactions.Interactables.Grab.Action
 {
     using UnityEngine;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Event;
     using Zinnia.Data.Attribute;
 
@@ -10,55 +13,42 @@
     public class GrabInteractableAction : MonoBehaviour
     {
         #region Input Settings
-        [Header("Input Settings"), Tooltip("The input ActiveCollisionConsumerEventProxyEmitter for the grab action."), InternalSetting, SerializeField]
-        private ActiveCollisionConsumerEventProxyEmitter _inputActiveCollisionConsumer = null;
         /// <summary>
         /// The input <see cref="ActiveCollisionConsumerEventProxyEmitter"/> for the grab action.
         /// </summary>
-        public ActiveCollisionConsumerEventProxyEmitter InputActiveCollisionConsumer => _inputActiveCollisionConsumer;
-
-        [Tooltip("The input GameObjectEventProxyEmitter for the grab action."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _inputGrabReceived = null;
+        [Serialized]
+        [field: Header("Input Settings"), DocumentedByXml, Restricted]
+        public ActiveCollisionConsumerEventProxyEmitter InputActiveCollisionConsumer { get; protected set; }
         /// <summary>
         /// The input <see cref="GameObjectEventProxyEmitter"/> for the grab action.
         /// </summary>
-        public GameObjectEventProxyEmitter InputGrabReceived => _inputGrabReceived;
-
-        [Tooltip("The input GameObjectEventProxyEmitter for the ungrab action."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _inputUngrabReceived = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter InputGrabReceived { get; protected set; }
         /// <summary>
         /// The input <see cref="GameObjectEventProxyEmitter"/> for the grab action.
         /// </summary>
-        public GameObjectEventProxyEmitter InputUngrabReceived => _inputUngrabReceived;
-
-        [Tooltip("The input GameObjectEventProxyEmitter for any pre setup on grab."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _inputGrabSetup = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter InputUngrabReceived { get; protected set; }
         /// <summary>
         /// The input <see cref="GameObjectEventProxyEmitter"/> for any pre setup on grab.
         /// </summary>
-        public GameObjectEventProxyEmitter InputGrabSetup => _inputGrabSetup;
-
-        [Tooltip("The input GameObjectEventProxyEmitter for any post reset on ungrab."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _inputUngrabReset = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter InputGrabSetup { get; protected set; }
         /// <summary>
         /// The input <see cref="GameObjectEventProxyEmitter"/> for any post reset on ungrab.
         /// </summary>
-        public GameObjectEventProxyEmitter InputUngrabReset => _inputUngrabReset;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter InputUngrabReset { get; protected set; }
         #endregion
 
         /// <summary>
         /// The internal setup for the grab action.
         /// </summary>
-        protected GrabInteractableInternalSetup grabSetup;
-
-        /// <summary>
-        /// Sets up the Action with required core data.
-        /// </summary>
-        /// <param name="grabSetup">The grab internal setup for the action.</param>
-        public virtual void SetUp(GrabInteractableInternalSetup grabSetup)
-        {
-            this.grabSetup = grabSetup;
-        }
+        public GrabInteractableConfigurator GrabSetup { get; set; }
 
         /// <summary>
         /// Notifies that the Interactable is being grabbed.
@@ -66,7 +56,7 @@
         /// <param name="data">The grabbing object.</param>
         public virtual void NotifyGrab(GameObject data)
         {
-            grabSetup.NotifyGrab(data);
+            GrabSetup.NotifyGrab(data);
         }
 
         /// <summary>
@@ -75,7 +65,13 @@
         /// <param name="data">The previous grabbing object.</param>
         public virtual void NotifyUngrab(GameObject data)
         {
-            grabSetup.NotifyUngrab(data);
+            GrabSetup.NotifyUngrab(data);
         }
+
+        /// <summary>
+        /// Called after <see cref="GrabSetup"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(GrabSetup))]
+        protected virtual void OnAfterGrabSetupChange() { }
     }
 }

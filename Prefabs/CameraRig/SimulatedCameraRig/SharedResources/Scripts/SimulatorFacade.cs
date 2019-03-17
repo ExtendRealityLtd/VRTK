@@ -2,79 +2,52 @@
 {
     using UnityEngine;
     using UnityEngine.XR;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.MemberChangeMethod;
     using Zinnia.Data.Operation;
     using Zinnia.Data.Attribute;
     using VRTK.Prefabs.CameraRig.TrackedAlias;
 
     /// <summary>
-    /// Provides configuration for the Simulated CameraRig.
+    /// The public interface into the SimulatedCameraRig Prefab.
     /// </summary>
     public class SimulatorFacade : MonoBehaviour
     {
         #region Simulator Settings
-        [Header("Simulator Settings"), Tooltip("The optional Tracked Alias prefab, must be provided if one is used in the scene."), SerializeField]
-        private TrackedAliasFacade _trackedAlias;
         /// <summary>
         /// The optional Tracked Alias prefab, must be provided if one is used in the scene.
         /// </summary>
-        public TrackedAliasFacade TrackedAlias
-        {
-            get { return _trackedAlias; }
-            set
-            {
-                _trackedAlias = value;
-                ConfigureTrackedAlias();
-            }
-        }
-
-        [Tooltip("Determines whether to disable the XRSettings."), SerializeField]
-        private bool _disableXRSettings = true;
+        [Serialized]
+        [field: Header("Simulator Settings"), DocumentedByXml]
+        public TrackedAliasFacade TrackedAlias { get; set; }
         /// <summary>
         /// Determines whether to disable the XRSettings.
         /// </summary>
-        public bool DisableXRSettings
-        {
-            get
-            {
-                return _disableXRSettings;
-            }
-            set
-            {
-                _disableXRSettings = value;
-                ConfigureXRSettings(_disableXRSettings);
-            }
-        }
-
-        [Tooltip("The frame rate to simulate with fixedDeltaTime."), SerializeField]
-        private float _simulatedFrameRate = 90f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool DisableXRSettings { get; set; } = true;
         /// <summary>
         /// The frame rate to simulate with fixedDeltaTime.
         /// </summary>
-        public float SimulatedFrameRate
-        {
-            get
-            {
-                return _simulatedFrameRate;
-            }
-            set
-            {
-                _simulatedFrameRate = value;
-                ConfigureSimulatedFrameRate();
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public float SimulatedFrameRate { get; set; } = 90f;
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked TransformPositionMutator.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked TransformPositionMutator."), InternalSetting, SerializeField]
-        protected TransformPositionMutator playAreaPosition;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TransformPositionMutator PlayAreaPosition { get; protected set; }
         /// <summary>
         /// The linked TransformPropertyResetter.
         /// </summary>
-        [Tooltip("The linked TransformPropertyResetter."), InternalSetting, SerializeField]
-        protected TransformPropertyResetter playAreaResetter;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public TransformPropertyResetter PlayAreaResetter { get; protected set; }
         #endregion
 
         /// <summary>
@@ -100,22 +73,6 @@
             Time.fixedDeltaTime = originalFixedDeltaTime;
         }
 
-        protected virtual void OnValidate()
-        {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
-            ConfigureXRSettings(DisableXRSettings);
-            ConfigureSimulatedFrameRate();
-
-            if (Application.isPlaying)
-            {
-                ConfigureTrackedAlias();
-            }
-        }
-
         /// <summary>
         /// Configures the provided <see cref="TrackedAlias"/> onto the simulator CameraRig.
         /// </summary>
@@ -123,8 +80,8 @@
         {
             if (TrackedAlias != null)
             {
-                playAreaPosition.Target = playAreaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
-                playAreaResetter.source = playAreaResetter != null ? TrackedAlias.PlayAreaAlias.transform : null;
+                PlayAreaPosition.Target = PlayAreaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
+                PlayAreaResetter.Source = PlayAreaResetter != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
             }
         }
 
@@ -151,6 +108,33 @@
         protected virtual void ConfigureSimulatedFrameRate()
         {
             Time.fixedDeltaTime = Time.timeScale / SimulatedFrameRate;
+        }
+
+        /// <summary>
+        /// Called after <see cref="TrackedAlias"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(TrackedAlias))]
+        protected virtual void OnAfterTrackedAliasChange()
+        {
+            ConfigureTrackedAlias();
+        }
+
+        /// <summary>
+        /// Called after <see cref="DisableXRSettings"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(DisableXRSettings))]
+        protected virtual void OnAfterDisableXRSettingsChange()
+        {
+            ConfigureXRSettings(DisableXRSettings);
+        }
+
+        /// <summary>
+        /// Called after <see cref="SimulatedFrameRate"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(SimulatedFrameRate))]
+        protected virtual void OnAfterSimulatedFrameRateChange()
+        {
+            ConfigureSimulatedFrameRate();
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace VRTK.Prefabs.CameraRig.UnityXRCameraRig.Input
 {
     using UnityEngine;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Action;
 
     /// <summary>
@@ -9,14 +11,15 @@
     public class UnityButtonAction : BooleanAction
     {
         /// <summary>
-        /// The <see cref="KeyCode"/> to listen for state changes on.
+        /// The <see cref="UnityEngine.KeyCode"/> to listen for state changes on.
         /// </summary>
-        [Tooltip("The key code to listen for state changes on.")]
-        public KeyCode keyCode;
+        [Serialized]
+        [field: DocumentedByXml]
+        public KeyCode KeyCode { get; set; }
 
         protected virtual void Update()
         {
-            Receive(Input.GetKey(keyCode));
+            Receive(Input.GetKey(KeyCode));
         }
     }
 }

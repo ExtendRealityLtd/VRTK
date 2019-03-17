@@ -1,6 +1,9 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
     using UnityEngine;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Extension;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
@@ -17,44 +20,44 @@
         /// <summary>
         /// The <see cref="InteractableFacade"/> that controls the movement of the drive.
         /// </summary>
-        [Tooltip("The InteractableFacade that controls the movement of the drive."), InternalSetting, SerializeField]
-        protected InteractableFacade interactable;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public InteractableFacade Interactable { get; protected set; }
         /// <summary>
         /// The <see cref="GameObject"/> that contains the meshes for the control.
         /// </summary>
-        [Tooltip("The GameObject that contains the meshes for the control."), InternalSetting, SerializeField]
-        protected GameObject interactableMesh;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObject InteractableMesh { get; protected set; }
         /// <summary>
         /// The <see cref="TransformPositionDifferenceRotation"/> to drive the rotation of the control.
         /// </summary>
-        [Tooltip("The TransformPositionDifferenceRotation to drive the rotation of the control."), InternalSetting, SerializeField]
-        protected TransformPositionDifferenceRotation rotationModifier;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public TransformPositionDifferenceRotation RotationModifier { get; protected set; }
         /// <summary>
         /// The <see cref="ArtificialVelocityApplier"/> that applies artificial angular velocity to the control after releasing.
         /// </summary>
-        [Tooltip("The ArtificialVelocityApplier that applies artificial angular velocity to the control after releasing."), InternalSetting, SerializeField]
-        protected ArtificialVelocityApplier velocityApplier;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public ArtificialVelocityApplier VelocityApplier { get; protected set; }
         #endregion
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override Vector3 CalculateDriveAxis(DriveAxis.Axis driveAxis)
         {
-            if (!isActiveAndEnabled)
-            {
-                return Vector3.zero;
-            }
-
             Vector3 axisDirection = base.CalculateDriveAxis(driveAxis);
             switch (driveAxis)
             {
                 case DriveAxis.Axis.XAxis:
-                    rotationModifier.FollowOnAxis = Vector3State.XOnly;
+                    RotationModifier.FollowOnAxis = Vector3State.XOnly;
                     break;
                 case DriveAxis.Axis.YAxis:
-                    rotationModifier.FollowOnAxis = Vector3State.YOnly;
+                    RotationModifier.FollowOnAxis = Vector3State.YOnly;
                     break;
                 case DriveAxis.Axis.ZAxis:
-                    rotationModifier.FollowOnAxis = Vector3State.ZOnly;
+                    RotationModifier.FollowOnAxis = Vector3State.ZOnly;
                     break;
             }
 
@@ -62,28 +65,24 @@
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override void CalculateHingeLocation(Vector3 newHingeLocation)
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
             transform.localPosition = newHingeLocation;
-            interactableMesh.transform.localPosition = newHingeLocation * -1f;
+            InteractableMesh.transform.localPosition = newHingeLocation * -1f;
         }
 
         /// <inheritdoc />
         public override void ApplyExistingAngularVelocity(float multiplier = 1f)
         {
-            velocityApplier.AngularVelocity = AxisDirection * pseudoAngularVelocity * multiplier;
-            velocityApplier.Apply();
+            VelocityApplier.AngularVelocity = AxisDirection * pseudoAngularVelocity * multiplier;
+            VelocityApplier.Apply();
         }
 
         /// <inheritdoc />
         protected override Transform GetDriveTransform()
         {
-            return interactable.transform;
+            return Interactable.transform;
         }
 
         /// <inheritdoc />
@@ -91,15 +90,15 @@
         {
             if (ApplyLimits())
             {
-                velocityApplier.Velocity = Vector3.zero;
-                velocityApplier.AngularVelocity = Vector3.zero;
+                VelocityApplier.Velocity = Vector3.zero;
+                VelocityApplier.AngularVelocity = Vector3.zero;
             }
         }
 
         /// <inheritdoc />
         protected override void ProcessAutoDrive(float driveSpeed)
         {
-            if (facade.MoveToTargetValue && !driveSpeed.ApproxEquals(0f))
+            if (Facade.MoveToTargetValue && !driveSpeed.ApproxEquals(0f))
             {
                 GetDriveTransform().localRotation *= Quaternion.Euler(-AxisDirection * driveSpeed * Time.deltaTime);
             }

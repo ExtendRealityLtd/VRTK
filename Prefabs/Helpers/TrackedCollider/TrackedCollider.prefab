@@ -87,7 +87,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3533518795242125164}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6053823821777842292}
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 0}
-  internalSetup: {fileID: 7631982828909951989}
+  configuration: {fileID: 7631982828909951989}
 --- !u!1 &5673201884694615319
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   facade: {fileID: 6434841534626989321}
   objectFollower: {fileID: 6448605195277943161}
   positionExtractor: {fileID: 7706563081135637935}
---- !u!114 &2396179314871548456
+--- !u!114 &4608236425198544497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -253,16 +253,16 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+FollowEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+FollowEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   angularVelocityLimit: Infinity
   maxDistanceDelta: 10
---- !u!114 &658376928774620630
+--- !u!114 &2209404458595471245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,12 +278,12 @@ MonoBehaviour:
   Premodified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+FollowEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Modified:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Tracking.Follow.ObjectFollower+FollowEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   velocityLimit: Infinity
   maxDistanceDelta: 10
@@ -294,6 +294,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6053823821777842292}
     m_Modifications:
+    - target: {fileID: 1068226196861958, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
+      propertyPath: m_Name
+      value: ObjectFollower
+      objectReference: {fileID: 0}
     - target: {fileID: 4952949373149400, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -338,38 +342,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1068226196861958, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
-      propertyPath: m_Name
-      value: ObjectFollower
-      objectReference: {fileID: 0}
-    - target: {fileID: 114960550120155566, guid: 9aa99d00578590e45a52faa205a1014a,
+    - target: {fileID: 1392910959889882537, guid: 9aa99d00578590e45a52faa205a1014a,
         type: 3}
-      propertyPath: targets.Array.size
+      propertyPath: elements.Array.size
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114960550120155566, guid: 9aa99d00578590e45a52faa205a1014a,
+    - target: {fileID: 1392910959889882537, guid: 9aa99d00578590e45a52faa205a1014a,
         type: 3}
-      propertyPath: targets.Array.data[0]
+      propertyPath: elements.Array.data[0]
       value: 
       objectReference: {fileID: 368991527492735335}
     - target: {fileID: 114374749712010186, guid: 9aa99d00578590e45a52faa205a1014a,
         type: 3}
       propertyPath: rotationModifier
       value: 
-      objectReference: {fileID: 2396179314871548456}
+      objectReference: {fileID: 4608236425198544497}
     - target: {fileID: 114374749712010186, guid: 9aa99d00578590e45a52faa205a1014a,
         type: 3}
       propertyPath: positionModifier
       value: 
-      objectReference: {fileID: 658376928774620630}
+      objectReference: {fileID: 2209404458595471245}
     - target: {fileID: 114265967538520616, guid: 9aa99d00578590e45a52faa205a1014a,
         type: 3}
-      propertyPath: momentToProcess
+      propertyPath: processMoment
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 114338087786370432, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
     - {fileID: 114065135811493534, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
+    - {fileID: 114338087786370432, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9aa99d00578590e45a52faa205a1014a, type: 3}
 --- !u!4 &6410866299087718415 stripped
 Transform:

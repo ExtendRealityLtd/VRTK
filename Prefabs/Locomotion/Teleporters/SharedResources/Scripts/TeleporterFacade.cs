@@ -1,9 +1,13 @@
 ﻿namespace VRTK.Prefabs.Locomotion.Teleporters
 {
     using UnityEngine;
-    using Zinnia.Data.Attribute;
-    using Zinnia.Data.Type;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Rule;
+    using Zinnia.Data.Type;
+    using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Modification;
 
     /// <summary>
@@ -11,102 +15,78 @@
     /// </summary>
     public class TeleporterFacade : MonoBehaviour
     {
+        /// <summary>
+        /// The type of offset to apply when teleporting.
+        /// </summary>
+        public enum OffsetType
+        {
+            /// <summary>
+            /// Updates the teleported position with the <see cref="Offset"/> affecting the position but the destination rotation has no effect on the teleported rotation.
+            /// </summary>
+            OffsetAlwaysIgnoreDestinationRotation,
+            /// <summary>
+            /// Updates the teleported position with the <see cref="Offset"/> affecting the position and the destination rotation affecting the teleported rotation.
+            /// </summary>
+            OffsetAlwaysWithDestinationRotation,
+            /// <summary>
+            /// Updates the teleported position but only uses the <see cref="Offset"/> when affecting the floor snap position but the destination rotation has no effect on the teleported rotation.
+            /// </summary>
+            OffsetFloorSnapOnlyIgnoreDestinationRotation
+        }
+
         #region Teleporter Settings
-        [Header("Teleporter Settings"), Tooltip("The target to move to the teleported position."), SerializeField]
-        private GameObject _target;
         /// <summary>
         /// The target to move to the teleported position.
         /// </summary>
-        public GameObject Target
-        {
-            get { return _target; }
-            set
-            {
-                _target = value;
-                internalSetup.ConfigureTransformPropertyAppliers();
-            }
-        }
-
-        [Tooltip("The offset to compensate the teleported target position by for both floor snapping and position movement."), SerializeField]
-        private GameObject _offset;
+        [Serialized, Cleared]
+        [field: Header("Teleporter Settings"), DocumentedByXml]
+        public GameObject Target { get; set; }
         /// <summary>
         /// The offset to compensate the teleported target position by for both floor snapping and position movement.
         /// </summary>
-        public GameObject Offset
-        {
-            get { return _offset; }
-            set
-            {
-                _offset = value;
-                internalSetup.ConfigureSurfaceLocatorAliases();
-                internalSetup.ConfigureTransformPropertyAppliers();
-            }
-        }
-
-        [Tooltip("Determines if only the floor snap should only be compensated by the offset or whether the teleported target position should also be compensated by the offset."), SerializeField]
-        private bool _onlyOffsetFloorSnap;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject Offset { get; set; }
         /// <summary>
-        /// Determines if only the floor snap should only be compensated by the <see cref="Offset"/> or whether the teleported target position should also be compensated by the <see cref="Offset"/>.
+        /// Determines how to use the <see cref="Offset"/> when calculating the teleport location.
         /// </summary>
-        public bool OnlyOffsetFloorSnap
-        {
-            get { return _onlyOffsetFloorSnap; }
-            set
-            {
-                _onlyOffsetFloorSnap = value;
-                internalSetup.ConfigureTransformPropertyAppliers();
-            }
-        }
-
-        [Tooltip("The list of scene Cameras to apply a fade to."), SerializeField]
-        private CameraList _sceneCameras;
+        [Serialized]
+        [field: DocumentedByXml]
+        public OffsetType OffsetUsage { get; set; }
         /// <summary>
         /// The <see cref="CameraList"/> of scene <see cref="Camera"/>s to apply a fade to.
         /// </summary>
-        public CameraList SceneCameras
-        {
-            get { return _sceneCameras; }
-            set
-            {
-                _sceneCameras = value;
-                internalSetup.ConfigureCameraColorOverlays();
-            }
-        }
-
-        [Tooltip("Allows to optionally determine targets based on the set rules."), SerializeField]
-        private RuleContainer _targetValidity;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public RuleContainer CameraValidity { get; set; }
         /// <summary>
         /// Allows to optionally determine targets based on the set rules.
         /// </summary>
-        public RuleContainer TargetValidity
-        {
-            get { return _targetValidity; }
-            set
-            {
-                _targetValidity = value;
-                internalSetup.ConfigureSurfaceLocatorRules();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public RuleContainer TargetValidity { get; set; }
         #endregion
 
         #region Teleporter Events
         /// <summary>
         /// Emitted when the teleporting is about to initiate.
         /// </summary>
-        [Header("Teleporter Events")]
+        [Header("Teleporter Events"), DocumentedByXml]
         public TransformPropertyApplier.UnityEvent Teleporting = new TransformPropertyApplier.UnityEvent();
         /// <summary>
         /// Emitted when the teleporting has completed.
         /// </summary>
+        [DocumentedByXml]
         public TransformPropertyApplier.UnityEvent Teleported = new TransformPropertyApplier.UnityEvent();
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected TeleporterInternalSetup internalSetup;
+        [Serialized, Cleared]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TeleporterConfigurator Configuration { get; protected set; }
         #endregion
 
         /// <summary>
@@ -115,20 +95,62 @@
         /// <param name="destination">The location to attempt to teleport to.</param>
         public virtual void Teleport(TransformData destination)
         {
-            internalSetup.Teleport(destination);
+            Configuration.Teleport(destination);
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Sets <see cref="OffsetUsage"/>.
+        /// </summary>
+        /// <param name="offsetTypeIndex">The index of the <see cref="OffsetType"/>.</param>
+        public virtual void SetOffsetUsage(int offsetTypeIndex)
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            OffsetUsage = (OffsetType)Mathf.Clamp(offsetTypeIndex, 0, System.Enum.GetValues(typeof(OffsetType)).Length);
+        }
 
-            internalSetup.ConfigureSurfaceLocatorAliases();
-            internalSetup.ConfigureSurfaceLocatorRules();
-            internalSetup.ConfigureTransformPropertyAppliers();
-            internalSetup.ConfigureCameraColorOverlays();
+        /// <summary>
+        /// Called after <see cref="Target"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Target))]
+        protected virtual void OnAfterTargetChange()
+        {
+            Configuration.ConfigureTransformPropertyAppliers();
+        }
+
+        /// <summary>
+        /// Called after <see cref="Offset"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Offset))]
+        protected virtual void OnAfterOffsetChange()
+        {
+            Configuration.ConfigureSurfaceLocatorAliases();
+            Configuration.ConfigureTransformPropertyAppliers();
+        }
+
+        /// <summary>
+        /// Called after <see cref="OffsetUsage"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(OffsetUsage))]
+        protected virtual void OnAfterOffsetUsageChange()
+        {
+            Configuration.ConfigureTransformPropertyAppliers();
+        }
+
+        /// <summary>
+        /// Called after <see cref="CameraValidity"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(CameraValidity))]
+        protected virtual void OnAfterCameraValidityChange()
+        {
+            Configuration.ConfigureCameraColorOverlays();
+        }
+
+        /// <summary>
+        /// Called after <see cref="TargetValidity"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(TargetValidity))]
+        protected virtual void OnAfterTargetValidityChange()
+        {
+            Configuration.ConfigureSurfaceLocatorRules();
         }
     }
 }

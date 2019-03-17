@@ -1,14 +1,15 @@
 ﻿namespace VRTK.Prefabs.Interactions.Interactables.Grab.Receiver
 {
     using UnityEngine;
-    using System.Collections.Generic;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Rule;
     using Zinnia.Event;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
     using Zinnia.Data.Collection;
     using Zinnia.Tracking.Collision.Active;
-    using VRTK.Prefabs.Interactions.Interactors;
 
     /// <summary>
     /// Handles the way in which a grab event from an Interactor is received and processed by the Interactable.
@@ -31,96 +32,90 @@
         }
 
         #region Interactable Settings
-        [Header("Interactable Settings"), Tooltip("The mechanism of how to keep the grab action active."), SerializeField]
-        private ActiveType _grabType = ActiveType.HoldTillRelease;
         /// <summary>
         /// The mechanism of how to keep the grab action active.
         /// </summary>
-        public ActiveType GrabType
-        {
-            get { return _grabType; }
-            set
-            {
-                _grabType = value;
-                ConfigureGrabType();
-            }
-        }
+        [Serialized]
+        [field: Header("Interactable Settings"), DocumentedByXml]
+        public ActiveType GrabType { get; set; } = ActiveType.HoldTillRelease;
         #endregion
 
         #region Grab Consumer Settings
         /// <summary>
         /// The <see cref="ActiveCollisionConsumer"/> that listens for the grab payload.
         /// </summary>
-        [Header("Grab Consumer Settings"), Tooltip("The ActiveCollisionConsumer that listens for the grab payload."), InternalSetting, SerializeField]
-        protected ActiveCollisionConsumer grabConsumer;
+        [Serialized]
+        [field: Header("Grab Consumer Settings"), DocumentedByXml, Restricted]
+        public ActiveCollisionConsumer GrabConsumer { get; protected set; }
         /// <summary>
         /// The <see cref="ActiveCollisionConsumer"/> that listens for the ungrab payload.
         /// </summary>
-        [Tooltip("The ActiveCollisionConsumer that listens for the ungrab payload."), InternalSetting, SerializeField]
-        protected ActiveCollisionConsumer ungrabConsumer;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public ActiveCollisionConsumer UngrabConsumer { get; protected set; }
         #endregion
 
         #region Grab Action Settings
         /// <summary>
-        /// The <see cref="ListContainsRule"/> used to determine the grab validity.
+        /// The <see cref="GameObjectEventProxyEmitter"/> used to determine the grab validity.
         /// </summary>
-        [Tooltip("The ListContainsRule used to determine the grab validity."), InternalSetting, SerializeField]
-        protected ListContainsRule grabValidity;
+        [Serialized]
+        [field: Header("Grab Action Settings"), DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter GrabValidity { get; set; }
         #endregion
 
         #region Active Type Settings
         /// <summary>
         /// The <see cref="GameObject"/> containing the logic for starting HoldTillRelease grabbing.
         /// </summary>
-        [Header("Active Type Settings"), Tooltip("The GameObject containing the logic for starting HoldTillRelease grabbing."), InternalSetting, SerializeField]
-        protected GameObject startStateGrab;
+        [Serialized]
+        [field: Header("Active Type Settings"), DocumentedByXml, Restricted]
+        public GameObject StartStateGrab { get; protected set; }
         /// <summary>
         /// The <see cref="GameObject"/> containing the logic for ending HoldTillRelease grabbing.
         /// </summary>
-        [Tooltip("The GameObject containing the logic for ending HoldTillRelease grabbing."), InternalSetting, SerializeField]
-        protected GameObject stopStateGrab;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObject StopStateGrab { get; protected set; }
         /// <summary>
         /// The <see cref="GameObject"/> containing the logic for starting and ending Toggle grabbing.
         /// </summary>
-        [Tooltip("The GameObject containing the logic for starting and ending Toggle grabbing"), InternalSetting, SerializeField]
-        protected GameObject toggleGrab;
-
-        [Tooltip("The GameObjectObservableSet containing the logic for starting and ending Toggle grabbing."), InternalSetting, SerializeField]
-        private GameObjectObservableSet _toggleSet = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObject ToggleGrab { get; protected set; }
         /// <summary>
         /// The <see cref="GameObjectObservableSet"/> containing the logic for starting and ending Toggle grabbing.
         /// </summary>
-        public GameObjectObservableSet ToggleSet => _toggleSet;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectObservableList ToggleList { get; protected set; }
         #endregion
 
         #region Output Settings
-        [Header("Output Settings"), Tooltip("The output ActiveCollisionConsumerEventProxyEmitter for the grab action."), InternalSetting, SerializeField]
-        private ActiveCollisionConsumerEventProxyEmitter _outputActiveCollisionConsumer = null;
         /// <summary>
         /// The output <see cref="ActiveCollisionConsumerEventProxyEmitter"/> for the grab action.
         /// </summary>
-        public ActiveCollisionConsumerEventProxyEmitter OutputActiveCollisionConsumer => _outputActiveCollisionConsumer;
-
-        [Tooltip("The output GameObjectEventProxyEmitter for the grab action."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _outputGrabAction = null;
+        [Serialized]
+        [field: Header("Output Settings"), DocumentedByXml, Restricted]
+        public ActiveCollisionConsumerEventProxyEmitter OutputActiveCollisionConsumer { get; protected set; }
         /// <summary>
         /// The output <see cref="GameObjectEventProxyEmitter"/> for the grab action.
         /// </summary>
-        public GameObjectEventProxyEmitter OutputGrabAction => _outputGrabAction;
-
-        [Tooltip("The output GameObjectEventProxyEmitter for the ungrab action."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _outputUngrabAction = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter OutputGrabAction { get; protected set; }
         /// <summary>
         /// The output <see cref="GameObjectEventProxyEmitter"/> for the ungrab action.
         /// </summary>
-        public GameObjectEventProxyEmitter OutputUngrabAction => _outputUngrabAction;
-
-        [Tooltip("The output GameObjectEventProxyEmitter for the ungrab on untouch action."), InternalSetting, SerializeField]
-        private GameObjectEventProxyEmitter _outputUngrabOnUntouchAction = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter OutputUngrabAction { get; protected set; }
         /// <summary>
         /// The output <see cref="GameObjectEventProxyEmitter"/> for the ungrab on untouch action.
         /// </summary>
-        public GameObjectEventProxyEmitter OutputUngrabOnUntouchAction => _outputUngrabOnUntouchAction;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectEventProxyEmitter OutputUngrabOnUntouchAction { get; protected set; }
         #endregion
 
         /// <summary>
@@ -129,24 +124,8 @@
         /// <param name="container">The container for the consumer.</param>
         public virtual void ConfigureConsumerContainers(GameObject container)
         {
-            grabConsumer.container = container;
-            ungrabConsumer.container = container;
-        }
-
-        /// <summary>
-        /// Configures the interactor grab validity.
-        /// </summary>
-        /// <param name="interactors">The interactors to add to the validity list.</param>
-        public virtual void ConfigureGrabValidity(List<InteractorFacade> interactors)
-        {
-            grabValidity.objects.Clear();
-            foreach (InteractorFacade interactor in interactors)
-            {
-                if (interactor.GrabInteractorSetup.AttachPoint != null)
-                {
-                    grabValidity.objects.Add(interactor.GrabInteractorSetup.AttachPoint);
-                }
-            }
+            GrabConsumer.Container = container;
+            UngrabConsumer.Container = container;
         }
 
         /// <summary>
@@ -157,14 +136,14 @@
             switch (GrabType)
             {
                 case ActiveType.HoldTillRelease:
-                    startStateGrab.TrySetActive(true);
-                    stopStateGrab.TrySetActive(true);
-                    toggleGrab.TrySetActive(false);
+                    StartStateGrab.TrySetActive(true);
+                    StopStateGrab.TrySetActive(true);
+                    ToggleGrab.TrySetActive(false);
                     break;
                 case ActiveType.Toggle:
-                    startStateGrab.TrySetActive(false);
-                    stopStateGrab.TrySetActive(false);
-                    toggleGrab.TrySetActive(true);
+                    StartStateGrab.TrySetActive(false);
+                    StopStateGrab.TrySetActive(false);
+                    ToggleGrab.TrySetActive(true);
                     break;
             }
         }
@@ -174,13 +153,12 @@
             ConfigureGrabType();
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="GrabType"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(GrabType))]
+        protected virtual void OnAfterGrabTypeChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
-
             ConfigureGrabType();
         }
     }

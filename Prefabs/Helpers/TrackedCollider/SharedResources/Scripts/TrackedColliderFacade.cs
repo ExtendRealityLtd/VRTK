@@ -1,6 +1,10 @@
 ﻿namespace VRTK.Prefabs.Helpers.TrackedCollider
 {
     using UnityEngine;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.MemberChangeMethod;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -9,31 +13,21 @@
     public class TrackedColliderFacade : MonoBehaviour
     {
         #region Tracking Settings
-        [Header("Tracking Settings"), Tooltip("The source to track."), SerializeField]
-        private GameObject source;
         /// <summary>
         /// The source to track.
         /// </summary>
-        public GameObject Source
-        {
-            get
-            {
-                return source;
-            }
-            set
-            {
-                source = value;
-                internalSetup.SetSource(source);
-            }
-        }
+        [Serialized, Cleared]
+        [field: Header("Tracking Settings"), DocumentedByXml]
+        public GameObject Source { get; set; }
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected TrackedColliderInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TrackedColliderConfigurator Configuration { get; protected set; }
         #endregion
 
         /// <summary>
@@ -41,17 +35,16 @@
         /// </summary>
         public virtual void SnapToSource()
         {
-            internalSetup.SnapToSource();
+            Configuration.SnapToSource();
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="Source"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Source))]
+        protected virtual void OnAfterSourceChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
-
-            internalSetup.SetSource(Source);
+            Configuration.SetSource(Source);
         }
     }
 }

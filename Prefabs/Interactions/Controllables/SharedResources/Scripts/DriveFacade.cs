@@ -3,6 +3,9 @@
     using System;
     using UnityEngine;
     using UnityEngine.Events;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
 
@@ -19,118 +22,90 @@
     /// </summary>
     /// <typeparam name="TDrive">The <see cref="Drive{TFacade, TSelf}"/> to operate with the facade.</typeparam>
     /// <typeparam name="TSelf">The actual concrete implementation of the drive facade being used.</typeparam>
-    public abstract class DriveFacade<TDrive, TSelf> : MonoBehaviour
-         where TDrive : Drive<TSelf, TDrive> where TSelf : DriveFacade<TDrive, TSelf>
+    public abstract class DriveFacade<TDrive, TSelf> : MonoBehaviour where TDrive : Drive<TSelf, TDrive> where TSelf : DriveFacade<TDrive, TSelf>
     {
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked <see cref="TDrive"/>
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked TDrive."), InternalSetting, SerializeField]
-        protected TDrive drive;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TDrive Drive { get; protected set; }
         #endregion
 
         #region Events
         /// <summary>
         /// Emitted when the raw value changes with the raw value data.
         /// </summary>
-        [Header("Events")]
+        [Header("Events"), DocumentedByXml]
         public DriveUnityEvent ValueChanged = new DriveUnityEvent();
         /// <summary>
         /// Emitted when the step value changes with the step value data.
         /// </summary>
+        [DocumentedByXml]
         public DriveUnityEvent StepValueChanged = new DriveUnityEvent();
         /// <summary>
         /// Emitted when the normalized value changes with the normalized value data.
         /// </summary>
+        [DocumentedByXml]
         public DriveUnityEvent NormalizedValueChanged = new DriveUnityEvent();
         /// <summary>
         /// Emitted when <see cref="TargetValue"/> has been reached by the control.
         /// </summary>
+        [DocumentedByXml]
         public DriveUnityEvent TargetValueReached = new DriveUnityEvent();
         /// <summary>
         /// Emitted when the drive starts moving the control.
         /// </summary>
+        [DocumentedByXml]
         public DriveUnityEvent StartedMoving = new DriveUnityEvent();
         /// <summary>
         /// Emitted when the drive is no longer moving the control and it is stationary.
         /// </summary>
+        [DocumentedByXml]
         public DriveUnityEvent StoppedMoving = new DriveUnityEvent();
         #endregion
 
         #region Drive Settings
-        [Header("Drive Settings"), Tooltip("The axis to operate the drive motion on."), SerializeField]
-        private DriveAxis.Axis _driveAxis = Controllables.DriveAxis.Axis.XAxis;
         /// <summary>
         /// The axis to operate the drive motion on.
         /// </summary>
-        public DriveAxis.Axis DriveAxis
-        {
-            get { return _driveAxis; }
-            set
-            {
-                _driveAxis = value;
-                CalculateDriveAxis(_driveAxis);
-            }
-        }
-
-        [Tooltip("Determines if the drive should move the control to the set Target Value."), SerializeField]
-        private bool _moveToTargetValue = true;
+        [Serialized]
+        [field: Header("Drive Settings"), DocumentedByXml]
+        public DriveAxis.Axis DriveAxis { get; set; } = Controllables.DriveAxis.Axis.XAxis;
         /// <summary>
         /// Determines if the drive should move the element to the set <see cref="TargetValue"/>.
         /// </summary>
-        public bool MoveToTargetValue
-        {
-            get { return _moveToTargetValue; }
-            set
-            {
-                _moveToTargetValue = value;
-                ProcessAutoDrive(_moveToTargetValue);
-            }
-        }
-
-        [Tooltip("The normalized value to attempt to drive the control to if the Move To Target Value is set to true."), SerializeField, Range(0f, 1f)]
-        private float _targetValue = 0.5f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool MoveToTargetValue { get; set; } = true;
         /// <summary>
         /// The normalized value to attempt to drive the control to if the <see cref="MoveToTargetValue"/> is set to <see langword="true"/>.
         /// </summary>
-        public float TargetValue
-        {
-            get { return _targetValue; }
-            set
-            {
-                _targetValue = value;
-                SetTargetValue(_targetValue);
-            }
-        }
-
-        [Tooltip("The speed in which the drive will attempt to move the control to the desired value."), SerializeField]
-        private float _driveSpeed = 10f;
+        [Serialized]
+        [field: DocumentedByXml, Range(0f, 1f)]
+        public float TargetValue { get; set; } = 0.5f;
         /// <summary>
         /// The speed in which the drive will attempt to move the control to the desired value.
         /// </summary>
-        public float DriveSpeed
-        {
-            get { return _driveSpeed; }
-            set
-            {
-                _driveSpeed = value;
-                ProcessDriveSpeed(_driveSpeed, MoveToTargetValue);
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public float DriveSpeed { get; set; } = 10f;
         #endregion
 
         #region Step Settings
         /// <summary>
         /// The range of step values to use.
         /// </summary>
-        [Header("Step Settings"), Tooltip("The range of step values to use.")]
-        public FloatRange stepRange = new FloatRange(0f, 10f);
+        [Serialized]
+        [field: Header("Step Settings"), DocumentedByXml]
+        public FloatRange StepRange { get; set; } = new FloatRange(0f, 10f);
         /// <summary>
         /// The increment to increase the steps in value by.
         /// </summary>
-        [Tooltip("The increment to increase the steps in value by.")]
-        public float stepIncrement = 1f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public float StepIncrement { get; set; } = 1f;
         #endregion
 
         /// <summary>
@@ -138,7 +113,7 @@
         /// </summary>
         public virtual void SetTargetValueByStepValue()
         {
-            SetTargetValueByStepValue(drive.StepValue);
+            SetTargetValueByStepValue(Drive.StepValue);
         }
 
         /// <summary>
@@ -147,7 +122,7 @@
         /// <param name="stepValue">The step value that represents the new target value.</param>
         public virtual void SetTargetValueByStepValue(float stepValue)
         {
-            float normalizedStepValue = Mathf.InverseLerp(stepRange.minimum, stepRange.maximum, Mathf.Clamp(stepValue, stepRange.minimum, stepRange.maximum));
+            float normalizedStepValue = Mathf.InverseLerp(StepRange.minimum, StepRange.maximum, Mathf.Clamp(stepValue, StepRange.minimum, StepRange.maximum));
             TargetValue = normalizedStepValue;
         }
 
@@ -168,7 +143,7 @@
         /// <param name="driveAxis">The new value.</param>
         protected virtual void CalculateDriveAxis(DriveAxis.Axis driveAxis)
         {
-            drive.CalculateDriveAxis(driveAxis);
+            Drive.CalculateDriveAxis(driveAxis);
         }
 
         /// <summary>
@@ -177,7 +152,7 @@
         /// <param name="autoDrive">Whether the drive can automatically drive the control.</param>
         protected virtual void ProcessAutoDrive(bool autoDrive)
         {
-            drive.ConfigureAutoDrive(autoDrive);
+            Drive.ConfigureAutoDrive(autoDrive);
         }
 
         /// <summary>
@@ -186,7 +161,7 @@
         /// <param name="targetValue">The new value.</param>
         protected virtual void SetTargetValue(float targetValue)
         {
-            drive.SetTargetValue(targetValue);
+            Drive.SetTargetValue(targetValue);
         }
 
         /// <summary>
@@ -196,17 +171,65 @@
         /// <param name="moveToTargetValue">Whether the new value should be processed.</param>
         protected virtual void ProcessDriveSpeed(float driveSpeed, bool moveToTargetValue)
         {
-            drive.ProcessDriveSpeed(driveSpeed, moveToTargetValue);
+            Drive.ProcessDriveSpeed(driveSpeed, moveToTargetValue);
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="DriveAxis"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(DriveAxis))]
+        protected virtual void OnAfterDriveAxisChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            CalculateDriveAxis(DriveAxis);
+            Drive.SetUp();
+        }
 
-            drive.SetUp();
+        /// <summary>
+        /// Called after <see cref="MoveToTargetValue"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(MoveToTargetValue))]
+        protected virtual void OnAfterMoveToTargetValueChange()
+        {
+            ProcessAutoDrive(MoveToTargetValue);
+            Drive.SetUp();
+        }
+
+        /// <summary>
+        /// Called after <see cref="TargetValue"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(TargetValue))]
+        protected virtual void OnAfterTargetValueChange()
+        {
+            SetTargetValue(TargetValue);
+            Drive.SetUp();
+        }
+
+        /// <summary>
+        /// Called after <see cref="DriveSpeed"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(DriveSpeed))]
+        protected virtual void OnAfterDriveSpeedChange()
+        {
+            ProcessDriveSpeed(DriveSpeed, MoveToTargetValue);
+            Drive.SetUp();
+        }
+
+        /// <summary>
+        /// Called after <see cref="StepRange"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(StepRange))]
+        protected virtual void OnAfterStepRangeChange()
+        {
+            Drive.SetUp();
+        }
+
+        /// <summary>
+        /// Called after <see cref="StepIncrement"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(StepIncrement))]
+        protected virtual void OnAfterStepIncrementChange()
+        {
+            Drive.SetUp();
         }
     }
 }

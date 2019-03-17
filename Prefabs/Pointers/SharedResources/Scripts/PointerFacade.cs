@@ -1,6 +1,10 @@
 ﻿namespace VRTK.Prefabs.Pointers
 {
     using UnityEngine;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.MemberChangeMethod;
     using Zinnia.Rule;
     using Zinnia.Action;
     using Zinnia.Data.Attribute;
@@ -26,102 +30,90 @@
         }
 
         #region Pointer Settings
-        [Header("Pointer Settings"), Tooltip("The source for the pointer origin to follow."), SerializeField]
-        private GameObject _followSource;
         /// <summary>
         /// The source for the pointer origin to follow.
         /// </summary>
-        public GameObject FollowSource
-        {
-            get { return _followSource; }
-            set
-            {
-                _followSource = value;
-                internalSetup.ConfigureFollowSources();
-            }
-        }
-
-        [Tooltip("The BooleanAction that will activate/deactivate the pointer."), SerializeField]
-        private BooleanAction _activationAction;
+        [Serialized, Cleared]
+        [field: Header("Pointer Settings"), DocumentedByXml]
+        public GameObject FollowSource { get; set; }
         /// <summary>
         /// The <see cref="BooleanAction"/> that will activate/deactivate the pointer.
         /// </summary>
-        public BooleanAction ActivationAction
-        {
-            get { return _activationAction; }
-            set
-            {
-                _activationAction = value;
-                internalSetup.ConfigureActivationAction();
-            }
-        }
-
-        [Tooltip("The BooleanAction that initiates the pointer selection."), SerializeField]
-        private BooleanAction _selectionAction;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public BooleanAction ActivationAction { get; set; }
         /// <summary>
         /// The <see cref="BooleanAction"/> that initiates the pointer selection.
         /// </summary>
-        public BooleanAction SelectionAction
-        {
-            get { return _selectionAction; }
-            set
-            {
-                _selectionAction = value;
-                internalSetup.ConfigureSelectionAction();
-            }
-        }
-
-        [Tooltip("The action moment when to initiate the select action."), SerializeField]
-        private SelectionType _selectionMethod = SelectionType.SelectOnActivate;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public BooleanAction SelectionAction { get; set; }
         /// <summary>
         /// The action moment when to initiate the select action.
         /// </summary>
-        public SelectionType SelectionMethod
-        {
-            get { return _selectionMethod; }
-            set
-            {
-                _selectionMethod = value;
-                internalSetup.ConfigureSelectionType();
-            }
-        }
-
+        [Serialized]
+        [field: DocumentedByXml]
+        public SelectionType SelectionMethod { get; set; }
         /// <summary>
         /// Allows to optionally determine targets based on the set rules.
         /// </summary>
-        [Tooltip("Allows to optionally determine targets based on the set rules."), SerializeField]
-        private RuleContainer _targetValidity;
-        public RuleContainer TargetValidity
-        {
-            get { return _targetValidity; }
-            set
-            {
-                _targetValidity = value;
-                internalSetup.ConfigureTargetValidity();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public RuleContainer TargetValidity { get; set; }
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected PointerInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public PointerConfigurator Configuration { get; protected set; }
         #endregion
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="FollowSource"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(FollowSource))]
+        protected virtual void OnAfterFollowSourceChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            Configuration.ConfigureFollowSources();
+        }
 
-            internalSetup.ConfigureTargetValidity();
-            internalSetup.ConfigureFollowSources();
-            internalSetup.ConfigureSelectionAction();
-            internalSetup.ConfigureActivationAction();
-            internalSetup.ConfigureSelectionType();
+        /// <summary>
+        /// Called after <see cref="ActivationAction"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(ActivationAction))]
+        protected virtual void OnAfterActivationActionChange()
+        {
+            Configuration.ConfigureActivationAction();
+        }
+
+        /// <summary>
+        /// Called after <see cref="SelectionAction"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(SelectionAction))]
+        protected virtual void OnAfterSelectionActionChange()
+        {
+            Configuration.ConfigureSelectionAction();
+        }
+
+        /// <summary>
+        /// Called after <see cref="SelectionMethod"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(SelectionMethod))]
+        protected virtual void OnAfterSelectionMethodChange()
+        {
+            Configuration.ConfigureSelectionType();
+        }
+
+        /// <summary>
+        /// Called after <see cref="TargetValidity"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(TargetValidity))]
+        protected virtual void OnAfterTargetValidityChange()
+        {
+            Configuration.ConfigureTargetValidity();
         }
     }
 }

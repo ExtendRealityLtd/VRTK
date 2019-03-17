@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7210327070411264172}
   - component: {fileID: 6459345143972930736}
+  - component: {fileID: 3605308491537486325}
   m_Layer: 0
   m_Name: AttachmentOrigin
   m_TagString: Untagged
@@ -43,7 +44,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60829535893427a45be5af6abd9f0426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityTrackers: []
+  velocityTrackers: {fileID: 3605308491537486325}
+--- !u!114 &3605308491537486325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713644663964208544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e0cf63a9a8d89409876f85cae7ae7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Velocity.Collection.VelocityTrackerObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Velocity.Collection.VelocityTrackerObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Velocity.Collection.VelocityTrackerObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Velocity.Collection.VelocityTrackerObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Velocity.Collection.VelocityTrackerObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Tracking.Velocity.Collection.VelocityTrackerObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &1045932229636822152
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8590078097062110039}
-  - component: {fileID: 2361407228587743032}
+  - component: {fileID: 4145320619812571116}
   m_Layer: 0
   m_Name: GrabbedObjectStore
   m_TagString: Untagged
@@ -198,7 +243,7 @@ Transform:
   m_Father: {fileID: 1270257204259223022}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2361407228587743032
+--- !u!114 &4145320619812571116
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,29 +252,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 1092683172336935960}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e38906e03882d44bea5c07f798a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ElementFound:
+  Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ElementNotFound:
+  NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecameEmpty:
+  Populated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecamePopulated:
+  Added:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &1855375965548148993
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +728,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls:
@@ -709,7 +772,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!1 &6024666130437826845
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,8 +818,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   facade: {fileID: 0}
-  _attachPoint: {fileID: 713644663964208544}
-  _velocityTracker: {fileID: 6459345143972930736}
+  attachPoint: {fileID: 713644663964208544}
+  velocityTracker: {fileID: 6459345143972930736}
   grabAction: {fileID: 2950308970267550319}
   startGrabbingPublisher: {fileID: 3957090777482764941}
   stopGrabbingPublisher: {fileID: 7465668924379348647}
@@ -765,7 +827,7 @@ MonoBehaviour:
   precognitionGrabProcessor: {fileID: 1045932229636822152}
   precognitionTimer: {fileID: 2220712448758848924}
   minPrecognitionTimer: 0.01
-  grabbedObjectsCollection: {fileID: 2361407228587743032}
+  grabbedObjectsCollection: {fileID: 4145320619812571116}
 --- !u!1 &6912614206094178078
 GameObject:
   m_ObjectHideFlags: 0

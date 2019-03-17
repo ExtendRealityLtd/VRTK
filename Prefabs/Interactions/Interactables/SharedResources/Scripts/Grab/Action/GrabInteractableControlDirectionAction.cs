@@ -1,8 +1,10 @@
 ﻿namespace VRTK.Prefabs.Interactions.Interactables.Grab.Action
 {
     using UnityEngine;
-    using System.Collections.Generic;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
+    using Zinnia.Data.Collection;
     using Zinnia.Tracking.Modification;
 
     /// <summary>
@@ -14,24 +16,19 @@
         /// <summary>
         /// A <see cref="GameObject"/> collection to enable/disabled as part of the direction control process.
         /// </summary>
-        [Header("Interactable Settings"), Tooltip("A GameObject collection to enable/disabled as part of the direction control process."), SerializeField]
-        protected List<GameObject> linkedObjects = new List<GameObject>();
+        [Serialized]
+        [field: Header("Interactable Settings"), DocumentedByXml, Restricted]
+        public GameObjectObservableList LinkedObjects { get; protected set; }
         /// <summary>
-        /// The <see cref="DirectionModifier"/> to process the direction control.
+        /// The <see cref="Zinnia.Tracking.Modification.DirectionModifier"/> to process the direction control.
         /// </summary>
-        [Tooltip("The DirectionModifier to process the direction control."), InternalSetting, SerializeField]
-        protected DirectionModifier directionModifier;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public DirectionModifier DirectionModifier { get; protected set; }
         #endregion
 
-        /// <inheritdoc />
-        public override void SetUp(GrabInteractableInternalSetup grabSetup)
-        {
-            base.SetUp(grabSetup);
-            directionModifier.Target = grabSetup.Facade.ConsumerContainer;
-        }
-
         /// <summary>
-        /// Enables the <see cref="GameObject"/> state of each of the items in the <see cref="linkedObjects"/> collection.
+        /// Enables the <see cref="GameObject"/> state of each of the items in the <see cref="LinkedObjects"/> collection.
         /// </summary>
         public virtual void EnableLinkedObjects()
         {
@@ -39,7 +36,7 @@
         }
 
         /// <summary>
-        /// Disables the <see cref="GameObject"/> state of each of the items in the <see cref="linkedObjects"/> collection.
+        /// Disables the <see cref="GameObject"/> state of each of the items in the <see cref="LinkedObjects"/> collection.
         /// </summary>
         public virtual void DisableLinkedObjects()
         {
@@ -47,15 +44,21 @@
         }
 
         /// <summary>
-        /// Toggles the <see cref="GameObject"/> state of each of the items in the <see cref="linkedObjects"/> collection.
+        /// Toggles the <see cref="GameObject"/> state of each of the items in the <see cref="LinkedObjects"/> collection.
         /// </summary>
         /// <param name="state">The state to set the <see cref="GameObject"/> active state to.</param>
         protected virtual void ToggleLinkedObjectState(bool state)
         {
-            foreach (GameObject linkedObject in linkedObjects)
+            foreach (GameObject linkedObject in LinkedObjects.NonSubscribableElements)
             {
                 linkedObject.SetActive(state);
             }
+        }
+
+        /// <inheritdoc />
+        protected override void OnAfterGrabSetupChange()
+        {
+            DirectionModifier.Target = GrabSetup.Facade.ConsumerContainer;
         }
     }
 }

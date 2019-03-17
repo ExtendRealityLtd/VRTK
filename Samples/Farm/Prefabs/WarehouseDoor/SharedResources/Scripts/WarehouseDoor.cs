@@ -1,8 +1,11 @@
 ﻿namespace VRTK.Examples.Prefabs.WarehouseDoor
 {
     using UnityEngine;
-    using Zinnia.Data.Type;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Extension;
+    using Zinnia.Data.Type;
 
     /// <summary>
     /// Controls the motion of the warehouse door.
@@ -12,13 +15,15 @@
         /// <summary>
         /// The door to control.
         /// </summary>
-        [Tooltip("The door to control.")]
-        public GameObject door;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject Door { get; set; }
         /// <summary>
         /// The minimum and maximum height of the door.
         /// </summary>
-        [Tooltip("The minimum and maximum height of the door.")]
-        public FloatRange heightLimits;
+        [Serialized]
+        [field: DocumentedByXml]
+        public FloatRange HeightLimits { get; set; }
 
         /// <summary>
         /// The step to increase or decrease the height of the door by.
@@ -29,8 +34,8 @@
         {
             if (!HeightStep.ApproxEquals(0f))
             {
-                float newHeight = Mathf.Clamp(door.transform.localScale.y + HeightStep, heightLimits.minimum, heightLimits.maximum);
-                door.transform.localScale = new Vector3(1f, newHeight, 1f);
+                float newHeight = Mathf.Clamp(Door.transform.localScale.y + HeightStep, HeightLimits.minimum, HeightLimits.maximum);
+                Door.transform.localScale = new Vector3(1f, newHeight, 1f);
             }
         }
     }

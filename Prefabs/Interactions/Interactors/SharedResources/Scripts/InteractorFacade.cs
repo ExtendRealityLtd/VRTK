@@ -4,6 +4,10 @@
     using UnityEngine.Events;
     using System;
     using System.Collections.Generic;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Action;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
@@ -24,103 +28,76 @@
         }
 
         #region Interactor Settings
-        [Header("Interactor Settings"), Tooltip("The BooleanAction that will initiate the Interactor grab mechanism."), SerializeField]
-        private BooleanAction _grabAction;
         /// <summary>
         /// The <see cref="BooleanAction"/> that will initiate the Interactor grab mechanism.
         /// </summary>
-        public BooleanAction GrabAction
-        {
-            get { return _grabAction; }
-            set
-            {
-                _grabAction = value;
-                grabInteractorSetup.ConfigureGrabAction();
-            }
-        }
-
-        [Tooltip("The VelocityTrackerProcessor to measure the interactors current velocity."), SerializeField]
-        private VelocityTrackerProcessor _velocityTracker;
+        [Serialized, Cleared]
+        [field: Header("Interactor Settings"), DocumentedByXml]
+        public BooleanAction GrabAction { get; set; }
         /// <summary>
         /// The <see cref="VelocityTrackerProcessor"/> to measure the interactors current velocity.
         /// </summary>
-        public VelocityTrackerProcessor VelocityTracker
-        {
-            get { return _velocityTracker; }
-            set
-            {
-                _velocityTracker = value;
-                grabInteractorSetup.ConfigureVelocityTrackers();
-            }
-        }
-
-        [Tooltip("The time between initiating the grabAction and touching an Interactable to be considered a valid grab."), SerializeField]
-        private float _grabPrecognition = 0.1f;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public VelocityTrackerProcessor VelocityTracker { get; set; }
         /// <summary>
         /// The time between initiating the <see cref="GrabAction"/> and touching an Interactable to be considered a valid grab.
         /// </summary>
-        public float GrabPrecognition
-        {
-            get
-            {
-                return _grabPrecognition;
-            }
-            set
-            {
-                _grabPrecognition = value;
-                grabInteractorSetup.ConfigureGrabPrecognition();
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public float GrabPrecognition { get; set; } = 0.1f;
         #endregion
 
         #region Interactor Events
         /// <summary>
         /// Emitted when the Interactor starts touching a valid Interactable.
         /// </summary>
-        [Header("Interactor Events")]
+        [Header("Interactor Events"), DocumentedByXml]
         public UnityEvent Touched = new UnityEvent();
         /// <summary>
         /// Emitted when the Interactor stops touching a valid Interactable.
         /// </summary>
+        [DocumentedByXml]
         public UnityEvent Untouched = new UnityEvent();
         /// <summary>
         /// Emitted when the Interactor starts grabbing a valid Interactable.
         /// </summary>
+        [DocumentedByXml]
         public UnityEvent Grabbed = new UnityEvent();
         /// <summary>
         /// Emitted when the Interactor stops grabbing a valid Interactable.
         /// </summary>
+        [DocumentedByXml]
         public UnityEvent Ungrabbed = new UnityEvent();
         #endregion
 
-        #region Internal Settings
-        [Header("Internal Settings"), Tooltip("The linked Touch Internal Setup."), InternalSetting, SerializeField]
-        protected TouchInteractorInternalSetup touchInteractorSetup;
+        #region Reference Settings
         /// <summary>
         /// The linked Touch Internal Setup.
         /// </summary>
-        public TouchInteractorInternalSetup TouchInteractorSetup => touchInteractorSetup;
-
-        [Tooltip("The linked Grab Internal Setup."), InternalSetting, SerializeField]
-        protected GrabInteractorInternalSetup grabInteractorSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TouchInteractorConfigurator TouchConfiguration { get; protected set; }
         /// <summary>
         /// The linked Grab Internal Setup.
         /// </summary>
-        public GrabInteractorInternalSetup GrabInteractorSetup => grabInteractorSetup;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GrabInteractorConfigurator GrabConfiguration { get; protected set; }
         #endregion
 
         /// <summary>
         /// A collection of currently touched GameObjects.
         /// </summary>
-        public IReadOnlyList<GameObject> TouchedObjects => touchInteractorSetup.TouchedObjects;
+        public IReadOnlyList<GameObject> TouchedObjects => TouchConfiguration.TouchedObjects;
         /// <summary>
         /// The currently active touched GameObject.
         /// </summary>
-        public GameObject ActiveTouchedObject => touchInteractorSetup.ActiveTouchedObject;
+        public GameObject ActiveTouchedObject => TouchConfiguration.ActiveTouchedObject;
         /// <summary>
         /// A collection of currently grabbed GameObjects.
         /// </summary>
-        public IReadOnlyList<GameObject> GrabbedObjects => grabInteractorSetup.GrabbedObjects;
+        public IReadOnlyList<GameObject> GrabbedObjects => GrabConfiguration.GrabbedObjects;
 
         /// <summary>
         /// Attempt to grab a <see cref="GameObject"/> that contains an Interactable to the current Interactor.
@@ -148,7 +125,7 @@
         /// <param name="collider">Custom collider data.</param>
         public virtual void Grab(InteractableFacade interactable, Collision collision, Collider collider)
         {
-            grabInteractorSetup.Grab(interactable, collision, collider);
+            GrabConfiguration.Grab(interactable, collision, collider);
         }
 
         /// <summary>
@@ -156,19 +133,34 @@
         /// </summary>
         public virtual void Ungrab()
         {
-            grabInteractorSetup.Ungrab();
+            GrabConfiguration.Ungrab();
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="GrabAction"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(GrabAction))]
+        protected virtual void OnAfterGrabActionChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            GrabConfiguration.ConfigureGrabAction();
+        }
 
-            grabInteractorSetup.ConfigureGrabAction();
-            grabInteractorSetup.ConfigureVelocityTrackers();
-            grabInteractorSetup.ConfigureGrabPrecognition();
+        /// <summary>
+        /// Called after <see cref="VelocityTracker"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(VelocityTracker))]
+        protected virtual void OnAfterVelocityTrackerChange()
+        {
+            GrabConfiguration.ConfigureVelocityTrackers();
+        }
+
+        /// <summary>
+        /// Called after <see cref="GrabPrecognition"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(GrabPrecognition))]
+        protected virtual void OnAfterGrabPrecognitionChange()
+        {
+            GrabConfiguration.ConfigureGrabPrecognition();
         }
     }
 }

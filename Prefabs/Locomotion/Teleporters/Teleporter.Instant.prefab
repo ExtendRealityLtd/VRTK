@@ -46,11 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11803ae5247db04b8ba76bdf0e5c67d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _target: {fileID: 0}
-  _offset: {fileID: 0}
-  _onlyOffsetFloorSnap: 0
-  _sceneCameras: {fileID: 0}
-  _targetValidity:
+  target: {fileID: 0}
+  offset: {fileID: 0}
+  offsetUsage: 0
+  cameraValidity:
+    field: {fileID: 0}
+  targetValidity:
     field: {fileID: 0}
   Teleporting:
     m_PersistentCalls:
@@ -62,7 +63,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Tracking.Modification.TransformPropertyApplier+UnityEvent,
       Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  internalSetup: {fileID: 831700923211128871}
+  configuration: {fileID: 831700923211128871}
 --- !u!1 &6091841197206593970
 GameObject:
   m_ObjectHideFlags: 0

@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 6786077342561127190}
   - component: {fileID: 1411944859431290510}
   - component: {fileID: 1823887267421524336}
-  - component: {fileID: 4552059790231730207}
+  - component: {fileID: 5459786590585583471}
   m_Layer: 0
   m_Name: ToggleGrab
   m_TagString: Untagged
@@ -663,7 +663,7 @@ MonoBehaviour:
   Extracted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4552059790231730207}
+      - m_Target: {fileID: 5459786590585583471}
         m_MethodName: DoContains
         m_Mode: 0
         m_Arguments:
@@ -676,7 +676,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Event.GameObjectEmitter+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &4552059790231730207
+--- !u!114 &5459786590585583471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -685,10 +685,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6786077342561127177}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e38906e03882d44bea5c07f798a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ElementFound:
+  Found:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1885398682272367174}
@@ -702,8 +702,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4552059790231730207}
-        m_MethodName: RemoveElement
+      - m_Target: {fileID: 5459786590585583471}
+        m_MethodName: DoRemove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -713,9 +713,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ElementNotFound:
+  NotFound:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 994340307326342373}
@@ -729,8 +729,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4552059790231730207}
-        m_MethodName: AddElement
+      - m_Target: {fileID: 5459786590585583471}
+        m_MethodName: AddUnique
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -740,18 +740,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecameEmpty:
+  Populated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecamePopulated:
+  Added:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &6786077342595245387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,18 +1205,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4013e20688e192747ae18baff553ede7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grabType: 0
+  grabType: 0
   grabConsumer: {fileID: 971480844886344354}
   ungrabConsumer: {fileID: 5525464756619507406}
-  grabValidity: {fileID: 7314679222710729223}
+  grabValidity: {fileID: 2177753939504016596}
   startStateGrab: {fileID: 6786077344390887069}
   stopStateGrab: {fileID: 6786077343790371810}
   toggleGrab: {fileID: 6786077342561127177}
-  _toggleSet: {fileID: 4552059790231730207}
-  _outputActiveCollisionConsumer: {fileID: 5477046560406251651}
-  _outputGrabAction: {fileID: 3257475270311612133}
-  _outputUngrabAction: {fileID: 1761054768097495726}
-  _outputUngrabOnUntouchAction: {fileID: 2362314506902924893}
+  toggleList: {fileID: 5459786590585583471}
+  outputActiveCollisionConsumer: {fileID: 5477046560406251651}
+  outputGrabAction: {fileID: 3257475270311612133}
+  outputUngrabAction: {fileID: 1761054768097495726}
+  outputUngrabOnUntouchAction: {fileID: 2362314506902924893}
 --- !u!1 &6786077343681991185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,7 +1488,6 @@ GameObject:
   - component: {fileID: 4382578300755204722}
   - component: {fileID: 4803788552672087469}
   - component: {fileID: 2177753939504016596}
-  - component: {fileID: 7314679222710729223}
   m_Layer: 0
   m_Name: GrabValidityChecks
   m_TagString: Untagged
@@ -1585,20 +1596,7 @@ MonoBehaviour:
     m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
-    field: {fileID: 7314679222710729223}
---- !u!114 &7314679222710729223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6786077343854942540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0462aa3102a34743b5c3c0cb9c525dbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objects: []
+    field: {fileID: 0}
 --- !u!1 &6786077343876304503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,6 +1608,7 @@ GameObject:
   - component: {fileID: 6786077343876304500}
   - component: {fileID: 971480844886344354}
   - component: {fileID: 9208573044575317269}
+  - component: {fileID: 3729522495425545389}
   m_Layer: 0
   m_Name: StartGrabbingConsumer
   m_TagString: Untagged
@@ -1679,7 +1678,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a5cea3d73a4234aa48131d662d170b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  componentTypes:
+  componentTypes: {fileID: 3729522495425545389}
+--- !u!114 &3729522495425545389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6786077343876304503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01a890104495a49a7a72c5733174ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - assemblyQualifiedTypeName: VRTK.Prefabs.Interactions.Interactors.ComponentTags.StartGrabbingTag,
       VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &6786077343889123117
@@ -1800,8 +1843,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4552059790231730207}
-        m_MethodName: RemoveElement
+      - m_Target: {fileID: 5459786590585583471}
+        m_MethodName: DoRemove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1826,6 +1869,7 @@ GameObject:
   - component: {fileID: 6786077344246487105}
   - component: {fileID: 5525464756619507406}
   - component: {fileID: 7039691679197550062}
+  - component: {fileID: 4795610410784826433}
   m_Layer: 0
   m_Name: StopGrabbingConsumer
   m_TagString: Untagged
@@ -1895,7 +1939,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a5cea3d73a4234aa48131d662d170b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  componentTypes:
+  componentTypes: {fileID: 4795610410784826433}
+--- !u!114 &4795610410784826433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6786077344246487104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01a890104495a49a7a72c5733174ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - assemblyQualifiedTypeName: VRTK.Prefabs.Interactions.Interactors.ComponentTags.StopGrabbingTag,
       VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &6786077344277616436

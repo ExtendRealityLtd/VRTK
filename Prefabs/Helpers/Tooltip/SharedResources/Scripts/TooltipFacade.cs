@@ -1,6 +1,10 @@
 ﻿namespace VRTK.Prefabs.Helpers.Tooltip
 {
     using UnityEngine;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.MemberChangeMethod;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -9,58 +13,37 @@
     public class TooltipFacade : MonoBehaviour
     {
         #region Tooltip Settings
-        [Header("Tooltip Settings"), Tooltip("The object that the tooltip will face towards."), SerializeField]
-        private GameObject facingSource;
         /// <summary>
         /// The object that the tooltip will face towards.
         /// </summary>
-        public GameObject FacingSource
-        {
-            get
-            {
-                return facingSource;
-            }
-            set
-            {
-                facingSource = value;
-            }
-        }
+        [Serialized, Cleared]
+        [field: Header("Tooltip Settings"), DocumentedByXml]
+        public GameObject FacingSource { get; set; }
 
-        [Tooltip("The target to draw the tooltip line to."), SerializeField]
-        private GameObject lineTarget;
         /// <summary>
         /// The target to draw the tooltip line to.
         /// </summary>
-        public GameObject LineTarget
-        {
-            get
-            {
-                return lineTarget;
-            }
-            set
-            {
-                lineTarget = value;
-                internalSetup.SetLine(lineTarget);
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject LineTarget { get; set; }
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected TooltipInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TooltipConfigurator Configuration { get; protected set; }
         #endregion
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="LineTarget"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LineTarget))]
+        protected virtual void OnAfterLineTargetChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
-
-            internalSetup.SetLine(LineTarget);
+            Configuration.SetLine(LineTarget);
         }
     }
 }

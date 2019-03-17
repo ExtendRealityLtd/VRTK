@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5812049124042179238}
   - component: {fileID: 8509791108597112804}
-  - component: {fileID: 4059491537068175637}
   m_Layer: 0
   m_Name: TouchValidityRules
   m_TagString: Untagged
@@ -61,20 +60,7 @@ MonoBehaviour:
     m_TypeName: Zinnia.Event.GameObjectEventProxyEmitter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
-    field: {fileID: 4059491537068175637}
---- !u!114 &4059491537068175637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963923004940535589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0462aa3102a34743b5c3c0cb9c525dbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objects: []
+    field: {fileID: 0}
 --- !u!1 &2380619337482105924
 GameObject:
   m_ObjectHideFlags: 0
@@ -86,7 +72,7 @@ GameObject:
   - component: {fileID: 7693767402030970820}
   - component: {fileID: 4227113623500866484}
   - component: {fileID: 396135878660418311}
-  - component: {fileID: 7872902437504004978}
+  - component: {fileID: 2496996295341015413}
   m_Layer: 0
   m_Name: UntouchCollection
   m_TagString: Untagged
@@ -151,8 +137,8 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6503910710826089126}
-        m_MethodName: RemoveElement
+      - m_Target: {fileID: 7807029298508291166}
+        m_MethodName: DoRemove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -162,7 +148,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7872902437504004978}
+      - m_Target: {fileID: 2496996295341015413}
         m_MethodName: DoContains
         m_Mode: 0
         m_Arguments:
@@ -177,7 +163,7 @@ MonoBehaviour:
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   receiveValidity:
     field: {fileID: 0}
---- !u!114 &7872902437504004978
+--- !u!114 &2496996295341015413
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,14 +172,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2380619337482105924}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e38906e03882d44bea5c07f798a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ElementFound:
+  Found:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7872902437504004978}
-        m_MethodName: RemoveElement
+      - m_Target: {fileID: 2496996295341015413}
+        m_MethodName: DoRemove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -236,14 +222,29 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ElementNotFound:
+  NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecameEmpty:
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8509791108597112804}
@@ -268,13 +269,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecamePopulated:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &2915501968370035215
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,12 +377,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20c42f708832631478a8ed2de243a6b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ElementAdded:
+  Added:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Zinnia.Data.Collection.GameObjectObservableCounter+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ElementRemoved:
+  Removed:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 396135878660418311}
@@ -476,6 +474,7 @@ GameObject:
   - component: {fileID: 1512157448904458332}
   - component: {fileID: 7290293061507625378}
   - component: {fileID: 1818058578112074367}
+  - component: {fileID: 6839970333089718969}
   m_Layer: 0
   m_Name: StopActiveTouchConsumer
   m_TagString: Untagged
@@ -545,7 +544,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a5cea3d73a4234aa48131d662d170b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  componentTypes:
+  componentTypes: {fileID: 6839970333089718969}
+--- !u!114 &6839970333089718969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197704190641965343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01a890104495a49a7a72c5733174ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - assemblyQualifiedTypeName: VRTK.Prefabs.Interactions.Interactors.ComponentTags.StopTouchingTag,
       VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &5364294047523183225
@@ -594,11 +637,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6631cbd1a0377e4dafb140bd9df0a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _facade: {fileID: 0}
+  facade: {fileID: 0}
   touchConsumer: {fileID: 7941858924651200902}
   untouchConsumer: {fileID: 7290293061507625378}
-  currentTouchingObjects: {fileID: 6503910710826089126}
-  touchValidity: {fileID: 4059491537068175637}
+  currentTouchingObjects: {fileID: 7807029298508291166}
+  touchValidity: {fileID: 8509791108597112804}
   potentialInteractors: {fileID: 5698463516239623407}
   addActiveInteractor: {fileID: 7318583696533420050}
   removeActiveInteractor: {fileID: 4581025933994455743}
@@ -826,6 +869,7 @@ GameObject:
   - component: {fileID: 3953360419425228763}
   - component: {fileID: 7941858924651200902}
   - component: {fileID: 7194968445026646721}
+  - component: {fileID: 2287192360354590483}
   m_Layer: 0
   m_Name: StartActiveTouchConsumer
   m_TagString: Untagged
@@ -895,7 +939,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a5cea3d73a4234aa48131d662d170b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  componentTypes:
+  componentTypes: {fileID: 2287192360354590483}
+--- !u!114 &2287192360354590483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7701449276610498123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01a890104495a49a7a72c5733174ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.SerializableTypeComponentObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - assemblyQualifiedTypeName: VRTK.Prefabs.Interactions.Interactors.ComponentTags.StartTouchingTag,
       VRTK.Prefabs.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &8504042581222451176
@@ -940,7 +1028,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3518042955657115070}
   - component: {fileID: 8681001309693767446}
-  - component: {fileID: 6503910710826089126}
+  - component: {fileID: 7807029298508291166}
   m_Layer: 0
   m_Name: TouchCollection
   m_TagString: Untagged
@@ -977,7 +1065,7 @@ MonoBehaviour:
   Extracted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6503910710826089126}
+      - m_Target: {fileID: 7807029298508291166}
         m_MethodName: DoContains
         m_Mode: 0
         m_Arguments:
@@ -990,7 +1078,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Event.GameObjectEmitter+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &6503910710826089126
+--- !u!114 &7807029298508291166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -999,19 +1087,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8586532332392305863}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e38906e03882d44bea5c07f798a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ElementFound:
+  Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ElementNotFound:
+  NotFound:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6503910710826089126}
-        m_MethodName: AddElement
+      - m_Target: {fileID: 7807029298508291166}
+        m_MethodName: AddUnique
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1021,8 +1109,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7872902437504004978}
-        m_MethodName: AddElement
+      - m_Target: {fileID: 2496996295341015413}
+        m_MethodName: AddUnique
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1065,14 +1153,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecameEmpty:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecamePopulated:
+  Populated:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8509791108597112804}
@@ -1097,8 +1180,25 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &8735653847523399982
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,62 +2,31 @@
 {
     using UnityEngine;
     using UnityEngine.XR;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.MemberChangeMethod;
 
     /// <summary>
     /// Provides configuration for the Unity Engine in XR.
     /// </summary>
     public class UnityXRConfigurator : MonoBehaviour
     {
-        [Tooltip("Represents the type of physical space available for XR."), SerializeField]
-        private TrackingSpaceType _trackingSpaceType = TrackingSpaceType.RoomScale;
         /// <summary>
         /// Represents the type of physical space available for XR.
         /// </summary>
-        public TrackingSpaceType TrackingSpaceType
-        {
-            get
-            {
-                return _trackingSpaceType;
-            }
-            set
-            {
-                _trackingSpaceType = value;
-                UpdateTrackingSpaceType();
-            }
-        }
-
-        [Tooltip("Automatically set the Unity Physics Fixed Timestep value based on the headset render frequency."), SerializeField]
-        private bool _lockPhysicsUpdateRateToRenderFrequency = true;
+        [Serialized]
+        [field: DocumentedByXml]
+        public TrackingSpaceType TrackingSpaceType { get; set; } = TrackingSpaceType.RoomScale;
         /// <summary>
         /// Automatically set the Unity Physics Fixed Timestep value based on the headset render frequency.
         /// </summary>
-        public bool LockPhysicsUpdateRateToRenderFrequency
-        {
-            get
-            {
-                return _lockPhysicsUpdateRateToRenderFrequency;
-            }
-            set
-            {
-                _lockPhysicsUpdateRateToRenderFrequency = value;
-                UpdateFixedDeltaTime();
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool LockPhysicsUpdateRateToRenderFrequency { get; set; } = true;
 
         protected virtual void OnEnable()
         {
             UpdateTrackingSpaceType();
-        }
-
-        protected virtual void OnValidate()
-        {
-            if (!isActiveAndEnabled || !Application.isPlaying)
-            {
-                return;
-            }
-
-            UpdateTrackingSpaceType();
-            UpdateFixedDeltaTime();
         }
 
         protected virtual void Update()
@@ -84,6 +53,24 @@
             {
                 Time.fixedDeltaTime = Time.timeScale / XRDevice.refreshRate;
             }
+        }
+
+        /// <summary>
+        /// Called after <see cref="TrackingSpaceType"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(TrackingSpaceType))]
+        protected virtual void OnAfterTrackingSpaceTypeChange()
+        {
+            UpdateTrackingSpaceType();
+        }
+
+        /// <summary>
+        /// Called after <see cref="LockPhysicsUpdateRateToRenderFrequency"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LockPhysicsUpdateRateToRenderFrequency))]
+        protected virtual void OnAfterLockPhysicsUpdateRateToRenderFrequencyChange()
+        {
+            UpdateFixedDeltaTime();
         }
     }
 }

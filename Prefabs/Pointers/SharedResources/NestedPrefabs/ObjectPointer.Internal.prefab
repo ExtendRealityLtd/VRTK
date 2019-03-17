@@ -76,7 +76,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -92,7 +98,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!1 &1111057230057527468
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +171,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -182,7 +193,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!1 &2024445825049221693
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,6 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1338433868669154813}
   - component: {fileID: 7046662317805364560}
+  - component: {fileID: 2680025304086750293}
   m_Layer: 0
   m_Name: MomentProcessor
   m_TagString: Untagged
@@ -226,8 +237,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0eab237e25807459af1c5caf4d3d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  momentToProcess: 5
-  processes:
+  processMoment: 5
+  processes: {fileID: 2680025304086750293}
+--- !u!114 &2680025304086750293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024445825049221693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a9c53f0e146454cb669c38817bd5b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
+      Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements:
   - {fileID: 3739929903651340988}
 --- !u!1 &4882254659404491312
 GameObject:
@@ -272,7 +327,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fd299fedf620074b8e4ce0978a7f425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ActivationStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Action.Action+BooleanUnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   defaultValue: 0
+  sources: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -288,7 +349,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Action.BooleanAction+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  sources: []
 --- !u!1 &5029966864976377525
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +535,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2602499800182351229}
     m_Modifications:
+    - target: {fileID: 238488845808054240, guid: 9f90ad3184b26c345a474156e0a11f99,
+        type: 3}
+      propertyPath: m_Name
+      value: PointsHandler
+      objectReference: {fileID: 0}
     - target: {fileID: 5062213534656051039, guid: 9f90ad3184b26c345a474156e0a11f99,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -530,10 +595,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 238488845808054240, guid: 9f90ad3184b26c345a474156e0a11f99,
+    - target: {fileID: 8512290642574627259, guid: 9f90ad3184b26c345a474156e0a11f99,
         type: 3}
-      propertyPath: m_Name
-      value: PointsHandler
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7132836569396897453, guid: 9f90ad3184b26c345a474156e0a11f99,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f90ad3184b26c345a474156e0a11f99, type: 3}
@@ -574,6 +644,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1255470011682875458}
     m_Modifications:
+    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
+        type: 3}
+      propertyPath: m_Name
+      value: Elements.Cube
+      objectReference: {fileID: 0}
     - target: {fileID: 7227980817941095506, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -628,11 +703,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
-        type: 3}
-      propertyPath: m_Name
-      value: Elements.Cube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c8a9312eead39c408e711dc1ae5a4f0, type: 3}
@@ -649,6 +719,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5288304000302675054}
     m_Modifications:
+    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
+        type: 3}
+      propertyPath: m_Name
+      value: Elements.Cube
+      objectReference: {fileID: 0}
     - target: {fileID: 7227980817941095506, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -703,11 +778,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7628887710797553620, guid: 1c8a9312eead39c408e711dc1ae5a4f0,
-        type: 3}
-      propertyPath: m_Name
-      value: Elements.Cube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c8a9312eead39c408e711dc1ae5a4f0, type: 3}
