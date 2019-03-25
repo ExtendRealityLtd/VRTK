@@ -142,6 +142,21 @@
         public GameObject OrientationLogicContainer { get; protected set; }
         #endregion
 
+        #region Kinematic Settings
+        /// <summary>
+        /// The container for the enable kinematic logic.
+        /// </summary>
+        [Serialized]
+        [field: Header("Kinematic Settings"), DocumentedByXml, Restricted]
+        public GameObject EnableKinematicContainer { get; protected set; }
+        /// <summary>
+        /// The container for the disable kinematic logic.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObject DisableKinematicContainer { get; protected set; }
+        #endregion
+
         /// <summary>
         /// The kinematic state of the consumer rigidbody.
         /// </summary>
@@ -166,6 +181,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(false);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(false);
                     ObjectFollower.FollowModifier = FollowTransformModifier;
+                    ToggleKinematicLogic(true);
                     break;
                 case TrackingType.FollowRigidbody:
                     FollowTransformModifier.gameObject.SetActive(false);
@@ -173,6 +189,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(false);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(false);
                     ObjectFollower.FollowModifier = FollowRigidbodyModifier;
+                    ToggleKinematicLogic(false);
                     break;
                 case TrackingType.FollowRigidbodyForceRotate:
                     FollowTransformModifier.gameObject.SetActive(false);
@@ -180,6 +197,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(true);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(false);
                     ObjectFollower.FollowModifier = FollowRigidbodyForceRotateModifier;
+                    ToggleKinematicLogic(false);
                     break;
                 case TrackingType.FollowTransformPositionDifferenceRotate:
                     FollowTransformModifier.gameObject.SetActive(false);
@@ -187,6 +205,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(false);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(true);
                     ObjectFollower.FollowModifier = FollowTransformRotateOnPositionDifferenceModifier;
+                    ToggleKinematicLogic(false);
                     break;
             }
         }
@@ -228,6 +247,16 @@
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Clear());
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Add(GrabSetup.Facade.ConsumerContainer));
             VelocityApplier.Target = GrabSetup.Facade.ConsumerRigidbody;
+        }
+
+        /// <summary>
+        /// Toggles the kinematic logic state.
+        /// </summary>
+        /// <param name="state">Whether the logic should run or not.</param>
+        protected virtual void ToggleKinematicLogic(bool state)
+        {
+            EnableKinematicContainer.SetActive(state);
+            DisableKinematicContainer.SetActive(state);
         }
 
         /// <summary>
