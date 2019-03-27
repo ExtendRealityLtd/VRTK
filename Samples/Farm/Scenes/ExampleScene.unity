@@ -6472,7 +6472,7 @@ PrefabInstance:
     - target: {fileID: 1322672732093859771, guid: c69d84a3cadb94e45af0210c52e5728d,
         type: 3}
       propertyPath: m_Name
-      value: RightParabolicPointer
+      value: RightCurvedPointer
       objectReference: {fileID: 0}
     - target: {fileID: 1977522402952244861, guid: c69d84a3cadb94e45af0210c52e5728d,
         type: 3}
@@ -20103,7 +20103,7 @@ PrefabInstance:
     - target: {fileID: 1322672732093859771, guid: c69d84a3cadb94e45af0210c52e5728d,
         type: 3}
       propertyPath: m_Name
-      value: LeftParabolicPointer
+      value: LeftCurvedPointer
       objectReference: {fileID: 0}
     - target: {fileID: 1322672732093859771, guid: c69d84a3cadb94e45af0210c52e5728d,
         type: 3}
