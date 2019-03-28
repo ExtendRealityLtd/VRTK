@@ -1,6 +1,6 @@
 [![VRTK logo][VRTK-Image]](#)
 
-> ### VRTK - Virtual Reality Toolkit
+> ### VRTK v4 beta - Virtual Reality Toolkit
 > A productive toolkit for rapidly building spatial computing solutions in the Unity software.
 
 [![Slack][Slack-Badge]][Slack]
