@@ -4,7 +4,7 @@
 > A productive toolkit for rapidly building spatial computing solutions in the Unity software.
 
 [![Slack][Slack-Badge]][Slack]
-[![Documentation][Docs-Badge]][Docs]
+[![Documentation][Academy-Badge]][Academy]
 [![Videos][Videos-Badge]][Videos]
 [![Twitter][Twitter-Badge]][Twitter]
 [![Waffle][Waffle-Badge]][Waffle]
@@ -72,13 +72,13 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [MIT License]: LICENSE.md
 
 [Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
-[Docs-Badge]: https://img.shields.io/badge/readme-docs-3484C6.svg
+[Academy-Badge]: https://img.shields.io/badge/vrtk-academy-3484C6.svg
 [Videos-Badge]: https://img.shields.io/badge/youtube-channel-e52d27.svg
 [Twitter-Badge]: https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter
 [Waffle-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
 
 [Slack]: http://invite.vrtk.io
-[Docs]: http://docs.vrtk.io
+[Academy]: https://academy.vrtk.io
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
 [Waffle]: http://tracker.vrtk.io
