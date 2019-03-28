@@ -1,7 +1,10 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
-    using System.Collections.Generic;
     using UnityEngine;
+    using System.Collections.Generic;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -13,13 +16,15 @@
         /// <summary>
         /// The joint being used to drive the rotation.
         /// </summary>
-        [Header("Joint Settings"), Tooltip("The joint being used to drive the rotation."), InternalSetting, SerializeField]
-        protected HingeJoint joint;
+        [Serialized]
+        [field: Header("Joint Settings"), DocumentedByXml, Restricted]
+        public HingeJoint Joint { get; protected set; }
         /// <summary>
         /// The parent <see cref="GameObject"/> of the joint.
         /// </summary>
-        [Tooltip("The parent GameObject of the joint."), InternalSetting, SerializeField]
-        protected GameObject jointContainer;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObject JointContainer { get; protected set; }
         #endregion
 
         /// <summary>
@@ -36,39 +41,27 @@
         protected readonly List<bool> rigidbodyChildrenActiveStates = new List<bool>();
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override Vector3 CalculateDriveAxis(DriveAxis.Axis driveAxis)
         {
-            if (!isActiveAndEnabled)
-            {
-                return Vector3.zero;
-            }
-
             Vector3 axisDirection = base.CalculateDriveAxis(driveAxis);
-            joint.axis = axisDirection * -1f;
+            Joint.axis = axisDirection * -1f;
             return axisDirection;
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override void CalculateHingeLocation(Vector3 newHingeLocation)
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
-            joint.anchor = newHingeLocation;
+            Joint.anchor = newHingeLocation;
             SetJointContainerPosition();
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override void ConfigureAutoDrive(bool autoDrive)
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
-            joint.useMotor = autoDrive;
+            Joint.useMotor = autoDrive;
         }
 
         /// <inheritdoc />
@@ -80,29 +73,29 @@
         /// <inheritdoc />
         protected override void SetUpInternals()
         {
-            jointMotor.force = joint.motor.force;
-            jointRigidbody = joint.GetComponent<Rigidbody>();
-            ConfigureAutoDrive(facade.MoveToTargetValue);
+            jointMotor.force = Joint.motor.force;
+            jointRigidbody = Joint.GetComponent<Rigidbody>();
+            ConfigureAutoDrive(Facade.MoveToTargetValue);
             base.SetUpInternals();
         }
 
         /// <inheritdoc />
         protected override Transform GetDriveTransform()
         {
-            return joint.transform;
+            return Joint.transform;
         }
 
         /// <inheritdoc />
         protected override void ProcessAutoDrive(float driveSpeed)
         {
             jointMotor.targetVelocity = driveSpeed;
-            joint.motor = jointMotor;
+            Joint.motor = jointMotor;
         }
 
         /// <inheritdoc />
         protected override void AttemptApplyLimits()
         {
-            if (!joint.useLimits && ApplyLimits())
+            if (!Joint.useLimits && ApplyLimits())
             {
                 jointRigidbody.velocity = Vector3.zero;
                 jointRigidbody.angularVelocity = Vector3.zero;
@@ -110,16 +103,16 @@
         }
 
         /// <summary>
-        /// Sets the <see cref="jointContainer"/> position based on the joint anchor.
+        /// Sets the <see cref="JointContainer"/> position based on the joint anchor.
         /// </summary>
         protected virtual void SetJointContainerPosition()
         {
             // Disable any child rigidbody GameObjects of the joint to prevent the anchor position updating their position.
-            Rigidbody[] rigidbodyChildren = joint.GetComponentsInChildren<Rigidbody>();
+            Rigidbody[] rigidbodyChildren = Joint.GetComponentsInChildren<Rigidbody>();
             rigidbodyChildrenActiveStates.Clear();
             for (int index = 0; index < rigidbodyChildren.Length; index++)
             {
-                if (rigidbodyChildren[index].gameObject == jointContainer || rigidbodyChildren[index] == jointRigidbody)
+                if (rigidbodyChildren[index].gameObject == JointContainer || rigidbodyChildren[index] == jointRigidbody)
                 {
                     rigidbodyChildrenActiveStates.Add(false);
                     continue;
@@ -130,13 +123,13 @@
             }
 
             // Set the current joint container to match the joint anchor to provide the correct offset.
-            jointContainer.transform.localPosition = joint.anchor;
-            jointContainer.transform.localRotation = Quaternion.identity;
+            JointContainer.transform.localPosition = Joint.anchor;
+            JointContainer.transform.localRotation = Quaternion.identity;
 
             // Restore the state of child rigidbody GameObjects now the anchor position has been set.
             for (int index = 0; index < rigidbodyChildren.Length; index++)
             {
-                if (rigidbodyChildren[index].gameObject == jointContainer || rigidbodyChildren[index] == jointRigidbody)
+                if (rigidbodyChildren[index].gameObject == JointContainer || rigidbodyChildren[index] == jointRigidbody)
                 {
                     continue;
                 }

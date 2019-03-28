@@ -1,6 +1,7 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
     using UnityEngine;
+    using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Data.Type;
 
     /// <summary>
@@ -31,13 +32,9 @@
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         protected override float CalculateValue(DriveAxis.Axis axis, FloatRange limits)
         {
-            if (!isActiveAndEnabled)
-            {
-                return 0f;
-            }
-
             float result = 0f;
             switch (axis)
             {
@@ -55,14 +52,10 @@
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override void ConfigureAutoDrive(bool autoDrive)
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
-            ProcessDriveSpeed(facade.DriveSpeed, facade.MoveToTargetValue);
+            ProcessDriveSpeed(Facade.DriveSpeed, Facade.MoveToTargetValue);
         }
     }
 }

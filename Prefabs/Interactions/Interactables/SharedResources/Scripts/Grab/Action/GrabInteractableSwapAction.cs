@@ -17,7 +17,7 @@
         /// <param name="interactor">The Interactor to remove from the toggle state.</param>
         public virtual void ResetToggle(GameObject interactor)
         {
-            grabSetup.GrabReceiver.ToggleSet.RemoveElement(interactor);
+            GrabSetup.GrabReceiver.ToggleList.Remove(interactor);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@
         /// </summary>
         public virtual void ClearStack()
         {
-            ToStackInteractorProvider(grabSetup.GrabProvider).EventStack.PopAt(0);
+            ToStackInteractorProvider(GrabSetup.GrabProvider).EventStack.PopAt(0);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
         /// </summary>
         public virtual void EmitActiveCollisionConsumerPayload()
         {
-            grabSetup.GrabReceiver.OutputActiveCollisionConsumer.EmitPayload();
+            GrabSetup.GrabReceiver.OutputActiveCollisionConsumer.EmitPayload();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
         /// <param name="interactor">The Interactor to push to the stack.</param>
         public virtual void PushToStack(GameObject interactor)
         {
-            ToStackInteractorProvider(grabSetup.GrabProvider).EventStack.Push(interactor);
+            ToStackInteractorProvider(GrabSetup.GrabProvider).EventStack.Push(interactor);
         }
 
         /// <summary>

@@ -1,7 +1,12 @@
 ﻿namespace VRTK.Examples.Prefabs.OptionsMenu
 {
     using UnityEngine;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Action;
+    using Zinnia.Extension;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -10,69 +15,68 @@
     public class OptionsMenuFacade : MonoBehaviour
     {
         #region Options Menu Settings
-        [Header("Options Menu Settings"), Tooltip("The action that will toggle the visibility of the options control station."), SerializeField]
-        private BooleanAction _activationAction;
         /// <summary>
         /// The action that will toggle the visibility of the options control station.
         /// </summary>
-        public BooleanAction ActivationAction
-        {
-            get { return _activationAction; }
-            set
-            {
-                _activationAction = value;
-                ConfigureToggleVisibility();
-            }
-        }
-
+        [Serialized, Cleared]
+        [field: Header("Options Menu Settings"), DocumentedByXml]
+        public BooleanAction ActivationAction { get; set; }
         /// <summary>
         /// The target location to set the control station to when it appears.
         /// </summary>
-        [Tooltip("The target location to set the control station to when it appears.")]
-        public GameObject locationTarget;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject LocationTarget { get; set; }
         /// <summary>
         /// The direction the control station will be placed in relation to the target location when it appears.
         /// </summary>
-        [Tooltip("The direction the control station will be placed in relation to the target location when it appears.")]
-        public GameObject locationDirection;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject LocationDirection { get; set; }
         /// <summary>
         /// The offset distance from the target location to place the control station when it appears.
         /// </summary>
-        [Tooltip("The offset distance from the target location to place the control station when it appears.")]
-        public float locationOffset = 0.5f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public float LocationOffset { get; set; } = 0.5f;
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The control station.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The control station."), InternalSetting, SerializeField]
-        private GameObject controlStation = null;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public GameObject ControlStation { get; protected set; }
         /// <summary>
         /// The internal linked action for controlling visibility activation.
         /// </summary>
-        [Tooltip("The internal linked action for controlling visibility activation."), InternalSetting, SerializeField]
-        private BooleanAction linkedInternalAction = null;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public BooleanAction LinkedInternalAction { get; protected set; }
         #endregion
 
+        /// <summary>
+        /// Sets the location of the options menu.
+        /// </summary>
         public virtual void SetLocation()
         {
-            if (locationTarget == null || locationDirection == null)
+            if (LocationTarget == null || LocationDirection == null)
             {
                 return;
             }
 
-            Vector3 locationDirectionPosition = locationDirection.transform.position;
-            Vector3 locationTargetPosition = locationTarget.transform.position;
+            Vector3 locationDirectionPosition = LocationDirection.transform.position;
+            Vector3 locationTargetPosition = LocationTarget.transform.position;
 
             transform.position = new Vector3(locationDirectionPosition.x, locationTargetPosition.y, locationDirectionPosition.z);
-            controlStation.transform.localPosition = locationDirection.transform.forward * locationOffset;
+            ControlStation.transform.localPosition = LocationDirection.transform.forward * LocationOffset;
 
-            Vector3.Scale(controlStation.transform.localPosition, Vector3.right + Vector3.forward);
+            Vector3.Scale(ControlStation.transform.localPosition, Vector3.right + Vector3.forward);
             Vector3 targetPosition = locationDirectionPosition;
             targetPosition.y = locationTargetPosition.y;
-            controlStation.transform.LookAt(targetPosition);
-            controlStation.transform.localEulerAngles = Vector3.up * (controlStation.transform.localEulerAngles.y + 180f);
+            ControlStation.transform.LookAt(targetPosition);
+            ControlStation.transform.localEulerAngles = Vector3.up * (ControlStation.transform.localEulerAngles.y + 180f);
         }
 
         protected virtual void OnEnable()
@@ -80,23 +84,22 @@
             ConfigureToggleVisibility();
         }
 
-        protected virtual void OnValidate()
-        {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
-
-            ConfigureToggleVisibility();
-        }
-
         /// <summary>
-        /// Links the provided <see cref="ActivationAction"/> action to the internal <see cref="linkedInternalAction"/>.
+        /// Links the provided <see cref="ActivationAction"/> action to the internal <see cref="LinkedInternalAction"/>.
         /// </summary>
         protected virtual void ConfigureToggleVisibility()
         {
-            linkedInternalAction.ClearSources();
-            linkedInternalAction.AddSource(ActivationAction);
+            LinkedInternalAction.RunWhenActiveAndEnabled(() => LinkedInternalAction.ClearSources());
+            LinkedInternalAction.RunWhenActiveAndEnabled(() => LinkedInternalAction.AddSource(ActivationAction));
+        }
+
+        /// <summary>
+        /// Called after <see cref="ActivationAction"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(ActivationAction))]
+        protected virtual void OnAfterActivationActionChange()
+        {
+            ConfigureToggleVisibility();
         }
     }
 }

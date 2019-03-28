@@ -1,6 +1,10 @@
 ﻿namespace VRTK.Prefabs.Locomotion.Movement.MovementAmplifier
 {
     using UnityEngine;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -9,93 +13,81 @@
     public class MovementAmplifierFacade : MonoBehaviour
     {
         #region Tracking Settings
-        [Header("Tracking Settings"), Tooltip("The source to observe movement of."), SerializeField]
-        private GameObject _source;
         /// <summary>
         /// The source to observe movement of.
         /// </summary>
-        public GameObject Source
-        {
-            get { return _source; }
-            set
-            {
-                _source = value;
-                internalSetup.ConfigureRadiusOriginMover();
-                internalSetup.ConfigureDistanceChecker();
-                internalSetup.ConfigureObjectMover();
-            }
-        }
-
-        [Tooltip("The target to apply amplified movement to."), SerializeField]
-        private GameObject _target;
+        [Serialized, Cleared]
+        [field: Header("Tracking Settings"), DocumentedByXml]
+        public GameObject Source { get; set; }
         /// <summary>
         /// The target to apply amplified movement to.
         /// </summary>
-        public GameObject Target
-        {
-            get { return _target; }
-            set
-            {
-                _target = value;
-                internalSetup.ConfigureTargetPositionMutator();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject Target { get; set; }
         #endregion
 
         #region Movement Settings
-        [Header("Movement Settings"), Tooltip("The radius in which source movement is ignored. Too small values can result in movement amplification happening during crouching which is often unexpected."), SerializeField]
-        private float _ignoredRadius = 0.25f;
         /// <summary>
         /// The radius in which <see cref="Source"/> movement is ignored. Too small values can result in movement amplification happening during crouching which is often unexpected.
         /// </summary>
-        public float IgnoredRadius
-        {
-            get { return _ignoredRadius; }
-            set
-            {
-                _ignoredRadius = value;
-                internalSetup.ConfigureDistanceChecker();
-                internalSetup.ConfigureRadiusSubtractor();
-            }
-        }
-
-        [Tooltip("How much to amplify movement of source to apply to target."), SerializeField]
-        private float _multiplier = 2f;
+        [Serialized]
+        [field: Header("Movement Settings"), DocumentedByXml]
+        public float IgnoredRadius { get; set; } = 0.25f;
         /// <summary>
         /// How much to amplify movement of <see cref="Source"/> to apply to <see cref="Target"/>.
         /// </summary>
-        public float Multiplier
-        {
-            get { return _multiplier; }
-            set
-            {
-                _multiplier = value;
-                internalSetup.ConfigureMovementMultiplier();
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public float Multiplier { get; set; } = 2f;
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected MovementAmplifierInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public MovementAmplifierConfigurator Configuration { get; protected set; }
         #endregion
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="Source"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Source))]
+        protected virtual void OnAfterSourceChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            Configuration.ConfigureRadiusOriginMover();
+            Configuration.ConfigureDistanceChecker();
+            Configuration.ConfigureObjectMover();
+        }
 
-            internalSetup.ConfigureRadiusOriginMover();
-            internalSetup.ConfigureDistanceChecker();
-            internalSetup.ConfigureObjectMover();
-            internalSetup.ConfigureRadiusSubtractor();
-            internalSetup.ConfigureMovementMultiplier();
-            internalSetup.ConfigureTargetPositionMutator();
+        /// <summary>
+        /// Called after <see cref="Target"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Target))]
+        protected virtual void OnAfterTargetChange()
+        {
+            Configuration.ConfigureTargetPositionMutator();
+        }
+
+        /// <summary>
+        /// Called after <see cref="IgnoredRadius"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(IgnoredRadius))]
+        protected virtual void OnAfterIgnoredRadiusChange()
+        {
+            Configuration.ConfigureDistanceChecker();
+            Configuration.ConfigureRadiusSubtractor();
+        }
+
+        /// <summary>
+        /// Called after <see cref="Multiplier"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Multiplier))]
+        protected virtual void OnAfterMultiplierChange()
+        {
+            Configuration.ConfigureMovementMultiplier();
         }
     }
 }

@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2518704924595545308}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.317627, y: 0.88, z: 16.145275}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2518704924720218110}
@@ -1261,6 +1261,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2518704924595545309}
     m_Modifications:
+    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_Name
+      value: tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1316,22 +1332,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_Name
-      value: tree
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e8babb31b97480a408b074dcc7f675ea, type: 3}
       propertyPath: m_LocalScale.x

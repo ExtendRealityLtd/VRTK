@@ -1,6 +1,8 @@
 ﻿namespace VRTK.Prefabs.CameraRig.SimulatedCameraRig.Input
 {
     using UnityEngine;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Action;
 
     /// <summary>
@@ -11,36 +13,33 @@
         /// <summary>
         /// The named x axis of the mouse.
         /// </summary>
-        [Tooltip("The named x axis of the mouse.")]
-        public string xAxisName = "Mouse X";
+        [Serialized]
+        [field: DocumentedByXml]
+        public string XAxisName { get; set; } = "Mouse X";
         /// <summary>
         /// The named y axis of the mouse.
         /// </summary>
-        [Tooltip("The named y axis of the mouse.")]
-        public string yAxisName = "Mouse Y";
-        [Tooltip("Determines whether to lock the cursor in the game window."), SerializeField]
-        private bool _lockCursor;
+        [Serialized]
+        [field: DocumentedByXml]
+        public string YAxisName { get; set; } = "Mouse Y";
         /// <summary>
         /// Determines whether to lock the cursor in the game window.
         /// </summary>
-        public bool LockCursor
-        {
-            get { return _lockCursor; }
-            set
-            {
-                _lockCursor = value;
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool LockCursor { get; set; }
         /// <summary>
         /// Multiplies the speed at which the unlocked cursor moves the axis.
         /// </summary>
-        [Tooltip("Multiplies the speed at which the unlocked cursor moves the axis.")]
-        public float cursorMultiplier = 1f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public float CursorMultiplier { get; set; } = 1f;
         /// <summary>
         /// Multiplies the speed at which the locked cursor moves the axis.
         /// </summary>
-        [Tooltip("Multiplies the speed at which the locked cursor moves the axis.")]
-        public float lockedCursorMultiplier = 2f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public float LockedCursorMultiplier { get; set; } = 2f;
 
         /// <summary>
         /// The previous axis position of the mouse pointer.
@@ -70,8 +69,8 @@
             previousMousePosition = Input.mousePosition;
 
             return Cursor.lockState == CursorLockMode.Locked
-                ? new Vector3(Input.GetAxis(xAxisName), Input.GetAxis(yAxisName)) * lockedCursorMultiplier
-                : difference * cursorMultiplier;
+                ? new Vector3(Input.GetAxis(XAxisName), Input.GetAxis(YAxisName)) * LockedCursorMultiplier
+                : difference * CursorMultiplier;
         }
     }
 }

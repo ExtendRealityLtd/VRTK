@@ -1,6 +1,7 @@
 ﻿namespace VRTK.Prefabs.Locomotion.Movement.AxesToVector3
 {
     using UnityEngine;
+    using Malimbe.XmlDocumentationAttribute;
 
     /// <summary>
     /// Caches <see cref="Vector3"/> data and emits an appropriate event when the cache is updated.
@@ -10,32 +11,36 @@
         /// <summary>
         /// Emitted when the cached data is updated and has been modified to a new value.
         /// </summary>
+        [DocumentedByXml]
         public AxesToVector3Facade.UnityEvent Modified = new AxesToVector3Facade.UnityEvent();
         /// <summary>
         /// Emitted when the cached data is updated but the value is unmodified.
         /// </summary>
+        [DocumentedByXml]
         public AxesToVector3Facade.UnityEvent Unmodified = new AxesToVector3Facade.UnityEvent();
 
         /// <summary>
-        /// The cached data.
+        /// The cached data. Emits an event when the data changes based on whether the cache has changed from it's previous value.
         /// </summary>
         public Vector3 CachedData
         {
-            get;
-            protected set;
-        }
-
-        public virtual void CacheData(Vector3 data)
-        {
-            if (data == CachedData)
+            get
             {
-                Unmodified?.Invoke(data);
+                return cachedData;
             }
-            else
+            set
             {
-                Modified?.Invoke(data);
+                if (value == cachedData)
+                {
+                    Unmodified?.Invoke(value);
+                }
+                else
+                {
+                    Modified?.Invoke(value);
+                }
+                cachedData = value;
             }
-            CachedData = data;
         }
+        private Vector3 cachedData;
     }
 }

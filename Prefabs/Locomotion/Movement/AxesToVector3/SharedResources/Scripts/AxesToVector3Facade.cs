@@ -3,6 +3,10 @@
     using System;
     using UnityEngine;
     using UnityEngine.Events;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Action;
     using Zinnia.Data.Attribute;
 
@@ -35,131 +39,107 @@
         }
 
         #region Axis Settings
-        [Header("Axis Settings"), Tooltip("The AxisUsage to utilize when applying the axis input."), SerializeField]
-        private AxisUsage _axisUsageType = AxisUsage.Incremental;
         /// <summary>
         /// The <see cref="AxisUsage"/> to utilize when applying the axis input.
         /// </summary>
-        public AxisUsage AxisUsageType
-        {
-            get
-            {
-                return _axisUsageType;
-            }
-            set
-            {
-                _axisUsageType = value;
-                internalSetup.SetAxisUsageType();
-            }
-        }
-
-        [Tooltip("The FloatAction to get the lateral (left/right direction) data from."), SerializeField]
-        private FloatAction _lateralAxis;
+        [Serialized]
+        [field: Header("Axis Settings"), DocumentedByXml]
+        public AxisUsage AxisUsageType { get; set; }
         /// <summary>
         /// The <see cref="FloatAction"/> to get the lateral (left/right direction) data from.
         /// </summary>
-        public FloatAction LateralAxis
-        {
-            get
-            {
-                return _lateralAxis;
-            }
-            set
-            {
-                _lateralAxis = value;
-                internalSetup.SetAxisSources();
-            }
-        }
-
-        [Tooltip("The FloatAction to get the longitudinal (forward/backward direction) data from."), SerializeField]
-        private FloatAction _longitudinalAxis;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public FloatAction LateralAxis { get; set; }
         /// <summary>
         /// The <see cref="FloatAction"/> to get the longitudinal (forward/backward direction) data from.
         /// </summary>
-        public FloatAction LongitudinalAxis
-        {
-            get
-            {
-                return _longitudinalAxis;
-            }
-            set
-            {
-                _longitudinalAxis = value;
-                internalSetup.SetAxisSources();
-            }
-        }
-
-        [Tooltip("The multiplier to apply to the lateral axis."), SerializeField]
-        private float _lateralSpeedMultiplier = 1f;
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public FloatAction LongitudinalAxis { get; set; }
         /// <summary>
         /// The multiplier to apply to the lateral axis.
         /// </summary>
-        public float LateralSpeedMultiplier
-        {
-            get
-            {
-                return _lateralSpeedMultiplier;
-            }
-            set
-            {
-                _lateralSpeedMultiplier = value;
-                internalSetup.SetMultipliers();
-            }
-        }
-
-        [Tooltip("The multiplier to apply to the longitudinal axis."), SerializeField]
-        private float _longitudinalSpeedMultiplier = 1f;
+        [Serialized]
+        [field: DocumentedByXml]
+        public float LateralSpeedMultiplier { get; set; } = 1f;
         /// <summary>
         /// The multiplier to apply to the longitudinal axis.
         /// </summary>
-        public float LongitudinalSpeedMultiplier
-        {
-            get
-            {
-                return _longitudinalSpeedMultiplier;
-            }
-            set
-            {
-                _longitudinalSpeedMultiplier = value;
-                internalSetup.SetMultipliers();
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public float LongitudinalSpeedMultiplier { get; set; } = 1f;
         #endregion
 
-        #region Reference Settings
+        #region Direction Settings
         /// <summary>
         /// The source of the forward direction to move towards.
         /// </summary>
-        [Header("Reference Settings"), Tooltip("The source of the forward direction to move towards.")]
-        public GameObject sourceOfForwardDirection;
+        [Serialized, Cleared]
+        [field: Header("Direction Settings"), DocumentedByXml]
+        public GameObject SourceOfForwardDirection { get; set; }
         #endregion
 
         #region Events
         /// <summary>
         /// Emitted when the axes are converted into a <see cref="Vector3"/>.
         /// </summary>
-        [Header("Events"), Tooltip("Emitted when the axes are converted into a Vector3.")]
+        [Header("Events"), DocumentedByXml]
         public UnityEvent Processed = new UnityEvent();
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected AxesToVector3InternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public AxesToVector3Processor Processor { get; protected set; }
         #endregion
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="AxisUsageType"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(AxisUsageType))]
+        protected virtual void OnAfterAxisUsageTypeChange()
         {
-            if (!isActiveAndEnabled || !Application.isPlaying)
-            {
-                return;
-            }
+            Processor.ConfigureAxisUsageType();
+        }
 
-            internalSetup.SetAxisSources();
-            internalSetup.SetMultipliers();
-            internalSetup.SetAxisUsageType();
+        /// <summary>
+        /// Called after <see cref="LateralAxis"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LateralAxis))]
+        protected virtual void OnAfterLateralAxisChange()
+        {
+            Processor.ConfigureAxisSources();
+        }
+
+        /// <summary>
+        /// Called after <see cref="LongitudinalAxis"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LongitudinalAxis))]
+        protected virtual void OnAfterLongitudinalAxisChange()
+        {
+            Processor.ConfigureAxisSources();
+        }
+
+        /// <summary>
+        /// Called after <see cref="LateralSpeedMultiplier"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LateralSpeedMultiplier))]
+        protected virtual void OnAfterLateralSpeedMultiplierChange()
+        {
+            Processor.ConfigureMultipliers();
+        }
+
+        /// <summary>
+        /// Called after <see cref="LongitudinalSpeedMultiplier"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LongitudinalSpeedMultiplier))]
+        protected virtual void OnAfterLongitudinalSpeedMultiplierChange()
+        {
+            Processor.ConfigureMultipliers();
         }
     }
 }

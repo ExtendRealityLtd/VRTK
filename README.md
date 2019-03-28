@@ -38,13 +38,6 @@ VRTK aims to make building spatial computing solutions in the [Unity] software f
   * `git clone --recurse-submodules https://github.com/thestonefox/VRTK.git`.
   * `git submodule init && git submodule update`.
 
-### Running the tests
-
-* Open the `VRTK/Samples/TestHelper/Scenes/TestRunner` scene.
-* In the Unity3 software select `Main Menu -> Window -> Test Runner`.
-* Within the Test Runner window click on the `EditMode` tab and the click `Run All` button.
-* If all the tests pass then installation was successful.
-
 ### Running the example scene
 
 * Open the `VRTK/Samples/Farm/Scenes/ExampleScene` scene.

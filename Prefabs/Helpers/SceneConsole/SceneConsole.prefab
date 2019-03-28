@@ -349,6 +349,7 @@ MonoBehaviour:
   warningMessage: {r: 0.70980394, g: 0.5372549, b: 0, a: 1}
   errorMessage: {r: 0.8627451, g: 0.19607843, b: 0.18431373, a: 1}
   exceptionMessage: {r: 0.8627451, g: 0.19607843, b: 0.18431373, a: 1}
+  collapseLog: 0
   scrollWindow: {fileID: 114770230980463154}
   consoleRect: {fileID: 224474490573805622}
   consoleOutput: {fileID: 114021841293544946}

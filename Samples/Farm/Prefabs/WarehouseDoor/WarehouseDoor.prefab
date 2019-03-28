@@ -882,6 +882,16 @@ PrefabInstance:
       propertyPath: _driveLimit
       value: 0.02
       objectReference: {fileID: 0}
+    - target: {fileID: 114513388815445630, guid: bdc24a54bab4ef248980171acee49e8e,
+        type: 3}
+      propertyPath: targetValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114513388815445630, guid: bdc24a54bab4ef248980171acee49e8e,
+        type: 3}
+      propertyPath: driveLimit
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 114287408107621598, guid: bdc24a54bab4ef248980171acee49e8e,
         type: 3}
       propertyPath: Activated.m_PersistentCalls.m_Calls.Array.size
@@ -1104,6 +1114,16 @@ PrefabInstance:
     - target: {fileID: 114513388815445630, guid: bdc24a54bab4ef248980171acee49e8e,
         type: 3}
       propertyPath: _driveLimit
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 114513388815445630, guid: bdc24a54bab4ef248980171acee49e8e,
+        type: 3}
+      propertyPath: targetValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114513388815445630, guid: bdc24a54bab4ef248980171acee49e8e,
+        type: 3}
+      propertyPath: driveLimit
       value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 114287408107621598, guid: bdc24a54bab4ef248980171acee49e8e,

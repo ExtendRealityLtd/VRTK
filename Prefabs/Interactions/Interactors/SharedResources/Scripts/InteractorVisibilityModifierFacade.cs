@@ -3,6 +3,9 @@
     using UnityEngine;
     using UnityEngine.Events;
     using System;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -22,25 +25,28 @@
         /// <summary>
         /// Emitted when the Interactor becomes shown.
         /// </summary>
-        [Header("Visibility Events")]
+        [Header("Visibility Events"), DocumentedByXml]
         public UnityEvent Shown = new UnityEvent();
         /// <summary>
         /// Emitted when the Interactor becomes hidden.
         /// </summary>
+        [DocumentedByXml]
         public UnityEvent Hidden = new UnityEvent();
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The emitter that deals with hiding the interactor.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The emitter that deals with hiding the interactor."), InternalSetting, SerializeField]
-        protected InteractorFacadeEventProxyEmitter hideEmitter;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public InteractorFacadeEventProxyEmitter HideEmitter { get; protected set; }
         /// <summary>
         /// The emitter that deals with showing the interactor.
         /// </summary>
-        [Tooltip("The emitter that deals with showing the interactor."), InternalSetting, SerializeField]
-        protected InteractorFacadeEventProxyEmitter showEmitter;
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public InteractorFacadeEventProxyEmitter ShowEmitter { get; protected set; }
         #endregion
 
         /// <summary>
@@ -49,7 +55,7 @@
         /// <param name="interactorFacade">The interactor to hide.</param>
         public virtual void Hide(InteractorFacade interactorFacade)
         {
-            if (Emit(hideEmitter, interactorFacade))
+            if (Emit(HideEmitter, interactorFacade))
             {
                 Hidden?.Invoke(interactorFacade);
             }
@@ -61,7 +67,7 @@
         /// <param name="interactorFacade">The interactor to show.</param>
         public virtual void Show(InteractorFacade interactorFacade)
         {
-            if (Emit(showEmitter, interactorFacade))
+            if (Emit(ShowEmitter, interactorFacade))
             {
                 Shown?.Invoke(interactorFacade);
             }
@@ -72,10 +78,11 @@
         /// </summary>
         /// <param name="emitter">The event proxy to emit to.</param>
         /// <param name="interactorFacade">The interactor to emit with.</param>
-        /// <returns><see langword="true"/> if the event is emitted.</returns>
+        /// <returns>Whether the event is emitted.</returns>
+        [RequiresBehaviourState]
         protected virtual bool Emit(InteractorFacadeEventProxyEmitter emitter, InteractorFacade interactorFacade)
         {
-            if (!isActiveAndEnabled || emitter == null)
+            if (emitter == null)
             {
                 return false;
             }

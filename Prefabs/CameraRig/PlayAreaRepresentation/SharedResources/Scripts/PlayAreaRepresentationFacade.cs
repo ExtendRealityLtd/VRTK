@@ -1,6 +1,10 @@
 ﻿namespace VRTK.Prefabs.PlayAreaRepresentation
 {
     using UnityEngine;
+    using Malimbe.MemberClearanceMethod;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.MemberChangeMethod;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -9,58 +13,35 @@
     public class PlayAreaRepresentationFacade : MonoBehaviour
     {
         #region Target Settings
-        [Header("Target Settings"), Tooltip("The target to represent the PlayArea."), SerializeField]
-        private GameObject _target;
         /// <summary>
         /// The target to represent the PlayArea.
         /// </summary>
-        public GameObject Target
-        {
-            get { return _target; }
-            set
-            {
-                _target = value;
-                internalSetup.ConfigureTarget();
-            }
-        }
+        [Serialized, Cleared]
+        [field: Header("Target Settings"), DocumentedByXml]
+        public GameObject Target { get; set; }
 
-        [Tooltip("An optional origin to use in a position offset calculation."), SerializeField]
-        private GameObject _offsetOrigin;
         /// <summary>
         /// An optional origin to use in a position offset calculation.
         /// </summary>
-        public GameObject OffsetOrigin
-        {
-            get { return _offsetOrigin; }
-            set
-            {
-                _offsetOrigin = value;
-                internalSetup.ConfigureOffsetOrigin();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject OffsetOrigin { get; set; }
 
-        [Tooltip("An optional destination to use in a position offset calculation."), SerializeField]
-        private GameObject _offsetDestination;
         /// <summary>
         /// An optional destination to use in a position offset calculation.
         /// </summary>
-        public GameObject OffsetDestination
-        {
-            get { return _offsetDestination; }
-            set
-            {
-                _offsetDestination = value;
-                internalSetup.ConfigureOffsetDestination();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject OffsetDestination { get; set; }
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected PlayAreaRepresentationInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public PlayAreaRepresentationConfigurator Configuration { get; protected set; }
         #endregion
 
         /// <summary>
@@ -68,19 +49,34 @@
         /// </summary>
         public virtual void Recalculate()
         {
-            internalSetup.RecalculateDimensions();
+            Configuration.RecalculateDimensions();
         }
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="Target"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Target))]
+        protected virtual void OnAfterTargetChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            Configuration.ConfigureTarget();
+        }
 
-            internalSetup.ConfigureTarget();
-            internalSetup.ConfigureOffsetOrigin();
-            internalSetup.ConfigureOffsetDestination();
+        /// <summary>
+        /// Called after <see cref="OffsetOrigin"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(OffsetOrigin))]
+        protected virtual void OnAfterOffsetOriginChange()
+        {
+            Configuration.ConfigureOffsetOrigin();
+        }
+
+        /// <summary>
+        /// Called after <see cref="OffsetDestination"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(OffsetDestination))]
+        protected virtual void OnAfterOffsetDestinationChange()
+        {
+            Configuration.ConfigureOffsetDestination();
         }
     }
 }

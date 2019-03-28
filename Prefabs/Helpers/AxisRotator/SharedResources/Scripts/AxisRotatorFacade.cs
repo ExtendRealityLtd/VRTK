@@ -1,6 +1,10 @@
 ﻿namespace VRTK.Prefabs.Helpers.AxisRotator
 {
     using UnityEngine;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.MemberClearanceMethod;
     using Zinnia.Action;
     using Zinnia.Data.Attribute;
 
@@ -10,93 +14,78 @@
     public class AxisRotatorFacade : MonoBehaviour
     {
         #region Axis Settings
-        [Header("Axis Settings"), Tooltip("The FloatAction to get the lateral (left/right direction) data from."), SerializeField]
-        private FloatAction _lateralAxis;
         /// <summary>
         /// The <see cref="FloatAction"/> to get the lateral (left/right direction) data from.
         /// </summary>
-        public FloatAction LateralAxis
-        {
-            get
-            {
-                return _lateralAxis;
-            }
-            set
-            {
-                _lateralAxis = value;
-                internalSetup.SetAxisSources();
-            }
-        }
-
-        [Tooltip("The FloatAction to get the longitudinal (forward/backward direction) data from."), SerializeField]
-        private FloatAction _longitudinalAxis;
+        [Serialized]
+        [field: Header("Axis Settings"), DocumentedByXml]
+        public FloatAction LateralAxis { get; set; }
         /// <summary>
         /// The <see cref="FloatAction"/> to get the longitudinal (forward/backward direction) data from.
         /// </summary>
-        public FloatAction LongitudinalAxis
-        {
-            get
-            {
-                return _longitudinalAxis;
-            }
-            set
-            {
-                _longitudinalAxis = value;
-                internalSetup.SetAxisSources();
-            }
-        }
+        [Serialized]
+        [field: DocumentedByXml]
+        public FloatAction LongitudinalAxis { get; set; }
         #endregion
 
         #region Target Settings
-        [Header("Target Settings"), Tooltip("The target to rotate."), SerializeField]
-        private GameObject _target;
         /// <summary>
         /// The target to rotate.
         /// </summary>
-        public GameObject Target
-        {
-            get { return _target; }
-            set
-            {
-                _target = value;
-                internalSetup.SetMutator();
-            }
-        }
-
-        [Tooltip("The direction offset to use when considering the rotation origin."), SerializeField]
-        private GameObject _directionOffset;
+        [Serialized, Cleared]
+        [field: Header("Target Settings"), DocumentedByXml]
+        public GameObject Target { get; set; }
         /// <summary>
         /// The direction offset to use when considering the rotation origin.
         /// </summary>
-        public GameObject DirectionOffset
-        {
-            get { return _directionOffset; }
-            set
-            {
-                _directionOffset = value;
-                internalSetup.SetExtractor();
-            }
-        }
+        [Serialized, Cleared]
+        [field: DocumentedByXml]
+        public GameObject DirectionOffset { get; set; }
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected AxisRotatorInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public AxisRotatorConfigurator Configuration { get; protected set; }
         #endregion
 
-        protected virtual void OnValidate()
+        /// <summary>
+        /// Called after <see cref="LateralAxis"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LateralAxis))]
+        protected virtual void OnAfterLateralAxisChange()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            Configuration.SetAxisSources();
+        }
 
-            internalSetup.SetAxisSources();
-            internalSetup.SetMutator();
-            internalSetup.SetExtractor();
+        /// <summary>
+        /// Called after <see cref="LongitudinalAxis"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(LongitudinalAxis))]
+        protected virtual void OnAfterLongitudinalAxisChange()
+        {
+            Configuration.SetAxisSources();
+        }
+
+        /// <summary>
+        /// Called after <see cref="Target"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(Target))]
+        protected virtual void OnAfterTargetChange()
+        {
+            Configuration.SetMutator();
+        }
+
+        /// <summary>
+        /// Called after <see cref="DirectionOffset"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(DirectionOffset))]
+        protected virtual void OnAfterDirectionOffsetChange()
+        {
+            Configuration.SetExtractor();
         }
     }
 }

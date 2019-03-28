@@ -1,6 +1,7 @@
 ﻿namespace VRTK.Prefabs.Interactions.Controllables
 {
     using UnityEngine;
+    using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Extension;
     using Zinnia.Data.Type;
 
@@ -12,15 +13,15 @@
         /// <summary>
         /// The previous rotation angle of the control.
         /// </summary>
-        protected float PreviousActualAngle => previousActualRotation[(int)facade.DriveAxis];
+        protected float PreviousActualAngle => previousActualRotation[(int)Facade.DriveAxis];
         /// <summary>
         /// The current rotation angle of the control.
         /// </summary>
-        protected float CurrentActualAngle => currentActualRotation[(int)facade.DriveAxis];
+        protected float CurrentActualAngle => currentActualRotation[(int)Facade.DriveAxis];
         /// <summary>
         /// The target angle for the control to reach.
         /// </summary>
-        protected float ActualTargetAngle => Mathf.Lerp(DriveLimits.minimum, DriveLimits.maximum, facade.TargetValue);
+        protected float ActualTargetAngle => Mathf.Lerp(DriveLimits.minimum, DriveLimits.maximum, Facade.TargetValue);
 
         /// <summary>
         /// The total number of degrees in a circle.
@@ -73,13 +74,9 @@
         public abstract void ApplyExistingAngularVelocity(float multiplier = 1f);
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         public override void Process()
         {
-            if (!isActiveAndEnabled)
-            {
-                return;
-            }
-
             base.Process();
 
             previousActualRotation = currentActualRotation;
@@ -106,8 +103,8 @@
         /// <inheritdoc />
         protected override void SetUpInternals()
         {
-            ConfigureAutoDrive(facade.MoveToTargetValue);
-            CalculateHingeLocation(facade.HingeLocation);
+            ConfigureAutoDrive(Facade.MoveToTargetValue);
+            CalculateHingeLocation(Facade.HingeLocation);
         }
 
         /// <inheritdoc />
@@ -117,13 +114,9 @@
         }
 
         /// <inheritdoc />
+        [RequiresBehaviourState]
         protected override float CalculateValue(DriveAxis.Axis driveAxis, FloatRange limits)
         {
-            if (!isActiveAndEnabled)
-            {
-                return 0f;
-            }
-
             return Mathf.Clamp(currentPseudoRotation, limits.minimum, limits.maximum);
         }
 
@@ -134,7 +127,7 @@
         protected virtual Vector3 GetSimpleEulerAngles()
         {
             Vector3 currentEulerAngle = GetDriveTransform().localEulerAngles;
-            if (facade.DriveAxis == DriveAxis.Axis.XAxis && !currentEulerAngle.y.ApproxEquals(0f, 1f))
+            if (Facade.DriveAxis == DriveAxis.Axis.XAxis && !currentEulerAngle.y.ApproxEquals(0f, 1f))
             {
                 currentEulerAngle.x = currentEulerAngle.y - (currentEulerAngle.x > (circleDegrees * 0.5f) ? currentEulerAngle.x - circleDegrees : currentEulerAngle.x);
             }
@@ -148,7 +141,7 @@
         protected virtual float CalculateDirectionMultiplier()
         {
             float actualAngle = ActualTargetAngle;
-            if (actualAngle.ApproxEquals(currentPseudoRotation, targetValueReachedThreshold))
+            if (actualAngle.ApproxEquals(currentPseudoRotation, TargetValueReachedThreshold))
             {
                 return 0f;
             }
@@ -170,16 +163,17 @@
         /// <returns>Whether the limits have been applied.</returns>
         protected virtual bool ApplyLimits()
         {
-            if (currentPseudoRotation < DriveLimits.minimum)
+            if (currentPseudoRotation < DriveLimits.minimum - TargetValueReachedThreshold)
             {
                 GetDriveTransform().localRotation = Quaternion.Euler(-AxisDirection * DriveLimits.minimum);
                 return true;
             }
-            else if (currentPseudoRotation > DriveLimits.maximum)
+            else if (currentPseudoRotation > DriveLimits.maximum + TargetValueReachedThreshold)
             {
                 GetDriveTransform().localRotation = Quaternion.Euler(-AxisDirection * DriveLimits.maximum);
                 return true;
             }
+
             return false;
         }
 
@@ -189,7 +183,7 @@
         /// <returns>The velocity to drive the control automatically with.</returns>
         protected virtual float CalculateAutoDriveVelocity()
         {
-            return (facade.MoveToTargetValue && !currentPseudoRotation.ApproxEquals(ActualTargetAngle, targetValueReachedThreshold) ? facade.DriveSpeed : 0f) * CalculateDirectionMultiplier();
+            return (Facade.MoveToTargetValue && !currentPseudoRotation.ApproxEquals(ActualTargetAngle, TargetValueReachedThreshold) ? Facade.DriveSpeed : 0f) * CalculateDirectionMultiplier();
         }
 
         /// <summary>
@@ -213,7 +207,7 @@
         /// <param name="driveSpeed">The speed the drive is automatically rotating at.</param>
         protected virtual void MatchActualTargetAngle(float driveSpeed)
         {
-            if (facade.MoveToTargetValue && driveSpeed.ApproxEquals(0f))
+            if (Facade.MoveToTargetValue && driveSpeed.ApproxEquals(0f))
             {
                 GetDriveTransform().localRotation = Quaternion.Euler(-AxisDirection * ActualTargetAngle);
             }

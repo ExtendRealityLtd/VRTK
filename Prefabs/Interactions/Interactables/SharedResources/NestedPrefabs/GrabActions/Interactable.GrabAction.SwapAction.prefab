@@ -459,11 +459,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbaf3558ca247b54c95c270c714485be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputActiveCollisionConsumer: {fileID: 8786168156367651281}
-  _inputGrabReceived: {fileID: 6917483306284153870}
-  _inputUngrabReceived: {fileID: 7453781720890572030}
-  _inputGrabSetup: {fileID: 8896760944068915709}
-  _inputUngrabReset: {fileID: 7270720495710619773}
+  inputActiveCollisionConsumer: {fileID: 8786168156367651281}
+  inputGrabReceived: {fileID: 6917483306284153870}
+  inputUngrabReceived: {fileID: 7453781720890572030}
+  inputGrabSetup: {fileID: 8896760944068915709}
+  inputUngrabReset: {fileID: 7270720495710619773}
 --- !u!1 &6580330336702185850
 GameObject:
   m_ObjectHideFlags: 0

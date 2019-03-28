@@ -3,10 +3,14 @@
     using UnityEngine;
     using UnityEngine.Events;
     using System.Collections.Generic;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.MemberChangeMethod;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Follow;
     using Zinnia.Tracking.Velocity;
     using Zinnia.Tracking.CameraRig;
+    using Zinnia.Tracking.CameraRig.Collection;
 
     /// <summary>
     /// The public interface into the Tracked Alias Prefab.
@@ -17,8 +21,9 @@
         /// <summary>
         /// The associated CameraRigs to track.
         /// </summary>
-        [Header("Tracked Alias Settings"), Tooltip("The associated CameraRigs to track.")]
-        public List<LinkedAliasAssociationCollection> cameraRigs = new List<LinkedAliasAssociationCollection>();
+        [Serialized]
+        [field: Header("Tracked Alias Settings"), DocumentedByXml]
+        public LinkedAliasAssociationCollectionObservableList CameraRigs { get; set; }
         #endregion
 
         #region Tracking Begun Events
@@ -37,158 +42,47 @@
         public UnityEvent RightControllerTrackingBegun = new UnityEvent();
         #endregion
 
-        #region Internal Settings
+        #region Reference Settings
         /// <summary>
         /// The linked Internal Setup.
         /// </summary>
-        [Header("Internal Settings"), Tooltip("The linked Internal Setup."), InternalSetting, SerializeField]
-        protected TrackedAliasInternalSetup internalSetup;
+        [Serialized]
+        [field: Header("Reference Settings"), DocumentedByXml, Restricted]
+        public TrackedAliasConfigurator Configuration { get; protected set; }
         #endregion
 
         /// <summary>
         /// Retrieves the active PlayArea that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActivePlayArea
-        {
-            get
-            {
-                foreach (GameObject playArea in PlayAreas)
-                {
-                    if (playArea.gameObject.activeInHierarchy)
-                    {
-                        return playArea;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public GameObject ActivePlayArea => GetFirstActiveGameObject(PlayAreas);
         /// <summary>
         /// Retrieves the active Headset that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActiveHeadset
-        {
-            get
-            {
-                foreach (GameObject headset in Headsets)
-                {
-                    if (headset.gameObject.activeInHierarchy)
-                    {
-                        return headset;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public GameObject ActiveHeadset => GetFirstActiveGameObject(Headsets);
         /// <summary>
         /// Retrieves the active Headset Camera that the TrackedAlias is using.
         /// </summary>
-        public Camera ActiveHeadsetCamera
-        {
-            get
-            {
-                foreach (Camera headsetCamera in HeadsetCameras)
-                {
-                    if (headsetCamera.gameObject.activeInHierarchy)
-                    {
-                        return headsetCamera;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public Camera ActiveHeadsetCamera => GetFirstActiveCamera(HeadsetCameras);
         /// <summary>
         /// Retrieves the active Headset Velocity Tracker that the TrackedAlias is using.
         /// </summary>
-        public VelocityTracker ActiveHeadsetVelocity
-        {
-            get
-            {
-                foreach (VelocityTracker headsetVelocityTracker in HeadsetVelocityTrackers)
-                {
-                    if (headsetVelocityTracker.gameObject.activeInHierarchy)
-                    {
-                        return headsetVelocityTracker;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public VelocityTracker ActiveHeadsetVelocity => GetFirstActiveVelocityTracker(HeadsetVelocityTrackers);
         /// <summary>
         /// Retrieves the active Left Controller that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActiveLeftController
-        {
-            get
-            {
-                foreach (GameObject leftController in LeftControllers)
-                {
-                    if (leftController.gameObject.activeInHierarchy)
-                    {
-                        return leftController;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public GameObject ActiveLeftController => GetFirstActiveGameObject(LeftControllers);
         /// <summary>
         /// Retrieves the active Left Controller Velocity Tracker that the TrackedAlias is using.
         /// </summary>
-        public VelocityTracker ActiveLeftControllerVelocity
-        {
-            get
-            {
-                foreach (VelocityTracker leftControllerVelocityTracker in LeftControllerVelocityTrackers)
-                {
-                    if (leftControllerVelocityTracker.gameObject.activeInHierarchy)
-                    {
-                        return leftControllerVelocityTracker;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public VelocityTracker ActiveLeftControllerVelocity => GetFirstActiveVelocityTracker(LeftControllerVelocityTrackers);
         /// <summary>
         /// Retrieves the active Right Controller that the TrackedAlias is using.
         /// </summary>
-        public GameObject ActiveRightController
-        {
-            get
-            {
-                foreach (GameObject rightController in RightControllers)
-                {
-                    if (rightController.gameObject.activeInHierarchy)
-                    {
-                        return rightController;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public GameObject ActiveRightController => GetFirstActiveGameObject(RightControllers);
         /// <summary>
         /// Retrieves the active Right Controller Velocity Tracker that the TrackedAlias is using.
         /// </summary>
-        public VelocityTracker ActiveRightControllerVelocity
-        {
-            get
-            {
-                foreach (VelocityTracker rightControllerVelocityTracker in RightControllerVelocityTrackers)
-                {
-                    if (rightControllerVelocityTracker.gameObject.activeInHierarchy)
-                    {
-                        return rightControllerVelocityTracker;
-                    }
-                }
-
-                return null;
-            }
-        }
+        public VelocityTracker ActiveRightControllerVelocity => GetFirstActiveVelocityTracker(RightControllerVelocityTrackers);
 
         /// <summary>
         /// Retrieves all of the linked CameraRig PlayAreas.
@@ -197,9 +91,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    GameObject playArea = cameraRig.playArea;
+                    GameObject playArea = cameraRig.PlayArea;
                     if (playArea != null)
                     {
                         yield return playArea;
@@ -214,9 +108,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    GameObject headset = cameraRig.headset;
+                    GameObject headset = cameraRig.Headset;
                     if (headset != null)
                     {
                         yield return headset;
@@ -231,9 +125,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    Camera headsetCamera = cameraRig.headsetCamera;
+                    Camera headsetCamera = cameraRig.HeadsetCamera;
                     if (headsetCamera != null)
                     {
                         yield return headsetCamera;
@@ -248,9 +142,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    VelocityTracker headsetVelocityTracker = cameraRig.headsetVelocityTracker;
+                    VelocityTracker headsetVelocityTracker = cameraRig.HeadsetVelocityTracker;
                     if (headsetVelocityTracker != null)
                     {
                         yield return headsetVelocityTracker;
@@ -265,9 +159,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    GameObject leftController = cameraRig.leftController;
+                    GameObject leftController = cameraRig.LeftController;
                     if (leftController != null)
                     {
                         yield return leftController;
@@ -282,9 +176,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    GameObject rightController = cameraRig.rightController;
+                    GameObject rightController = cameraRig.RightController;
                     if (rightController != null)
                     {
                         yield return rightController;
@@ -299,9 +193,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    VelocityTracker leftControllerVelocityTracker = cameraRig.leftControllerVelocityTracker;
+                    VelocityTracker leftControllerVelocityTracker = cameraRig.LeftControllerVelocityTracker;
                     if (leftControllerVelocityTracker != null)
                     {
                         yield return leftControllerVelocityTracker;
@@ -316,9 +210,9 @@
         {
             get
             {
-                foreach (LinkedAliasAssociationCollection cameraRig in cameraRigs)
+                foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
-                    VelocityTracker rightControllerVelocityTracker = cameraRig.rightControllerVelocityTracker;
+                    VelocityTracker rightControllerVelocityTracker = cameraRig.RightControllerVelocityTracker;
                     if (rightControllerVelocityTracker != null)
                     {
                         yield return rightControllerVelocityTracker;
@@ -329,35 +223,141 @@
         /// <summary>
         /// The alias follower for the PlayArea.
         /// </summary>
-        public ObjectFollower PlayAreaAlias => internalSetup.PlayArea;
+        public ObjectFollower PlayAreaAlias => Configuration.PlayArea;
         /// <summary>
         /// The alias follower for the Headset.
         /// </summary>
-        public ObjectFollower HeadsetAlias => internalSetup.Headset;
+        public ObjectFollower HeadsetAlias => Configuration.Headset;
         /// <summary>
         /// The alias follower for the LeftController.
         /// </summary>
-        public ObjectFollower LeftControllerAlias => internalSetup.LeftController;
+        public ObjectFollower LeftControllerAlias => Configuration.LeftController;
         /// <summary>
         /// The alias follower for the RightController.
         /// </summary>
-        public ObjectFollower RightControllerAlias => internalSetup.RightController;
+        public ObjectFollower RightControllerAlias => Configuration.RightController;
 
-        /// <summary>
-        /// Refreshes any changes made to the <see cref="cameraRigs"/> collection.
-        /// </summary>
-        public virtual void RefreshCameraRigsConfiguration()
+        protected virtual void OnEnable()
         {
-            internalSetup.SetUpCameraRigsConfiguration();
+            SubscribeToCameraRigsEvents();
         }
 
-        protected virtual void OnValidate()
+        protected virtual void OnDisable()
         {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            UnsubscribeFromCameraRigsEvents();
+        }
 
+        /// <summary>
+        /// Subscribes to the events on the current <see cref="CameraRigs"/> collection.
+        /// </summary>
+        protected virtual void SubscribeToCameraRigsEvents()
+        {
+            CameraRigs.Added.AddListener(OnCameraRigAdded);
+            CameraRigs.Removed.AddListener(OnCameraRigRemoved);
+        }
+
+        /// <summary>
+        /// Unsubscribes from the events on the current <see cref="CameraRigs"/> collection.
+        /// </summary>
+        protected virtual void UnsubscribeFromCameraRigsEvents()
+        {
+            CameraRigs.Added.RemoveListener(OnCameraRigAdded);
+            CameraRigs.Removed.RemoveListener(OnCameraRigRemoved);
+        }
+
+        /// <summary>
+        /// Occurs when an item is added to the <see cref="CameraRigs"/> collection.
+        /// </summary>
+        /// <param name="cameraRig">The added element.</param>
+        protected virtual void OnCameraRigAdded(LinkedAliasAssociationCollection cameraRig)
+        {
+            RefreshCameraRigsConfiguration();
+        }
+
+        /// <summary>
+        /// Occurs when an item is removed from the <see cref="CameraRigs"/> collection.
+        /// </summary>
+        /// <param name="cameraRig">The removed element.</param>
+        protected virtual void OnCameraRigRemoved(LinkedAliasAssociationCollection cameraRig)
+        {
+            RefreshCameraRigsConfiguration();
+        }
+
+        /// <summary>
+        /// Refreshes any changes made to the <see cref="CameraRigs"/> collection.
+        /// </summary>
+        protected virtual void RefreshCameraRigsConfiguration()
+        {
+            Configuration.SetUpCameraRigsConfiguration();
+        }
+
+        /// <summary>
+        /// Gets the first active <see cref="GameObject"/> found in the given collection.
+        /// </summary>
+        /// <param name="collection">The collection to look for the first active in.</param>
+        /// <returns>The found first active element in the collection.</returns>
+        protected virtual GameObject GetFirstActiveGameObject(IEnumerable<GameObject> collection)
+        {
+            foreach (GameObject element in collection)
+            {
+                if (element.gameObject.activeInHierarchy)
+                {
+                    return element;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the first active <see cref="Camera"/> found in the given collection.
+        /// </summary>
+        /// <param name="collection">The collection to look for the first active in.</param>
+        /// <returns>The found first active element in the collection.</returns>
+        protected virtual Camera GetFirstActiveCamera(IEnumerable<Camera> collection)
+        {
+            foreach (Camera element in collection)
+            {
+                if (element.gameObject.activeInHierarchy)
+                {
+                    return element;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the first active <see cref="VelocityTracker"/> found in the given collection.
+        /// </summary>
+        /// <param name="collection">The collection to look for the first active in.</param>
+        /// <returns>The found first active element in the collection.</returns>
+        protected virtual VelocityTracker GetFirstActiveVelocityTracker(IEnumerable<VelocityTracker> collection)
+        {
+            foreach (VelocityTracker element in collection)
+            {
+                if (element.gameObject.activeInHierarchy)
+                {
+                    return element;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Called before <see cref="CameraRigs"/> has been changed.
+        /// </summary>
+        [CalledBeforeChangeOf(nameof(CameraRigs))]
+        protected virtual void OnBeforeCameraRigsChange()
+        {
+            UnsubscribeFromCameraRigsEvents();
+        }
+
+        /// <summary>
+        /// Called after <see cref="CameraRigs"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(CameraRigs))]
+        protected virtual void OnAfterCameraRigsChange()
+        {
+            SubscribeToCameraRigsEvents();
             RefreshCameraRigsConfiguration();
         }
     }

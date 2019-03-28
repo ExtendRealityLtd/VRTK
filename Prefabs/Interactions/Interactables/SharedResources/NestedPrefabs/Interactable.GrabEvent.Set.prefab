@@ -108,8 +108,8 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8460288292371204238}
-        m_MethodName: AddElement
+      - m_Target: {fileID: 3920447426581158059}
+        m_MethodName: AddUnique
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -610,8 +610,8 @@ MonoBehaviour:
   Emitted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8460288292371204238}
-        m_MethodName: RemoveElement
+      - m_Target: {fileID: 3920447426581158059}
+        m_MethodName: DoRemove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -893,7 +893,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5512487357561444365}
-  - component: {fileID: 8460288292371204238}
+  - component: {fileID: 3920447426581158059}
   m_Layer: 0
   m_Name: EventSet
   m_TagString: Untagged
@@ -915,7 +915,7 @@ Transform:
   m_Father: {fileID: 4152683519229203631}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8460288292371204238
+--- !u!114 &3920447426581158059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -924,36 +924,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 8566820493531761153}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e38906e03882d44bea5c07f798a277, type: 3}
+  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ElementFound:
+  Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  ElementNotFound:
+  NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecameEmpty:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1224392515471913227}
-        m_MethodName: Receive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  BecamePopulated:
+  Populated:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8493113471025686915}
@@ -967,8 +951,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableSet+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1224392515471913227}
+        m_MethodName: Receive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &8745344863494772342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,12 +1027,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a45fec25ad4a8f4f84ed894c62ccbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputGrabReceived: {fileID: 1783297962633656972}
-  _inputUngrabReceived: {fileID: 5436559809717653457}
-  _outputPrimaryGrabAction: {fileID: 8487239000973997865}
-  _outputPrimaryGrabSetupOnSecondaryAction: {fileID: 2573731404022369290}
-  _outputPrimaryUngrabAction: {fileID: 3488953177630038837}
-  _outputPrimaryUngrabResetOnSecondaryAction: {fileID: 8219681996271932449}
-  _outputSecondaryGrabAction: {fileID: 2704966660703552617}
-  _outputSecondaryUngrabAction: {fileID: 4490643780171364178}
-  _eventSet: {fileID: 8460288292371204238}
+  inputGrabReceived: {fileID: 1783297962633656972}
+  inputUngrabReceived: {fileID: 5436559809717653457}
+  outputPrimaryGrabAction: {fileID: 8487239000973997865}
+  outputPrimaryGrabSetupOnSecondaryAction: {fileID: 2573731404022369290}
+  outputPrimaryUngrabAction: {fileID: 3488953177630038837}
+  outputPrimaryUngrabResetOnSecondaryAction: {fileID: 8219681996271932449}
+  outputSecondaryGrabAction: {fileID: 2704966660703552617}
+  outputSecondaryUngrabAction: {fileID: 4490643780171364178}
+  eventList: {fileID: 3920447426581158059}
