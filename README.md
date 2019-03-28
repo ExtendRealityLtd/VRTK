@@ -35,7 +35,7 @@ VRTK aims to make building spatial computing solutions in the [Unity] software f
 
 * Navigate to the project `Assets/` directory.
 * Git clone with required submodules into the `Assets/` directory:
-  * `git clone --recurse-submodules https://github.com/thestonefox/VRTK.git`.
+  * `git clone --recurse-submodules https://github.com/ExtendRealityLtd/VRTK.git`.
   * `git submodule init && git submodule update`.
 
 ### Running the example scene
