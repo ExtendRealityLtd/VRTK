@@ -1,0 +1,21 @@
+{
+    "name": "VRTK.Samples.Farm.Runtime",
+    "references": [
+        "Zinnia.Runtime",
+        "VRTK.Prefabs.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Malimbe.BehaviourStateRequirementMethod.dll",
+        "Malimbe.MemberChangeMethod.dll",
+        "Malimbe.MemberClearanceMethod.dll",
+        "Malimbe.PropertySerializationAttribute.dll",
+        "Malimbe.XmlDocumentationAttribute.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

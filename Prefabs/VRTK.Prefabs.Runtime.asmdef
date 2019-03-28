@@ -1,0 +1,20 @@
+{
+    "name": "VRTK.Prefabs.Runtime",
+    "references": [
+        "Zinnia.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Malimbe.BehaviourStateRequirementMethod.dll",
+        "Malimbe.MemberChangeMethod.dll",
+        "Malimbe.MemberClearanceMethod.dll",
+        "Malimbe.PropertySerializationAttribute.dll",
+        "Malimbe.XmlDocumentationAttribute.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
