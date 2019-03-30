@@ -4,7 +4,7 @@
 > A productive toolkit for rapidly building spatial computing solutions in the Unity software.
 
 [![Slack][Slack-Badge]][Slack]
-[![Documentation][Academy-Badge]][Academy]
+[![Documentation][Academy-Badge]][VRTK.Academy]
 [![Videos][Videos-Badge]][Videos]
 [![Twitter][Twitter-Badge]][Twitter]
 [![Waffle][Waffle-Badge]][Waffle]
@@ -16,6 +16,10 @@ VRTK aims to make building spatial computing solutions in the [Unity] software f
 > **Requires** the Unity software version 2018.3 (or above).
 
 ## Getting Started
+
+### Documentation
+
+Visit the [VRTK.Academy] for a collection of educational content to help you get the most out of building spatial computing solutions with VRTK.
 
 ### Setting up the project
 
@@ -35,8 +39,10 @@ VRTK aims to make building spatial computing solutions in the [Unity] software f
 
 * Navigate to the project `Assets/` directory.
 * Git clone with required submodules into the `Assets/` directory:
-  * `git clone --recurse-submodules https://github.com/ExtendRealityLtd/VRTK.git`.
-  * `git submodule init && git submodule update`.
+  * `git clone --recurse-submodules https://github.com/ExtendRealityLtd/VRTK.git`
+  * change to the newly cloned directory: `cd VRTK/`
+  * `git submodule init && git submodule update`
+* The Unity software will now import and compile the new files.
 
 ### Running the example scene
 
@@ -78,7 +84,7 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Waffle-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
 
 [Slack]: http://invite.vrtk.io
-[Academy]: https://academy.vrtk.io
+[VRTK.Academy]: https://academy.vrtk.io
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
 [Waffle]: http://tracker.vrtk.io
