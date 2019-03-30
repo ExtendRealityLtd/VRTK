@@ -4,7 +4,6 @@
     using Malimbe.MemberChangeMethod;
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
-    using Zinnia.Rule;
     using Zinnia.Event;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
