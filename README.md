@@ -13,7 +13,7 @@
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
 
-> **Requires** the Unity software version 2018.3 (or above).
+> **Requires** the Unity software version 2018.3.10f1 (or above).
 
 ## Getting Started
 
