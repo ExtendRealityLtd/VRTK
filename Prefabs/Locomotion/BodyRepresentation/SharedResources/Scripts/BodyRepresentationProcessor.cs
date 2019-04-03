@@ -3,17 +3,19 @@
     using UnityEngine;
     using System;
     using System.Collections.Generic;
-    using Malimbe.MemberChangeMethod;
-    using Malimbe.XmlDocumentationAttribute;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.BehaviourStateRequirementMethod;
-    using Zinnia.Process;
-    using Zinnia.Extension;
+    using Malimbe.MemberChangeMethod;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using Zinnia.Cast;
     using Zinnia.Data.Attribute;
-    using Zinnia.Tracking.Follow;
+    using Zinnia.Data.Type;
+    using Zinnia.Extension;
+    using Zinnia.Process;
     using Zinnia.Tracking.Collision;
-    using VRTK.Prefabs.Interactions.Interactors;
+    using Zinnia.Tracking.Follow;
     using VRTK.Prefabs.Interactions.Interactables;
+    using VRTK.Prefabs.Interactions.Interactors;
 
     /// <summary>
     /// Sets up the BodyRepresentation prefab based on the provided user settings and implements the logic to represent a body.
@@ -389,9 +391,9 @@
                 return true;
             }
 
-            Collider[] hitColliders = Physics.OverlapSphere(
-                Character.transform.position
-                + (Vector3.up * (Character.radius - Character.skinWidth - 0.001f)),
+            HeapAllocationFreeReadOnlyList<Collider> hitColliders = PhysicsCast.OverlapSphereAll(
+                null,
+                Character.transform.position + (Vector3.up * (Character.radius - Character.skinWidth - 0.001f)),
                 Character.radius,
                 1 << Character.gameObject.layer);
             foreach (Collider hitCollider in hitColliders)

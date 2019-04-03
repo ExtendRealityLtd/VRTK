@@ -78,11 +78,14 @@
         /// </summary>
         protected virtual void ConfigureTrackedAlias()
         {
-            if (TrackedAlias != null)
+            if (TrackedAlias == null)
             {
-                PlayAreaPosition.Target = PlayAreaPosition != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
-                PlayAreaResetter.Source = PlayAreaResetter != null ? TrackedAlias.PlayAreaAlias.gameObject : null;
+                return;
             }
+
+            GameObject playAreaObject = TrackedAlias.PlayAreaAlias.gameObject;
+            PlayAreaPosition.Target = PlayAreaPosition != null ? playAreaObject : null;
+            PlayAreaResetter.Source = PlayAreaResetter != null ? playAreaObject : null;
         }
 
         /// <summary>
