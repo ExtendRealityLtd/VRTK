@@ -51,7 +51,7 @@
 
         static InputAxisCreator()
         {
-            EditorApplication.update += ManageInputMappings;
+            EditorApplication.delayCall += ManageInputMappings;
         }
 
         public void OnGUI()
@@ -70,7 +70,7 @@
 
                 using (EditorGUI.ChangeCheckScope changeCheckScope = new EditorGUI.ChangeCheckScope())
                 {
-                    bool hideToggle = EditorPrefs.HasKey(hidePromptKey);
+                    bool hideToggle = EditorPrefs.HasKey(GetProjectKeyName());
 
                     hideToggle = GUILayout.Toggle(hideToggle, "Do not prompt again.");
                     GUILayout.FlexibleSpace();
@@ -91,11 +91,11 @@
                     {
                         if (hideToggle)
                         {
-                            EditorPrefs.SetBool(hidePromptKey, true);
+                            EditorPrefs.SetBool(GetProjectKeyName(), true);
                         }
                         else
                         {
-                            EditorPrefs.DeleteKey(hidePromptKey);
+                            EditorPrefs.DeleteKey(GetProjectKeyName());
                         }
                     }
                 }
@@ -108,13 +108,13 @@
             {
                 ShowWindow();
             }
-            else if (EditorPrefs.HasKey(hidePromptKey) || AxisDefined(rightHorizontal.name))
+            else if (EditorPrefs.HasKey(GetProjectKeyName()) || AxisDefined(rightHorizontal.name))
             {
-                EditorApplication.update -= ManageInputMappings;
+                EditorApplication.delayCall -= ManageInputMappings;
                 return;
             }
 
-            EditorApplication.update -= ManageInputMappings;
+            EditorApplication.delayCall -= ManageInputMappings;
 
             ShowWindow();
             isManualCheck = false;
@@ -192,6 +192,11 @@
             serializedObject.ApplyModifiedProperties();
         }
 
+        private static string GetProjectKeyName()
+        {
+            return hidePromptKey + AssetDatabase.AssetPathToGUID("Assets/VRTK");
+        }
+
         private static void ShowWindow()
         {
             if (promptWindow != null)
@@ -209,7 +214,7 @@
         private static void CheckManually()
         {
             isManualCheck = true;
-            EditorApplication.update += ManageInputMappings;
+            EditorApplication.delayCall += ManageInputMappings;
         }
     }
 }
