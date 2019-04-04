@@ -12,6 +12,7 @@
     using Zinnia.Data.Attribute;
     using Zinnia.Data.Collection;
     using Zinnia.Tracking.Velocity;
+    using Zinnia.Tracking.Collision;
     using Zinnia.Tracking.Collision.Active;
     using VRTK.Prefabs.Interactions.Interactables;
 
@@ -246,6 +247,10 @@
         protected virtual ActiveCollisionsContainer.EventData CreateActiveCollisionsEventData(GameObject forwardSource, Collision collision = null, Collider collider = null)
         {
             collider = collider == null ? forwardSource.GetComponentInChildren<Collider>() : collider;
+            if (activeCollisionsEventData.ActiveCollisions.Count == 0)
+            {
+                activeCollisionsEventData.ActiveCollisions.Add(new CollisionNotifier.EventData());
+            }
             activeCollisionsEventData.ActiveCollisions[0].Set(forwardSource.TryGetComponent<Component>(), collider.isTrigger, collision, collider);
             return activeCollisionsEventData;
         }
