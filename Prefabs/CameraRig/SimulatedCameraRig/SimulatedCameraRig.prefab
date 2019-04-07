@@ -260,6 +260,7 @@ MonoBehaviour:
     xState: 1
     yState: 1
     zState: 1
+  origin: {fileID: 0}
 --- !u!114 &114208761435017372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,7 +279,7 @@ MonoBehaviour:
     xState: 1
     yState: 1
     zState: 1
-  rotationOffset: {fileID: 1643489474284420}
+  facingDirection: {fileID: 1643489474284420}
 --- !u!114 &114150379920675320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,7 +1126,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targets: {fileID: 2683933662030746648}
   targetState: 1
-  currentIndex: 0
 --- !u!114 &2683933662030746648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1874,6 +1874,7 @@ MonoBehaviour:
     xState: 1
     yState: 1
     zState: 1
+  origin: {fileID: 0}
 --- !u!114 &114391431457905644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1892,7 +1893,7 @@ MonoBehaviour:
     xState: 1
     yState: 1
     zState: 1
-  rotationOffset: {fileID: 1581495199198194}
+  facingDirection: {fileID: 1581495199198194}
 --- !u!114 &114218838133236254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3203,6 +3204,7 @@ MonoBehaviour:
     xState: 1
     yState: 1
     zState: 1
+  origin: {fileID: 0}
 --- !u!114 &114447943956170304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3221,7 +3223,7 @@ MonoBehaviour:
     xState: 1
     yState: 0
     zState: 1
-  rotationOffset: {fileID: 1143215074586592}
+  facingDirection: {fileID: 1143215074586592}
 --- !u!114 &114187299305708370
 MonoBehaviour:
   m_ObjectHideFlags: 0
