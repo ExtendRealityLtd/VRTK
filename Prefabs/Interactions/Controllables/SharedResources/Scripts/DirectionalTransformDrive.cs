@@ -4,6 +4,7 @@
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
     using Malimbe.BehaviourStateRequirementMethod;
+    using Zinnia.Extension;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Modification;
@@ -62,11 +63,14 @@
         /// <inheritdoc />
         public override void ProcessDriveSpeed(float driveSpeed, bool moveToTargetValue)
         {
-            PropertyApplier.TransitionDuration = 1f / driveSpeed;
+            PropertyApplier.TransitionDuration = driveSpeed.ApproxEquals(0f) ? 0f : 1f / driveSpeed;
             PropertyApplier.enabled = moveToTargetValue;
             if (PropertyApplier.enabled)
             {
-                Interactable.ConsumerRigidbody.velocity = Vector3.zero;
+                if (Interactable.ConsumerRigidbody != null)
+                {
+                    Interactable.ConsumerRigidbody.velocity = Vector3.zero;
+                }
                 PropertyApplier.Apply();
             }
         }
@@ -80,8 +84,9 @@
         /// <inheritdoc />
         protected override void SetDriveTargetValue(Vector3 targetValue)
         {
+            autoDrivePosition.UseLocalValues = true;
             autoDrivePosition.Transform = GetDriveTransform();
-            autoDrivePosition.PositionOverride = autoDrivePosition.Transform.TransformPoint(targetValue - autoDrivePosition.Transform.localPosition);
+            autoDrivePosition.PositionOverride = targetValue;
             PropertyApplier.Source = autoDrivePosition;
             PropertyApplier.Apply();
         }

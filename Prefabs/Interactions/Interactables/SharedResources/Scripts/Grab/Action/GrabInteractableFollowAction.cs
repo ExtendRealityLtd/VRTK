@@ -243,10 +243,10 @@
         /// <inheritdoc />
         protected override void OnAfterGrabSetupChange()
         {
-            IsConsumerRigidbodyKinematic = GrabSetup.Facade.ConsumerRigidbody.isKinematic;
+            IsConsumerRigidbodyKinematic = GrabSetup.Facade.ConsumerRigidbody != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Clear());
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Add(GrabSetup.Facade.ConsumerContainer));
-            VelocityApplier.Target = GrabSetup.Facade.ConsumerRigidbody;
+            VelocityApplier.Target = GrabSetup.Facade.ConsumerRigidbody != null ? GrabSetup.Facade.ConsumerRigidbody : null;
         }
 
         /// <summary>
@@ -283,6 +283,11 @@
         [CalledAfterChangeOf(nameof(IsConsumerRigidbodyKinematic))]
         protected virtual void OnAfterConsumerRigidbodyIsKinematicChange()
         {
+            if (GrabSetup.Facade.ConsumerRigidbody == null)
+            {
+                return;
+            }
+
             GrabSetup.Facade.ConsumerRigidbody.isKinematic = IsConsumerRigidbodyKinematic;
         }
     }
