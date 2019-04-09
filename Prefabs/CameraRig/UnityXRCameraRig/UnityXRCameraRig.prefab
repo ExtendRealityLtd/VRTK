@@ -49,7 +49,7 @@ MonoBehaviour:
   m_PoseProviderComponent: {fileID: 0}
   m_TrackingType: 0
   m_UpdateType: 0
-  m_UseRelativeTransform: 1
+  m_UseRelativeTransform: 0
 --- !u!114 &114583763361574438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_PoseProviderComponent: {fileID: 0}
   m_TrackingType: 0
   m_UpdateType: 0
-  m_UseRelativeTransform: 1
+  m_UseRelativeTransform: 0
 --- !u!114 &114080674084496316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,8 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3f71c65a21f41e4da4cae476b4e957c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trackingSpaceType: 1
-  _lockPhysicsUpdateRateToRenderFrequency: 1
+  trackingSpaceType: 1
+  lockPhysicsUpdateRateToRenderFrequency: 1
 --- !u!114 &114703236085601920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,11 +300,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Device: 0
-  m_PoseSource: 3
+  m_PoseSource: 2
   m_PoseProviderComponent: {fileID: 0}
   m_TrackingType: 0
   m_UpdateType: 0
-  m_UseRelativeTransform: 1
+  m_UseRelativeTransform: 0
 --- !u!114 &114247250152654678
 MonoBehaviour:
   m_ObjectHideFlags: 0
