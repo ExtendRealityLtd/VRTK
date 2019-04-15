@@ -6,7 +6,8 @@
     using Zinnia.Action;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Operation;
+    using Zinnia.Data.Operation.Mutation;
+    using Zinnia.Data.Operation.Extraction;
 
     /// <summary>
     /// Sets up the AxisRotator prefab based on the provided settings and implements the logic to allow rotating an object based on axis data.

@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
-    using Zinnia.Event;
     using Zinnia.Extension;
+    using Zinnia.Event.Proxy;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Collection;
+    using Zinnia.Data.Collection.List;
     using Zinnia.Tracking.Collision;
     using Zinnia.Tracking.Collision.Active;
-    using Zinnia.Tracking.Collision.Active.Operation;
+    using Zinnia.Tracking.Collision.Active.Operation.Extraction;
     using VRTK.Prefabs.Interactions.Interactors;
 
     public class TouchInteractableConfigurator : MonoBehaviour

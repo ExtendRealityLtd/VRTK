@@ -2,14 +2,14 @@
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Collection;
-    using Zinnia.Data.Operation;
-    using Zinnia.Data.Type.Transformation;
+    using Zinnia.Data.Collection.List;
     using Zinnia.Tracking.Follow;
     using Zinnia.Tracking.Velocity;
+    using Zinnia.Data.Operation.Mutation;
+    using Zinnia.Data.Type.Transformation.Aggregation;
     using VRTK.Prefabs.Locomotion.BodyRepresentation;
 
     /// <summary>

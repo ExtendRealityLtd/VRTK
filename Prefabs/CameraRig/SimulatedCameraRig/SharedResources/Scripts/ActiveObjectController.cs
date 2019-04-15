@@ -2,11 +2,11 @@
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using Malimbe.PropertySerializationAttribute;
-    using Malimbe.XmlDocumentationAttribute;
     using Malimbe.MemberChangeMethod;
+    using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Extension;
-    using Zinnia.Data.Type.Transformation;
+    using Zinnia.Data.Type.Transformation.Aggregation;
     using VRTK.Prefabs.CameraRig.SimulatedCameraRig.Input;
 
     /// <summary>

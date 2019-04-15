@@ -4,8 +4,9 @@
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Operation;
-    using Zinnia.Tracking.CameraRig;
+    using Zinnia.Data.Operation.Mutation;
+    using Zinnia.Data.Operation.Extraction;
+    using Zinnia.Tracking.CameraRig.Operation.Extraction;
 
     /// <summary>
     /// Sets up the PlayAreaRepresentation Prefab based on the provided user settings.

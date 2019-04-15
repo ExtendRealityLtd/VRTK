@@ -3,7 +3,7 @@
     using UnityEngine;
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
-    using Zinnia.Event;
+    using Zinnia.Event.Proxy;
     using Zinnia.Data.Attribute;
 
     /// <summary>

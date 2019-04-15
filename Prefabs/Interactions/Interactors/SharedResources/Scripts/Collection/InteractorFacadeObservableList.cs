@@ -3,7 +3,7 @@
     using UnityEngine.Events;
     using System;
     using System.Collections.Generic;
-    using Zinnia.Data.Collection;
+    using Zinnia.Data.Collection.List;
     using VRTK.Prefabs.Interactions.Interactors;
 
     /// <summary>

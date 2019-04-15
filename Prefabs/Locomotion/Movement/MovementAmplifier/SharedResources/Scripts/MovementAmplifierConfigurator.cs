@@ -1,13 +1,13 @@
 ﻿namespace VRTK.Prefabs.Locomotion.Movement.MovementAmplifier
 {
     using UnityEngine;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Extension;
     using Zinnia.Tracking.Follow;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Operation;
-    using Zinnia.Data.Type.Transformation;
+    using Zinnia.Data.Operation.Mutation;
+    using Zinnia.Data.Type.Transformation.Aggregation;
 
     /// <summary>
     /// Sets up the MovementAmplifier prefab based on the provided user settings.

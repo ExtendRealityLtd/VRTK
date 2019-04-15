@@ -10,7 +10,7 @@
     using Zinnia.Utility;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Collection;
+    using Zinnia.Data.Collection.List;
     using Zinnia.Tracking.Velocity;
     using Zinnia.Tracking.Collision;
     using Zinnia.Tracking.Collision.Active;

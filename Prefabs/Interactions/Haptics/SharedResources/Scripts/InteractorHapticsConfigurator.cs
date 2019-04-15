@@ -4,9 +4,9 @@
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
     using Zinnia.Rule;
-    using Zinnia.Event;
     using Zinnia.Haptics;
     using Zinnia.Extension;
+    using Zinnia.Event.Proxy;
     using Zinnia.Data.Attribute;
 
     public class InteractorHapticsConfigurator : MonoBehaviour

@@ -4,8 +4,9 @@
     using Malimbe.MemberChangeMethod;
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
-    using Zinnia.Event;
+    using Zinnia.Event.Proxy;
     using Zinnia.Data.Attribute;
+    using Zinnia.Tracking.Collision.Active.Event.Proxy;
 
     /// <summary>
     /// Describes an action to perform when a Grab Process is executed.
