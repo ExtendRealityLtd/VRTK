@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emittedTypes: -1
   forwardingSourceValidity:
-    field: {fileID: 0}
+    field: {fileID: 2549507546355436025}
   CollisionStarted:
     m_PersistentCalls:
       m_Calls:
@@ -312,16 +312,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3924256656882590479}
     m_Modifications:
-    - target: {fileID: 6024666130437826845, guid: 2cbd94cbb01df384eb07028e0f09c402,
-        type: 3}
-      propertyPath: m_Name
-      value: Interaction.Grabbing
-      objectReference: {fileID: 0}
-    - target: {fileID: 4568962547894877131, guid: 2cbd94cbb01df384eb07028e0f09c402,
-        type: 3}
-      propertyPath: facade
-      value: 
-      objectReference: {fileID: 5839046843648530548}
     - target: {fileID: 2635737225441082409, guid: 2cbd94cbb01df384eb07028e0f09c402,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -376,6 +366,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4568962547894877131, guid: 2cbd94cbb01df384eb07028e0f09c402,
+        type: 3}
+      propertyPath: facade
+      value: 
+      objectReference: {fileID: 5839046843648530548}
+    - target: {fileID: 6024666130437826845, guid: 2cbd94cbb01df384eb07028e0f09c402,
+        type: 3}
+      propertyPath: m_Name
+      value: Interaction.Grabbing
       objectReference: {fileID: 0}
     - target: {fileID: 2220712448758848924, guid: 2cbd94cbb01df384eb07028e0f09c402,
         type: 3}
@@ -432,16 +432,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3924256656882590479}
     m_Modifications:
-    - target: {fileID: 3916300416617427846, guid: 734c79b0fd2a7ec46932982b9fa8b279,
-        type: 3}
-      propertyPath: m_Name
-      value: Interaction.Touching
-      objectReference: {fileID: 0}
-    - target: {fileID: 3916300416617427845, guid: 734c79b0fd2a7ec46932982b9fa8b279,
-        type: 3}
-      propertyPath: facade
-      value: 
-      objectReference: {fileID: 5839046843648530548}
     - target: {fileID: 3916300416617427844, guid: 734c79b0fd2a7ec46932982b9fa8b279,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -496,6 +486,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3916300416617427845, guid: 734c79b0fd2a7ec46932982b9fa8b279,
+        type: 3}
+      propertyPath: facade
+      value: 
+      objectReference: {fileID: 5839046843648530548}
+    - target: {fileID: 3916300416617427846, guid: 734c79b0fd2a7ec46932982b9fa8b279,
+        type: 3}
+      propertyPath: m_Name
+      value: Interaction.Touching
       objectReference: {fileID: 0}
     - target: {fileID: 3916300417121912082, guid: 734c79b0fd2a7ec46932982b9fa8b279,
         type: 3}
@@ -562,5 +562,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 527a09295f3fc774ea0a2cf043470f65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2549507546355436025 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1352181034914718263, guid: 734c79b0fd2a7ec46932982b9fa8b279,
+    type: 3}
+  m_PrefabInstance: {fileID: 3576494617055275982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53fca345d7764be0a2f6ce49a7d64b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
