@@ -35,6 +35,14 @@ Visit the [VRTK.Academy] for a collection of educational content to help you get
   * In the `Player` settings panel expand `Other Settings`.
   * Ensure the `Scripting Runtime Version` is set to `.NET 4.x Equivalent`.
 
+> Note: Unity 2019.1 requires additional project setup before importing VRTK.
+
+* Download and install the `XR Legacy Input Helpers` from the Unity Package Manager.
+  * In the Unity software select `Main Menu -> Window -> Package Manager` to open the `Package Manager` window.
+  * Select `XR Legacy Input Helpers` from the `Packages` tab in the `Package Manager` window.
+  * Click the `Install` button located in the bottom right of the `Package Manager` window.
+  * The `XR Legacy Input Helpers` package will now download and install into the project.
+
 ### Cloning the repo
 
 * Navigate to the project `Assets/` directory.
