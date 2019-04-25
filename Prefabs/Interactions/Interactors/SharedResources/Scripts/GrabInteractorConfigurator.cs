@@ -194,6 +194,10 @@
             InteractableFacade interactable = GrabbedObjects[0].TryGetComponent<InteractableFacade>(true, true);
             if (interactable.IsGrabTypeToggle)
             {
+                if (StartGrabbingPublisher.Payload.ActiveCollisions.Count == 0)
+                {
+                    StartGrabbingPublisher.SetActiveCollisions(CreateActiveCollisionsEventData(interactable.gameObject, null, null));
+                }
                 ProcessGrabAction(StartGrabbingPublisher, true);
             }
             ProcessGrabAction(StopGrabbingPublisher, false);
