@@ -1,12 +1,12 @@
 ﻿namespace VRTK.Prefabs.Helpers.TrackedCollider
 {
     using UnityEngine;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Operation;
     using Zinnia.Tracking.Follow;
+    using Zinnia.Data.Operation.Extraction;
 
     /// <summary>
     /// Sets up the TrackedCollider prefab based on the provided settings and implements the logic to follow the relevant source.

@@ -2,7 +2,7 @@
 {
     using UnityEngine.Events;
     using System;
-    using Zinnia.Event;
+    using Zinnia.Event.Proxy;
 
     /// <summary>
     /// Emits a UnityEvent with an <see cref="InteractableFacade"/> payload whenever the Receive method is called.

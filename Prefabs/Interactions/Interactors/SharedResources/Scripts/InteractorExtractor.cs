@@ -1,12 +1,12 @@
 ﻿namespace VRTK.Prefabs.Interactions.Interactors
 {
     using UnityEngine;
-    using Zinnia.Event;
+    using Zinnia.Data.Operation.Extraction;
 
     /// <summary>
     /// Extracts a <see cref="GameObject"/> relevant to the extraction method from an <see cref="InteractorFacade"/>.
     /// </summary>
-    public class InteractorExtractor : GameObjectEmitter
+    public class InteractorExtractor : GameObjectExtractor
     {
         /// <summary>
         /// Extracts the <see cref="GameObject"/> the <see cref="InteractorFacade"/> is residing on.

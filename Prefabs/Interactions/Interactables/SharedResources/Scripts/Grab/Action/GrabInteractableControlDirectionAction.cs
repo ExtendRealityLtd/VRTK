@@ -4,7 +4,7 @@
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Collection;
+    using Zinnia.Data.Collection.List;
     using Zinnia.Tracking.Modification;
 
     /// <summary>

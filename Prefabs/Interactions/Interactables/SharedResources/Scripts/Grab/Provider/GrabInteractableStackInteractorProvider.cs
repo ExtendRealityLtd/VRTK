@@ -2,10 +2,10 @@
 {
     using UnityEngine;
     using System.Collections.Generic;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.XmlDocumentationAttribute;
-    using Zinnia.Data.Collection;
+    using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
+    using Zinnia.Data.Collection.Stack;
     using VRTK.Prefabs.Interactions.Interactors;
 
     /// <summary>

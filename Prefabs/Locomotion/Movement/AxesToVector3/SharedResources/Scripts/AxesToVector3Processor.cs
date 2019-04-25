@@ -1,15 +1,15 @@
 ﻿namespace VRTK.Prefabs.Locomotion.Movement.AxesToVector3
 {
     using UnityEngine;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.XmlDocumentationAttribute;
+    using Malimbe.PropertySerializationAttribute;
     using Malimbe.BehaviourStateRequirementMethod;
     using Zinnia.Action;
     using Zinnia.Extension;
     using Zinnia.Process;
     using Zinnia.Process.Moment;
     using Zinnia.Data.Attribute;
-    using Zinnia.Data.Type.Transformation;
+    using Zinnia.Data.Type.Transformation.Aggregation;
 
     /// <summary>
     /// Sets up the AxisSlide prefab based on the provided settings and implements the logic to allow moving an object via input from two axes.

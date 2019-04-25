@@ -1,4 +1,4 @@
-﻿namespace VRTK.Prefabs.Interactions.Interactables
+﻿namespace VRTK.Prefabs.Interactions.Interactables.Climb
 {
     using UnityEngine;
     using Malimbe.XmlDocumentationAttribute;

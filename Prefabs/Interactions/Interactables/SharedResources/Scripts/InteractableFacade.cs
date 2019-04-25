@@ -138,6 +138,14 @@
         /// Determines if the grab type is set to toggle.
         /// </summary>
         public bool IsGrabTypeToggle => GrabConfiguration.IsGrabTypeToggle;
+        /// <summary>
+        /// Whether the Interactable is currently being touched by any valid Interactor.
+        /// </summary>
+        public bool IsTouched => TouchingInteractors.Count > 0;
+        /// <summary>
+        /// Whether the Interactable is currently being grabbed by any valid Interactor.
+        /// </summary>
+        public bool IsGrabbed => GrabbingInteractors.Count > 0;
 
         /// <summary>
         /// Attempt to grab the Interactable to the given <see cref="GameObject"/> that contains an Interactor.

@@ -2,7 +2,7 @@
 {
     using UnityEngine.Events;
     using System;
-    using Zinnia.Event;
+    using Zinnia.Event.Proxy;
 
     /// <summary>
     /// Emits a UnityEvent with an <see cref="InteractorFacade"/> payload whenever <see cref="SingleEventProxyEmitter{TValue,TEvent}.Receive"/> is called.
