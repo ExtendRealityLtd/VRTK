@@ -7,6 +7,7 @@
     using Malimbe.MemberChangeMethod;
     using Zinnia.Rule;
     using Zinnia.Action;
+    using Zinnia.Pointer;
     using Zinnia.Data.Attribute;
 
     /// <summary>
@@ -60,6 +61,39 @@
         [Serialized, Cleared]
         [field: DocumentedByXml]
         public RuleContainer TargetValidity { get; set; }
+        #endregion
+
+        #region Pointer Events
+        /// <summary>
+        /// Emitted when the <see cref="ObjectPointer"/> becomes active.
+        /// </summary>
+        [Header("Pointer Events"), DocumentedByXml]
+        public ObjectPointer.UnityEvent Activated = new ObjectPointer.UnityEvent();
+        /// <summary>
+        /// Emitted when the <see cref="ObjectPointer"/> is deactivated.
+        /// </summary>
+        [DocumentedByXml]
+        public ObjectPointer.UnityEvent Deactivated = new ObjectPointer.UnityEvent();
+        /// <summary>
+        /// Emitted when the <see cref="ObjectPointer"/> collides with a new target.
+        /// </summary>
+        [DocumentedByXml]
+        public ObjectPointer.UnityEvent Entered = new ObjectPointer.UnityEvent();
+        /// <summary>
+        /// Emitted when the <see cref="ObjectPointer"/> stops colliding with an existing target.
+        /// </summary>
+        [DocumentedByXml]
+        public ObjectPointer.UnityEvent Exited = new ObjectPointer.UnityEvent();
+        /// <summary>
+        /// Emitted when the <see cref="ObjectPointer"/> changes its hovering position over an existing target.
+        /// </summary>
+        [DocumentedByXml]
+        public ObjectPointer.UnityEvent HoverChanged = new ObjectPointer.UnityEvent();
+        /// <summary>
+        /// Emitted whenever <see cref="ObjectPointer.Select"/> is called.
+        /// </summary>
+        [DocumentedByXml]
+        public ObjectPointer.UnityEvent Selected = new ObjectPointer.UnityEvent();
         #endregion
 
         #region Reference Settings
