@@ -7,7 +7,8 @@
 [![Documentation][Academy-Badge]][VRTK.Academy]
 [![Videos][Videos-Badge]][Videos]
 [![Twitter][Twitter-Badge]][Twitter]
-[![Waffle][Waffle-Badge]][Waffle]
+[![License][License-Badge]][License]
+[![Backlog][Backlog-Badge]][Backlog]
 
 ## Introduction
 
@@ -23,7 +24,7 @@ Visit the [VRTK.Academy] for a collection of educational content to help you get
 
 ### Setting up the project
 
-* Create a new project in the Unity software version 2018.3 (or above) using 3D Template or open an existing project.
+* Create a new project in the Unity software version 2018.3.10f1 (or above) using 3D Template or open an existing project.
 * Ensure `Virtual Reality Supported` is checked:
   * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` window.
   * Select `Player` from the left hand menu in the `Project Settings` window.
@@ -74,7 +75,7 @@ We're not currently in a place where accepting contributions would be helpful. B
 
 ## License
 
-Code released under the [MIT License].
+Code released under the [MIT License][License].
 
 ## Disclaimer
 
@@ -83,16 +84,17 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [VRTK-Image]: https://user-images.githubusercontent.com/1029673/40060519-bb122e8c-584e-11e8-8402-ca168b327671.png
 [Unity]: https://unity3d.com/
 [Made With VRTK]: https://www.vrtk.io/madewith.html
-[MIT License]: LICENSE.md
+[License]: LICENSE.md
 
 [Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
 [Academy-Badge]: https://img.shields.io/badge/vrtk-academy-3484C6.svg
 [Videos-Badge]: https://img.shields.io/badge/youtube-channel-e52d27.svg
 [Twitter-Badge]: https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter
-[Waffle-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
+[Backlog-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
+[License-Badge]: https://img.shields.io/github/license/ExtendRealityLtd/VRTK.svg
 
 [Slack]: http://invite.vrtk.io
 [VRTK.Academy]: https://academy.vrtk.io
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
-[Waffle]: http://tracker.vrtk.io
+[Backlog]: http://tracker.vrtk.io
