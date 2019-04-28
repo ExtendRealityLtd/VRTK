@@ -5,6 +5,7 @@
     using Malimbe.PropertySerializationAttribute;
     using Zinnia.Cast;
     using Zinnia.Action;
+    using Zinnia.Pointer;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Follow;
@@ -21,6 +22,15 @@
         [Serialized]
         [field: Header("Facade Settings"), DocumentedByXml, Restricted]
         public PointerFacade Facade { get; protected set; }
+        #endregion
+
+        #region Pointer Settings
+        /// <summary>
+        /// The <see cref="ObjectPointer"/> component for the Pointer.
+        /// </summary>
+        [Serialized]
+        [field: Header("Pointer Settings"), DocumentedByXml, Restricted]
+        public ObjectPointer ObjectPointer { get; protected set; }
         #endregion
 
         #region Object Follow Settings
@@ -75,9 +85,10 @@
         /// </summary>
         public virtual void ConfigureFollowSources()
         {
+            ObjectFollow.Sources.RunWhenActiveAndEnabled(() => ObjectFollow.Sources.Clear());
+
             if (Facade.FollowSource != null)
             {
-                ObjectFollow.Sources.RunWhenActiveAndEnabled(() => ObjectFollow.Sources.Clear());
                 ObjectFollow.Sources.RunWhenActiveAndEnabled(() => ObjectFollow.Sources.Add(Facade.FollowSource));
             }
         }
@@ -87,11 +98,12 @@
         /// </summary>
         public virtual void ConfigureSelectionAction()
         {
+            SelectOnActivatedAction.RunWhenActiveAndEnabled(() => SelectOnActivatedAction.ClearSources());
+            SelectOnDeactivatedAction.RunWhenActiveAndEnabled(() => SelectOnDeactivatedAction.ClearSources());
+
             if (Facade.SelectionAction != null)
             {
-                SelectOnActivatedAction.RunWhenActiveAndEnabled(() => SelectOnActivatedAction.ClearSources());
                 SelectOnActivatedAction.RunWhenActiveAndEnabled(() => SelectOnActivatedAction.AddSource(Facade.SelectionAction));
-                SelectOnDeactivatedAction.RunWhenActiveAndEnabled(() => SelectOnDeactivatedAction.ClearSources());
                 SelectOnDeactivatedAction.RunWhenActiveAndEnabled(() => SelectOnDeactivatedAction.AddSource(Facade.SelectionAction));
             }
         }
@@ -101,9 +113,10 @@
         /// </summary>
         public virtual void ConfigureActivationAction()
         {
+            ActivationAction.RunWhenActiveAndEnabled(() => ActivationAction.ClearSources());
+
             if (Facade.ActivationAction != null)
             {
-                ActivationAction.RunWhenActiveAndEnabled(() => ActivationAction.ClearSources());
                 ActivationAction.RunWhenActiveAndEnabled(() => ActivationAction.AddSource(Facade.ActivationAction));
             }
         }
@@ -124,6 +137,60 @@
                     SelectOnDeactivatedAction.gameObject.SetActive(true);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Emits the Activated event.
+        /// </summary>
+        /// <param name="eventData">The data to emit.</param>
+        public virtual void EmitActivated(ObjectPointer.EventData eventData)
+        {
+            Facade.Activated?.Invoke(eventData);
+        }
+
+        /// <summary>
+        /// Emits the Deactivated event.
+        /// </summary>
+        /// <param name="eventData">The data to emit.</param>
+        public virtual void EmitDeactivated(ObjectPointer.EventData eventData)
+        {
+            Facade.Deactivated?.Invoke(eventData);
+        }
+
+        /// <summary>
+        /// Emits the Entered event.
+        /// </summary>
+        /// <param name="eventData">The data to emit.</param>
+        public virtual void EmitEntered(ObjectPointer.EventData eventData)
+        {
+            Facade.Entered?.Invoke(eventData);
+        }
+
+        /// <summary>
+        /// Emits the Exited event.
+        /// </summary>
+        /// <param name="eventData">The data to emit.</param>
+        public virtual void EmitExited(ObjectPointer.EventData eventData)
+        {
+            Facade.Exited?.Invoke(eventData);
+        }
+
+        /// <summary>
+        /// Emits the HoverChanged event.
+        /// </summary>
+        /// <param name="eventData">The data to emit.</param>
+        public virtual void EmitHoverChanged(ObjectPointer.EventData eventData)
+        {
+            Facade.HoverChanged?.Invoke(eventData);
+        }
+
+        /// <summary>
+        /// Emits the Selected event.
+        /// </summary>
+        /// <param name="eventData">The data to emit.</param>
+        public virtual void EmitSelected(ObjectPointer.EventData eventData)
+        {
+            Facade.Selected?.Invoke(eventData);
         }
 
         protected virtual void OnEnable()
