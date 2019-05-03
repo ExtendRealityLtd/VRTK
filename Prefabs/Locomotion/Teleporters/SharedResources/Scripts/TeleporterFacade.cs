@@ -54,6 +54,12 @@
         [field: DocumentedByXml]
         public OffsetType OffsetUsage { get; set; }
         /// <summary>
+        /// Determines if the teleport destination <see cref="Transform.rotation"/> will be applied to the <see cref="Target"/>.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool ApplyDestinationRotation { get; set; } = true;
+        /// <summary>
         /// The <see cref="CameraList"/> of scene <see cref="Camera"/>s to apply a fade to.
         /// </summary>
         [Serialized, Cleared]
@@ -133,6 +139,15 @@
         protected virtual void OnAfterOffsetUsageChange()
         {
             Configuration.ConfigureTransformPropertyAppliers();
+        }
+
+        /// <summary>
+        /// Called after <see cref="ApplyDestinationRotation"/> has been changed.
+        /// </summary>
+        [CalledAfterChangeOf(nameof(ApplyDestinationRotation))]
+        protected virtual void OnAfterApplyDestinationRotationChange()
+        {
+            Configuration.ConfigureRotationAbility(ApplyDestinationRotation);
         }
 
         /// <summary>
