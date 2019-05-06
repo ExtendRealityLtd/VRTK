@@ -5,6 +5,7 @@
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
     using Zinnia.Visual;
+    using Zinnia.Data.Enum;
     using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking;
@@ -162,12 +163,50 @@
             }
         }
 
+        /// <summary>
+        /// Configures whether the teleporter will apply the destination rotation to the target.
+        /// </summary>
+        public virtual void ConfigureRotationAbility(bool shouldRotate)
+        {
+            if (shouldRotate)
+            {
+                EnableRotations();
+            }
+            else
+            {
+                DisableRotations();
+            }
+        }
+
         protected virtual void OnEnable()
         {
             ConfigureSurfaceLocatorAliases();
             ConfigureSurfaceLocatorRules();
             ConfigureTransformPropertyAppliers();
             ConfigureCameraColorOverlays();
+            ConfigureRotationAbility(Facade.ApplyDestinationRotation);
+        }
+
+        /// <summary>
+        /// Disables the ability to rotate the target.
+        /// </summary>
+        protected virtual void DisableRotations()
+        {
+            foreach (TransformPropertyApplier alias in TransformPropertyApplierIgnoreOffsetAliases)
+            {
+                alias.ApplyTransformations &= ~TransformProperties.Rotation;
+            }
+        }
+
+        /// <summary>
+        /// Enables the ability to rotate the target.
+        /// </summary>
+        protected virtual void EnableRotations()
+        {
+            foreach (TransformPropertyApplier alias in TransformPropertyApplierIgnoreOffsetAliases)
+            {
+                alias.ApplyTransformations |= TransformProperties.Rotation;
+            }
         }
     }
 }
