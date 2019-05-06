@@ -48,7 +48,7 @@
         [CalledAfterChangeOf(nameof(DriveLimit))]
         protected virtual void OnAfterDriveLimitChange()
         {
-            Drive.CalculateDriveLimits(DriveLimit);
+            Drive.SetUp();
         }
     }
 }

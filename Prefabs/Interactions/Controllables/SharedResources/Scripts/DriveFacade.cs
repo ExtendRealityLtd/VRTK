@@ -180,7 +180,6 @@
         [CalledAfterChangeOf(nameof(DriveAxis))]
         protected virtual void OnAfterDriveAxisChange()
         {
-            CalculateDriveAxis(DriveAxis);
             Drive.SetUp();
         }
 
@@ -190,7 +189,6 @@
         [CalledAfterChangeOf(nameof(MoveToTargetValue))]
         protected virtual void OnAfterMoveToTargetValueChange()
         {
-            ProcessAutoDrive(MoveToTargetValue);
             Drive.SetUp();
         }
 
@@ -200,7 +198,6 @@
         [CalledAfterChangeOf(nameof(TargetValue))]
         protected virtual void OnAfterTargetValueChange()
         {
-            SetTargetValue(TargetValue);
             Drive.SetUp();
         }
 
@@ -210,7 +207,6 @@
         [CalledAfterChangeOf(nameof(DriveSpeed))]
         protected virtual void OnAfterDriveSpeedChange()
         {
-            ProcessDriveSpeed(DriveSpeed, MoveToTargetValue);
             Drive.SetUp();
         }
 
