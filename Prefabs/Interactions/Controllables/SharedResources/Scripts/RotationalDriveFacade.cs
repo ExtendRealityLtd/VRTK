@@ -64,7 +64,7 @@
         [CalledAfterChangeOf(nameof(HingeLocation))]
         protected virtual void OnAfterHingeLocationChange()
         {
-            Drive.CalculateHingeLocation(HingeLocation);
+            Drive.SetUp();
         }
     }
 }
