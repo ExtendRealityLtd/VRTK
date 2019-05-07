@@ -10,6 +10,7 @@
     using Malimbe.XmlDocumentationAttribute;
     using Zinnia.Action;
     using Zinnia.Extension;
+    using Zinnia.Data.Type;
     using Zinnia.Data.Attribute;
     using Zinnia.Tracking.Velocity;
     using VRTK.Prefabs.Interactions.Interactables;
@@ -23,9 +24,7 @@
         /// Defines the event with the <see cref="InteractableFacade"/>.
         /// </summary>
         [Serializable]
-        public class UnityEvent : UnityEvent<InteractableFacade>
-        {
-        }
+        public class UnityEvent : UnityEvent<InteractableFacade> { }
 
         #region Interactor Settings
         /// <summary>
@@ -100,7 +99,7 @@
         public IReadOnlyList<GameObject> GrabbedObjects => GrabConfiguration.GrabbedObjects;
 
         /// <summary>
-        /// Attempt to grab a <see cref="GameObject"/> that contains an Interactable to the current Interactor.
+        /// Attempt to attach a <see cref="GameObject"/> that contains an <see cref="InteractableFacade"/> to this <see cref="InteractorFacade"/>.
         /// </summary>
         /// <param name="interactable">The GameObject that the Interactable is on.</param>
         public virtual void Grab(GameObject interactable)
@@ -109,7 +108,7 @@
         }
 
         /// <summary>
-        /// Attempt to grab an Interactable to the current Interactor.
+        /// Attempt to attach an <see cref="InteractableFacade"/> to this <see cref="InteractorFacade"/>.
         /// </summary>
         /// <param name="interactable">The Interactable to attempt to grab.</param>
         public virtual void Grab(InteractableFacade interactable)
@@ -118,7 +117,21 @@
         }
 
         /// <summary>
-        /// Attempt to grab an Interactable to the current Interactor utilizing custom collision data.
+        /// Attempt to attach an <see cref="InteractableFacade"/> found in the given <see cref="SurfaceData"/> to this <see cref="InteractorFacade"/>.
+        /// </summary>
+        /// <param name="data">The collision data containing a valid Interactable.</param>
+        public virtual void Grab(SurfaceData data)
+        {
+            if (data == null || data.CollisionData.transform == null)
+            {
+                return;
+            }
+
+            Grab(data.CollisionData.transform.gameObject.TryGetComponent<InteractableFacade>(true, true), null, null);
+        }
+
+        /// <summary>
+        /// Attempt to attach an <see cref="InteractableFacade"/> to this <see cref="InteractorFacade"/> utilizing custom collision data.
         /// </summary>
         /// <param name="interactable">The Interactable to attempt to grab.</param>
         /// <param name="collision">Custom collision data.</param>
