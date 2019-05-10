@@ -87,7 +87,7 @@
         /// </summary>
         public virtual void EmitHoverDeactivated()
         {
-            Facade.HoverActivated?.Invoke();
+            Facade.HoverDeactivated?.Invoke();
         }
 
         /// <summary>
