@@ -112,8 +112,7 @@
                     Facade.FirstGrabbed?.Invoke(interactor);
                 }
                 Facade.Grabbed?.Invoke(interactor);
-                interactor.Grabbed?.Invoke(Facade);
-                interactor.GrabConfiguration.GrabbedObjectsCollection.AddUnique(Facade.gameObject);
+                interactor.NotifyOfGrab(Facade);
             }
         }
 
@@ -127,8 +126,7 @@
             if (interactor != null)
             {
                 Facade.Ungrabbed?.Invoke(interactor);
-                interactor.Ungrabbed?.Invoke(Facade);
-                interactor.GrabConfiguration.GrabbedObjectsCollection.Remove(Facade.gameObject);
+                interactor.NotifyOfUngrab(Facade);
                 if (Facade.GrabbingInteractors.Count == 0)
                 {
                     Facade.LastUngrabbed?.Invoke(interactor);

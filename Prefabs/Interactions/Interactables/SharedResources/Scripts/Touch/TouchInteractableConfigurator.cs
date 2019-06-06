@@ -99,7 +99,7 @@
                     Facade.FirstTouched?.Invoke(interactor);
                 }
                 Facade.Touched?.Invoke(interactor);
-                interactor.Touched?.Invoke(Facade);
+                interactor.NotifyOfTouch(Facade);
             }
         }
 
@@ -113,7 +113,7 @@
             if (interactor != null)
             {
                 Facade.Untouched?.Invoke(interactor);
-                interactor.Untouched?.Invoke(Facade);
+                interactor.NotifyOfUntouch(Facade);
                 if (Facade.TouchingInteractors.Count == 0)
                 {
                     Facade.LastUntouched?.Invoke(interactor);

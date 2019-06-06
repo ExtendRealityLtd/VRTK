@@ -150,6 +150,45 @@
         }
 
         /// <summary>
+        /// Notifies the interactor that it is touching an interactable.
+        /// </summary>
+        /// <param name="interactable">The interactable being touched.</param>
+        public virtual void NotifyOfTouch(InteractableFacade interactable)
+        {
+            Touched?.Invoke(interactable);
+        }
+
+        /// <summary>
+        /// Notifies the interactor that it is no longer touching an interactable.
+        /// </summary>
+        /// <param name="interactable">The interactable being untouched.</param>
+        public virtual void NotifyOfUntouch(InteractableFacade interactable)
+        {
+            Untouched?.Invoke(interactable);
+        }
+
+        /// <summary>
+        /// Notifies the interactor that it is grabbing an interactable.
+        /// </summary>
+        /// <param name="interactable">The interactable being grabbed.</param>
+        public virtual void NotifyOfGrab(InteractableFacade interactable)
+        {
+            Grabbed?.Invoke(interactable);
+            GrabConfiguration.GrabbedObjectsCollection.AddUnique(interactable.gameObject);
+        }
+
+        /// <summary>
+        /// Notifies the interactor that it is no longer grabbing an interactable.
+        /// </summary>
+        /// <param name="interactable">The interactable being ungrabbed.</param>
+        public virtual void NotifyOfUngrab(InteractableFacade interactable)
+        {
+            Ungrabbed?.Invoke(interactable);
+            GrabConfiguration.GrabbedObjectsCollection.Remove(interactable.gameObject);
+            GrabConfiguration.StopGrabbingPublisher.ClearActiveCollisions();
+        }
+
+        /// <summary>
         /// Called after <see cref="GrabAction"/> has been changed.
         /// </summary>
         [CalledAfterChangeOf(nameof(GrabAction))]
