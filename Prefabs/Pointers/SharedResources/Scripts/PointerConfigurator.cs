@@ -126,6 +126,7 @@
         /// </summary>
         public virtual void ConfigureSelectionType()
         {
+            ActivationAction.gameObject.SetActive(false);
             switch (Facade.SelectionMethod)
             {
                 case PointerFacade.SelectionType.SelectOnActivate:
@@ -137,6 +138,9 @@
                     SelectOnDeactivatedAction.gameObject.SetActive(true);
                     break;
             }
+            ConfigureSelectionAction();
+            ConfigureActivationAction();
+            ActivationAction.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -197,8 +201,6 @@
         {
             ConfigureTargetValidity();
             ConfigureFollowSources();
-            ConfigureSelectionAction();
-            ConfigureActivationAction();
             ConfigureSelectionType();
         }
     }
