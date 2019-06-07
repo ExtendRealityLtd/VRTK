@@ -45,7 +45,7 @@
         public float GizmoSphereRadius { get; set; } = 0.015f;
         #endregion
 
-        protected virtual void OnDrawGizmos()
+        protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
             Gizmos.matrix = transform.localToWorldMatrix;
