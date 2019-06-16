@@ -11,7 +11,7 @@
 
 * Source of VRTK (Unity Asset Store or GitHub).
 * Version of VRTK (Unity Asset Store/GitHub release number) (GitHub master commit hash).
-* Version of the Unity software (e.g. Unity 2018.3).
+* Version of the Unity software (e.g. Unity 2018.3.10f1).
 * Hardware used (e.g. Vive/Oculus).
 * SDK used (e.g. OpenVR/SteamVR/Oculus Utilities).
 
