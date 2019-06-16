@@ -110,12 +110,22 @@
 
         protected virtual void OnEnable()
         {
+            if (IgnoredInteractors == null)
+            {
+                return;
+            }
+
             IgnoredInteractors.Added.AddListener(OnIgnoredInteractorAdded);
             IgnoredInteractors.Removed.AddListener(OnIgnoredInteractorRemoved);
         }
 
         protected virtual void OnDisable()
         {
+            if (IgnoredInteractors == null)
+            {
+                return;
+            }
+
             IgnoredInteractors.Added.RemoveListener(OnIgnoredInteractorAdded);
             IgnoredInteractors.Removed.RemoveListener(OnIgnoredInteractorRemoved);
         }
@@ -162,6 +172,11 @@
         [CalledBeforeChangeOf(nameof(IgnoredInteractors))]
         protected virtual void OnBeforeIgnoredInteractorsChange()
         {
+            if (IgnoredInteractors == null)
+            {
+                return;
+            }
+
             IgnoredInteractors.Added.RemoveListener(OnIgnoredInteractorAdded);
             IgnoredInteractors.Removed.RemoveListener(OnIgnoredInteractorRemoved);
         }
@@ -172,6 +187,11 @@
         [CalledAfterChangeOf(nameof(IgnoredInteractors))]
         protected virtual void OnAfterIgnoredInteractorsChange()
         {
+            if (IgnoredInteractors == null)
+            {
+                return;
+            }
+
             IgnoredInteractors.Added.AddListener(OnIgnoredInteractorAdded);
             IgnoredInteractors.Removed.AddListener(OnIgnoredInteractorRemoved);
         }
