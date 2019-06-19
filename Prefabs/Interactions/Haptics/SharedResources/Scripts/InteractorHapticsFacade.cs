@@ -5,6 +5,7 @@
     using Malimbe.XmlDocumentationAttribute;
     using Malimbe.PropertySerializationAttribute;
     using Zinnia.Data.Attribute;
+    using Zinnia.Data.Collection.List;
     using VRTK.Prefabs.Interactions.Interactors;
 
     public class InteractorHapticsFacade : MonoBehaviour
@@ -22,6 +23,21 @@
         [Serialized]
         [field: DocumentedByXml]
         public bool OnlyRumbleActiveInteractor { get; set; } = true;
+        #endregion
+
+        #region Interactor Settings
+        /// <summary>
+        /// The interactors that are considered part of the left controller.
+        /// </summary>
+        [Serialized]
+        [field: Header("Interactor Settings"), DocumentedByXml]
+        public UnityObjectObservableList LeftInteractors { get; set; }
+        /// <summary>
+        /// The interactors that are considered part of the right controller.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml]
+        public UnityObjectObservableList RightInteractors { get; set; }
         #endregion
 
         #region Reference Settings

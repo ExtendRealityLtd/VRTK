@@ -24,11 +24,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2160068357018252285}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4315896199824777917}
+  m_Father: {fileID: 7304710172355870804}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9061554902409299926
@@ -46,36 +46,80 @@ MonoBehaviour:
   Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Populated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Added:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Removed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Emptied:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.BehaviourObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   currentIndex: 0
   elements:
   - {fileID: 4315896199824777918}
+--- !u!1 &2684128180299843742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7304710172355870804}
+  m_Layer: 0
+  m_Name: Internal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7304710172355870804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2684128180299843742}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2733478212563227130}
+  - {fileID: 644780227512281379}
+  - {fileID: 6343283485373238758}
+  - {fileID: 4315896199336624265}
+  m_Father: {fileID: 4315896199824777917}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4315896199336624266
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,8 +152,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4315896200844705110}
-  m_Father: {fileID: 4315896199824777917}
-  m_RootOrder: 0
+  m_Father: {fileID: 7304710172355870804}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -366,17 +410,20 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4315896199588200009}
@@ -417,7 +464,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4315896199824777917}
   - component: {fileID: 4315896199824777918}
-  - component: {fileID: 6013313824313023533}
   - component: {fileID: 3343241170520567492}
   m_Layer: 0
   m_Name: CameraRigSwitcher
@@ -437,9 +483,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4315896199336624265}
-  - {fileID: 644780227512281379}
-  - {fileID: 6343283485373238758}
+  - {fileID: 7304710172355870804}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -455,53 +499,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1209c68b564999e49aad6fe9186bd92d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: {fileID: 6013313824313023533}
+  targets: {fileID: 4893095752389336993}
   targetState: 1
-  currentIndex: 0
---- !u!114 &6013313824313023533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4315896199824777919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Found:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  NotFound:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  Populated:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  Added:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  Removed:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  Emptied:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  currentIndex: 0
-  elements: []
 --- !u!114 &3343241170520567492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,17 +631,20 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4315896200279449909}
@@ -910,6 +912,91 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: <b>CameraRig Switcher</b>
+--- !u!1 &8652489559033008461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2733478212563227130}
+  - component: {fileID: 4893095752389336993}
+  m_Layer: 0
+  m_Name: TargetList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2733478212563227130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8652489559033008461}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7304710172355870804}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4893095752389336993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8652489559033008461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7102cedb00f74625a1cdaa822e5661f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Found:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  NotFound:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  Populated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Added:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  Emptied:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  currentIndex: 0
+  elements: []
 --- !u!1 &8652509969443861013
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,11 +1022,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8652509969443861013}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4315896199824777917}
+  m_Father: {fileID: 7304710172355870804}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &359024164216545923

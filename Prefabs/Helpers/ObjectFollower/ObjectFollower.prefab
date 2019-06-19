@@ -28,7 +28,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6340684924633364675}
   - {fileID: 4552570867738632}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -93,7 +92,7 @@ Transform:
   m_Children:
   - {fileID: 4417176232239154}
   m_Father: {fileID: 4552570867738632}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1300870921756748
 GameObject:
@@ -284,10 +283,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6340684924633364675}
   - {fileID: 4071496394556574}
   - {fileID: 4351591682580898}
   m_Father: {fileID: 4952949373149400}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1662140269739252
 GameObject:
@@ -320,7 +320,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4552570867738632}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114712274792673208
 MonoBehaviour:
@@ -374,6 +374,16 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
       Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Populated:
     m_PersistentCalls:
       m_Calls: []
@@ -502,32 +512,42 @@ MonoBehaviour:
   Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Populated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Added:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Removed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Emptied:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   currentIndex: 0
   elements: []
@@ -577,32 +597,42 @@ MonoBehaviour:
   Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Populated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Added:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Removed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Emptied:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   currentIndex: 0
   elements: []
@@ -636,7 +666,7 @@ Transform:
   - {fileID: 4254408638857882487}
   - {fileID: 4139161036866613762}
   - {fileID: 8268114433113752008}
-  m_Father: {fileID: 4952949373149400}
+  m_Father: {fileID: 4552570867738632}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8744390424190783560
@@ -685,32 +715,42 @@ MonoBehaviour:
   Found:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   NotFound:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Populated:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Added:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Removed:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   Emptied:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Zinnia.Data.Collection.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
+    m_TypeName: Zinnia.Data.Collection.List.GameObjectObservableList+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   currentIndex: 0
   elements: []

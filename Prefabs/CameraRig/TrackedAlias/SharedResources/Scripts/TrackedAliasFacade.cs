@@ -91,8 +91,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     GameObject playArea = cameraRig.PlayArea;
                     if (playArea != null)
                     {
@@ -108,8 +118,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     GameObject headset = cameraRig.Headset;
                     if (headset != null)
                     {
@@ -125,8 +145,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     Camera headsetCamera = cameraRig.HeadsetCamera;
                     if (headsetCamera != null)
                     {
@@ -142,8 +172,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     VelocityTracker headsetVelocityTracker = cameraRig.HeadsetVelocityTracker;
                     if (headsetVelocityTracker != null)
                     {
@@ -159,8 +199,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     GameObject leftController = cameraRig.LeftController;
                     if (leftController != null)
                     {
@@ -176,8 +226,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     GameObject rightController = cameraRig.RightController;
                     if (rightController != null)
                     {
@@ -193,8 +253,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     VelocityTracker leftControllerVelocityTracker = cameraRig.LeftControllerVelocityTracker;
                     if (leftControllerVelocityTracker != null)
                     {
@@ -210,8 +280,18 @@
         {
             get
             {
+                if (CameraRigs == null)
+                {
+                    yield break;
+                }
+
                 foreach (LinkedAliasAssociationCollection cameraRig in CameraRigs.NonSubscribableElements)
                 {
+                    if (cameraRig == null)
+                    {
+                        continue;
+                    }
+
                     VelocityTracker rightControllerVelocityTracker = cameraRig.RightControllerVelocityTracker;
                     if (rightControllerVelocityTracker != null)
                     {
@@ -252,6 +332,11 @@
         /// </summary>
         protected virtual void SubscribeToCameraRigsEvents()
         {
+            if (CameraRigs == null)
+            {
+                return;
+            }
+
             CameraRigs.Added.AddListener(OnCameraRigAdded);
             CameraRigs.Removed.AddListener(OnCameraRigRemoved);
         }
@@ -261,6 +346,11 @@
         /// </summary>
         protected virtual void UnsubscribeFromCameraRigsEvents()
         {
+            if (CameraRigs == null)
+            {
+                return;
+            }
+
             CameraRigs.Added.RemoveListener(OnCameraRigAdded);
             CameraRigs.Removed.RemoveListener(OnCameraRigRemoved);
         }
