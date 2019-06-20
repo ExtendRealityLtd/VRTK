@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   emittedTypes: -1
+  statesToProcess: -1
   forwardingSourceValidity:
     field: {fileID: 2549507546355436025}
   CollisionStarted:
@@ -226,6 +227,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Zinnia.Tracking.Collision.CollisionNotifier+UnityEvent, Zinnia.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  stopCollisionsOnDisable: 1
 --- !u!54 &4439612322405818077
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -312,6 +314,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3924256656882590479}
     m_Modifications:
+    - target: {fileID: 6024666130437826845, guid: 2cbd94cbb01df384eb07028e0f09c402,
+        type: 3}
+      propertyPath: m_Name
+      value: Interaction.Grabbing
+      objectReference: {fileID: 0}
     - target: {fileID: 2635737225441082409, guid: 2cbd94cbb01df384eb07028e0f09c402,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -372,11 +379,6 @@ PrefabInstance:
       propertyPath: facade
       value: 
       objectReference: {fileID: 5839046843648530548}
-    - target: {fileID: 6024666130437826845, guid: 2cbd94cbb01df384eb07028e0f09c402,
-        type: 3}
-      propertyPath: m_Name
-      value: Interaction.Grabbing
-      objectReference: {fileID: 0}
     - target: {fileID: 2220712448758848924, guid: 2cbd94cbb01df384eb07028e0f09c402,
         type: 3}
       propertyPath: startTime
@@ -432,6 +434,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3924256656882590479}
     m_Modifications:
+    - target: {fileID: 3916300416617427846, guid: 734c79b0fd2a7ec46932982b9fa8b279,
+        type: 3}
+      propertyPath: m_Name
+      value: Interaction.Touching
+      objectReference: {fileID: 0}
     - target: {fileID: 3916300416617427844, guid: 734c79b0fd2a7ec46932982b9fa8b279,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -492,11 +499,6 @@ PrefabInstance:
       propertyPath: facade
       value: 
       objectReference: {fileID: 5839046843648530548}
-    - target: {fileID: 3916300416617427846, guid: 734c79b0fd2a7ec46932982b9fa8b279,
-        type: 3}
-      propertyPath: m_Name
-      value: Interaction.Touching
-      objectReference: {fileID: 0}
     - target: {fileID: 3916300417121912082, guid: 734c79b0fd2a7ec46932982b9fa8b279,
         type: 3}
       propertyPath: source
