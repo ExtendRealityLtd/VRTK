@@ -74,6 +74,18 @@
         [Serialized]
         [field: DocumentedByXml]
         public OffsetType GrabOffset { get; set; }
+        /// <summary>
+        /// Whether the <see cref="Rigidbody"/> of the interactable should be in a kinematic state when the follow action is active.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool IsKinematicWhenActive { get; set; } = true;
+        /// <summary>
+        /// Whether the <see cref="Rigidbody"/> of the interactable should be in a kinematic state when the follow action is inactive.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool IsKinematicWhenInactive { get; set; }
         #endregion
 
         #region Tracking Settings
@@ -142,25 +154,21 @@
         public GameObject OrientationLogicContainer { get; protected set; }
         #endregion
 
-        #region Kinematic Settings
         /// <summary>
-        /// The container for the enable kinematic logic.
+        /// Applies the active kinematic state to the <see cref="Rigidbody"/> of the interactable.
         /// </summary>
-        [Serialized]
-        [field: Header("Kinematic Settings"), DocumentedByXml, Restricted]
-        public GameObject EnableKinematicContainer { get; protected set; }
-        /// <summary>
-        /// The container for the disable kinematic logic.
-        /// </summary>
-        [Serialized]
-        [field: DocumentedByXml, Restricted]
-        public GameObject DisableKinematicContainer { get; protected set; }
-        #endregion
+        public virtual void ApplyActiveKinematicState()
+        {
+            GrabSetup.Facade.ConsumerRigidbody.isKinematic = IsKinematicWhenActive;
+        }
 
         /// <summary>
-        /// The kinematic state of the consumer rigidbody.
+        /// Applies the inactive kinematic state to the <see cref="Rigidbody"/> of the interactable.
         /// </summary>
-        public bool IsConsumerRigidbodyKinematic { get; set; }
+        public virtual void ApplyInactiveKinematicState()
+        {
+            GrabSetup.Facade.ConsumerRigidbody.isKinematic = IsKinematicWhenInactive;
+        }
 
         protected virtual void OnEnable()
         {
@@ -173,6 +181,7 @@
         /// </summary>
         protected virtual void ConfigureFollowTracking()
         {
+            IsKinematicWhenInactive = GrabSetup != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
             switch (FollowTracking)
             {
                 case TrackingType.FollowTransform:
@@ -181,7 +190,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(false);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(false);
                     ObjectFollower.FollowModifier = FollowTransformModifier;
-                    ToggleKinematicLogic(true);
+                    IsKinematicWhenActive = true;
                     break;
                 case TrackingType.FollowRigidbody:
                     FollowTransformModifier.gameObject.SetActive(false);
@@ -189,7 +198,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(false);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(false);
                     ObjectFollower.FollowModifier = FollowRigidbodyModifier;
-                    ToggleKinematicLogic(false);
+                    IsKinematicWhenActive = false;
                     break;
                 case TrackingType.FollowRigidbodyForceRotate:
                     FollowTransformModifier.gameObject.SetActive(false);
@@ -197,7 +206,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(true);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(false);
                     ObjectFollower.FollowModifier = FollowRigidbodyForceRotateModifier;
-                    ToggleKinematicLogic(false);
+                    IsKinematicWhenActive = false;
                     break;
                 case TrackingType.FollowTransformPositionDifferenceRotate:
                     FollowTransformModifier.gameObject.SetActive(false);
@@ -205,7 +214,7 @@
                     FollowRigidbodyForceRotateModifier.gameObject.SetActive(false);
                     FollowTransformRotateOnPositionDifferenceModifier.gameObject.SetActive(true);
                     ObjectFollower.FollowModifier = FollowTransformRotateOnPositionDifferenceModifier;
-                    ToggleKinematicLogic(false);
+                    IsKinematicWhenActive = true;
                     break;
             }
         }
@@ -243,20 +252,9 @@
         /// <inheritdoc />
         protected override void OnAfterGrabSetupChange()
         {
-            IsConsumerRigidbodyKinematic = GrabSetup.Facade.ConsumerRigidbody != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Clear());
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Add(GrabSetup.Facade.ConsumerContainer));
             VelocityApplier.Target = GrabSetup.Facade.ConsumerRigidbody != null ? GrabSetup.Facade.ConsumerRigidbody : null;
-        }
-
-        /// <summary>
-        /// Toggles the kinematic logic state.
-        /// </summary>
-        /// <param name="state">Whether the logic should run or not.</param>
-        protected virtual void ToggleKinematicLogic(bool state)
-        {
-            EnableKinematicContainer.SetActive(state);
-            DisableKinematicContainer.SetActive(state);
         }
 
         /// <summary>
@@ -275,20 +273,6 @@
         protected virtual void OnAfterGrabOffsetChange()
         {
             ConfigureGrabOffset();
-        }
-
-        /// <summary>
-        /// Called after <see cref="IsConsumerRigidbodyKinematic"/> has been changed.
-        /// </summary>
-        [CalledAfterChangeOf(nameof(IsConsumerRigidbodyKinematic))]
-        protected virtual void OnAfterConsumerRigidbodyIsKinematicChange()
-        {
-            if (GrabSetup.Facade.ConsumerRigidbody == null)
-            {
-                return;
-            }
-
-            GrabSetup.Facade.ConsumerRigidbody.isKinematic = IsConsumerRigidbodyKinematic;
         }
     }
 }
