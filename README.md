@@ -10,6 +10,10 @@
 [![License][License-Badge]][License]
 [![Backlog][Backlog-Badge]][Backlog]
 
+## Beta Disclaimer
+
+VRTK v4 has not yet been released fully is still in the beta phase meaning there may still be undiscovered bugs, missing features and a lack of usable documentation. All of these things are being worked on but progress is slow as there is only one person actively working on VRTK v4 in their spare time so please be patient and respectful. You are free to use VRTK v4 in any way you wish, but if you feel you will struggle figuring stuff out for yourself without detailed documentation then it may be better off if you wait until the full release of VRTK v4. 
+
 ## Introduction
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
