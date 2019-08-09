@@ -86,6 +86,12 @@
         [Serialized]
         [field: DocumentedByXml]
         public bool IsKinematicWhenInactive { get; set; }
+        /// <summary>
+        /// Whether the above setting should be inherited from the <see cref="Rigidbody"/> of the interactable.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool InheritIsKinematicWhenInactive { get; set; }
         #endregion
 
         #region Tracking Settings
@@ -181,7 +187,8 @@
         /// </summary>
         protected virtual void ConfigureFollowTracking()
         {
-            IsKinematicWhenInactive = GrabSetup != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
+            if (InheritIsKinematicWhenInactive)
+                IsKinematicWhenInactive = GrabSetup != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
             switch (FollowTracking)
             {
                 case TrackingType.FollowTransform:
