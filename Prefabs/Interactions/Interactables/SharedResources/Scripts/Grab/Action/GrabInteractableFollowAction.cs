@@ -86,6 +86,12 @@
         [Serialized]
         [field: DocumentedByXml]
         public bool IsKinematicWhenInactive { get; set; }
+        /// <summary>
+        /// Whether the <see cref="IsKinematicWhenInactive"/> property inherits the kinematic state from <see cref="GrabSetup.Facade.ConsumerRigidbody.isKinematic"/>.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml]
+        public bool WillInheritIsKinematicWhenInactiveFromConsumerRigidbody { get; set; } = true;
         #endregion
 
         #region Tracking Settings
@@ -181,7 +187,10 @@
         /// </summary>
         protected virtual void ConfigureFollowTracking()
         {
-            IsKinematicWhenInactive = GrabSetup != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
+            if (WillInheritIsKinematicWhenInactiveFromConsumerRigidbody)
+            {
+                IsKinematicWhenInactive = GrabSetup != null ? GrabSetup.Facade.ConsumerRigidbody.isKinematic : false;
+            }
             switch (FollowTracking)
             {
                 case TrackingType.FollowTransform:
@@ -255,6 +264,7 @@
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Clear());
             ObjectFollower.Targets.RunWhenActiveAndEnabled(() => ObjectFollower.Targets.Add(GrabSetup.Facade.ConsumerContainer));
             VelocityApplier.Target = GrabSetup.Facade.ConsumerRigidbody != null ? GrabSetup.Facade.ConsumerRigidbody : null;
+            ConfigureFollowTracking();
         }
 
         /// <summary>

@@ -1973,6 +1973,7 @@ MonoBehaviour:
   grabOffset: 0
   isKinematicWhenActive: 1
   isKinematicWhenInactive: 0
+  willInheritIsKinematicWhenInactiveFromConsumerRigidbody: 1
   objectFollower: {fileID: 1803858868811045269}
   followTransformModifier: {fileID: 2304878481562678152}
   followRigidbodyModifier: {fileID: 3324176677558867994}
