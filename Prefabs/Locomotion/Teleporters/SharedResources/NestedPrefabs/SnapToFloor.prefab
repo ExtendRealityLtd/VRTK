@@ -30,6 +30,7 @@ Transform:
   - {fileID: 4571630719193713254}
   - {fileID: 3199935394603094063}
   - {fileID: 8331258515199282043}
+  - {fileID: 5590959520585286125}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -88,7 +89,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Visual.CameraColorOverlay+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  AddTransitioned:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Visual.CameraColorOverlay+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Removed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Zinnia.Visual.CameraColorOverlay+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  RemoveTransitioned:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Zinnia.Visual.CameraColorOverlay+UnityEvent, Zinnia.Runtime, Version=0.0.0.0,
@@ -148,9 +159,12 @@ MonoBehaviour:
   searchDirection: {x: 0, y: -1, z: 0}
   originOffset: -0.05
   maximumDistance: 50
+  destinationOffset: {x: 0, y: 0, z: 0}
   targetValidity:
     field: {fileID: 0}
-  physicsCast: {fileID: 0}
+  locatorTermination:
+    field: {fileID: 0}
+  physicsCast: {fileID: 2130108729906962417}
   SurfaceLocated:
     m_PersistentCalls:
       m_Calls:
@@ -203,6 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source:
     transform: {fileID: 0}
+    useLocalValues: 0
   target: {fileID: 0}
   offset: {fileID: 0}
   applyPositionOffsetOnAxis:
@@ -216,6 +231,7 @@ MonoBehaviour:
   applyTransformations: 1
   transitionDuration: 0
   transitionDestinationThreshold: 0.01
+  isTransitionDestinationDynamic: 0
   BeforeTransformUpdated:
     m_PersistentCalls:
       m_Calls: []
@@ -292,6 +308,53 @@ MonoBehaviour:
     field: {fileID: 4601657258391178558}
   onlyProcessOnActiveAndEnabled: 1
   interval: 0
+--- !u!1 &4684265157891715037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5590959520585286125}
+  - component: {fileID: 2130108729906962417}
+  m_Layer: 0
+  m_Name: CustomPhysicsCaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5590959520585286125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4684265157891715037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 374839283324289467}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2130108729906962417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4684265157891715037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406d478cdbf496a4ead48dfdc7df8d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 4
+  triggerInteraction: 1
 --- !u!1 &6187257659837233587
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,6 +423,16 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Zinnia.Process.Moment.Collection.MomentProcessObservableList+UnityEvent,
       Zinnia.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  IsEmpty:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  IsPopulated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   Populated:
     m_PersistentCalls:
       m_Calls: []
