@@ -11,6 +11,7 @@
     using Zinnia.Rule.Collection;
     using Zinnia.Tracking.Modification;
     using VRTK.Prefabs.Interactions.Interactables;
+    using VRTK.Prefabs.Interactions.Interactables.Grab;
 
     public class SnapZoneConfigurator : MonoBehaviour
     {
@@ -31,11 +32,35 @@
         [field: Header("Reference Settings"), DocumentedByXml]
         public RuleContainerObservableList ValidCollisionRules { get; protected set; }
         /// <summary>
+        /// The <see cref="InteractableGrabStateEmitter"/> that processes if the interactable entering the zone is being grabbed.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public InteractableGrabStateEmitter GrabStateEmitter { get; protected set; }
+        /// <summary>
+        /// The <see cref="ActivationValidator"/> that determines if the activation of the zone is valid.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public SnapZoneActivator ActivationArea { get; protected set; }
+        /// <summary>
+        /// The <see cref="ActivationValidator"/> that determines if the activation of the zone is valid.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public ActivationValidator ActivationValidator { get; protected set; }
+        /// <summary>
         /// The <see cref="TransformPropertyApplier"/> that transitions the Interactable to the snapped destination.
         /// </summary>
         [Serialized]
         [field: DocumentedByXml, Restricted]
         public TransformPropertyApplier PropertyApplier { get; protected set; }
+        /// <summary>
+        /// The <see cref="GameObjectObservableList"/> containing the list of objects that are currently colliding with the zone.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectObservableList CollidingObjectsList { get; protected set; }
         /// <summary>
         /// The <see cref="GameObjectObservableList"/> containing the list of Interactables that can be snapped.
         /// </summary>
@@ -127,6 +152,34 @@
         }
 
         /// <summary>
+        /// Emits the Activated event.
+        /// </summary>
+        /// <param name="activator">The <see cref="GameObject"/> that has activated the zone.</param>
+        public virtual void EmitActivated(GameObject activator)
+        {
+            if (activator == null)
+            {
+                return;
+            }
+
+            Facade.Activated?.Invoke(activator);
+        }
+
+        /// <summary>
+        /// Emits the Deactivated event.
+        /// </summary>
+        /// <param name="deactivator">The <see cref="GameObject"/> that has deactivated the zone.</param>
+        public virtual void EmitDeactivated(GameObject deactivator)
+        {
+            if (deactivator == null)
+            {
+                return;
+            }
+
+            Facade.Deactivated?.Invoke(deactivator);
+        }
+
+        /// <summary>
         /// Emits the Snapped event.
         /// </summary>
         /// <param name="snapped">The <see cref="GameObject"/> is snapped to the zone.</param>
@@ -175,6 +228,39 @@
         public virtual void ConfigurePropertyApplier()
         {
             PropertyApplier.RunWhenActiveAndEnabled(() => PropertyApplier.TransitionDuration = Facade.TransitionDuration);
+        }
+
+        /// <summary>
+        /// Attempts to process any other valid snappable objects against any other potential SnapZones if their primary activating zone is snapped by another object.
+        /// </summary>
+        public virtual void ProcessOtherSnappablesOnSnap()
+        {
+            foreach (GameObject snappable in SnappableInteractables)
+            {
+                if (snappable == null || snappable == SnappedInteractable)
+                {
+                    continue;
+                }
+
+                InteractableFacade snappableInteractable = snappable.TryGetComponent<InteractableFacade>(true, true);
+
+                if (snappableInteractable == null)
+                {
+                    continue;
+                }
+
+                foreach (GameObject collidingWith in snappableInteractable.ActiveCollisions.SubscribableElements)
+                {
+                    SnapZoneActivator activatingZone = collidingWith.GetComponent<SnapZoneActivator>();
+
+                    if (activatingZone == null || activatingZone == ActivationArea || activatingZone.Facade.ZoneState == SnapZoneFacade.SnapZoneState.ZoneIsActivated)
+                    {
+                        continue;
+                    }
+
+                    activatingZone.Facade.Configuration.GrabStateEmitter.DoIsGrabbed(snappableInteractable);
+                }
+            }
         }
 
         protected virtual void OnEnable()

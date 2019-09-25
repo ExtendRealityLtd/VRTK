@@ -20,15 +20,34 @@
         [Serializable]
         public class UnityEvent : UnityEvent<GameObject> { }
 
+        /// <summary>
+        /// The state the SnapZone is in.
+        /// </summary>
+        public enum SnapZoneState
+        {
+            /// <summary>
+            /// No valid <see cref="GameObject"/> is colliding with the SnapZone and nothing has been snapped into the SnapZone.
+            /// </summary>
+            ZoneIsEmpty,
+            /// <summary>
+            /// At least one valid <see cref="GameObject"/> is colliding with the SnapZone but nothing has been snapped into the SnapZone.
+            /// </summary>
+            ZoneIsActivated,
+            /// <summary>
+            /// A valid <see cref="GameObject"/> has been snapped into the SnapZone.
+            /// </summary>
+            ZoneIsSnapped
+        }
+
         #region Snap Settings
         /// <summary>
-        /// The rules that determine which <see cref="InteractableFacade"/> can be snapped to this snap zone.
+        /// The rules that determine which <see cref="GameObject"/> can be snapped to this snap zone.
         /// </summary>
         [Serialized, Cleared]
         [field: Header("Snap Settings"), DocumentedByXml]
         public RuleContainer SnapValidity { get; set; }
         /// <summary>
-        /// The duration for the transition of the snapped <see cref="InteractableFacade"/> to reach the snap zone destination.
+        /// The duration for the transition of the snapped <see cref="GameObject"/> to reach the snap zone destination.
         /// </summary>
         [Serialized]
         [field: DocumentedByXml]
@@ -56,6 +75,16 @@
         [DocumentedByXml]
         public UnityEvent Exited = new UnityEvent();
         /// <summary>
+        /// Emitted when a valid <see cref="GameObject"/> activates the zone.
+        /// </summary>
+        [DocumentedByXml]
+        public UnityEvent Activated = new UnityEvent();
+        /// <summary>
+        /// Emitted when a valid <see cref="GameObject"/> deactivates the zone.
+        /// </summary>
+        [DocumentedByXml]
+        public UnityEvent Deactivated = new UnityEvent();
+        /// <summary>
         /// Emitted when a valid <see cref="GameObject"/> is snapped to the zone.
         /// </summary>
         [DocumentedByXml]
@@ -70,15 +99,30 @@
         /// <summary>
         /// Returns the collection of <see cref="GameObject"/>s that are currently colliding with the snap zone and are valid to be snapped.
         /// </summary>
-        public HeapAllocationFreeReadOnlyList<GameObject> SnappableInteractables => Configuration.SnappableInteractables;
+        public HeapAllocationFreeReadOnlyList<GameObject> SnappableGameObjects => Configuration.SnappableInteractables;
         /// <summary>
         /// Returns the currently snapped <see cref="GameObject"/>.
         /// </summary>
-        public GameObject SnappedInteractable => Configuration.SnappedInteractable;
+        public GameObject SnappedGameObject => Configuration.SnappedInteractable;
         /// <summary>
-        /// Whether the snap zone is currently empty or populated.
+        /// The state of the SnapZone.
         /// </summary>
-        public bool IsEmpty => SnappedInteractable == null;
+        public SnapZoneState ZoneState
+        {
+            get
+            {
+                if (SnappedGameObject != null)
+                {
+                    return SnapZoneState.ZoneIsSnapped;
+                }
+                else if (SnappableGameObjects.Count > 0)
+                {
+                    return SnapZoneState.ZoneIsActivated;
+                }
+
+                return SnapZoneState.ZoneIsEmpty;
+            }
+        }
 
         /// <summary>
         /// Attempts to snap a given <see cref="InteractableFacade"/> to the snap zone.
@@ -99,7 +143,7 @@
         }
 
         /// <summary>
-        /// Attempts to unsnap any existing <see cref="InteractableFacade"/> that is currently snapped to the snap zone.
+        /// Attempts to unsnap any existing <see cref="GameObject"/> that is currently snapped to the snap zone.
         /// </summary>
         public virtual void Unsnap()
         {

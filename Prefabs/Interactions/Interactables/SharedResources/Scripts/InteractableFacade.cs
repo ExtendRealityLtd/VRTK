@@ -11,6 +11,7 @@
     using Zinnia.Rule;
     using Zinnia.Extension;
     using Zinnia.Data.Attribute;
+    using Zinnia.Data.Collection.List;
     using Zinnia.Tracking.Collision;
     using VRTK.Prefabs.Interactions.Interactors;
     using VRTK.Prefabs.Interactions.Interactables.Touch;
@@ -112,6 +113,12 @@
         [Serialized]
         [field: Header("Reference Settings"), DocumentedByXml, Restricted]
         public CollisionNotifier CollisionNotifier { get; protected set; }
+        /// <summary>
+        /// The linked <see cref="GameObjectObservableList"/>.
+        /// </summary>
+        [Serialized]
+        [field: DocumentedByXml, Restricted]
+        public GameObjectObservableList ActiveCollisions { get; protected set; }
         /// <summary>
         /// The linked Touch Internal Setup.
         /// </summary>
