@@ -72,6 +72,10 @@
         /// A collection of listeners registered with this SnapZone.
         /// </summary>
         protected Dictionary<ListenerKey, UnityAction<GameObject>> currentZoneListeners = new Dictionary<ListenerKey, UnityAction<GameObject>>();
+        /// <summary>
+        /// A collection of found snap zone collisions that are actually invalid and not colliding.
+        /// </summary>
+        List<GameObject> invalidSnapZoneCollisions = new List<GameObject>();
 
         /// <summary>
         /// Attempts to activate the SnapZone if the colliding <see cref="GameObject"/> is not already activating another SnapZone.
@@ -87,6 +91,7 @@
             }
 
             currentActivatingInteractable.ActiveCollisions.AddUnique(Facade.Configuration.ActivationArea.gameObject);
+            invalidSnapZoneCollisions.Clear();
 
             foreach (GameObject collidingObject in currentActivatingInteractable.ActiveCollisions.SubscribableElements)
             {
@@ -101,6 +106,12 @@
                     continue;
                 }
 
+                if (!activatingZone.Facade.Configuration.CollidingObjectsList.Contains(currentActivatingInteractable.gameObject))
+                {
+                    invalidSnapZoneCollisions.Add(activatingZone.Facade.Configuration.ActivationArea.gameObject);
+                    continue;
+                }
+
                 if (activatingZone == Facade.Configuration.ActivationArea)
                 {
                     if (!IsActivated)
@@ -109,6 +120,7 @@
                     }
                     IsActivated = true;
                     Validated?.Invoke(activator);
+                    ClearInvalidSnapZoneCollisions(currentActivatingInteractable, ref invalidSnapZoneCollisions);
                     break;
                 }
                 else
@@ -128,9 +140,12 @@
                         Facade.Exited.AddListener(onExitCurrentZoneListener);
                         currentZoneListeners.Add(listenerKey, onExitCurrentZoneListener);
                     }
+                    ClearInvalidSnapZoneCollisions(currentActivatingInteractable, ref invalidSnapZoneCollisions);
                     break;
                 }
             }
+
+            ClearInvalidSnapZoneCollisions(currentActivatingInteractable, ref invalidSnapZoneCollisions);
         }
 
         /// <summary>
@@ -144,6 +159,26 @@
                 IsActivated = false;
                 Facade.Deactivated?.Invoke(deactivator);
             }
+
+            InteractableFacade deactivatingInteractable = TryGetInteractable(deactivator);
+            if (deactivatingInteractable != null)
+            {
+                deactivatingInteractable.ActiveCollisions.Remove(Facade.Configuration.ActivationArea.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Clears any invalid SnapZone collision that still may be stored on the activating Interactable.
+        /// </summary>
+        /// <param name="interactable">The activating interactable.</param>
+        /// <param name="invalidCollisions">The collection of invalid SnapZone collisions.</param>
+        protected virtual void ClearInvalidSnapZoneCollisions(InteractableFacade interactable, ref List<GameObject> invalidCollisions)
+        {
+            foreach (GameObject invalidCollision in invalidCollisions)
+            {
+                interactable.ActiveCollisions.Remove(invalidCollision);
+            }
+            invalidCollisions.Clear();
         }
 
         /// <summary>
@@ -165,7 +200,7 @@
         }
 
         /// <summary>
-        /// Cancels the attempt to activate the SnapZone unpon the previous activating SnapZone becoming deactivated.
+        /// Cancels the attempt to activate the SnapZone upon the previous activating SnapZone becoming deactivated.
         /// </summary>
         /// <param name="activator">The colliding interactable.</param>
         /// <param name="activatingZone">The SnapZone that was previously being activated by the colliding interactable.</param>
@@ -189,7 +224,7 @@
         }
 
         /// <summary>
-        /// Tries and retrieves the <see cref="InteractableFacade"/> associated with the given valid snappable <see cref="GameObject"/>.
+        /// Attempts to set the cache for the <see cref="InteractableFacade"/> associated with the given valid snappable <see cref="GameObject"/>.
         /// </summary>
         /// <param name="container">The colliding interactable.</param>
         protected virtual void TrySetInteractableFacade(GameObject container)
@@ -197,13 +232,23 @@
             if ((container != null && container != currentActivatingGameObject) || currentActivatingInteractable == null)
             {
                 currentActivatingGameObject = container;
-                currentActivatingInteractable = currentActivatingGameObject.TryGetComponent<InteractableFacade>(true, true);
+                currentActivatingInteractable = TryGetInteractable(currentActivatingGameObject);
             }
 
             if (currentActivatingInteractable == null)
             {
                 throw new NullReferenceException("The given container must contain an InteractableFacade.");
             }
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the <see cref="InteractableFacade"/> associated with the given valid snappable <see cref="GameObject"/>.
+        /// </summary>
+        /// <param name="container">The colliding interactable.</param>
+        /// <returns>The interactable associated with the snappable object.</returns>
+        protected virtual InteractableFacade TryGetInteractable(GameObject container)
+        {
+            return container != null ? container.TryGetComponent<InteractableFacade>(true, true) : null;
         }
     }
 }
