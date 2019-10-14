@@ -1,0 +1,14 @@
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: ExtendRealityLtd/DevOps
+      ref: refs/tags/v3.11.3
+      endpoint: ExtendRealityLtd
+
+variables:
+  - group: Build
+  - group: Publish
+
+jobs:
+- template: templates/jobs/cd.yml@templates
