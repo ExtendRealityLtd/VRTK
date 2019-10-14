@@ -2,7 +2,7 @@
     "name": "@extendrealityltd/vrtk",
     "displayName": "VRTK",
     "description": "A productive toolkit for rapidly building spatial computing solutions in the Unity software.",
-    "version": "4.0.0",
+    "version": "4.0.0-beta.1",
     "unity": "2018.3",
     "unityRelease": "10f1",
     "keywords": [
@@ -32,5 +32,25 @@
         "*.meta",
         "Prefabs",
         "Samples"
-    ]
+    ],
+    "releases": {
+        "branches": [
+            "+([0-9])?(.{+([0-9]),x}).x",
+            {
+                "name": "master",
+                "channel": false,
+                "prerelease": "beta"
+            },
+            {
+                "name": "next",
+                "channel": false,
+                "prerelease": "next"
+            },
+            {
+                "name": "next-major",
+                "channel": false,
+                "prerelease": "next-major"
+            }
+        ]
+    }
 }
