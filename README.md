@@ -48,18 +48,39 @@ Visit the [VRTK.Academy] for a collection of educational content to help you get
   * Click the `Install` button located in the bottom right of the `Package Manager` window.
   * The `XR Legacy Input Helpers` package will now download and install into the project.
 
-### Cloning the repo
+### Adding VRTK to a project
 
-* Navigate to the project `Assets/` directory.
-* Git clone with required submodules into the `Assets/` directory:
-  * `git clone --recurse-submodules https://github.com/ExtendRealityLtd/VRTK.git`
-  * change to the newly cloned directory: `cd VRTK/`
-  * `git submodule init && git submodule update`
-* The Unity software will now import and compile the new files.
+* Navigate to the `Packages` directory of your project.
+* Adjust the [project manifest file][Project-Manifest] `manifest.json` in a text editor.
+  * Ensure `https://npm.pkg.github.com/ExtendRealityLtd` is part of `scopedRegistries`.
+    * Ensure `@extendrealityltd` is part of `scopes`.
+  * Add `@extendrealityltd/vrtk` to `dependencies`, stating the latest version.
+
+  A minimal example ends up looking like this. Please note that the version `X.Y.Z` stated here is to be replaced with [the latest released version][Latest-Release].
+  ```json
+  {
+    "scopedRegistries": [
+      {
+        "name": "ExtendRealityLtd",
+        "url": "https://npm.pkg.github.com/ExtendRealityLtd",
+        "scopes": [
+          "@extendrealityltd"
+        ]
+      }
+    ],
+    "dependencies": {
+      "@extendrealityltd/vrtk": "X.Y.Z",
+      ...
+    }
+  }
+  ```
+* Switch back to the Unity software and wait for it to finish importing the added package.
 
 ### Running the example scene
 
-* Open the `VRTK/Samples/Farm/Scenes/ExampleScene` scene.
+* Within the Unity software's `Project` window expand the `Packages` node.
+* Expand the child node of the VRTK package.
+* Open the `Samples/Farm/Scenes/ExampleScene` scene.
 * Enable `Maximize On Play` in the Unity Game view control bar to ensure no performance issues are caused by the Unity Editor overhead.
 * Play the scene in the Unity Editor (`CTRL` + `P`).
 * The scene should automatically play within any Unity supported XR hardware.
@@ -89,6 +110,7 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Unity]: https://unity3d.com/
 [Made With VRTK]: https://www.vrtk.io/madewith.html
 [License]: LICENSE.md
+[Latest-Release]: https://github.com/ExtendRealityLtd/VRTK/releases/latest
 
 [Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
 [Academy-Badge]: https://img.shields.io/badge/vrtk-academy-3484C6.svg
