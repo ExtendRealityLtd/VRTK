@@ -1,5 +1,5 @@
 {
-    "name": "@extendrealityltd/vrtk",
+    "name": "io.extendreality.vrtk",
     "displayName": "VRTK",
     "description": "A productive toolkit for rapidly building spatial computing solutions in the Unity software.",
     "version": "4.0.0-beta.1",
@@ -17,7 +17,10 @@
     "bugs": {
         "url": "https://github.com/ExtendRealityLtd/VRTK/issues"
     },
-    "repository": "github:ExtendRealityLtd/VRTK",
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@github.com/ExtendRealityLtd/VRTK.git"
+    },
     "license": "MIT",
     "author": {
         "name": "Extend Reality Ltd",
@@ -25,7 +28,7 @@
         "url": "https://github.com/ExtendRealityLtd"
     },
     "dependencies": {
-        "@extendrealityltd/zinnia.unity": "1.0.0"
+        "io.extendreality.zinnia.unity": "1.0.1"
     },
     "files": [
         "*.md",

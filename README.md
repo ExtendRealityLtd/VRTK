@@ -52,24 +52,24 @@ Visit the [VRTK.Academy] for a collection of educational content to help you get
 
 * Navigate to the `Packages` directory of your project.
 * Adjust the [project manifest file][Project-Manifest] `manifest.json` in a text editor.
-  * Ensure `https://npm.pkg.github.com/ExtendRealityLtd` is part of `scopedRegistries`.
-    * Ensure `@extendrealityltd` is part of `scopes`.
-  * Add `@extendrealityltd/vrtk` to `dependencies`, stating the latest version.
+  * Ensure `https://registry.npmjs.org/` is part of `scopedRegistries`.
+    * Ensure `io.extendreality` is part of `scopes`.
+  * Add `io.extendreality.vrtk` to `dependencies`, stating the latest version.
 
   A minimal example ends up looking like this. Please note that the version `X.Y.Z` stated here is to be replaced with [the latest released version][Latest-Release].
   ```json
   {
     "scopedRegistries": [
       {
-        "name": "ExtendRealityLtd",
-        "url": "https://npm.pkg.github.com/ExtendRealityLtd",
+        "name": "npmjs",
+        "url": "https://registry.npmjs.org/",
         "scopes": [
-          "@extendrealityltd"
+          "io.extendreality"
         ]
       }
     ],
     "dependencies": {
-      "@extendrealityltd/vrtk": "X.Y.Z",
+      "io.extendreality.vrtk": "X.Y.Z",
       ...
     }
   }
