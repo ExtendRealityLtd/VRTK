@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<Weavers>
-  <Malimbe.FodyRunner>
-    <AssemblyNameRegex>^VRTK</AssemblyNameRegex>
-  </Malimbe.FodyRunner>
-</Weavers>
