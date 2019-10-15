@@ -2,9 +2,10 @@
 
 > ### VRTK v4 beta - Virtual Reality Toolkit
 > A productive toolkit for rapidly building spatial computing solutions in the Unity software.
+> #### Requires the Unity software version 2018.3.10f1 (or above).
 
 [![Slack][Slack-Badge]][Slack]
-[![Documentation][Academy-Badge]][VRTK.Academy]
+[![Documentation][Academy-Badge]][Academy]
 [![Videos][Videos-Badge]][Videos]
 [![Twitter][Twitter-Badge]][Twitter]
 [![License][License-Badge]][License]
@@ -18,69 +19,20 @@ VRTK v4 has not yet been released fully is still in the beta phase meaning there
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
 
-> **Requires** the Unity software version 2018.3.10f1 (or above).
+This repository contains an example Unity project showcasing how to use the [VRTK.Prefabs] package to create spatial experiences.
 
 ## Getting Started
 
-### Documentation
+### Downloading the project
 
-Visit the [VRTK.Academy] for a collection of educational content to help you get the most out of building spatial computing solutions with VRTK.
-
-### Setting up the project
-
-* Create a new project in the Unity software version 2018.3.10f1 (or above) using 3D Template or open an existing project.
-* Ensure `Virtual Reality Supported` is checked:
-  * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` window.
-  * Select `Player` from the left hand menu in the `Project Settings` window.
-  * In the `Player` settings panel expand `XR Settings`.
-  * In `XR Settings` ensure the `Virtual Reality Supported` option is checked.
-* Ensure the project `Scripting Runtime Version` is set to `.NET 4.x Equivalent`:
-  * In the Unity software select `Main Menu -> Edit -> Project Settings` to open the `Project Settings` inspector.
-  * Select `Player` from the left hand menu in the `Project Settings` window.
-  * In the `Player` settings panel expand `Other Settings`.
-  * Ensure the `Scripting Runtime Version` is set to `.NET 4.x Equivalent`.
-
-> Note: Unity 2019.1 requires additional project setup before importing VRTK.
-
-* Download and install the `XR Legacy Input Helpers` from the Unity Package Manager.
-  * In the Unity software select `Main Menu -> Window -> Package Manager` to open the `Package Manager` window.
-  * Select `XR Legacy Input Helpers` from the `Packages` tab in the `Package Manager` window.
-  * Click the `Install` button located in the bottom right of the `Package Manager` window.
-  * The `XR Legacy Input Helpers` package will now download and install into the project.
-
-### Adding VRTK to a project
-
-* Navigate to the `Packages` directory of your project.
-* Adjust the [project manifest file][Project-Manifest] `manifest.json` in a text editor.
-  * Ensure `https://registry.npmjs.org/` is part of `scopedRegistries`.
-    * Ensure `io.extendreality` is part of `scopes`.
-  * Add `io.extendreality.vrtk` to `dependencies`, stating the latest version.
-
-  A minimal example ends up looking like this. Please note that the version `X.Y.Z` stated here is to be replaced with [the latest released version][Latest-Release].
-  ```json
-  {
-    "scopedRegistries": [
-      {
-        "name": "npmjs",
-        "url": "https://registry.npmjs.org/",
-        "scopes": [
-          "io.extendreality"
-        ]
-      }
-    ],
-    "dependencies": {
-      "io.extendreality.vrtk": "X.Y.Z",
-      ...
-    }
-  }
-  ```
-* Switch back to the Unity software and wait for it to finish importing the added package.
+* Download this project repository to your local machine using *one* of the following methods:
+  * Git clone the repository with `git clone https://github.com/ExtendRealityLtd/VRTK.git`
+  * Download the zip file at `https://github.com/ExtendRealityLtd/VRTK/archive/master.zip` and extract it.
+* Open the downloaded VRTK Unity project in the Unity Software.
 
 ### Running the example scene
 
-* Within the Unity software's `Project` window expand the `Packages` node.
-* Expand the child node of the VRTK package.
-* Open the `Samples/Farm/Scenes/ExampleScene` scene.
+* Open the `Assets/Samples/Farm/Scenes/ExampleScene` scene.
 * Enable `Maximize On Play` in the Unity Game view control bar to ensure no performance issues are caused by the Unity Editor overhead.
 * Play the scene in the Unity Editor (`CTRL` + `P`).
 * The scene should automatically play within any Unity supported XR hardware.
@@ -110,8 +62,7 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Unity]: https://unity3d.com/
 [Made With VRTK]: https://www.vrtk.io/madewith.html
 [License]: LICENSE.md
-[Project-Manifest]: https://docs.unity3d.com/Manual/upm-manifestPrj.html
-[Latest-Release]: https://github.com/ExtendRealityLtd/VRTK/releases/latest
+[VRTK.Prefabs]: https://github.com/ExtendRealityLtd/VRTK.Prefabs
 
 [Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
 [Academy-Badge]: https://img.shields.io/badge/vrtk-academy-3484C6.svg
@@ -121,7 +72,7 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [License-Badge]: https://img.shields.io/github/license/ExtendRealityLtd/VRTK.svg
 
 [Slack]: http://invite.vrtk.io
-[VRTK.Academy]: https://academy.vrtk.io
+[Academy]: https://academy.vrtk.io
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
 [Backlog]: http://tracker.vrtk.io
