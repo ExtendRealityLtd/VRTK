@@ -110,6 +110,7 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Unity]: https://unity3d.com/
 [Made With VRTK]: https://www.vrtk.io/madewith.html
 [License]: LICENSE.md
+[Project-Manifest]: https://docs.unity3d.com/Manual/upm-manifestPrj.html
 [Latest-Release]: https://github.com/ExtendRealityLtd/VRTK/releases/latest
 
 [Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
