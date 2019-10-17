@@ -335,3 +335,7 @@ feat(Teleport): add fade camera option on teleport
 * Push your changes to your topic branch in your repository.
 * Submit a pull request to this repository.
 * The core team will aim to look at the pull request as soon as possible and provide feedback where required.
+
+## Copyright Notices
+
+Do not include any copyright notices in any files committed to the repository. As the author of the commit you will continue to retain the copyright for the code committed but do so under the license stated in the repository as outlined in the [GitHub Terms Of Service](https://help.github.com/en/articles/github-terms-of-service#6-contributions-under-repository-license).
