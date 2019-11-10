@@ -4,12 +4,13 @@
 > A productive toolkit for rapidly building spatial computing solutions in the Unity software.
 > #### Requires the Unity software version 2018.3.10f1 (or above).
 
-[![Slack][Slack-Badge]][Slack]
-[![Documentation][Academy-Badge]][Academy]
-[![Videos][Videos-Badge]][Videos]
-[![Twitter][Twitter-Badge]][Twitter]
 [![License][License-Badge]][License]
 [![Backlog][Backlog-Badge]][Backlog]
+[![Documentation][Academy-Badge]][Academy]
+
+[![Slack][Slack-Badge]][Slack]
+[![Videos][Videos-Badge]][Videos]
+[![Twitter][Twitter-Badge]][Twitter]
 
 ## Beta Disclaimer
 
@@ -19,7 +20,9 @@ VRTK v4 has not yet been released fully is still in the beta phase meaning there
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
 
-This repository contains an example Unity project showcasing how to use the [VRTK.Prefabs] package to create spatial experiences.
+This repository contains an example Unity project showcasing how to use the [VRTK.Prefabs] package to create spatial experiences. If you only wish to use the VRTK.Prefabs within your own Unity project then follow the [VRTK.Prefabs Getting Started] guide.
+
+> You do not need to download anything else to get this Unity project running, simply open the downloaded Unity project in the Unity software as outlined by the Getting Started guide below.
 
 ## Getting Started
 
@@ -28,7 +31,33 @@ This repository contains an example Unity project showcasing how to use the [VRT
 * Download this project repository to your local machine using *one* of the following methods:
   * Git clone the repository with `git clone https://github.com/ExtendRealityLtd/VRTK.git`
   * Download the zip file at `https://github.com/ExtendRealityLtd/VRTK/archive/master.zip` and extract it.
-* Open the downloaded VRTK Unity project in the Unity Software.
+
+### Opening the downloaded project in the Unity software
+
+> *Do not* drag and drop the VRTK project download into an existing Unity project. The VRTK repository download *is a Unity project* already and you should not nest a Unity project inside another Unity project. Follow the instructions below for opening the VRTK project within the Unity software. If you only wish to use the VRTK.Prefabs within your own Unity project then follow the [VRTK.Prefabs Getting Started] guide.
+
+#### Using the Unity Hub
+
+* Open the [Unity Hub] panel.
+* Click the `Add` Button:
+
+![image](https://user-images.githubusercontent.com/1029673/68544837-112cb180-03bf-11ea-8118-acd2640cfe30.png)
+
+* Browse to the local directory where the repository was downloaded to and click `Select Folder`:
+
+![image](https://user-images.githubusercontent.com/1029673/68544843-1a1d8300-03bf-11ea-9b88-60f55eddf617.png)
+
+* The VRTK project will now show up in the Unity Hub project window, so select it to open the VRTK project in the Unity software:
+
+![image](https://user-images.githubusercontent.com/1029673/68544856-243f8180-03bf-11ea-8890-1be86159e7f6.png)
+
+* The VRTK project will now open within the Unity software.
+
+#### Opening from within the Unity software
+
+* Select `Main Menu -> File -> Open Project` within the Unity software.
+* Browse to the local directory where the repository was downloaded to and click `Select Folder`.
+* The VRTK project will now open within the Unity software.
 
 ### Running the example scene
 
@@ -63,16 +92,21 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Made With VRTK]: https://www.vrtk.io/madewith.html
 [License]: LICENSE.md
 [VRTK.Prefabs]: https://github.com/ExtendRealityLtd/VRTK.Prefabs
+[VRTK.Prefabs Getting Started]: https://github.com/ExtendRealityLtd/VRTK.Prefabs#getting-started
+[Unity Hub]: https://docs.unity3d.com/Manual/GettingStartedUnityHub.html
 
-[Slack-Badge]: https://img.shields.io/badge/slack-chat-E24663.svg
-[Academy-Badge]: https://img.shields.io/badge/vrtk-academy-3484C6.svg
-[Videos-Badge]: https://img.shields.io/badge/youtube-channel-e52d27.svg
-[Twitter-Badge]: https://img.shields.io/twitter/follow/vr_toolkit.svg?style=flat&label=twitter
-[Backlog-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
 [License-Badge]: https://img.shields.io/github/license/ExtendRealityLtd/VRTK.svg
+[Backlog-Badge]: https://img.shields.io/badge/project-backlog-78bdf2.svg
+[Academy-Badge]: https://img.shields.io/badge/learn-academy-f3aeae.svg
+
+[Slack-Badge]: https://img.shields.io/badge/slack--E24663.svg?style=social&logo=slack
+[Videos-Badge]: https://img.shields.io/badge/youtube--e52d27.svg?style=social&logo=youtube
+[Twitter-Badge]: https://img.shields.io/badge/twitter--219eeb.svg?style=social&logo=twitter
+
+[License]: LICENSE.md
+[Backlog]: http://tracker.vrtk.io
+[Academy]: https://academy.vrtk.io
 
 [Slack]: http://invite.vrtk.io
-[Academy]: https://academy.vrtk.io
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
-[Backlog]: http://tracker.vrtk.io
