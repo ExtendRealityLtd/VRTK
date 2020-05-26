@@ -1,7 +1,7 @@
 [![VRTK logo][VRTK-Image]](#)
 
-> ### VRTK v4 beta - Virtual Reality Toolkit
-> A productive toolkit for rapidly building spatial computing solutions in the Unity software.
+> ### VRTK Farm Yard Example - Virtual Reality Toolkit
+> A Farm Yard example scene of how to use VRTK v4 for rapidly building spatial computing solutions in the Unity software.
 > #### Requires the Unity software version 2018.3.10f1 (or above).
 
 [![License][License-Badge]][License]
@@ -14,13 +14,13 @@
 
 ## Beta Disclaimer
 
-VRTK v4 has not yet been released fully is still in the beta phase meaning there may still be undiscovered bugs, missing features and a lack of usable documentation. All of these things are being worked on but progress is slow as there is only one person actively working on VRTK v4 in their spare time so please be patient and respectful. You are free to use VRTK v4 in any way you wish, but if you feel you will struggle figuring stuff out for yourself without detailed documentation then it may be better off if you wait until the full release of VRTK v4. 
+This VRTK v4 Farm Yard Example project uses a deprecated version of [VRTK.Prefabs] and this will eventually be replaced with the new Tilia repositories that provide the same functionality. This Farm Yard Example project will be considered in the Beta state until the VRTK.Prefabs have been removed and replaced with the Tilia components. A complete list of the Tilia repos can be found at https://www.vrtk.io/tilia.html along with installation instructions.
 
 ## Introduction
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
 
-This repository contains an example Unity project showcasing how to use the [VRTK.Prefabs] package to create spatial experiences. If you only wish to use the VRTK.Prefabs within your own Unity project then follow the [VRTK.Prefabs Getting Started] guide.
+~~This repository contains an example Unity project showcasing how to use the [VRTK.Prefabs] package to create spatial experiences. If you only wish to use the VRTK.Prefabs within your own Unity project then follow the [VRTK.Prefabs Getting Started] guide.~~
 
 > You do not need to download anything else to get this Unity project running, simply open the downloaded Unity project in the Unity software as outlined by the Getting Started guide below.
 
