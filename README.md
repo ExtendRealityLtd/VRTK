@@ -16,6 +16,8 @@
 
 This VRTK v4 Farm Yard Example project uses a deprecated version of [VRTK.Prefabs] and this will eventually be replaced with the new Tilia repositories that provide the same functionality. This Farm Yard Example project will be considered in the Beta state until the VRTK.Prefabs have been removed and replaced with the Tilia components. A complete list of the Tilia repos can be found at https://www.vrtk.io/tilia.html along with installation instructions.
 
+If you want to get started with the Tilia repos then check out the [Bowling Tutorial].
+
 ## Introduction
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
@@ -110,3 +112,4 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Slack]: http://invite.vrtk.io
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
+[Bowling Tutorial]: https://github.com/ExtendRealityLtd/VRTK.Tutorials.VRBowling
