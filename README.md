@@ -14,15 +14,31 @@
 
 ## Beta Disclaimer
 
-This VRTK v4 Farm Yard Example project uses a deprecated version of [VRTK.Prefabs] and this will eventually be replaced with the new Tilia repositories that provide the same functionality. This Farm Yard Example project will be considered in the Beta state until the VRTK.Prefabs have been removed and replaced with the Tilia components. A complete list of the Tilia repos can be found at https://www.vrtk.io/tilia.html along with installation instructions.
+This VRTK v4 Farm Yard Example project has been updated to use the latest [Tilia] packages but is still in development and is missing a number of features from the previous release that used the deprecated [VRTK.Prefabs] package.
+
+The current missing features are:
+
+* Locomotion
+  * Axis Movement
+  * Step Multiplier
+  * Drag World
+  * Climbing
+* Pointers
+  * PlayArea Boundary Cursor
+  * Distance Grab
+* Snap Zone Scarecrow
+* Cloneamatic Machine
+* Car Lift in warehouse
+* Interactable Carry Ladder
+* Barn Zip Wire
+
+These features will be added in due course.
 
 If you want to get started with the Tilia repos then check out the [Bowling Tutorial].
 
 ## Introduction
 
 VRTK aims to make building spatial computing solutions in the [Unity] software fast and easy for beginners as well as experienced developers.
-
-~~This repository contains an example Unity project showcasing how to use the [VRTK.Prefabs] package to create spatial experiences. If you only wish to use the VRTK.Prefabs within your own Unity project then follow the [VRTK.Prefabs Getting Started] guide.~~
 
 > You do not need to download anything else to get this Unity project running, simply open the downloaded Unity project in the Unity software as outlined by the Getting Started guide below.
 
@@ -36,7 +52,7 @@ VRTK aims to make building spatial computing solutions in the [Unity] software f
 
 ### Opening the downloaded project in the Unity software
 
-> *Do not* drag and drop the VRTK project download into an existing Unity project. The VRTK repository download *is a Unity project* already and you should not nest a Unity project inside another Unity project. Follow the instructions below for opening the VRTK project within the Unity software. If you only wish to use the VRTK.Prefabs within your own Unity project then follow the [VRTK.Prefabs Getting Started] guide.
+> *Do not* drag and drop the VRTK project download into an existing Unity project. The VRTK repository download *is a Unity project* already and you should not nest a Unity project inside another Unity project. Follow the instructions below for opening the VRTK project within the Unity software.
 
 #### Using the Unity Hub
 
@@ -93,8 +109,8 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Unity]: https://unity3d.com/
 [Made With VRTK]: https://www.vrtk.io/madewith.html
 [License]: LICENSE.md
+[Tilia]: https://www.vrtk.io/tilia.html
 [VRTK.Prefabs]: https://github.com/ExtendRealityLtd/VRTK.Prefabs
-[VRTK.Prefabs Getting Started]: https://github.com/ExtendRealityLtd/VRTK.Prefabs#getting-started
 [Unity Hub]: https://docs.unity3d.com/Manual/GettingStartedUnityHub.html
 
 [License-Badge]: https://img.shields.io/github/license/ExtendRealityLtd/VRTK.svg

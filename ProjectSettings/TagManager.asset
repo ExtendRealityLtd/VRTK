@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - InvalidTeleportLocation
+  - TeleportTargetPoint
+  - TeleportTargetArea
+  - Hammer
+  - Hacksaw
+  - WoodSaw
+  - Ignore Collision Fade
+  - HeadsetFaderCollider
+  - AppleStem
   layers:
   - Default
   - TransparentFX

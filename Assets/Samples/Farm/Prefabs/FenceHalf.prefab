@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 9020892188672620286}
   - component: {fileID: 3761421817333805651}
   - component: {fileID: 3526427850672417044}
-  - component: {fileID: 8289218737919750450}
   m_Layer: 0
   m_Name: PostRightEnd
-  m_TagString: Untagged
+  m_TagString: InvalidTeleportLocation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,18 +91,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8289218737919750450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 793689745043100300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b310d871f5b32844a3993d884746365, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1918928329983112705
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,10 +137,9 @@ GameObject:
   - component: {fileID: 1779037675797388039}
   - component: {fileID: 6435240673599046320}
   - component: {fileID: 136632421535375854}
-  - component: {fileID: 630928409244811983}
   m_Layer: 0
   m_Name: PostLeftEnd
-  m_TagString: Untagged
+  m_TagString: InvalidTeleportLocation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -230,18 +216,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &630928409244811983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6567915700250868316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b310d871f5b32844a3993d884746365, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7767419048319195704
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,10 +228,9 @@ GameObject:
   - component: {fileID: 4031892605097385706}
   - component: {fileID: 4942432166915795825}
   - component: {fileID: 3882054981364589039}
-  - component: {fileID: 2874139360779594636}
   m_Layer: 0
   m_Name: StrutBottom
-  m_TagString: Untagged
+  m_TagString: InvalidTeleportLocation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -334,18 +307,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2874139360779594636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7767419048319195704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b310d871f5b32844a3993d884746365, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9146973100790107742
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,10 +319,9 @@ GameObject:
   - component: {fileID: 1468611587468326297}
   - component: {fileID: 7381363721058707833}
   - component: {fileID: 3396518820020473119}
-  - component: {fileID: 7515281021410567711}
   m_Layer: 0
   m_Name: StrutTop
-  m_TagString: Untagged
+  m_TagString: InvalidTeleportLocation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -438,15 +398,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7515281021410567711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9146973100790107742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b310d871f5b32844a3993d884746365, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
