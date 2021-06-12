@@ -1,9 +1,9 @@
 ﻿namespace VRTK.Examples
 {
-    using UnityEngine;
-    using Malimbe.XmlDocumentationAttribute;
-    using Malimbe.PropertySerializationAttribute;
     using Malimbe.BehaviourStateRequirementMethod;
+    using Malimbe.PropertySerializationAttribute;
+    using Malimbe.XmlDocumentationAttribute;
+    using UnityEngine;
 
     /// <summary>
     /// Scrubs through an animation timeline to a specific normalized point along the timeline.
@@ -17,7 +17,7 @@
         [field: DocumentedByXml]
         public Animator Timeline { get; set; }
         /// <summary>
-        /// The the name of the <see cref="Animation"/> to scrub.
+        /// The name of the <see cref="Animation"/> to scrub.
         /// </summary>
         [Serialized]
         [field: DocumentedByXml]
