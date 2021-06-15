@@ -24,7 +24,7 @@ TagManager:
   - 
   - PostProcessing
   - PointerGrabbableObject
-  - 
+  - IgnoreSnapToFloor
   - 
   - 
   - 
