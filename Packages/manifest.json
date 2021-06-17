@@ -29,7 +29,7 @@
     "io.extendreality.tilia.interactions.controllables.unity": "1.12.10",
     "io.extendreality.tilia.interactions.interactables.unity": "1.19.2",
     "io.extendreality.tilia.interactions.pointerinteractors.unity": "1.7.14",
-    "io.extendreality.tilia.interactions.snapzone.unity": "1.4.5",
+    "io.extendreality.tilia.interactions.snapzone.unity": "1.5.0",
     "io.extendreality.tilia.interactions.spatialbuttons.unity": "1.3.9",
     "io.extendreality.tilia.locomotors.axismove.unity": "1.3.9",
     "io.extendreality.tilia.locomotors.climbing.unity": "1.7.16",

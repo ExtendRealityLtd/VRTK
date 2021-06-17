@@ -14,23 +14,18 @@
 
 ## Beta Disclaimer
 
-This VRTK v4 Farm Yard Example project has been updated to use the latest [Tilia] packages but is still in development and is missing a number of features from the previous release that used the deprecated [VRTK.Prefabs] package.
+This VRTK v4 Farm Yard example project has been updated to use the latest [Tilia] packages but is still in development and is missing a number of features from the previous release that used the deprecated [VRTK.Prefabs] package.
 
 The current missing features are:
 
 * Locomotion
-  * Axis Movement
   * Step Multiplier
   * Drag World
-  * Climbing
 * Pointers
   * PlayArea Boundary Cursor
   * Distance Grab
-* Snap Zone Scarecrow
-* Cloneamatic Machine
 * Car Lift in warehouse
 * Interactable Carry Ladder
-* Barn Zip Wire
 
 These features will be added in due course.
 
@@ -97,6 +92,12 @@ Check out the [Made With VRTK] website to see the full list.
 
 We're not currently in a place where accepting contributions would be helpful. But as soon as we're ready we'll let you know!
 
+## Third Party Pacakges
+
+The VRTK v4 Farm Yard example project uses the following 3rd party package:
+
+* [Quick Outline] by Chris Nolet.
+
 ## License
 
 Code released under the [MIT License][License].
@@ -129,3 +130,5 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Videos]: http://videos.vrtk.io
 [Twitter]: https://twitter.com/VR_Toolkit
 [Bowling Tutorial]: https://github.com/ExtendRealityLtd/VRTK.Tutorials.VRBowling
+
+[Quick Outline]: https://github.com/chrisnolet/QuickOutline

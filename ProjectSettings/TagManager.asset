@@ -13,6 +13,10 @@ TagManager:
   - Ignore Collision Fade
   - HeadsetFaderCollider
   - AppleStem
+  - ScarecrowHead
+  - ScarecrowHat
+  - ScarecrowArm
+  - ScarecrowHand
   layers:
   - Default
   - TransparentFX
@@ -24,7 +28,7 @@ TagManager:
   - 
   - PostProcessing
   - PointerGrabbableObject
-  - 
+  - IgnoreSnapToFloor
   - 
   - 
   - 
