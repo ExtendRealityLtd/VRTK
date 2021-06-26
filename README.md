@@ -23,13 +23,9 @@ This VRTK v4 Farm Yard example project has been updated to use the latest [Tilia
 The current missing features are:
 
 * Locomotion
-  * Step Multiplier
   * Drag World
 * Pointers
   * PlayArea Boundary Cursor
-  * Distance Grab
-* Car Lift in warehouse
-* Interactable Carry Ladder
 
 These features will be added in due course.
 
