@@ -227,7 +227,7 @@
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.interactions.snapzone.unity": {
-      "version": "1.5.8",
+      "version": "1.5.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
