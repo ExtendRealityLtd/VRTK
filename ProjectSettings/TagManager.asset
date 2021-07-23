@@ -17,6 +17,7 @@ TagManager:
   - HeadsetFaderCollider
   - ScarecrowHat
   - ScarecrowHead
+  - FireableArrow
   layers:
   - Default
   - TransparentFX

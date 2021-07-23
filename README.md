@@ -90,7 +90,9 @@ Check out the [Made With VRTK] website to see the full list.
 
 ## Contributing
 
-We're not currently in a place where accepting contributions would be helpful. But as soon as we're ready we'll let you know!
+If you have a cool feature you'd like to show off within the Farm Yard that can be implemented with the base Tilia packages then feel free to raise a pull request with your contribution.
+
+Please refer to the Extend Reality [Contributing guidelines] and the [project coding conventions].
 
 ## Third Party Pacakges
 
@@ -130,3 +132,6 @@ These materials are not sponsored by or affiliated with Unity Technologies or it
 [Bowling Tutorial]: https://github.com/ExtendRealityLtd/VRTK.Tutorials.VRBowling
 
 [Quick Outline]: https://github.com/chrisnolet/QuickOutline
+
+[Contributing guidelines]: https://github.com/ExtendRealityLtd/.github/blob/master/CONTRIBUTING.md
+[project coding conventions]: https://github.com/ExtendRealityLtd/.github/blob/master/CONVENTIONS/UNITY3D.md
