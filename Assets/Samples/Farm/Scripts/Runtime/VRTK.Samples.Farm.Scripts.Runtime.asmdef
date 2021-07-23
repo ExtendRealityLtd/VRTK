@@ -1,9 +1,10 @@
 {
     "name": "VRTK.Samples.Farm.Scripts.Runtime",
     "references": [
-        "Zinnia.Runtime"
+        "Zinnia.Runtime",
+        "Tilia.Interactions.Interactables.Unity.Runtime",
+        "Tilia.Interactions.SnapZone.Unity.Runtime"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -16,5 +17,7 @@
         "Malimbe.XmlDocumentationAttribute.dll"
     ],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
