@@ -2,7 +2,7 @@
 
 > ### VRTK Farm Yard Example - Virtual Reality Toolkit
 > A Farm Yard example scene of how to use VRTK v4 for rapidly building spatial computing solutions in the Unity software.
-> #### Requires the Unity software version 2019.4.28f1.
+> #### Requires the Unity software version 2020.3.24f1.
 
 [![License][License-Badge]][License]
 [![Backlog][Backlog-Badge]][Backlog]
@@ -12,11 +12,9 @@
 
 ## Beta Disclaimer
 
-This project was built using Unity 2019.4.28f1 and should work as expected on that version. It is feasible to downgrade this project to a previous version of the Unity software but it may cause issues in doing so.
+This project was built using 2020.3.24f1 and should work as expected on that version. It is feasible to downgrade this project to a previous version of the Unity software but it may cause issues in doing so.
 
-This project also uses the Unity software legacy XR system and the old Unity Input Manager which is deprecated and may be removed in future versions of Unity, this may cause this project not to work as expected in future versions of the Unity software.
-
-There are Tilia packages that support the new Unity input system and new Unity XR management system so it would also be feasible to convert this project to work on later versions of the Unity software.
+This project uses the newer Unity software XR management system and the newer Unity Input system.
 
 This VRTK v4 Farm Yard example project has been updated to use the latest [Tilia] packages but is still in development and is missing a number of features from the previous release that used the deprecated [VRTK.Prefabs] package.
 
