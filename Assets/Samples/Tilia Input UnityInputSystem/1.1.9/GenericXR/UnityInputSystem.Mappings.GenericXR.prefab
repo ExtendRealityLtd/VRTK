@@ -515,7 +515,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443294227618252
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,7 +958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: f9adcc3f2cca70e4fa3cdabd2c27afbc, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: f9adcc3f2cca70e4fa3cdabd2c27afbc,
+    type: 3}
   m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -1964,7 +1965,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443294806420875
 GameObject:
   m_ObjectHideFlags: 0
@@ -2797,7 +2798,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443295184921974
 GameObject:
   m_ObjectHideFlags: 0
@@ -2917,7 +2918,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443295214854025
 GameObject:
   m_ObjectHideFlags: 0
@@ -3037,7 +3038,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443295252543439
 GameObject:
   m_ObjectHideFlags: 0
@@ -4501,7 +4502,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443295763352110
 GameObject:
   m_ObjectHideFlags: 0
@@ -4695,7 +4696,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1
 --- !u!1 &6349443295896242458
 GameObject:
   m_ObjectHideFlags: 0
@@ -5335,4 +5336,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  contextToProcess: 2
+  contextToProcess: -1

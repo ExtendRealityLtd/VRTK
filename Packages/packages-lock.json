@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.collab-proxy": {
-      "version": "1.15.4",
+      "version": "1.15.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -155,13 +155,13 @@
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.camerarigs.spatialsimulator.unity": {
-      "version": "1.4.18",
+      "version": "1.4.19",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "io.extendreality.zinnia.unity": "1.39.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.2.0",
-        "io.extendreality.tilia.input.unityinputmanager": "1.4.8"
+        "io.extendreality.tilia.input.unityinputmanager": "1.4.9"
       },
       "url": "https://registry.npmjs.org"
     },
@@ -224,7 +224,7 @@
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.input.unityinputmanager": {
-      "version": "1.4.8",
+      "version": "1.4.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -233,7 +233,7 @@
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.input.unityinputsystem": {
-      "version": "1.1.10",
+      "version": "1.1.11",
       "depth": 0,
       "source": "registry",
       "dependencies": {
