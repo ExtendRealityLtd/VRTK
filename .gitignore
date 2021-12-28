@@ -1,4 +1,5 @@
-[Ll]ibrary/
+[Ll]ibrary/*
+![Ll]ibrary/InputUserSettings.json
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
