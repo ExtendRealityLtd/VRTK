@@ -192,7 +192,9 @@ public class Outline : MonoBehaviour {
       var smoothNormals = (index >= 0) ? bakeValues[index].data : SmoothNormals(meshFilter.sharedMesh);
 
       // Store smooth normals in UV3
-      meshFilter.sharedMesh.SetUVs(3, smoothNormals);
+      if (smoothNormals.Count == meshFilter.mesh.vertexCount) {
+        meshFilter.sharedMesh.SetUVs(3, smoothNormals);
+      }
     }
 
     // Clear UV3 on skinned mesh renderers
