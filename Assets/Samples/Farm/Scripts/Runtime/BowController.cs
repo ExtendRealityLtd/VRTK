@@ -1,8 +1,5 @@
 ﻿namespace VRTK.Examples
 {
-    using Malimbe.MemberClearanceMethod;
-    using Malimbe.PropertySerializationAttribute;
-    using Malimbe.XmlDocumentationAttribute;
     using Tilia.Interactions.Interactables.Interactables;
     using Tilia.Interactions.Interactables.Interactors;
     using Tilia.Interactions.SnapZone;
@@ -16,70 +13,246 @@
     public class BowController : MonoBehaviour
     {
         #region Bow Settings
+        [Header("Bow Settings")]
+        [Tooltip("The actual Interactable bow.")]
+        [SerializeField]
+        private InteractableFacade bowInteractable;
         /// <summary>
         /// The actual Interactable bow.
         /// </summary>
-        [Serialized, Cleared]
-        [field: Header("Bow Settings"), DocumentedByXml]
-        public InteractableFacade BowInteractable { get; set; }
+        public InteractableFacade BowInteractable
+        {
+            get
+            {
+                return bowInteractable;
+            }
+            set
+            {
+                bowInteractable = value;
+            }
+        }
+        [Tooltip("The colliders associated with the bow.")]
+        [SerializeField]
+        private Collider[] bowColliders;
         /// <summary>
         /// The colliders associated with the bow.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public Collider[] BowColliders { get; set; }
+        public Collider[] BowColliders
+        {
+            get
+            {
+                return bowColliders;
+            }
+            set
+            {
+                bowColliders = value;
+            }
+        }
+        [Tooltip("The snap zone used for nocking the arrow to the bow.")]
+        [SerializeField]
+        private SnapZoneFacade arrowSnapZone;
         /// <summary>
         /// The snap zone used for nocking the arrow to the bow.
         /// </summary>
-        [Serialized, Cleared]
-        [field: DocumentedByXml]
-        public SnapZoneFacade ArrowSnapZone { get; set; }
+        public SnapZoneFacade ArrowSnapZone
+        {
+            get
+            {
+                return arrowSnapZone;
+            }
+            set
+            {
+                arrowSnapZone = value;
+            }
+        }
+        [Tooltip("The animation scrubber that scrubs through the bow flex animation.")]
+        [SerializeField]
+        private AnimatorScrubber flexAnimationScrubber;
         /// <summary>
         /// The animation scrubber that scrubs through the bow flex animation.
         /// </summary>
-        [Serialized, Cleared]
-        [field: DocumentedByXml]
-        public AnimatorScrubber FlexAnimationScrubber { get; set; }
+        public AnimatorScrubber FlexAnimationScrubber
+        {
+            get
+            {
+                return flexAnimationScrubber;
+            }
+            set
+            {
+                flexAnimationScrubber = value;
+            }
+        }
         #endregion
 
         #region String Settings
+        [Header("String Settings")]
+        [Tooltip("The LineRenderer used to draw the bow string.")]
+        [SerializeField]
+        private LineRenderer stringRenderer;
         /// <summary>
         /// The <see cref="LineRenderer"/> used to draw the bow string.
         /// </summary>
-        [Serialized, Cleared]
-        [field: Header("String Settings"), DocumentedByXml]
-        public LineRenderer StringRenderer { get; set; }
+        public LineRenderer StringRenderer
+        {
+            get
+            {
+                return stringRenderer;
+            }
+            set
+            {
+                stringRenderer = value;
+            }
+        }
+        [Tooltip("The points used to draw the string between.")]
+        [SerializeField]
+        private Transform[] stringPoints = new Transform[3];
         /// <summary>
         /// The points used to draw the string between.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public Transform[] StringPoints { get; set; } = new Transform[3];
-        /// <summary>
+        public Transform[] StringPoints
+        {
+            get
+            {
+                return stringPoints;
+            }
+            set
+            {
+                stringPoints = value;
+            }
+        }
+        [Tooltip("The container holding the nocking point on the string.")]
+        [SerializeField]
+        private GameObject stringNock;
         /// The container holding the nocking point on the string.
         /// </summary>
-        [Serialized, Cleared]
-        [field: DocumentedByXml]
-        public GameObject StringNock { get; set; }
+        public GameObject StringNock
+        {
+            get
+            {
+                return stringNock;
+            }
+            set
+            {
+                stringNock = value;
+            }
+        }
+        [Tooltip("The speed in which the string returns to the idle position.")]
+        [SerializeField]
+        private float stringReturnSpeed = 150f;
         /// <summary>
         /// The speed in which the string returns to the idle position.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public float StringReturnSpeed { get; set; } = 150f;
+        public float StringReturnSpeed
+        {
+            get
+            {
+                return stringReturnSpeed;
+            }
+            set
+            {
+                stringReturnSpeed = value;
+            }
+        }
+        [Tooltip("The maximum length the string can be pulled back.")]
+        [SerializeField]
+        private float maxStringPull = 0.75f;
         /// <summary>
         /// The maximum length the string can be pulled back.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public float MaxStringPull { get; set; } = 0.75f;
+        public float MaxStringPull
+        {
+            get
+            {
+                return maxStringPull;
+            }
+            set
+            {
+                maxStringPull = value;
+            }
+        }
+        [Tooltip("The power produced to propel the arrow forward by the string when fully pulled back.")]
+        [SerializeField]
+        private float stringPower = 20f;
         /// <summary>
         /// The power produced to propel the arrow forward by the string when fully pulled back.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public float StringPower { get; set; } = 20f;
+        public float StringPower
+        {
+            get
+            {
+                return stringPower;
+            }
+            set
+            {
+                stringPower = value;
+            }
+        }
         #endregion
+
+        /// <summary>
+        /// Clears the <see cref="BowInteractable"/>.
+        /// </summary>
+        public virtual void ClearBowInteractable()
+        {
+            if (!this.IsValidState())
+            {
+                return;
+            }
+
+            BowInteractable = default;
+        }
+
+        /// <summary>
+        /// Clears the <see cref="ArrowSnapZone"/>.
+        /// </summary>
+        public virtual void ClearArrowSnapZone()
+        {
+            if (!this.IsValidState())
+            {
+                return;
+            }
+
+            ArrowSnapZone = default;
+        }
+
+        /// <summary>
+        /// Clears the <see cref="FlexAnimationScrubber"/>.
+        /// </summary>
+        public virtual void ClearFlexAnimationScrubber()
+        {
+            if (!this.IsValidState())
+            {
+                return;
+            }
+
+            FlexAnimationScrubber = default;
+        }
+
+        /// <summary>
+        /// Clears the <see cref="StringRenderer"/>.
+        /// </summary>
+        public virtual void ClearStringRenderer()
+        {
+            if (!this.IsValidState())
+            {
+                return;
+            }
+
+            StringRenderer = default;
+        }
+
+        /// <summary>
+        /// Clears the <see cref="StringNock"/>.
+        /// </summary>
+        public virtual void ClearStringNock()
+        {
+            if (!this.IsValidState())
+            {
+                return;
+            }
+
+            StringNock = default;
+        }
 
         /// <summary>
         /// The normalized value of the current pull distance of the string from the nock resting point.

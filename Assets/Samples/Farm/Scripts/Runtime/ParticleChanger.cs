@@ -1,17 +1,26 @@
 ﻿namespace VRTK.Examples
 {
-    using Malimbe.PropertySerializationAttribute;
-    using Malimbe.XmlDocumentationAttribute;
     using UnityEngine;
 
     public class ParticleChanger : MonoBehaviour
     {
+        [Tooltip("The ParticleSystem to control.")]
+        [SerializeField]
+        private ParticleSystem particles;
         /// <summary>
         /// The <see cref="ParticleSystem"/> to control.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public ParticleSystem Particles { get; set; }
+        public ParticleSystem Particles
+        {
+            get
+            {
+                return particles;
+            }
+            set
+            {
+                particles = value;
+            }
+        }
 
         public virtual void UpdateEmissionRate(float rate)
         {

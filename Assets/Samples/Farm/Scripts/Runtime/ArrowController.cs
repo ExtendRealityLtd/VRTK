@@ -1,10 +1,8 @@
 ﻿namespace VRTK.Examples
 {
-    using Malimbe.MemberClearanceMethod;
-    using Malimbe.PropertySerializationAttribute;
-    using Malimbe.XmlDocumentationAttribute;
     using Tilia.Interactions.Interactables.Interactables;
     using UnityEngine;
+    using Zinnia.Extension;
     using Zinnia.Tracking.Collision;
 
     /// <summary>
@@ -12,35 +10,105 @@
     /// </summary>
     public class ArrowController : MonoBehaviour
     {
+        [Tooltip("The actual Interactable arrow.")]
+        [SerializeField]
+        private InteractableFacade arrowInteractable;
         /// <summary>
         /// The actual Interactable arrow.
         /// </summary>
-        [Serialized, Cleared]
-        [field: DocumentedByXml]
-        public InteractableFacade ArrowInteractable { get; set; }
+        public InteractableFacade ArrowInteractable
+        {
+            get
+            {
+                return arrowInteractable;
+            }
+            set
+            {
+                arrowInteractable = value;
+            }
+        }
+        [Tooltip("The amount of time to pass before destroying the arrow after being fired.")]
+        [SerializeField]
+        private float timeTillDestroy = 20f;
         /// <summary>
         /// The amount of time to pass before destroying the arrow after being fired.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public float TimeTillDestroy { get; set; } = 20f;
+        public float TimeTillDestroy
+        {
+            get
+            {
+                return timeTillDestroy;
+            }
+            set
+            {
+                timeTillDestroy = value;
+            }
+        }
+        [Tooltip("The actions to enable upon the arrow hitting a valid object.")]
+        [SerializeField]
+        private GameObject hitAction;
         /// <summary>
         /// The actions to enable upon the arrow hitting a valid object.
         /// </summary>
-        [Serialized, Cleared]
-        [field: DocumentedByXml]
-        public GameObject HitAction { get; set; }
+        public GameObject HitAction
+        {
+            get
+            {
+                return hitAction;
+            }
+            set
+            {
+                hitAction = value;
+            }
+        }
+        [Tooltip("The colliders associated with the arrow.")]
+        [SerializeField]
+        private Collider[] arrowColliders;
         /// <summary>
         /// The colliders associated with the arrow.
         /// </summary>
-        [Serialized]
-        [field: DocumentedByXml]
-        public Collider[] ArrowColliders { get; set; }
+        public Collider[] ArrowColliders
+        {
+            get
+            {
+                return arrowColliders;
+            }
+            set
+            {
+                arrowColliders = value;
+            }
+        }
 
         /// <summary>
         /// Whether the arrow is in flight;
         /// </summary>
         protected bool inFlight;
+
+        /// <summary>
+        /// Clears the <see cref="ArrowInteractable"/>.
+        /// </summary>
+        public virtual void ClearArrowInteractable()
+        {
+            if(!this.IsValidState())
+            {
+                return;
+            }
+
+            ArrowInteractable = default;
+        }
+
+        /// <summary>
+        /// Clears the <see cref="HitAction"/>.
+        /// </summary>
+        public virtual void ClearHitAction()
+        {
+            if (!this.IsValidState())
+            {
+                return;
+            }
+
+            HitAction = default;
+        }
 
         /// <summary>
         /// Checks to see if the arrow has hit something.
