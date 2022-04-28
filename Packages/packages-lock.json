@@ -106,7 +106,7 @@
       }
     },
     "com.unity.xr.legacyinputhelpers": {
-      "version": "2.1.8",
+      "version": "2.1.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -139,269 +139,262 @@
       },
       "url": "https://packages.unity.com"
     },
-    "io.extendreality.malimbe": {
-      "version": "9.7.0",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.npmjs.org"
-    },
     "io.extendreality.tilia.camerarigs.spatialsimulator.unity": {
-      "version": "1.7.4",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0",
-        "io.extendreality.tilia.input.unityinputmanager": "1.5.1"
+        "io.extendreality.tilia.input.unityinputmanager": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.camerarigs.trackedalias.unity": {
-      "version": "1.8.1",
-      "depth": 0,
+      "version": "2.0.1",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.camerarigs.xrpluginframework.unity": {
-      "version": "1.5.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "com.unity.xr.management": "4.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.developertools.unity": {
-      "version": "1.3.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.indicators.objectpointers.unity": {
-      "version": "1.8.4",
+      "version": "2.0.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0",
-        "io.extendreality.tilia.mutators.objectfollower.unity": "1.3.1"
+        "io.extendreality.tilia.mutators.objectfollower.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.indicators.spatialtargets.unity": {
-      "version": "1.8.3",
-      "depth": 0,
+      "version": "2.0.3",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.indicators.objectpointers.unity": "1.8.4"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.indicators.objectpointers.unity": "2.0.3"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.input.combinedactions.unity": {
-      "version": "1.11.1",
-      "depth": 0,
+      "version": "2.0.1",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.input.unityinputmanager": {
-      "version": "1.5.1",
+      "version": "2.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.input.unityinputsystem": {
-      "version": "1.2.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "com.unity.inputsystem": "1.0.2"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.interactions.controllables.unity": {
-      "version": "1.16.2",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.interactions.interactables.unity": {
-      "version": "1.24.1",
+      "version": "2.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.interactions.pointerinteractors.unity": {
-      "version": "1.10.6",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0",
-        "io.extendreality.tilia.indicators.objectpointers.unity": "1.8.4",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.tilia.indicators.objectpointers.unity": "2.0.3",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.interactions.snapzone.unity": {
-      "version": "1.6.5",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0",
-        "io.extendreality.tilia.mutators.objectfollower.unity": "1.3.1",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.tilia.mutators.objectfollower.unity": "2.0.1",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.interactions.spatialbuttons.unity": {
-      "version": "1.4.4",
+      "version": "2.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.tilia.indicators.spatialtargets.unity": "1.8.3",
+        "io.extendreality.tilia.indicators.spatialtargets.unity": "2.0.3",
         "com.unity.textmeshpro": "1.3.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.locomotors.axismove.unity": {
-      "version": "1.4.4",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0",
-        "io.extendreality.tilia.input.combinedactions.unity": "1.11.1"
+        "io.extendreality.tilia.input.combinedactions.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.locomotors.climbing.unity": {
-      "version": "1.8.7",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.trackers.pseudobody.unity": "1.8.6",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.trackers.pseudobody.unity": "2.0.5",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.locomotors.movementamplifier.unity": {
-      "version": "1.1.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.locomotors.teleporter.unity": {
-      "version": "1.8.0",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.locomotors.teleporttargets.unity": {
-      "version": "1.2.4",
+      "version": "2.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.tilia.indicators.spatialtargets.unity": "1.8.3"
+        "io.extendreality.tilia.indicators.spatialtargets.unity": "2.0.3"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.mutators.collisionignorer.unity": {
-      "version": "1.3.1",
-      "depth": 2,
+      "version": "2.0.1",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.mutators.objectfollower.unity": {
-      "version": "1.3.1",
+      "version": "2.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.output.interactorhaptics.unity": {
-      "version": "1.2.6",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.camerarigs.trackedalias.unity": "1.8.1",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.camerarigs.trackedalias.unity": "2.0.1",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.trackers.colliderfollower.unity": {
-      "version": "1.4.4",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.mutators.objectfollower.unity": "1.3.1"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.mutators.objectfollower.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.trackers.obscurancetracker.unity": {
-      "version": "1.3.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.trackers.pseudobody.unity": {
-      "version": "1.8.6",
-      "depth": 1,
+      "version": "2.0.5",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.mutators.collisionignorer.unity": "1.3.1",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.mutators.collisionignorer.unity": "2.0.1",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.utilities.objectstateswitcher.unity": {
-      "version": "1.4.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0"
+        "io.extendreality.zinnia.unity": "2.0.0"
       },
       "url": "https://registry.npmjs.org"
     },
@@ -413,43 +406,41 @@
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.visuals.collisionfader.unity": {
-      "version": "1.2.2",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0",
-        "io.extendreality.tilia.mutators.objectfollower.unity": "1.3.1"
+        "io.extendreality.tilia.mutators.objectfollower.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.visuals.interactablehighlighter.unity": {
-      "version": "1.1.4",
+      "version": "2.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
-        "io.extendreality.tilia.interactions.interactables.unity": "1.24.1"
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.interactions.interactables.unity": "2.0.1"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.tilia.visuals.tooltip.unity": {
-      "version": "1.5.1",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "io.extendreality.zinnia.unity": "1.47.0",
+        "io.extendreality.zinnia.unity": "2.0.0",
         "io.extendreality.tilia.utilities.shaders.unity": "1.3.0"
       },
       "url": "https://registry.npmjs.org"
     },
     "io.extendreality.zinnia.unity": {
-      "version": "1.47.0",
-      "depth": 1,
+      "version": "2.0.0",
+      "depth": 0,
       "source": "registry",
-      "dependencies": {
-        "io.extendreality.malimbe": "9.7.0"
-      },
+      "dependencies": {},
       "url": "https://registry.npmjs.org"
     },
     "com.unity.modules.ai": {
