@@ -418,6 +418,16 @@
       "dependencies": {},
       "url": "https://registry.npmjs.org"
     },
+    "io.extendreality.tilia.visuals.basichand.unity": {
+      "version": "2.2.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "io.extendreality.zinnia.unity": "2.0.0",
+        "io.extendreality.tilia.utilities.shaders.unity": "1.3.0"
+      },
+      "url": "https://registry.npmjs.org"
+    },
     "io.extendreality.tilia.visuals.collisionfader.unity": {
       "version": "2.0.3",
       "depth": 0,

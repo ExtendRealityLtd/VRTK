@@ -45,6 +45,7 @@
     "io.extendreality.tilia.trackers.pseudobody.unity": "2.0.6",
     "io.extendreality.tilia.utilities.objectstateswitcher.unity": "2.0.1",
     "io.extendreality.tilia.utilities.shaders.unity": "1.2.0",
+    "io.extendreality.tilia.visuals.basichand.unity": "2.2.0",
     "io.extendreality.tilia.visuals.collisionfader.unity": "2.0.3",
     "io.extendreality.tilia.visuals.interactablehighlighter.unity": "2.0.4",
     "io.extendreality.tilia.visuals.tooltip.unity": "2.0.1",
